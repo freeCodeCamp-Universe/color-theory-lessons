@@ -135,7 +135,6 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({ variant = 'color-
       <div>
         {/* Purposeful mockup — interactive */}
         <div className={styles.panel}>
-          <span className={styles.panelLabel}>purposeful color</span>
           <div className={`${styles.mockup} ${styles.mockupGood}`}>
             <div
               className={`${styles.nav} ${interactive ? styles.region : ''} ${results['nav'] === true ? styles.regionSolved : activeId === 'nav' ? styles.regionActive : ''}`}
