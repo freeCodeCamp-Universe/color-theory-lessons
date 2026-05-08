@@ -336,10 +336,13 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
               <StepPanelRenderer panel={currentStep?.panel} />
             </fieldset>
           : phase !== 'quiz'
-            ? <ToolRenderer
-                lesson={lesson}
-                onChallengeComplete={() => setChallengeDone(true)}
-              />
+            ? <fieldset className={styles.examplePanel}>
+                <legend className={styles.panelExampleLabel}>exercise</legend>
+                <ToolRenderer
+                  lesson={lesson}
+                  onChallengeComplete={() => setChallengeDone(true)}
+                />
+              </fieldset>
             : null
         }
       </div>
