@@ -15,7 +15,7 @@ export const lesson1_1: LessonConfig = {
   steps: [
     {
       id: 's1',
-      text: 'Designers do not use color only to make things look nice. In digital products, color helps users notice what matters first.',
+      text: 'Designers do not use color only to make things look nice. In digital products, color helps users notice what matters first. Notice the example on the right — it shows what this looks like in a real interface.',
       panel: { type: 'before-after-preview', mockup: 'purposeful' },
     },
     {
