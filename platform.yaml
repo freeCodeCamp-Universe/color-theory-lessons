@@ -1,0 +1,5 @@
+site: color-theory-lessons
+
+build:
+  command: npm run build
+  output: dist
