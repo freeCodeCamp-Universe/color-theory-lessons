@@ -1,4 +1,4 @@
-site: color-theory-lessons
+site: color-theory-course
 
 build:
   command: npm run build
