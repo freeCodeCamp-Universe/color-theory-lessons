@@ -27,11 +27,11 @@ npm run dev
 - **Linting**: Run `npm run lint` before committing to ensure adherence to ESLint rules.
 
 ### Building & Deployment
-The app is designed to be hosted on Vercel as a static site.
+The app is deployed via freeCodeCamp Universe, configured in `platform.yaml`.
 
 1.  **Build**: `npm run build`. This generates a `dist/` folder.
 2.  **Base Path**: The application serves from `/` (default Vite base).
-3.  **Deployment**: Import the repository into Vercel. Build command: `npm run build`; output directory: `dist`.
+3.  **Deployment**: Handled automatically by freeCodeCamp Universe on push to `main`. Build command: `npm run build`; output directory: `dist`.
 
 ## Contributing
 

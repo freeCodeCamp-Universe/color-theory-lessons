@@ -1,10 +1,10 @@
 # Color Theory Lessons (Color Theory Course)
 
-Interactive color theory learning app. React 19 + TypeScript + Vite, deployed to Vercel.
+Interactive color theory learning app. React 19 + TypeScript + Vite, deployed via freeCodeCamp Universe.
 
 ## Project Vision
 
-Browser-based learning app teaching practical color theory for digital design. Self-paced, game-like, targeting beginner designers. Optimized for static hosting on Vercel.
+Browser-based learning app teaching practical color theory for digital design. Self-paced, game-like, targeting beginner designers. Optimized for static hosting on freeCodeCamp Universe.
 
 ## Implementation Status
 
@@ -56,7 +56,7 @@ All 6 units are fully built and wired. Milestones now use mixed-part capstones (
 
 ## Tech Stack
 
-React 19 + TypeScript + Vite. No backend. Vercel deployment from repository builds. Design system: freeCodeCamp "Command-line Chic." CSS variables for theming: `var(--primary-foreground)`, `var(--primary-background)`, `var(--muted)`, `var(--border)`, `var(--accent-cta)`, `var(--accent-success)`, `var(--accent-danger)`, `var(--font-mono)`, `var(--radius-md)`, `var(--radius-sm)`.
+React 19 + TypeScript + Vite. No backend. Deployed via freeCodeCamp Universe (`platform.yaml`). Design system: freeCodeCamp "Command-line Chic." CSS variables for theming: `var(--primary-foreground)`, `var(--primary-background)`, `var(--muted)`, `var(--border)`, `var(--accent-cta)`, `var(--accent-success)`, `var(--accent-danger)`, `var(--font-mono)`, `var(--radius-md)`, `var(--radius-sm)`.
 
 ## Build
 
