@@ -28,7 +28,7 @@ npm run dev
 npm run build
 ```
 
-Deploys to Vercel using `npm run build` and serves the `dist/` output as a static SPA.
+Deploys to freeCodeCamp Universe (`platform.yaml`) using `npm run build` and serves the `dist/` output as a static SPA.
 
 ## Structure
 
@@ -42,3 +42,9 @@ src/
   types/        # TypeScript interfaces
   utils/        # color conversion and analysis utilities
 ```
+
+## License
+
+Copyright (c) freeCodeCamp.
+
+This project is licensed under the [BSD 3-Clause License](LICENSE).
