@@ -9,7 +9,19 @@ import styles from './HomePage.module.css';
 export function HomePage() {
   const { completedLessons, completedMilestones } = useAppState();
   const dispatch = useAppDispatch();
-  const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
+  // Start with the current unit expanded: the first unit that is unlocked
+  // (previous unit fully finished) but not yet fully finished itself.
+  const [expandedUnit, setExpandedUnit] = useState<string | null>(() => {
+    let prevFinished = true;
+    for (const unit of units) {
+      const lessonsDone = unit.lessons.every((id) => completedLessons.includes(id));
+      const milestoneDone = !unit.milestoneId || completedMilestones.includes(unit.milestoneId);
+      const finished = lessonsDone && milestoneDone;
+      if (prevFinished && !finished) return unit.id;
+      prevFinished = finished;
+    }
+    return null;
+  });
 
   function handleResetProgress() {
     if (window.confirm('Reset all progress? This cannot be undone.')) {
@@ -48,7 +60,6 @@ export function HomePage() {
             const complete = total > 0 && done === total;
             const started = done > 0 && !complete;
             const firstLesson = unit.lessons[0];
-            const canExpand = started || complete;
 
             const prevUnit = i > 0 ? units[i - 1] : null;
             const prevUnitLessonsDone = prevUnit
@@ -59,6 +70,7 @@ export function HomePage() {
               : true;
             const prevUnitComplete = prevUnitLessonsDone && prevUnitMilestoneDone;
             const isUnlocked = i === 0 || prevUnitComplete;
+            const canExpand = isUnlocked;
             const isExpanded = expandedUnit === unit.id;
 
             function toggleExpand() {
@@ -113,7 +125,9 @@ export function HomePage() {
                   <ul className={styles.lessonList}>
                     {unit.lessons.map((lessonId, li) => {
                       const isDone = completedLessons.includes(lessonId);
-                      const isNext = !isDone && unit.lessons[li - 1] !== undefined && completedLessons.includes(unit.lessons[li - 1]);
+                      // The list only renders inside an expanded (therefore unlocked)
+                      // unit, so its first lesson is always startable when not done.
+                      const isNext = !isDone && (li === 0 || completedLessons.includes(unit.lessons[li - 1]));
                       const isLocked = !isDone && !isNext;
                       return (
                         <li key={lessonId} className={`${styles.lessonRow} ${isLocked ? styles.lessonLocked : ''}`}>
