@@ -51,7 +51,7 @@ export const lesson3_5: LessonConfig = {
     },
     {
       id: 's5',
-      text: 'The theme sandbox on the right lets you assign colors to common roles and apply a gradient to a hero panel. Build a coherent theme where text is readable, accents are purposeful, and the gradient supports — not fights — the rest of the interface.',
+      text: 'The theme sandbox lets you assign colors to common roles and apply a gradient to a hero panel. Build a coherent theme where text is readable, accents are purposeful, and the gradient supports — not fights — the rest of the interface.',
     },
   ],
   challenges: [

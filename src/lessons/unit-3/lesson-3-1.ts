@@ -43,7 +43,7 @@ export const lesson3_1: LessonConfig = {
     },
     {
       id: 's5',
-      text: 'Click each colored element in the UI mockup on the right. A panel will reveal the same color in all three formats. Notice how the visible result stays exactly the same while the representation changes.',
+      text: 'Click each colored element in the UI mockup. A panel will reveal the same color in all three formats. Notice how the visible result stays exactly the same while the representation changes.',
     },
   ],
   challenges: [

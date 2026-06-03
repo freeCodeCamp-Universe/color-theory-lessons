@@ -44,7 +44,7 @@ export const lesson3_3: LessonConfig = {
     },
     {
       id: 's5',
-      text: 'The playground on the right shows the same color in all three formats simultaneously — HSL, HEX, and RGB. Adjust the sliders and watch how each format updates. Then match three target colors using HSL controls.',
+      text: 'The playground shows the same color in all three formats simultaneously — HSL, HEX, and RGB. Adjust the sliders and watch how each format updates. Then match three target colors using HSL controls.',
     },
   ],
   challenges: [

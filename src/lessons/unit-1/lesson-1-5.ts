@@ -34,7 +34,7 @@ export const lesson1_5: LessonConfig = {
     },
     {
       id: 's5',
-      text: 'The tool on the right shows three identical buttons — no hierarchy at all. Use it to assign each one a role and create a clear visual order before the challenge.',
+      text: 'The interactive tool shows three identical buttons — no hierarchy at all. Use it to assign each one a role and create a clear visual order before the challenge.',
     },
   ],
   challenges: [

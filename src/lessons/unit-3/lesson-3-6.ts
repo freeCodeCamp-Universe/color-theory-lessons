@@ -48,7 +48,7 @@ export const lesson3_6: LessonConfig = {
     },
     {
       id: 's5',
-      text: 'The token map on the right shows a base value connected to several role tokens. Change the base and watch every role update across the interface. Then sort items into raw values, alias tokens, and role tokens.',
+      text: 'The token map shows a base value connected to several role tokens. Change the base and watch every role update across the interface. Then sort items into raw values, alias tokens, and role tokens.',
     },
   ],
   challenges: [

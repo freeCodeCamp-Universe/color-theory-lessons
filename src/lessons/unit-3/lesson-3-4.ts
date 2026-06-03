@@ -51,7 +51,7 @@ export const lesson3_4: LessonConfig = {
     },
     {
       id: 's5',
-      text: 'Use the layer stack simulator on the right. Choose a foreground color, adjust its alpha, and place it over different backgrounds to see how the perceived result changes.',
+      text: 'Use the layer stack simulator. Choose a foreground color, adjust its alpha, and place it over different backgrounds to see how the perceived result changes.',
     },
   ],
   challenges: [

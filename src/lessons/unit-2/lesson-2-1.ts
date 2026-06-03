@@ -33,7 +33,7 @@ export const lesson2_1: LessonConfig = {
     },
     {
       id: 's5',
-      text: 'Look at the two diagrams on the right. The dark one shows light combining — colors brighten toward white. The light one shows pigment combining — colors darken toward black. Sort the examples shown into the correct model.',
+      text: 'Look at the two diagrams in the sorting tool. The dark one shows light combining — colors brighten toward white. The light one shows pigment combining — colors darken toward black. Sort the examples shown into the correct model.',
     },
   ],
   challenges: [

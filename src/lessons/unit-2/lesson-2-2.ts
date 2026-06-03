@@ -36,7 +36,7 @@ export const lesson2_2: LessonConfig = {
     },
     {
       id: 's5',
-      text: 'Use the RGB mixer on the right to explore how channels combine. The challenge asks you to recreate five interface colors — think through which channels should be high, low, or equal before reaching for the slider.',
+      text: 'Use the RGB mixer to explore how channels combine. The challenge asks you to recreate five interface colors — think through which channels should be high, low, or equal before reaching for the slider.',
     },
   ],
   challenges: [

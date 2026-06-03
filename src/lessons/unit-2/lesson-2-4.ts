@@ -38,7 +38,7 @@ export const lesson2_4: LessonConfig = {
     },
     {
       id: 's6',
-      text: 'The comparison on the right shows the same color as a screen swatch and an approximation of how it might appear in print. In the challenge, you will identify the correct reasons why the two versions differ.',
+      text: 'The comparison tool shows the same color as a screen swatch and an approximation of how it might appear in print. In the challenge, you will identify the correct reasons why the two versions differ.',
     },
   ],
   challenges: [
