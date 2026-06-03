@@ -88,7 +88,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
   const currentStep = lesson.steps[stepIndex];
 
   const hasRightPanel =
-    phase !== 'quiz' && (
+    phase !== 'quiz' && phase !== 'complete' && (
       phase !== 'steps' ||
       stepIndex === lesson.steps.length - 1 ||
       !!currentStep?.panel
@@ -335,7 +335,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
               <legend className={styles.panelExampleLabel}>example</legend>
               <StepPanelRenderer panel={currentStep?.panel} />
             </fieldset>
-          : phase !== 'quiz'
+          : phase !== 'quiz' && phase !== 'complete'
             ? <fieldset className={styles.examplePanel}>
                 <legend className={styles.panelExampleLabel}>exercise</legend>
                 <ToolRenderer
