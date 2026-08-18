@@ -34,7 +34,7 @@ export const lesson1_5: LessonConfig = {
     },
     {
       id: 's5',
-      text: 'The interactive tool shows three identical buttons — no hierarchy at all. Use it to assign each one a role and create a clear visual order before the challenge.',
+      text: 'The exercise applies visual hierarchy to three actions: Submit, Save Draft, and Cancel. Their styling should reflect their relative importance as primary, secondary, and tertiary actions.',
     },
   ],
   challenges: [
