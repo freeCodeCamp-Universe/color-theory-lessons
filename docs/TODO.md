@@ -1,5 +1,7 @@
 # Repository TODOs
 
+> **Tracking reminder:** Before resuming work from this file, convert every remaining TODO into a GitHub issue, then remove this file. Track future work in GitHub Issues instead.
+
 ## Audit learner-facing lesson language
 
 - **Status:** In progress
