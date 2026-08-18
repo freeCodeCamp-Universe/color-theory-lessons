@@ -40,7 +40,7 @@ export const lesson1_5: LessonConfig = {
   challenges: [
     {
       id: 'c1',
-      prompt: 'A screen shows three buttons: Submit, Save Draft, and Cancel. Right now they all look the same. Make Submit clearly primary without making the design feel broken or unbalanced.',
+      prompt: 'Assign a visual role to each action so Submit receives the most emphasis, Save Draft remains available without competing with it, and Cancel receives the least emphasis.',
       type: 'fix-interface',
       hints: [
         'The primary action should use the strongest accent. The others should step back.',
