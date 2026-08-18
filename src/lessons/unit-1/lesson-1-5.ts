@@ -65,7 +65,7 @@ export const lesson1_5: LessonConfig = {
       id: 'q2',
       prompt: 'Which revision best supports a single primary action on a screen?',
       choices: [
-        { id: 'a', label: 'Use the accent color only for the primary button; make others gray or outlined.', isCorrect: true, explanation: 'Reserving the accent for one element immediately signals its importance.' },
+        { id: 'a', label: 'Use the accent color only for the primary button; make others gray or outlined.', isCorrect: true, explanation: 'Using the filled accent treatment only on the primary action distinguishes it from the outlined and text-link actions.' },
         { id: 'b', label: 'Make all buttons the same bright color so they all get attention.', isCorrect: false, explanation: 'Equal emphasis means no emphasis. The user still cannot tell which action matters most.' },
         { id: 'c', label: 'Add more colors to make secondary actions more interesting.', isCorrect: false, explanation: 'More colors create more visual noise, not clearer hierarchy.' },
         { id: 'd', label: 'Reduce all button contrast so nothing stands out too much.', isCorrect: false, explanation: 'Reducing all contrast makes every action feel equally unimportant.' },
