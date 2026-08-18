@@ -75,7 +75,7 @@ export const lesson1_5: LessonConfig = {
       id: 'q3',
       prompt: 'A screen uses a filled accent treatment for its primary action. Which treatment best fits its secondary actions?',
       choices: [
-        { id: 'a', label: 'More saturated than the primary to create balance.', isCorrect: false, explanation: 'More saturation would challenge the primary for attention, not support it.' },
+        { id: 'a', label: 'More saturated than the primary to create balance.', isCorrect: false, explanation: 'Increasing saturation would give the secondary actions stronger color emphasis and make them compete with the primary action.' },
         { id: 'b', label: 'The same color as the primary but smaller.', isCorrect: false, explanation: 'Same color means the same emphasis signal — size alone does not create enough hierarchy difference.' },
         { id: 'c', label: 'Bright red so users notice there is a secondary option.', isCorrect: false, explanation: 'Red carries a danger/destructive meaning and would create the wrong signal for a neutral secondary action.' },
         { id: 'd', label: 'Outlined, muted, or text-only — visually subordinate.', isCorrect: true, explanation: 'Secondary actions need to be available without competing. Lower contrast and less visual weight keep them supportive.' },
