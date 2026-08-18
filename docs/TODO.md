@@ -3,7 +3,7 @@
 ## Audit learner-facing lesson language
 
 - **Status:** In progress
-- **Lesson progress:** 4 of 34 lessons complete
+- **Lesson progress:** 5 of 34 lessons complete
 - **Key-point progress:** 0 of 34 lessons complete
 - **Area:** Lesson content and Review-page summaries
 - **References:** `docs/LESSON_CONTENT_FLAGS.md`, lesson definitions, and lesson-specific tool components
@@ -24,7 +24,7 @@
 - [x] 1.2 Hue, Saturation, and Lightness
 - [x] 1.3 Contrast and Readability
 - [x] 1.4 Warm and Cool Colors in Practice
-- [ ] 1.5 Visual Hierarchy Through Color
+- [x] 1.5 Visual Hierarchy Through Color
 - [ ] 1.6 Basic Color Relationships and Harmony
 
 #### Unit 2: How Screens Make Color
