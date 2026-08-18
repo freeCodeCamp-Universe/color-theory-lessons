@@ -20,7 +20,7 @@ export const lesson1_5: LessonConfig = {
     },
     {
       id: 's2',
-      text: 'Color is one of the fastest tools for creating emphasis. A small amount of accent color draws the eye immediately — but only when the rest of the design steps back.',
+      text: 'Color can create emphasis when one element differs from its surroundings. Reserving an accent color for the focal point makes it more prominent than nearby elements that use neutral or muted colors.',
       highlights: ['emphasis', 'accent color'],
     },
     {
