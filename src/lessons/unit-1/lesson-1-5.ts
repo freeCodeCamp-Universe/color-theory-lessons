@@ -78,7 +78,7 @@ export const lesson1_5: LessonConfig = {
         { id: 'a', label: 'More saturated than the primary to create balance.', isCorrect: false, explanation: 'Increasing saturation would give the secondary actions stronger color emphasis and make them compete with the primary action.' },
         { id: 'b', label: 'The same color as the primary but smaller.', isCorrect: false, explanation: 'Using the primary accent color would give the secondary actions the same color signal. Size can affect hierarchy, but it would not reserve the accent treatment for the primary action.' },
         { id: 'c', label: 'Bright red so users notice there is a secondary option.', isCorrect: false, explanation: 'A bright red treatment would add another strong accent. Red is also commonly used for errors or destructive actions, which does not match a neutral secondary action.' },
-        { id: 'd', label: 'Outlined, muted, or text-only — visually subordinate.', isCorrect: true, explanation: 'Secondary actions need to be available without competing. Lower contrast and less visual weight keep them supportive.' },
+        { id: 'd', label: 'Outlined or neutral, with less color emphasis than the primary action.', isCorrect: true, explanation: 'Secondary actions need to be available without competing. Lower contrast and less visual weight keep them supportive.' },
       ],
     },
   ],
