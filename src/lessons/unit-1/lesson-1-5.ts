@@ -53,7 +53,7 @@ export const lesson1_5: LessonConfig = {
   quizItems: [
     {
       id: 'q1',
-      prompt: 'A designer uses five different accent colors across a single screen — purple, teal, orange, red, and gold. What is the most likely hierarchy problem?',
+      prompt: 'A screen uses purple, teal, orange, red, and gold as accent colors on five different elements. What hierarchy problem is most likely?',
       choices: [
         { id: 'a', label: 'The palette has too many cool colors.', isCorrect: false, explanation: 'The temperature mix is not the core issue here.' },
         { id: 'b', label: 'No single element has clear primary emphasis.', isCorrect: true, explanation: 'When everything is accented differently, nothing stands out. The eye does not know where to go first.' },
