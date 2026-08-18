@@ -68,6 +68,12 @@ React 19 + TypeScript + Vite. No backend. Deployed via freeCodeCamp Universe (`p
 npm run build   # tsc + vite build
 ```
 
+## Verification Before Commits
+
+- After the user approves a text-only change, apply it and create its atomic commit without requiring runtime verification.
+- Before committing a functional code change, verify the exact behavior the change claims to implement or fix.
+- Use a verification method that matches the behavior. For example, a component remount test does not verify a full browser reload.
+
 ## Learning Outcomes
 
 By completion, learners should be able to: explain additive vs subtractive color, build usable palettes for digital interfaces, understand RGB/HEX/HSL/HSV/alpha, identify accessibility mistakes, design with awareness of color blindness and low contrast, apply WCAG guidance, and make strong UI color choices for hierarchy, emphasis, readability, and feedback states.
