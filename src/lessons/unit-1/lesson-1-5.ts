@@ -58,7 +58,7 @@ export const lesson1_5: LessonConfig = {
         { id: 'a', label: 'The palette has too many cool colors.', isCorrect: false, explanation: 'The temperature mix is not the core issue here.' },
         { id: 'b', label: 'No single element has clear primary emphasis.', isCorrect: true, explanation: 'Each accent creates a competing emphasis signal, so the screen does not identify one primary element.' },
         { id: 'c', label: 'The accents should all use the same hue.', isCorrect: false, explanation: 'Using one hue on five elements would still give them similar emphasis. The hierarchy problem comes from applying accent styling to too many elements.' },
-        { id: 'd', label: 'The design lacks enough contrast.', isCorrect: false, explanation: 'Five saturated accents might have plenty of contrast individually — the problem is that none is clearly dominant.' },
+        { id: 'd', label: 'The design lacks enough contrast.', isCorrect: false, explanation: 'Contrast depends on each element\'s color pair with its background, which the prompt does not specify. The hierarchy problem is that five elements receive accent emphasis.' },
       ],
     },
     {
