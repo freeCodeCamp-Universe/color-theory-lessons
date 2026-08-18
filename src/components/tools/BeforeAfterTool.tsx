@@ -313,11 +313,21 @@ function HierarchyDemo({ interactive = true, onComplete }: { interactive?: boole
         </button>
       )}
       {checked && (
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: isCorrect ? 'var(--green)' : 'var(--red)' }}>
-          {isCorrect
-            ? '✓ Submit stands out as the primary action. Well done.'
-            : '✗ Submit should be primary, Save Draft secondary, and Cancel tertiary.'}
-        </p>
+        <>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: isCorrect ? 'var(--green)' : 'var(--red)' }}>
+            {isCorrect
+              ? '✓ Submit stands out as the primary action. Well done.'
+              : '✗ Submit should be primary, Save Draft secondary, and Cancel tertiary.'}
+          </p>
+          {!isCorrect && (
+            <button
+              onClick={() => setChecked(false)}
+              style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'transparent', color: 'var(--secondary-foreground)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', border: '1px solid var(--border)', borderRadius: '3px', cursor: 'pointer' }}
+            >
+              try again
+            </button>
+          )}
+        </>
       )}
     </div>
   );
