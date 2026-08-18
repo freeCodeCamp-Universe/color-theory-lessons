@@ -25,7 +25,7 @@ export const lesson1_5: LessonConfig = {
     },
     {
       id: 's3',
-      text: 'When everything is equally loud — same saturation, same weight, same contrast — the design has no hierarchy. The user does not know where to look first.',
+      text: 'Applying saturated accent colors to several elements gives each of them a strong color signal. Color then no longer indicates which element should receive attention first.',
     },
     {
       id: 's4',
