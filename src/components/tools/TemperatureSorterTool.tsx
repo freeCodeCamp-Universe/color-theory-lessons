@@ -21,9 +21,9 @@ const SWATCHES: Swatch[] = [
 ];
 
 const INTERFACE_GOALS = [
-  { id: 'friendly', label: 'Friendly sign-up page', correct: 'warm' as const },
-  { id: 'dashboard', label: 'Serious data dashboard', correct: 'cool' as const },
-  { id: 'urgent', label: 'Urgent alert banner', correct: 'warm' as const },
+  { id: 'event', label: 'Lively event sign-up', correct: 'warm' as const },
+  { id: 'dashboard', label: 'Calm data dashboard', correct: 'cool' as const },
+  { id: 'portfolio', label: 'Artwork-centered portfolio', correct: 'neutral' as const },
 ];
 
 type Temperature = 'warm' | 'cool' | 'neutral';
@@ -34,35 +34,38 @@ interface TemperatureSorterToolProps {
 }
 
 export const TemperatureSorterTool = memo(function TemperatureSorterTool({ interactive = true, onComplete }: TemperatureSorterToolProps) {
+  const [stage, setStage] = useState<1 | 2>(1);
   const [swatchAnswers, setSwatchAnswers] = useState<Record<string, Temperature | ''>>(() =>
     Object.fromEntries(SWATCHES.map((s) => [s.id, ''])),
   );
   const [goalAnswers, setGoalAnswers] = useState<Record<string, Temperature | ''>>(() =>
     Object.fromEntries(INTERFACE_GOALS.map((g) => [g.id, ''])),
   );
-  const [checked, setChecked] = useState(false);
+  const [swatchesChecked, setSwatchesChecked] = useState(false);
+  const [goalsChecked, setGoalsChecked] = useState(false);
 
   const swatchCorrect = SWATCHES.filter((s) => swatchAnswers[s.id] === s.correct).length;
   const goalCorrect = INTERFACE_GOALS.filter((g) => goalAnswers[g.id] === g.correct).length;
-  const totalCorrect = swatchCorrect + goalCorrect;
-  const totalItems = SWATCHES.length + INTERFACE_GOALS.length;
-  const allAnswered =
-    SWATCHES.every((s) => swatchAnswers[s.id] !== '') &&
-    INTERFACE_GOALS.every((g) => goalAnswers[g.id] !== '');
+  const allSwatchesAnswered = SWATCHES.every((s) => swatchAnswers[s.id] !== '');
+  const allGoalsAnswered = INTERFACE_GOALS.every((g) => goalAnswers[g.id] !== '');
+  const swatchesPassed = swatchesChecked && swatchCorrect === SWATCHES.length;
+  const goalsPassed = goalsChecked && goalCorrect >= Math.ceil(INTERFACE_GOALS.length * 0.7);
 
-  const passed = checked && totalCorrect >= totalItems * 0.7;
-
-  function handleCheck() {
-    setChecked(true);
-    if (totalCorrect >= totalItems * 0.7) {
+  function handleCheckGoals() {
+    setGoalsChecked(true);
+    if (goalCorrect >= Math.ceil(INTERFACE_GOALS.length * 0.7)) {
       onComplete?.();
     }
   }
 
-  function handleRetry() {
+  function handleRetrySwatches() {
     setSwatchAnswers(Object.fromEntries(SWATCHES.map((s) => [s.id, ''])));
+    setSwatchesChecked(false);
+  }
+
+  function handleRetryGoals() {
     setGoalAnswers(Object.fromEntries(INTERFACE_GOALS.map((g) => [g.id, ''])));
-    setChecked(false);
+    setGoalsChecked(false);
   }
 
   const tempColor = (t: Temperature | '') =>
@@ -70,172 +73,260 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({ inter
 
   return (
     <div className={shellStyles.shell}>
-      <span className={shellStyles.toolLabel}>palette temperature sorter</span>
+      <span className={shellStyles.toolLabel}>color temperature exercise</span>
 
-      {/* Swatch sorting */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
-          sort each swatch
-        </span>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 'var(--spacing-sm)' }}>
-          {SWATCHES.map((s) => {
-            const chosen = swatchAnswers[s.id];
-            const isCorrect = checked && chosen === s.correct;
-            const isWrong = checked && chosen !== '' && chosen !== s.correct;
+      <div style={{ display: 'flex', gap: '0.3rem' }} aria-hidden="true">
+        {[1, 2].map((stageNumber) => (
+          <div
+            key={stageNumber}
+            style={{
+              flex: 1,
+              height: 4,
+              borderRadius: 2,
+              background: stageNumber < stage
+                ? 'var(--accent-success)'
+                : stageNumber === stage
+                  ? 'var(--accent-cta)'
+                  : 'var(--border)',
+            }}
+          />
+        ))}
+      </div>
+      <p style={{ fontSize: '0.72rem', color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
+        Stage {stage} of 2
+      </p>
+
+      {stage === 1 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
+            classify the colors
+          </span>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 'var(--spacing-sm)' }}>
+            {SWATCHES.map((s) => {
+              const chosen = swatchAnswers[s.id];
+              const isCorrect = swatchesChecked && chosen === s.correct;
+              const isWrong = swatchesChecked && chosen !== '' && chosen !== s.correct;
+              return (
+                <div
+                  key={s.id}
+                  style={{
+                    background: 'var(--surface)',
+                    border: `1px solid ${isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--border)'}`,
+                    borderRadius: 'var(--radius-sm)',
+                    padding: 'var(--spacing-sm)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '6px',
+                  }}
+                >
+                  <div
+                    style={{
+                      height: '40px',
+                      borderRadius: '3px',
+                      backgroundColor: s.color,
+                      border: `2px solid ${tempColor(chosen)}`,
+                      transition: 'border-color 0.2s ease',
+                    }}
+                  />
+                  <span style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>{s.label}</span>
+                  <select
+                    value={swatchAnswers[s.id]}
+                    disabled={swatchesChecked || !interactive}
+                    onChange={(e) => setSwatchAnswers((prev) => ({ ...prev, [s.id]: e.target.value as Temperature }))}
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.75rem',
+                      background: 'var(--primary-background)',
+                      color: 'var(--primary-foreground)',
+                      border: '1px solid var(--border)',
+                      borderRadius: '3px',
+                      padding: '0.25rem 0.35rem',
+                      cursor: swatchesChecked ? 'not-allowed' : 'pointer',
+                    }}
+                    aria-label={`Temperature for ${s.label}`}
+                  >
+                    <option value="">— ?</option>
+                    <option value="warm">warm</option>
+                    <option value="cool">cool</option>
+                    <option value="neutral">neutral</option>
+                  </select>
+                  {swatchesChecked && (
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--muted)' }}>
+                      {isCorrect ? '✓' : isWrong ? `→ ${s.correct}` : '—'}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {interactive && !swatchesChecked && (
+            <button
+              disabled={!allSwatchesAnswered}
+              onClick={() => setSwatchesChecked(true)}
+              style={{
+                alignSelf: 'flex-start',
+                padding: '0.5rem 1.25rem',
+                background: allSwatchesAnswered ? 'var(--yellow)' : 'var(--border)',
+                color: 'var(--gray-90)',
+                fontFamily: 'var(--font-mono)',
+                fontWeight: 700,
+                fontSize: '0.85rem',
+                borderRadius: 'var(--radius-sm)',
+                border: 'none',
+                cursor: allSwatchesAnswered ? 'pointer' : 'not-allowed',
+              }}
+            >
+              check stage
+            </button>
+          )}
+
+          {swatchesChecked && (
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: swatchesPassed ? 'var(--green)' : 'var(--yellow)' }}>
+              {swatchCorrect} / {SWATCHES.length} correct
+            </p>
+          )}
+
+          {swatchesPassed && (
+            <button
+              onClick={() => setStage(2)}
+              style={{
+                alignSelf: 'flex-start',
+                padding: '0.5rem 1.25rem',
+                background: 'var(--accent-success)',
+                color: 'var(--gray-90)',
+                fontFamily: 'var(--font-mono)',
+                fontWeight: 700,
+                fontSize: '0.85rem',
+                borderRadius: 'var(--radius-sm)',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              next stage →
+            </button>
+          )}
+
+          {swatchesChecked && !swatchesPassed && (
+            <button
+              onClick={handleRetrySwatches}
+              style={{
+                alignSelf: 'flex-start',
+                padding: '0.5rem 1.25rem',
+                background: 'transparent',
+                color: 'var(--secondary-foreground)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.85rem',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-sm)',
+                cursor: 'pointer',
+              }}
+            >
+              try stage again
+            </button>
+          )}
+        </div>
+      )}
+
+      {stage === 2 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
+            match temperature to interface goals
+          </span>
+          {INTERFACE_GOALS.map((g) => {
+            const chosen = goalAnswers[g.id];
+            const isCorrect = goalsChecked && chosen === g.correct;
+            const isWrong = goalsChecked && chosen !== '' && chosen !== g.correct;
             return (
               <div
-                key={s.id}
+                key={g.id}
                 style={{
                   background: 'var(--surface)',
                   border: `1px solid ${isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--border)'}`,
                   borderRadius: 'var(--radius-sm)',
-                  padding: 'var(--spacing-sm)',
+                  padding: 'var(--spacing-sm) var(--spacing-md)',
                   display: 'flex',
-                  flexDirection: 'column',
-                  gap: '6px',
+                  alignItems: 'center',
+                  gap: 'var(--spacing-md)',
                 }}
               >
-                <div
-                  style={{
-                    height: '40px',
-                    borderRadius: '3px',
-                    backgroundColor: s.color,
-                    border: `2px solid ${tempColor(chosen)}`,
-                    transition: 'border-color 0.2s ease',
-                  }}
-                />
-                <span style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>{s.label}</span>
+                <span style={{ flex: 1, fontSize: '0.9rem' }}>{g.label}</span>
                 <select
-                  value={swatchAnswers[s.id]}
-                  disabled={checked || !interactive}
-                  onChange={(e) => setSwatchAnswers((prev) => ({ ...prev, [s.id]: e.target.value as Temperature }))}
+                  value={goalAnswers[g.id]}
+                  disabled={goalsChecked || !interactive}
+                  onChange={(e) => setGoalAnswers((prev) => ({ ...prev, [g.id]: e.target.value as Temperature }))}
                   style={{
                     fontFamily: 'var(--font-mono)',
-                    fontSize: '0.75rem',
+                    fontSize: '0.8rem',
                     background: 'var(--primary-background)',
                     color: 'var(--primary-foreground)',
                     border: '1px solid var(--border)',
                     borderRadius: '3px',
-                    padding: '0.25rem 0.35rem',
-                    cursor: checked ? 'not-allowed' : 'pointer',
+                    padding: '0.3rem 0.5rem',
+                    cursor: goalsChecked ? 'not-allowed' : 'pointer',
                   }}
-                  aria-label={`Temperature for ${s.label}`}
+                  aria-label={`Palette direction for ${g.label}`}
                 >
-                  <option value="">— ?</option>
+                  <option value="">— choose</option>
                   <option value="warm">warm</option>
                   <option value="cool">cool</option>
-                  <option value="neutral">neutral</option>
+                  <option value="neutral">balanced</option>
                 </select>
-                {checked && (
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--muted)' }}>
-                    {isCorrect ? '✓' : isWrong ? `→ ${s.correct}` : '—'}
+                {goalsChecked && (
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--muted)', width: '80px' }}>
+                    {isCorrect ? '✓ correct' : isWrong ? `→ ${g.correct === 'neutral' ? 'balanced' : g.correct}` : '—'}
                   </span>
                 )}
               </div>
             );
           })}
-        </div>
-      </div>
 
-      {/* Interface goals */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
-          match the palette direction to the goal
-        </span>
-        {INTERFACE_GOALS.map((g) => {
-          const chosen = goalAnswers[g.id];
-          const isCorrect = checked && chosen === g.correct;
-          const isWrong = checked && chosen !== '' && chosen !== g.correct;
-          return (
-            <div
-              key={g.id}
+          {interactive && !goalsChecked && (
+            <button
+              disabled={!allGoalsAnswered}
+              onClick={handleCheckGoals}
               style={{
-                background: 'var(--surface)',
-                border: `1px solid ${isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--border)'}`,
+                alignSelf: 'flex-start',
+                padding: '0.5rem 1.25rem',
+                background: allGoalsAnswered ? 'var(--yellow)' : 'var(--border)',
+                color: 'var(--gray-90)',
+                fontFamily: 'var(--font-mono)',
+                fontWeight: 700,
+                fontSize: '0.85rem',
                 borderRadius: 'var(--radius-sm)',
-                padding: 'var(--spacing-sm) var(--spacing-md)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--spacing-md)',
+                border: 'none',
+                cursor: allGoalsAnswered ? 'pointer' : 'not-allowed',
               }}
             >
-              <span style={{ flex: 1, fontSize: '0.9rem' }}>{g.label}</span>
-              <select
-                value={goalAnswers[g.id]}
-                disabled={checked || !interactive}
-                onChange={(e) => setGoalAnswers((prev) => ({ ...prev, [g.id]: e.target.value as Temperature }))}
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.8rem',
-                  background: 'var(--primary-background)',
-                  color: 'var(--primary-foreground)',
-                  border: '1px solid var(--border)',
-                  borderRadius: '3px',
-                  padding: '0.3rem 0.5rem',
-                  cursor: checked ? 'not-allowed' : 'pointer',
-                }}
-                aria-label={`Palette direction for ${g.label}`}
-              >
-                <option value="">— choose</option>
-                <option value="warm">warm</option>
-                <option value="cool">cool</option>
-                <option value="neutral">balanced</option>
-              </select>
-              {checked && (
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--muted)', width: '80px' }}>
-                  {isCorrect ? '✓ correct' : isWrong ? `→ ${g.correct}` : '—'}
-                </span>
-              )}
-            </div>
-          );
-        })}
-      </div>
+              check stage
+            </button>
+          )}
 
-      {interactive && !checked && (
-        <button
-          disabled={!allAnswered}
-          onClick={handleCheck}
-          style={{
-            alignSelf: 'flex-start',
-            padding: '0.5rem 1.25rem',
-            background: allAnswered ? 'var(--yellow)' : 'var(--border)',
-            color: 'var(--gray-90)',
-            fontFamily: 'var(--font-mono)',
-            fontWeight: 700,
-            fontSize: '0.85rem',
-            borderRadius: 'var(--radius-sm)',
-            border: 'none',
-            cursor: allAnswered ? 'pointer' : 'not-allowed',
-          }}
-        >
-          check answers
-        </button>
-      )}
+          {goalsChecked && (
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: goalsPassed ? 'var(--green)' : 'var(--yellow)' }}>
+              {goalCorrect} / {INTERFACE_GOALS.length} correct
+            </p>
+          )}
 
-      {checked && (
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: passed ? 'var(--green)' : 'var(--yellow)' }}>
-          {totalCorrect} / {totalItems} correct
-          {passed ? ' — well done!' : ' — review the incorrect ones.'}
-        </p>
-      )}
-
-      {checked && !passed && (
-        <button
-          onClick={handleRetry}
-          style={{
-            alignSelf: 'flex-start',
-            padding: '0.5rem 1.25rem',
-            background: 'transparent',
-            color: 'var(--secondary-foreground)',
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.85rem',
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--radius-sm)',
-            cursor: 'pointer',
-          }}
-        >
-          try again
-        </button>
+          {goalsChecked && !goalsPassed && (
+            <button
+              onClick={handleRetryGoals}
+              style={{
+                alignSelf: 'flex-start',
+                padding: '0.5rem 1.25rem',
+                background: 'transparent',
+                color: 'var(--secondary-foreground)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.85rem',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-sm)',
+                cursor: 'pointer',
+              }}
+            >
+              try stage again
+            </button>
+          )}
+        </div>
       )}
     </div>
   );
