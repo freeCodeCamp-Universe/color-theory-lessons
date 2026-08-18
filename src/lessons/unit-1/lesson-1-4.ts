@@ -74,10 +74,10 @@ export const lesson1_4: LessonConfig = {
       id: 'q3',
       prompt: 'Which statement is most accurate about warm and cool colors in UI design?',
       choices: [
-        { id: 'a', label: 'Warm colors always mean danger or error.', isCorrect: false, explanation: 'Red often marks errors by convention, while orange and yellow also appear in calls to action and warnings. Meaning depends on context.' },
-        { id: 'b', label: 'Cool colors always feel more professional.', isCorrect: false, explanation: 'Some industries favor cool palettes, but professional interfaces can also use warm colors.' },
+        { id: 'a', label: 'Warm colors are the strongest choice for any warning or error.', isCorrect: false, explanation: 'Warm colors can support warnings and errors, but their meaning depends on conventions and context.' },
+        { id: 'b', label: 'Cool palettes are generally more professional than warm palettes.', isCorrect: false, explanation: 'Some industries favor cool palettes, but professional interfaces can also use warm colors.' },
         { id: 'c', label: 'Warm and cool tendencies are useful starting points that depend on context.', isCorrect: true, explanation: 'Temperature is a starting point. Surrounding colors and product goals shape its effect.' },
-        { id: 'd', label: 'Neutral colors do not affect palette temperature.', isCorrect: false, explanation: 'Neutrals can lean warm, as beige often does, or cool, as blue-gray does.' },
+        { id: 'd', label: 'A color\'s temperature determines how much attention it receives.', isCorrect: false, explanation: 'Temperature can affect attention, but surrounding colors, saturation, and contrast also matter.' },
       ],
     },
   ],

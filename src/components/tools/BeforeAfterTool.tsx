@@ -31,19 +31,19 @@ const REGIONS: Region[] = [
     id: 'nav',
     name: 'dark nav bar',
     correctJob: 'separating sections',
-    explanation: 'The dark background draws a boundary between navigation and content, creating clear sections without using a visible divider.',
+    explanation: 'The dark background separates the navigation from the page content without a visible divider.',
   },
   {
     id: 'cta',
     name: 'gold CTA button',
     correctJob: 'drawing attention',
-    explanation: 'Gold on a dark surface has the highest contrast on the screen. Color is being used to tell the user "this is the most important thing to do."',
+    explanation: 'The gold button contrasts with the dark background and gray controls, drawing attention to the primary action.',
   },
   {
     id: 'success',
     name: 'green success text',
     correctJob: 'signaling status',
-    explanation: 'Green communicates a completed state — a widely learned convention. The color carries a specific meaning: something succeeded.',
+    explanation: 'Green marks the completed state, following a common interface convention.',
   },
   {
     id: 'card',
@@ -131,7 +131,7 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({ variant = 'color-
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>
-        {interactive ? 'click each colored area — what is it doing?' : 'before / after comparison'}
+        {interactive ? 'identify each color\'s role' : 'before / after comparison'}
       </span>
 
       <div>
@@ -242,7 +242,7 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({ variant = 'color-
       {interactive && <div className={styles.progressRow}>
         <span className={styles.score}>{solvedCount} / {REGIONS.length} identified</span>
         {allSolved && (
-          <span className={styles.allDone}>All done — challenge complete!</span>
+          <span className={styles.allDone}>challenge complete!</span>
         )}
       </div>}
     </div>
