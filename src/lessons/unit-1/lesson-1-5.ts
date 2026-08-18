@@ -73,7 +73,7 @@ export const lesson1_5: LessonConfig = {
     },
     {
       id: 'q3',
-      prompt: 'On a well-designed screen, the primary CTA uses the accent color. What should the secondary actions typically look like?',
+      prompt: 'A screen uses a filled accent treatment for its primary action. Which treatment best fits its secondary actions?',
       choices: [
         { id: 'a', label: 'More saturated than the primary to create balance.', isCorrect: false, explanation: 'More saturation would challenge the primary for attention, not support it.' },
         { id: 'b', label: 'The same color as the primary but smaller.', isCorrect: false, explanation: 'Same color means the same emphasis signal — size alone does not create enough hierarchy difference.' },
