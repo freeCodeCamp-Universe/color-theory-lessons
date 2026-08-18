@@ -65,7 +65,7 @@ export const ContrastTool = memo(function ContrastTool({ interactive = true, onC
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>contrast repair lab</span>
       <p style={{ fontSize: '0.9rem', color: 'var(--secondary-foreground)' }}>
-        Adjust the lightness slider for each problem area until it's easy to read.
+        Adjust the lightness slider for each color pair, then select check.
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
@@ -184,7 +184,7 @@ export const ContrastTool = memo(function ContrastTool({ interactive = true, onC
       {checked && !completed && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--red)' }}>
-            not there yet — keep adjusting
+            One or more color pairs do not pass yet. Select retry to continue adjusting.
           </p>
           <button
             onClick={handleRetry}
@@ -206,7 +206,7 @@ export const ContrastTool = memo(function ContrastTool({ interactive = true, onC
 
       {completed && (
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--green)' }}>
-          ✓ All three areas are now readable. Good work!
+          ✓ All three color pairs passed. Good work!
         </p>
       )}
     </div>

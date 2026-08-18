@@ -15,37 +15,37 @@ export const lesson1_3: LessonConfig = {
   steps: [
     {
       id: 's1',
-      text: 'Two colors can be different and still create weak, hard-to-read contrast. A hue change is not the same as a readability improvement.',
+      text: 'Text and its background can have different hues and still be hard to distinguish when they appear similarly light or dark. Changing hue alone does not guarantee readable text.',
       highlights: ['contrast'],
     },
     {
       id: 's2',
-      text: 'Contrast matters everywhere text appears: labels, buttons, nav links, helper text, placeholder text. Weak contrast makes content feel effortful to read.',
+      text: 'Labels, button text, navigation links, helper text, and placeholder text all rely on contrast with their backgrounds. When contrast is low, their letter shapes are harder to distinguish.',
       highlights: ['readability'],
     },
     {
       id: 's3',
-      text: 'Lightness difference between foreground and background is the strongest driver of readable contrast. Two hues at similar lightness levels can be almost impossible to read against each other. The WCAG standard measures this as a ratio: body text needs at least 4.5:1, and large text (18 pt or 14 pt bold) needs at least 3:1.',
+      text: 'The Web Content Accessibility Guidelines (WCAG) define minimum contrast ratios for text. WCAG calculates contrast from the relative luminance of the foreground and background colors, not from their hue or HSL lightness values. At Level AA, text needs at least 4.5:1 contrast. Text that is at least 18 pt, or at least 14 pt and bold, qualifies as large text and needs at least 3:1.',
       highlights: ['foreground', 'background', 'lightness'],
     },
     {
       id: 's4',
-      text: 'A beautiful color palette can still fail if important information blends into the background. Good aesthetics and good readability must work together.',
+      text: 'A palette can look appealing while text and controls still blend into their backgrounds. Check the contrast of each foreground and background pair instead of judging readability from the palette as a whole.',
     },
     {
       id: 's5',
-      text: 'Try the contrast lab. Adjust the background lightness and see how readability changes. Notice when the text becomes easy to read without strain.',
+      text: 'A contrast problem does not have one fixed solution. Depending on the color pair, you can change the foreground, the background, or both.',
     },
   ],
   challenges: [
     {
       id: 'c1',
-      prompt: 'A dashboard card has three low-contrast problems: a muted label, faint helper text, and a light button on a light surface. Adjust the colors until all three areas are clearly readable.',
+      prompt: 'Repair three low-contrast text pairs in the dashboard card: the section label, the helper text, and the Submit text on its button background.',
       type: 'adjust-contrast',
       hints: [
-        'Focus on lightness difference first — hue changes alone rarely fix contrast.',
-        'Helper text is often the weakest contrast in a design. Try making it darker.',
-        'Button contrast depends on both the button color and the surface it sits on.',
+        'The section label sits on a dark background. Increase the label\'s lightness to raise its contrast.',
+        'Increase the helper text\'s lightness so it stands out from the dark background.',
+        'The Submit text is white. Decrease the button background\'s lightness to raise the contrast.',
       ],
       successCriteria: 'All three problem areas reach clearly readable contrast.',
     },
@@ -53,30 +53,32 @@ export const lesson1_3: LessonConfig = {
   quizItems: [
     {
       id: 'q1',
-      prompt: 'True or false: two very different hues always have strong, readable contrast.',
+      prompt: 'Which measurement determines whether text and its background meet a WCAG contrast requirement?',
       choices: [
-        { id: 'a', label: 'False', isCorrect: true, explanation: 'Readability depends on lightness difference, not hue difference. Two colors can share a very similar lightness level and be nearly unreadable together.' },
-        { id: 'b', label: 'True', isCorrect: false, explanation: 'Hue alone does not determine contrast. Red and green at the same lightness can have very weak readable contrast.' },
+        { id: 'a', label: 'The difference between their hue angles', isCorrect: false, explanation: 'Hue angle is not part of the WCAG contrast calculation.' },
+        { id: 'b', label: 'The difference between their HSL lightness values', isCorrect: false, explanation: 'Changing HSL lightness can affect contrast, but WCAG does not calculate the ratio from those percentages.' },
+        { id: 'c', label: 'The contrast ratio calculated from relative luminance', isCorrect: true, explanation: 'WCAG calculates the contrast ratio from the relative luminance of the text and background colors.' },
+        { id: 'd', label: 'The difference between their saturation values', isCorrect: false, explanation: 'Saturation is not part of the WCAG contrast calculation.' },
       ],
     },
     {
       id: 'q2',
-      prompt: 'Which pair most likely has the stronger text contrast?',
+      prompt: 'A paragraph uses 16 pt regular text with a contrast ratio of 3.8:1. Does it meet WCAG Level AA?',
       choices: [
-        { id: 'a', label: 'Medium blue text on a blue-green background', isCorrect: false, explanation: 'Similar hue and similar lightness typically means weak contrast.' },
-        { id: 'b', label: 'Dark navy text on a light gray background', isCorrect: true, explanation: 'A very dark foreground on a very light background creates strong lightness contrast — the most reliable source of readability.' },
-        { id: 'c', label: 'Bright red text on a bright orange background', isCorrect: false, explanation: 'Both colors are bright and light — lightness difference is too small for reliable readability.' },
-        { id: 'd', label: 'Saturated purple text on a saturated green background', isCorrect: false, explanation: 'High saturation on both sides does not guarantee strong contrast if lightness levels are similar.' },
+        { id: 'a', label: 'Yes. Any ratio above 3:1 passes Level AA.', isCorrect: false, explanation: 'The 3:1 threshold applies only to large text.' },
+        { id: 'b', label: 'No. It needs at least 4.5:1.', isCorrect: true, explanation: 'At 16 pt and regular weight, this does not qualify as large text. It needs at least 4.5:1 contrast.' },
+        { id: 'c', label: 'It cannot be determined without the hue values.', isCorrect: false, explanation: 'Hue is not part of the WCAG contrast calculation.' },
+        { id: 'd', label: 'Yes. Text above 14 pt only needs 3:1.', isCorrect: false, explanation: 'The 14 pt threshold applies only to bold text. Regular text must be at least 18 pt to use the 3:1 threshold.' },
       ],
     },
     {
       id: 'q3',
-      prompt: 'A designer says the interface looks great because the palette is vibrant and colorful. But users struggle to read it. What is the most likely cause?',
+      prompt: 'The same text color has a 7:1 contrast ratio on the page background and 2:1 on a card background. Which statement is correct?',
       choices: [
-        { id: 'a', label: 'Too many warm colors', isCorrect: false, explanation: 'Color temperature does not directly determine readability.' },
-        { id: 'b', label: 'Too much hue variety', isCorrect: false, explanation: 'Using many hues does not automatically cause readability problems.' },
-        { id: 'c', label: 'The font is too small', isCorrect: false, explanation: 'Font size affects legibility, but the question points to a color issue, not a size issue.' },
-        { id: 'd', label: 'Insufficient lightness contrast between text and background', isCorrect: true, explanation: 'Vibrant palettes often use similar lightness levels for multiple colors, which can make text hard to distinguish from its background.' },
+        { id: 'a', label: 'Both pairs pass because their ratios average to 4.5:1.', isCorrect: false, explanation: 'Contrast ratios are not averaged. Each pair must meet the threshold.' },
+        { id: 'b', label: 'The result cannot change unless the text color changes.', isCorrect: false, explanation: 'Changing the background changes the contrast ratio even when the text color stays fixed.' },
+        { id: 'c', label: 'It passes in both places because the text color can reach 7:1.', isCorrect: false, explanation: 'A passing ratio against one background does not apply to other backgrounds.' },
+        { id: 'd', label: 'It passes on the page background and fails on the card background.', isCorrect: true, explanation: 'WCAG evaluates each foreground and background pair separately.' },
       ],
     },
   ],
