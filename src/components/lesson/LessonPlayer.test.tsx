@@ -30,7 +30,10 @@ function StateReader() {
   );
 }
 
-beforeEach(() => localStorage.clear());
+beforeEach(() => {
+  localStorage.clear();
+  sessionStorage.clear();
+});
 afterEach(() => cleanup());
 
 function renderLesson(lesson: LessonConfig) {
@@ -87,6 +90,52 @@ async function advanceThroughChallenge() {
 }
 
 describe('LessonPlayer', () => {
+  describe('step position', () => {
+    it('restores the current step after the player remounts', () => {
+      const lesson = makeLesson({
+        steps: [
+          { id: 's1', text: 'Step one' },
+          { id: 's2', text: 'Step two' },
+          { id: 's3', text: 'Step three' },
+        ],
+      });
+      const firstRender = renderLesson(lesson);
+
+      fireEvent.click(screen.getByRole('button', { name: 'next' }));
+      expect(screen.getByText('2 / 3')).toBeInTheDocument();
+      firstRender.unmount();
+
+      renderLesson(lesson);
+      expect(screen.getByText('2 / 3')).toBeInTheDocument();
+      expect(screen.getByText('Step two')).toBeInTheDocument();
+    });
+
+    it('restores the current quiz question and earlier answers after remounting', async () => {
+      const lesson = makeLesson();
+      const firstRender = renderLesson(lesson);
+      await advanceThroughChallenge();
+
+      fireEvent.click(screen.getByRole('button', { name: /Correct Answer/i }));
+      fireEvent.click(screen.getByRole('button', { name: 'check' }));
+      fireEvent.click(await screen.findByRole('button', { name: 'next question →' }));
+      expect(screen.getByText('question 2 of 2')).toBeInTheDocument();
+      firstRender.unmount();
+
+      renderLesson(lesson);
+      expect(screen.getByText('question 2 of 2')).toBeInTheDocument();
+      expect(screen.getByText('Second question?')).toBeInTheDocument();
+
+      fireEvent.click(screen.getByRole('button', { name: /Right Choice/i }));
+      fireEvent.click(screen.getByRole('button', { name: 'check' }));
+      fireEvent.click(await screen.findByRole('button', { name: 'finish lesson →' }));
+
+      await waitFor(() => {
+        const scores = JSON.parse(screen.getByTestId('quiz-scores').textContent ?? '{}');
+        expect(scores['test-lesson']).toBe(100);
+      });
+    });
+  });
+
   describe('finishLesson score dispatch', () => {
     it('dispatches COMPLETE_QUIZ with score 100 when all answers are correct', async () => {
       renderLesson(makeLesson());

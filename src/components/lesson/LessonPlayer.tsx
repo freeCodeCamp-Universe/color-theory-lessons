@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { LessonConfig } from '../../types/lesson.ts';
 import { useLessonCompletion, type QuizAnswer } from '../../hooks/useLessonCompletion.ts';
@@ -13,15 +13,129 @@ interface LessonPlayerProps {
 
 type Phase = 'steps' | 'challenge' | 'quiz' | 'complete';
 
+interface LessonSessionState {
+  version: 1;
+  phase: Phase;
+  stepIndex: number;
+  challengeDone: boolean;
+  quizIndex: number;
+  answers: QuizAnswer[];
+  selectedChoice: string | null;
+  submitted: boolean;
+}
+
+const LESSON_SESSION_PREFIX = 'color-theory-course-lesson-session:';
+const LEGACY_STEP_STORAGE_PREFIX = 'color-theory-course-step:';
+
+function initialLessonSession(): LessonSessionState {
+  return {
+    version: 1,
+    phase: 'steps',
+    stepIndex: 0,
+    challengeDone: false,
+    quizIndex: 0,
+    answers: [],
+    selectedChoice: null,
+    submitted: false,
+  };
+}
+
+function clampIndex(value: unknown, itemCount: number): number {
+  if (itemCount === 0 || !Number.isInteger(value)) return 0;
+  return Math.min(Math.max(value as number, 0), itemCount - 1);
+}
+
+function loadLessonSession(lesson: LessonConfig): LessonSessionState {
+  const fallback = initialLessonSession();
+
+  try {
+    const stored = sessionStorage.getItem(`${LESSON_SESSION_PREFIX}${lesson.id}`);
+    if (stored === null) {
+      const legacyStep = sessionStorage.getItem(`${LEGACY_STEP_STORAGE_PREFIX}${lesson.id}`);
+      return {
+        ...fallback,
+        stepIndex: clampIndex(legacyStep === null ? 0 : Number.parseInt(legacyStep, 10), lesson.steps.length),
+      };
+    }
+
+    const parsed: unknown = JSON.parse(stored);
+    if (typeof parsed !== 'object' || parsed === null) return fallback;
+
+    const saved = parsed as Partial<LessonSessionState>;
+    const validPhases: Phase[] = ['steps', 'challenge', 'quiz', 'complete'];
+    let phase = validPhases.includes(saved.phase as Phase) ? saved.phase as Phase : 'steps';
+    if (phase === 'quiz' && lesson.quizItems.length === 0) phase = 'challenge';
+
+    const quizIndex = clampIndex(saved.quizIndex, lesson.quizItems.length);
+    const question = lesson.quizItems[quizIndex];
+    const selectedChoice =
+      typeof saved.selectedChoice === 'string' &&
+      question?.choices.some((choice) => choice.id === saved.selectedChoice)
+        ? saved.selectedChoice
+        : null;
+
+    const answers: QuizAnswer[] = [];
+    if (Array.isArray(saved.answers)) {
+      for (const savedAnswer of saved.answers) {
+        if (typeof savedAnswer !== 'object' || savedAnswer === null) continue;
+        const answer = savedAnswer as Partial<QuizAnswer>;
+        const answerQuestion = lesson.quizItems.find((item) => item.id === answer.questionId);
+        const choice = answerQuestion?.choices.find((item) => item.id === answer.choiceId);
+        if (!answerQuestion || !choice || answers.some((item) => item.questionId === answerQuestion.id)) continue;
+        answers.push({
+          questionId: answerQuestion.id,
+          choiceId: choice.id,
+          isCorrect: choice.isCorrect,
+        });
+      }
+    }
+
+    return {
+      version: 1,
+      phase,
+      stepIndex: clampIndex(saved.stepIndex, lesson.steps.length),
+      challengeDone: saved.challengeDone === true || phase === 'quiz' || phase === 'complete',
+      quizIndex,
+      answers,
+      selectedChoice,
+      submitted: saved.submitted === true && selectedChoice !== null,
+    };
+  } catch {
+    return fallback;
+  }
+}
+
+function saveLessonSession(lessonId: string, state: LessonSessionState) {
+  try {
+    sessionStorage.setItem(`${LESSON_SESSION_PREFIX}${lessonId}`, JSON.stringify(state));
+  } catch {
+    // Continue without per-tab lesson persistence when storage is unavailable.
+  }
+}
+
 export function LessonPlayer({ lesson }: LessonPlayerProps) {
   const { completeLesson } = useLessonCompletion(lesson);
-  const [phase, setPhase] = useState<Phase>('steps');
-  const [stepIndex, setStepIndex] = useState(0);
-  const [challengeDone, setChallengeDone] = useState(false);
-  const [quizIndex, setQuizIndex] = useState(0);
-  const [answers, setAnswers] = useState<QuizAnswer[]>([]);
-  const [selectedChoice, setSelectedChoice] = useState<string | null>(null);
-  const [submitted, setSubmitted] = useState(false);
+  const [initialSession] = useState(() => loadLessonSession(lesson));
+  const [phase, setPhase] = useState<Phase>(initialSession.phase);
+  const [stepIndex, setStepIndex] = useState(initialSession.stepIndex);
+  const [challengeDone, setChallengeDone] = useState(initialSession.challengeDone);
+  const [quizIndex, setQuizIndex] = useState(initialSession.quizIndex);
+  const [answers, setAnswers] = useState<QuizAnswer[]>(initialSession.answers);
+  const [selectedChoice, setSelectedChoice] = useState<string | null>(initialSession.selectedChoice);
+  const [submitted, setSubmitted] = useState(initialSession.submitted);
+
+  useEffect(() => {
+    saveLessonSession(lesson.id, {
+      version: 1,
+      phase,
+      stepIndex,
+      challengeDone,
+      quizIndex,
+      answers,
+      selectedChoice,
+      submitted,
+    });
+  }, [answers, challengeDone, lesson.id, phase, quizIndex, selectedChoice, stepIndex, submitted]);
 
   function handleNextStep() {
     if (stepIndex < lesson.steps.length - 1) {
