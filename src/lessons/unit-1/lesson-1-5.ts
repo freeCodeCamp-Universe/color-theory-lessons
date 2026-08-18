@@ -15,7 +15,7 @@ export const lesson1_5: LessonConfig = {
   steps: [
     {
       id: 's1',
-      text: 'Not every element should compete equally for attention. Hierarchy means giving each element a clear role: primary, supporting, or background.',
+      text: 'Visual hierarchy organizes interface elements by importance. It directs attention first to the main content or action, then to supporting information, while background elements remain less prominent.',
       highlights: ['hierarchy'],
     },
     {
