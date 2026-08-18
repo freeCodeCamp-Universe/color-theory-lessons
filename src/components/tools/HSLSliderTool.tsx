@@ -243,7 +243,7 @@ export const HSLSliderTool = memo(function HSLSliderTool({ interactive = true, o
           ) : (
             <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--red)' }}>
-                not quite — try again
+                No match yet. Select retry to reset the slider.
               </p>
               <button
                 onClick={handleRetry}
