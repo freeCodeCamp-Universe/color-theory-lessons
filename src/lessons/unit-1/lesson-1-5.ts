@@ -43,7 +43,7 @@ export const lesson1_5: LessonConfig = {
       prompt: 'Assign a visual role to each action so Submit receives the most emphasis, Save Draft remains available without competing with it, and Cancel receives the least emphasis.',
       type: 'fix-interface',
       hints: [
-        'The primary action should use the strongest accent. The others should step back.',
+        'Only one action should use the filled accent treatment.',
         'Secondary actions work well as ghost buttons or lower-saturation versions.',
         'Cancel or destructive actions can use a subtle red, or simply be a text link.',
       ],
