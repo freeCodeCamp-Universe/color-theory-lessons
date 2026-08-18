@@ -316,7 +316,7 @@ function HierarchyDemo({ interactive = true, onComplete }: { interactive?: boole
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: isCorrect ? 'var(--green)' : 'var(--red)' }}>
           {isCorrect
             ? '✓ Submit stands out as the primary action. Well done.'
-            : '✗ Submit should be primary, Save Draft secondary, and Cancel a text link.'}
+            : '✗ Submit should be primary, Save Draft secondary, and Cancel tertiary.'}
         </p>
       )}
     </div>
