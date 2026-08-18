@@ -29,7 +29,7 @@ export const lesson1_5: LessonConfig = {
     },
     {
       id: 's4',
-      text: 'Good hierarchy usually means some elements step back so one element can step forward. Supporting elements use muted, lower-contrast colors. The focal point uses the design\'s strongest color signal.',
+      text: 'Supporting elements can use neutral or less saturated colors while maintaining readable contrast with their backgrounds. The focal point can use the accent color to distinguish it from those supporting elements.',
       highlights: ['focal point'],
     },
     {
