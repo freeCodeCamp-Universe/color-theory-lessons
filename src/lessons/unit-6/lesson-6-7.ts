@@ -3,15 +3,6 @@ import type { LessonConfig } from '../../types/lesson.ts';
 export const lesson6_7: LessonConfig = {
   id: 'u6-l7', unitId: 'unit-6',
   title: 'Final System Review and Stress Test',
-  description: 'Run a governance-focused stress review of a color system across light mode, dark mode, charts, alerts, and CVD simulation to catch cross-context role drift before shipping.',
-  learningGoal: 'Perform a comprehensive system stress test that identifies role drift, token inconsistency, and cross-context failures.',
-  estimatedMinutes: 16,
-  prerequisites: ['u6-l6'],
-  conceptsIntroduced: [
-    'consistency audit',
-    'stress test',
-    'system review',
-  ],
   interactionType: 'system-stress',
   glossaryTerms: [
     'consistency audit',

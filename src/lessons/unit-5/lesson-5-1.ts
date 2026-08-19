@@ -3,11 +3,6 @@ import type { LessonConfig } from '../../types/lesson.ts';
 export const lesson5_1: LessonConfig = {
   id: 'u5-l1', unitId: 'unit-5',
   title: 'Text Contrast in Practice',
-  description: 'Master the practical WCAG contrast thresholds for readable text by testing and repairing real text/background color pairs.',
-  learningGoal: 'Check a text pair for contrast, read pass/fail output correctly, and adjust colors to meet the intended use case.',
-  estimatedMinutes: 16,
-  prerequisites: ['u4-l4'],
-  conceptsIntroduced: ['normal text', 'large text', 'contrast ratio', 'pass', 'fail'],
   interactionType: 'text-contrast-lab',
   glossaryTerms: ['text contrast', 'normal text', 'large text', 'contrast ratio', 'pass', 'fail'],
   reviewTags: ['contrast', 'text', 'WCAG'],

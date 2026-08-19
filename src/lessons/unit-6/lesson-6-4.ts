@@ -3,11 +3,6 @@ import type { LessonConfig } from '../../types/lesson.ts';
 export const lesson6_4: LessonConfig = {
   id: 'u6-l4', unitId: 'unit-6',
   title: 'Dark Mode and Theme Pairing',
-  description: 'Learn practical dark mode thinking — how to adapt a color system across themes without simply inverting every value.',
-  learningGoal: 'Create a basic paired light/dark theme that preserves hierarchy, readability, and semantic meaning in both modes.',
-  estimatedMinutes: 18,
-  prerequisites: ['u6-l3'],
-  conceptsIntroduced: ['dark mode', 'inverse text', 'light mode', 'mode adaptation', 'surface depth', 'theme pairing', 'tonal separation'],
   interactionType: 'dark-translator',
   glossaryTerms: ['dark mode', 'inverse text', 'light mode', 'mode adaptation', 'surface depth', 'theme pairing', 'tonal separation'],
   reviewTags: ['dark-mode', 'theme', 'hierarchy', 'adaptation'],

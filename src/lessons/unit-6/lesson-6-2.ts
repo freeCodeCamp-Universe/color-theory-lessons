@@ -3,11 +3,6 @@ import type { LessonConfig } from '../../types/lesson.ts';
 export const lesson6_2: LessonConfig = {
   id: 'u6-l2', unitId: 'unit-6',
   title: 'Building Semantic Color Roles for UI',
-  description: 'Define a compact set of semantic roles covering structure, content, interactions, and status — and connect those roles to real components.',
-  learningGoal: 'Build a compact semantic role set and connect roles to common UI components and states.',
-  estimatedMinutes: 18,
-  prerequisites: ['u6-l1'],
-  conceptsIntroduced: ['component state', 'disabled', 'elevated surface', 'hover', 'primary text', 'secondary text', 'semantic status'],
   interactionType: 'role-builder',
   glossaryTerms: ['component state', 'disabled', 'elevated surface', 'hover', 'primary text', 'secondary text', 'semantic status'],
   reviewTags: ['roles', 'components', 'states', 'hierarchy'],

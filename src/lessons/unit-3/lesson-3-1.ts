@@ -4,21 +4,6 @@ export const lesson3_1: LessonConfig = {
   id: 'u3-l1',
   unitId: 'unit-3',
   title: 'Why Digital Design Needs Color Formats',
-  description:
-    'Discover why digital interfaces require precise coded color values — and explore the three most common formats by clicking through a real UI mockup.',
-  learningGoal:
-    'Explain why coded color formats matter and identify where designers encounter them.',
-  estimatedMinutes: 13,
-  prerequisites: ['u2-l6'],
-  conceptsIntroduced: [
-    'color value',
-    'color format',
-    'HEX',
-    'RGB',
-    'HSL',
-    'implementation',
-    'token',
-  ],
   interactionType: 'format-reveal',
   glossaryTerms: ['color value', 'color format', 'implementation', 'token'],
   reviewTags: ['foundations', 'formats', 'HEX', 'RGB', 'HSL', 'implementation'],

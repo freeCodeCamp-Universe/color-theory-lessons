@@ -4,21 +4,6 @@ export const lesson4_1: LessonConfig = {
   id: 'u4-l1',
   unitId: 'unit-4',
   title: 'How Humans Perceive Color',
-  description:
-    'Discover that color is a human interpretation: the eye and brain construct the experience of color from light signals.',
-  learningGoal:
-    'Explain in plain terms that color perception is constructed by the visual system and varies across individuals.',
-  estimatedMinutes: 13,
-  prerequisites: ['u3-l6'],
-  conceptsIntroduced: [
-    'color perception',
-    'retina',
-    'cone',
-    'rod',
-    'optic nerve',
-    'visual system',
-    'color vision',
-  ],
   interactionType: 'eye-diagram',
   glossaryTerms: [
     'color perception',

@@ -4,19 +4,6 @@ export const lesson3_3: LessonConfig = {
   id: 'u3-l3',
   unitId: 'unit-3',
   title: 'HSL and HSLA',
-  description:
-    'Explore HSL as a designer-friendly color format by manipulating hue, saturation, and lightness while seeing HEX and RGB update in real time.',
-  learningGoal:
-    'Use HSL controls to make deliberate color adjustments and explain when HSL is more practical than RGB.',
-  estimatedMinutes: 16,
-  prerequisites: ['u3-l2'],
-  conceptsIntroduced: [
-    'HSL notation',
-    'HSLA',
-    'alpha',
-    'tonal variation',
-    'color family',
-  ],
   interactionType: 'hsl-playground',
   glossaryTerms: ['HSL', 'HSLA', 'alpha', 'color family', 'tonal variation'],
   reviewTags: ['formats', 'HSL', 'design-adjustment'],

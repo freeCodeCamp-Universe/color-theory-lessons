@@ -4,23 +4,6 @@ export const lesson4_2: LessonConfig = {
   id: 'u4-l2',
   unitId: 'unit-4',
   title: 'Types of Color Vision Deficiency',
-  description:
-    'Learn that color vision deficiency is not one single condition — multiple types and severities exist, each affecting different color distinctions.',
-  learningGoal:
-    'Name the major categories of CVD, describe which cone type is affected, and explain why design must be robust rather than diagnostic.',
-  estimatedMinutes: 14,
-  prerequisites: ['u4-l1'],
-  conceptsIntroduced: [
-    'color vision deficiency',
-    'protanopia',
-    'protanomaly',
-    'deuteranopia',
-    'deuteranomaly',
-    'tritanopia',
-    'tritanomaly',
-    'achromatopsia',
-    'simulation',
-  ],
   interactionType: 'vision-cards',
   glossaryTerms: [
     'color vision deficiency',

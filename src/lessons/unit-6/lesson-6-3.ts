@@ -3,11 +3,6 @@ import type { LessonConfig } from '../../types/lesson.ts';
 export const lesson6_3: LessonConfig = {
   id: 'u6-l3', unitId: 'unit-6',
   title: 'Brand Constraints and Hierarchy',
-  description: 'Learn how to translate a brand anchor color into a usable interface system without letting strong branding damage readability, hierarchy, or usability.',
-  learningGoal: 'Translate a brand color into a usable interface system with supporting neutrals and clear hierarchy.',
-  estimatedMinutes: 16,
-  prerequisites: ['u6-l2'],
-  conceptsIntroduced: ['accent overuse', 'brand color', 'supporting palette', 'tonal scale'],
   interactionType: 'brand-pressure',
   glossaryTerms: ['accent overuse', 'brand color', 'supporting palette', 'tonal scale'],
   reviewTags: ['brand', 'hierarchy', 'neutrals', 'balance'],

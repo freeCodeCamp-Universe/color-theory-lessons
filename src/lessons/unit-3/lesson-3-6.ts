@@ -4,19 +4,6 @@ export const lesson3_6: LessonConfig = {
   id: 'u3-l6',
   unitId: 'unit-3',
   title: 'Design Tokens and Role-Based Color Systems',
-  description:
-    'Learn how design tokens separate color meaning from raw values — and see how changing one base value can update an entire interface.',
-  learningGoal:
-    'Explain what design tokens do, distinguish tokens from raw values, and demonstrate how token propagation works.',
-  estimatedMinutes: 15,
-  prerequisites: ['u3-l5'],
-  conceptsIntroduced: [
-    'design token',
-    'variable',
-    'alias token',
-    'role token',
-    'theme propagation',
-  ],
   interactionType: 'token-map',
   glossaryTerms: [
     'design token',

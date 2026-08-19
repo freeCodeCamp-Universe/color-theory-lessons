@@ -3,19 +3,6 @@ import type { LessonConfig } from '../../types/lesson.ts';
 export const lesson5_5: LessonConfig = {
   id: 'u5-l5', unitId: 'unit-5',
   title: 'Accessibility Audit Workflow',
-  description: 'Build a repeatable accessibility workflow for individual screens and user tasks, combining contrast tools, CVD simulation, and task-based checking into one structured process.',
-  learningGoal: 'Apply a structured accessibility audit workflow to a real interface, identify the most important failures, and explain why testing in context matters.',
-  estimatedMinutes: 16,
-  prerequisites: ['u5-l4'],
-  conceptsIntroduced: [
-    'audit',
-    'checker',
-    'context',
-    'priority element',
-    'verification',
-    'review pass',
-    'task check',
-  ],
   interactionType: 'audit-flow',
   glossaryTerms: [
     'audit',

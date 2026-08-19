@@ -10,11 +10,6 @@ export interface LessonConfig {
   id: string;
   unitId: string;
   title: string;
-  description: string;
-  learningGoal: string;
-  estimatedMinutes: number;
-  prerequisites: string[];
-  conceptsIntroduced: string[];
   interactionType: InteractionType;
   steps: LessonStep[];
   challenges: Challenge[];

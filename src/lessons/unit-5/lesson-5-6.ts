@@ -3,17 +3,6 @@ import type { LessonConfig } from '../../types/lesson.ts';
 export const lesson5_6: LessonConfig = {
   id: 'u5-l6', unitId: 'unit-5',
   title: 'Inclusive Testing and Review',
-  description: 'Understand the limits of simulation, learn when to involve real users, and build inclusive color checking into your everyday design workflow.',
-  learningGoal: 'Describe why simulation is an approximation, explain the value of real user testing, and apply inclusive checks early in the design process.',
-  estimatedMinutes: 14,
-  prerequisites: ['u5-l5'],
-  conceptsIntroduced: [
-    'approximation',
-    'inclusive design',
-    'robustness',
-    'user test',
-    'workflow',
-  ],
   interactionType: 'inclusive-review',
   glossaryTerms: [
     'approximation',
