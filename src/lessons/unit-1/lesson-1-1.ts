@@ -70,10 +70,10 @@ export const lesson1_1: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Color communicates meaning before a viewer reads a single word.',
-    'Red, orange, and yellow tend to signal urgency, energy, or danger; blue and green tend to signal calm, safety, or progress — but these are conventions, not universal rules.',
-    'Color meaning is shaped by cultural context and can differ across audiences.',
-    'Using color as the only carrier of meaning (with no text, icon, or pattern backup) is an accessibility risk.',
-    'Every color in a product is either communicating something or adding visual noise.',
+    'Color can direct attention and communicate the structure of an interface.',
+    'A shared color treatment can mark related items as one group.',
+    'Different background colors can separate regions such as navigation and page content.',
+    'Interfaces often use green for success, red for errors, and yellow for warnings. Repeated use turns these conventions into status cues.',
+    'Saturated colors on unrelated elements create competing signals and make the primary action harder to identify.',
   ],
 };

@@ -68,10 +68,10 @@ export const lesson1_6: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Analogous colors sit adjacent on the color wheel and feel naturally harmonious.',
-    'Complementary colors are opposite on the wheel and create strong contrast when paired.',
-    'Triadic colors are three hues evenly spaced at 120° intervals, producing vibrant and balanced palettes.',
-    'Harmony comes from intentional relationships between colors — not from luck or random selection.',
-    'Palette balance means no single color dominates unintentionally; variety and repetition are both tools for balance.',
+    'Color-wheel positions provide starting points for choosing related hues.',
+    'Analogous hues sit next to each other on the color wheel, so the change between their hue angles is gradual.',
+    'Complementary hues sit 180 degrees apart. One hue can be dominant while the other appears in smaller areas as an accent.',
+    'Triadic palettes use three hues spaced 120 degrees apart, but the hues do not need equal visual weight.',
+    'A starter interface palette can combine one dominant hue, supporting hues from a color-wheel relationship, and neutrals for surfaces or text.',
   ],
 };
