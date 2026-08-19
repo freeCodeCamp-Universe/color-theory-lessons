@@ -59,7 +59,7 @@ function makeLesson(overrides?: Partial<LessonConfig>): LessonConfig {
     conceptsIntroduced: [],
     interactionType: 'color-wheel',
     steps: [{ id: 's1', text: 'Step one' }],
-    challenges: [{ id: 'c1', prompt: 'Do the thing', type: 'match-target', hints: [], successCriteria: '' }],
+    challenges: [{ id: 'c1', prompt: 'Do the thing', type: 'match-target', hints: [] }],
     quizItems: [
       {
         id: 'q1',

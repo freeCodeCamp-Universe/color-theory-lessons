@@ -58,7 +58,6 @@ export const lesson3_3: LessonConfig = {
         'A very muted target means low saturation. A very light target means high lightness.',
         'If the target looks gray, saturation is near zero — focus on lightness to match brightness.',
       ],
-      successCriteria: 'All three targets matched.',
     },
   ],
   quizItems: [

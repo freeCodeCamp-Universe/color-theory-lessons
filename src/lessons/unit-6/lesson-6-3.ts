@@ -28,7 +28,6 @@ export const lesson6_3: LessonConfig = {
         'Test your primary text against your page background — this pair must pass contrast before styling anything else.',
         'If the brand color dominates too much, move it to interactive roles only and use neutrals for surfaces.',
       ],
-      successCriteria: 'Brand visible, contrast passes, hierarchy clear, no accent overuse.',
     },
   ],
   quizItems: [

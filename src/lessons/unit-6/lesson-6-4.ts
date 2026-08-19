@@ -28,7 +28,6 @@ export const lesson6_4: LessonConfig = {
         'Lighten your accent slightly for dark mode — vivid colors intensify on dark backgrounds.',
         'Check secondary text contrast in dark mode — it can fall below threshold even if primary text passes.',
       ],
-      successCriteria: 'All roles paired, both modes show readable hierarchy.',
     },
   ],
   quizItems: [

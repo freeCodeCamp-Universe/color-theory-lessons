@@ -61,7 +61,6 @@ export const lesson3_2: LessonConfig = {
         'Watch which channel dominates in the target — that tells you which slider to push higher.',
         'Equal channel values always produce a neutral. If the target has a clear hue, at least one channel must be different.',
       ],
-      successCriteria: 'All three targets matched.',
     },
   ],
   quizItems: [

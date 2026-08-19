@@ -28,7 +28,6 @@ export const lesson6_1: LessonConfig = {
         'Each inconsistency can be traced back to a missing role or a role used for two different purposes.',
         'A good system has one clear answer for "what color should this button be?"',
       ],
-      successCriteria: 'All inconsistencies identified.',
     },
   ],
   quizItems: [

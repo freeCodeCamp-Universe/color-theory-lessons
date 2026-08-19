@@ -31,8 +31,7 @@ export const lessonX_Y: LessonConfig = {
       id: 'c1',
       prompt: 'Complete the interaction to...',
       type: 'match-target',
-      hints: ['Hint 1', 'Hint 2'],
-      successCriteria: 'User matches color exactly'
+      hints: ['Hint 1', 'Hint 2']
     }
   ],
   quizItems: [

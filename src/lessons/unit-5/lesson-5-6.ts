@@ -58,7 +58,6 @@ export const lesson5_6: LessonConfig = {
         'Read each checklist item carefully. The sample interface has real problems — look for them.',
         'For each item, ask: can a user complete the task without relying on hue alone?',
       ],
-      successCriteria: 'All checklist items assessed.',
     },
   ],
   quizItems: [

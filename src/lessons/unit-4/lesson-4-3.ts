@@ -59,7 +59,6 @@ export const lesson4_3: LessonConfig = {
         'Switch to Deuteranopia first — it is the most common type. Notice which status indicators look similar.',
         'Under Achromatopsia, only lightness differences remain. Which elements still have meaning?',
       ],
-      successCriteria: 'All simulation modes explored.',
     },
   ],
   quizItems: [

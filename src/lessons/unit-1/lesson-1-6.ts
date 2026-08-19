@@ -50,7 +50,6 @@ export const lesson1_6: LessonConfig = {
         'In this tool, analogous hues are 30 degrees from the base, a complementary hue is 180 degrees from the base, and triadic hues are 120 degrees apart.',
         'Look at the positions of the marked hues before answering the reflection question.',
       ],
-      successCriteria: 'Palette has a clear relationship type and the accent creates visible contrast against the dominant hue.',
     },
   ],
   quizItems: [

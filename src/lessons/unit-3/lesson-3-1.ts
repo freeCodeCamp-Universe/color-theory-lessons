@@ -57,7 +57,6 @@ export const lesson3_1: LessonConfig = {
         'Each element reveals HEX, RGB, and HSL for the same color.',
         'You do not need to memorize the values — focus on the structure of each format.',
       ],
-      successCriteria: 'All elements explored.',
     },
   ],
   quizItems: [

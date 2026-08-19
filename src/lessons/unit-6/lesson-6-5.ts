@@ -28,7 +28,6 @@ export const lesson6_5: LessonConfig = {
         'If two bars look similar under deuteranopia, add direct labels to the bars.',
         'Avoid using red and green as the only distinguishing pair — use blue/orange or add patterns.',
       ],
-      successCriteria: 'Both charts pass normal and simulation checks.',
     },
   ],
   quizItems: [

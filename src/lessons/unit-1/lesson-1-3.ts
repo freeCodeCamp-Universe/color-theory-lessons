@@ -47,7 +47,6 @@ export const lesson1_3: LessonConfig = {
         'Increase the helper text\'s lightness so it stands out from the dark background.',
         'The Submit text is white. Decrease the button background\'s lightness to raise the contrast.',
       ],
-      successCriteria: 'All three problem areas reach clearly readable contrast.',
     },
   ],
   quizItems: [

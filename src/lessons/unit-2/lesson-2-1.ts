@@ -46,7 +46,6 @@ export const lesson2_1: LessonConfig = {
         'If it relies on external light to be seen — paint, ink, printed paper — it is subtractive.',
         'LED signs and projector beams are light sources, even though they project onto surfaces.',
       ],
-      successCriteria: 'At least 6 of 8 examples correctly classified.',
     },
   ],
   quizItems: [

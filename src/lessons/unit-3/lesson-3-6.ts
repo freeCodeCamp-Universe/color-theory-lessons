@@ -62,7 +62,6 @@ export const lesson3_6: LessonConfig = {
         'If you change a base value and multiple interface elements update, those elements reference the same token.',
         'Role tokens describe function: --color-text-primary, --color-success-bg. Alias tokens describe the palette: --blue-600.',
       ],
-      successCriteria: 'Base values fixed and all items correctly sorted.',
     },
   ],
   quizItems: [

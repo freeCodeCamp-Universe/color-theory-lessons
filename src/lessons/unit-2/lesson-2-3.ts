@@ -46,7 +46,6 @@ export const lesson2_3: LessonConfig = {
         'On screens, "darker" means lower channel values — less light. It does not mean more pigment.',
         'If the explanation uses words like "muddy," "dilute," or "absorb," it is probably paint logic.',
       ],
-      successCriteria: 'All three scenarios correctly identified using additive reasoning.',
     },
   ],
   quizItems: [

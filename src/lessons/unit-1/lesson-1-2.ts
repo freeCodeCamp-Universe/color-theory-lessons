@@ -50,7 +50,6 @@ export const lesson1_2: LessonConfig = {
         'Compare how vivid or muted the colors look while hue and lightness remain fixed. That difference comes from saturation.',
         'Lightness is the changing value when one color is darker or lighter and the other two values match.',
       ],
-      successCriteria: 'Matches all three targets within acceptable tolerance.',
     },
   ],
   quizItems: [
