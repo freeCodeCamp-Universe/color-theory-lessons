@@ -85,7 +85,7 @@ function ColorWheel({ baseH, relatedH, interactive, onChange }: ColorWheelProps)
       aria-valuemin={0}
       aria-valuemax={359}
       aria-valuenow={baseH}
-      aria-label={`Color wheel hue selector — ${baseH}°`}
+      aria-label={`Color wheel hue selector: ${baseH}°`}
       style={{ cursor: interactive ? 'crosshair' : 'default', flexShrink: 0, outline: 'none' }}
     >
       {focused && interactive && (
@@ -127,9 +127,9 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
   const relatedColors = relatedH.map((h) => hslToHex(h, 70, 50));
 
   const relationshipDesc: Record<Relationship, string> = {
-    analogous: 'Adjacent hues — cohesive and calm.',
-    complementary: 'Opposite hue — strong contrast and energy.',
-    triadic: 'Three equally spaced hues — dynamic but needs restraint.',
+    analogous: 'Two hues, each 30° from the base.',
+    complementary: 'One hue, 180° from the base.',
+    triadic: 'Two hues, each 120° from the base.',
   };
 
   function buildPalette() {
@@ -213,7 +213,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
               ))}
               <div style={{ flex: 1, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--gray-80)' }} title="Neutral" />
             </div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>dominant · support · neutral</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>base · related hues · neutral</span>
           </div>
         </div>
       </div>
@@ -249,36 +249,36 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
               </div>
             </div>
             <p style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>
-              Relationship: <strong style={{ color: 'var(--primary-foreground)' }}>{relationship}</strong>. The accent creates the strongest visual signal.
+              Selected relationship: <strong style={{ color: 'var(--primary-foreground)' }}>{relationship}</strong>. The swatches are labeled by their intended roles.
             </p>
             {interactive && !paletteDone && (() => {
               const VALIDATION: Record<Relationship, { question: string; choices: { id: string; label: string; isCorrect: boolean }[]; feedback: string }> = {
                 analogous: {
-                  question: 'What does analogous typically bring to this palette?',
+                  question: 'Where are analogous hues positioned relative to the base hue?',
                   choices: [
-                    { id: 'a', label: 'Adjacent hues — creates cohesion and visual calm', isCorrect: true },
-                    { id: 'b', label: 'Creates tension through contrast', isCorrect: false },
-                    { id: 'c', label: 'Adds three distinct accent points', isCorrect: false },
+                    { id: 'a', label: 'On either side of the base hue', isCorrect: true },
+                    { id: 'b', label: 'Opposite the base hue', isCorrect: false },
+                    { id: 'c', label: 'At 120° intervals from the base hue', isCorrect: false },
                   ],
-                  feedback: 'Good for calm briefs — cohesion without tension.',
+                  feedback: 'Analogous hues sit 30° on either side of the base hue in this tool.',
                 },
                 complementary: {
-                  question: 'What does complementary typically bring to this palette?',
+                  question: 'Where is a complementary hue positioned relative to the base hue?',
                   choices: [
-                    { id: 'a', label: 'Creates visual cohesion and calm', isCorrect: false },
-                    { id: 'b', label: 'Opposite hues — creates contrast and visual energy', isCorrect: true },
-                    { id: 'c', label: 'Evenly spaces three hues for variety', isCorrect: false },
+                    { id: 'a', label: '30° from the base hue', isCorrect: false },
+                    { id: 'b', label: '180° from the base hue', isCorrect: true },
+                    { id: 'c', label: '120° from the base hue', isCorrect: false },
                   ],
-                  feedback: 'Creates strong pop — great for CTAs, but high-energy for a calming app.',
+                  feedback: 'A complementary hue sits opposite the base hue, 180° away.',
                 },
                 triadic: {
-                  question: 'What does triadic typically bring to this palette?',
+                  question: 'How are the three hues in a triadic relationship spaced?',
                   choices: [
-                    { id: 'a', label: 'Adjacent hues — creates cohesion', isCorrect: false },
-                    { id: 'b', label: 'One opposite hue for maximum contrast', isCorrect: false },
-                    { id: 'c', label: 'Three evenly spaced hues — dynamic, needs restraint', isCorrect: true },
+                    { id: 'a', label: '30° apart', isCorrect: false },
+                    { id: 'b', label: '180° apart', isCorrect: false },
+                    { id: 'c', label: '120° apart', isCorrect: true },
                   ],
-                  feedback: 'Dynamic and versatile — keeps it interesting, but requires careful restraint for calm interfaces.',
+                  feedback: 'A triadic relationship contains three hues spaced 120° apart.',
                 },
               };
               const v = VALIDATION[relationship];
