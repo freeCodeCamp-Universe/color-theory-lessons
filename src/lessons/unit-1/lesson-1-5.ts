@@ -65,10 +65,10 @@ export const lesson1_5: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Visual hierarchy means the most important element receives the most visual weight; everything else is subordinate.',
-    'Primary actions get the most prominent color; secondary actions are quieter; tertiary actions recede further.',
-    'A focal point is created by giving one element a distinctly different color from its surroundings.',
-    'Accent colors lose their impact if overused — restraint is what makes an accent read as emphasis.',
-    'Hierarchy works not because some colors are inherently louder, but because they stand out relative to the rest.',
+    'Visual hierarchy directs attention to the main content or action before supporting information and background elements.',
+    'Reserving an accent color for one focal point makes it more prominent than neutral or muted elements nearby.',
+    'Applying saturated accent colors to several elements creates competing signals instead of a clear primary emphasis.',
+    'Supporting elements can use neutral or less saturated colors while maintaining readable contrast with their backgrounds.',
+    'A filled accent can mark the primary action, an outline can mark a secondary action, and a text link can mark a tertiary action.',
   ],
 };
