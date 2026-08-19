@@ -65,7 +65,7 @@ export const lesson1_3: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Different hues do not make a text and background pair readable when both colors appear similarly light or dark.',
+    'Different hues do not guarantee that a text and background pair is readable when both colors appear similarly light or dark.',
     'WCAG calculates text contrast from the relative luminance of the foreground and background colors, not from hue or HSL lightness.',
     'At WCAG Level AA, text that does not qualify as large needs at least 4.5:1 contrast. Large text needs at least 3:1.',
     'Contrast belongs to a foreground and background pair. The same text color can pass on one background and fail on another.',
