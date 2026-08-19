@@ -67,7 +67,6 @@ export const lesson6_6: LessonConfig = {
         'A semantic role is a token name like --color-text-primary or --color-success-bg.',
         'A rendering context is where the color appears: Display P3, Canvas chart fill, SVG icon fill.',
       ],
-      successCriteria: 'All items correctly sorted.',
     },
   ],
   quizItems: [

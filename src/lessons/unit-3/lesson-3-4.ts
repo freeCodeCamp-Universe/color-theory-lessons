@@ -65,7 +65,6 @@ export const lesson3_4: LessonConfig = {
         'Hover states are typically subtle — try a light or dark overlay at low opacity (10-20%).',
         'For text readability over images, you need enough overlay opacity that the text contrast passes.',
       ],
-      successCriteria: 'All four overlay contexts completed.',
     },
   ],
   quizItems: [

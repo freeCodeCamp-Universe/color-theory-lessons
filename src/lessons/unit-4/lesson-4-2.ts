@@ -74,7 +74,6 @@ export const lesson4_2: LessonConfig = {
         'Click a card header to expand it. Each card shows a description, a design risk, and the affected colors.',
         'There are six card types — protan, deutan, tritan, and achromatopsia variants. Expand all of them.',
       ],
-      successCriteria: 'All vision type cards expanded.',
     },
   ],
   quizItems: [

@@ -47,7 +47,6 @@ export const lesson1_5: LessonConfig = {
         'An outlined treatment keeps an action visible without giving it the same emphasis as a filled accent.',
         'A text-link treatment gives a tertiary action less emphasis than filled or outlined actions.',
       ],
-      successCriteria: 'Submit is clearly dominant, secondary actions are visually subordinate, no element fights for equal emphasis.',
     },
   ],
   quizItems: [

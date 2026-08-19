@@ -76,7 +76,6 @@ export const lesson5_3: LessonConfig = {
         'All four states need at least one cue enabled before the challenge is complete.',
         'Start by asking: if I removed hue, what would still communicate meaning?',
       ],
-      successCriteria: 'All four states have at least one non-color cue enabled.',
     },
   ],
   quizItems: [

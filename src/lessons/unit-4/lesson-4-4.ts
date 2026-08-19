@@ -57,7 +57,6 @@ export const lesson4_4: LessonConfig = {
         'Imagine the colors shift so that reds and greens look the same. Which elements lose their meaning?',
         'Three of the six examples rely on hue alone. The others have a backup signal.',
       ],
-      successCriteria: 'All three hue-dependent examples correctly identified.',
     },
   ],
   quizItems: [

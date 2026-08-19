@@ -63,7 +63,6 @@ export const lesson5_5: LessonConfig = {
         'A passing ratio does not fix a color-only problem — check both separately.',
         'Simulate at least two CVD modes before marking the simulation step complete.',
       ],
-      successCriteria: 'All audit stages completed.',
     },
   ],
   quizItems: [

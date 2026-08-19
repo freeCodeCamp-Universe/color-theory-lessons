@@ -46,7 +46,6 @@ export const lesson1_4: LessonConfig = {
         'Compare an uncertain swatch with the warmer and cooler examples. If neither temperature dominates, it may belong in the neutral group.',
         'Use the intended mood as your guide. Consider whether the goal needs more energy, more calm, or less color emphasis.',
       ],
-      successCriteria: 'Sorts all swatches correctly and matches palette directions to interface goals.',
     },
   ],
   quizItems: [

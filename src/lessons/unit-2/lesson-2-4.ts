@@ -51,7 +51,6 @@ export const lesson2_4: LessonConfig = {
         'The gap is not always a mistake — it can be a natural consequence of different models.',
         'Surface finish, ambient lighting, and gamut limits are all real factors.',
       ],
-      successCriteria: 'All correct reasons selected and no incorrect reasons selected across all scenarios.',
     },
   ],
   quizItems: [

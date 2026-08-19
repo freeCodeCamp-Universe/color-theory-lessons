@@ -51,7 +51,6 @@ export const lesson1_1: LessonConfig = {
         'A status color marks an outcome such as success, warning, or error.',
         'A background color can mark the boundary between navigation and page content.',
       ],
-      successCriteria: 'Identifies the role of color in all four areas.',
     },
   ],
   quizItems: [

@@ -66,7 +66,6 @@ export const lesson3_5: LessonConfig = {
         'Use the gradient to add visual interest to the hero area without hurting text readability.',
         'Status colors (success, warning, error) should be distinct from each other and from the accent.',
       ],
-      successCriteria: 'All roles assigned, gradient applied, readability checks pass.',
     },
   ],
   quizItems: [

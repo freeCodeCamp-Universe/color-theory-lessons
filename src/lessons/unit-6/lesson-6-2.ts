@@ -28,7 +28,6 @@ export const lesson6_2: LessonConfig = {
         'Keep success/warning/error visually distinct — not just different hues but different enough lightness too.',
         'Check: can you tell what is interactive vs informational vs structural?',
       ],
-      successCriteria: 'All required roles filled and hierarchy checks pass.',
     },
   ],
   quizItems: [

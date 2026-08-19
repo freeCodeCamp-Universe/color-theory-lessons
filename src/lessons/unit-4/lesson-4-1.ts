@@ -67,7 +67,6 @@ export const lesson4_1: LessonConfig = {
         'Start with the light source and follow the path into the eye.',
         'Each step has a short design implication — read it before moving on.',
       ],
-      successCriteria: 'All pathway steps explored.',
     },
   ],
   quizItems: [

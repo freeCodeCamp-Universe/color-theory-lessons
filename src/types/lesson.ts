@@ -84,7 +84,6 @@ export interface Challenge {
   prompt: string;
   type: ChallengeType;
   hints: string[];
-  successCriteria: string;
 }
 
 export type ChallengeType =

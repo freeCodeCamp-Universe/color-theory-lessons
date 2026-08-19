@@ -49,7 +49,6 @@ export const lesson2_2: LessonConfig = {
         'For cool colors (blues, cyans), the blue channel leads. Cyan also needs high green.',
         'Grays and neutrals come from roughly equal channels. Tilt one slightly to add warmth or coolness.',
       ],
-      successCriteria: 'All five target colors matched within the allowed tolerance.',
     },
   ],
   quizItems: [

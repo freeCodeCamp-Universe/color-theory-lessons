@@ -47,7 +47,6 @@ export const lesson2_5: LessonConfig = {
         'Think about what "contrast" means when the surrounding area is near-black versus near-white.',
         'The accent\'s RGB values do not change — only the context does.',
       ],
-      successCriteria: 'All three scenarios answered correctly with screen-logic reasoning.',
     },
   ],
   quizItems: [

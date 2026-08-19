@@ -55,7 +55,6 @@ export const lesson6_7: LessonConfig = {
         'For each issue, classify the root cause: role drift, missing role definition, or token override.',
         'Simulation failures often appear in the chart and alert views — check those carefully.',
       ],
-      successCriteria: 'All five stress test contexts reviewed.',
     },
   ],
   quizItems: [
