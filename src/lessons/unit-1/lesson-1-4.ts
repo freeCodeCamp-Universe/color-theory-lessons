@@ -67,7 +67,7 @@ export const lesson1_4: LessonConfig = {
   keyPoints: [
     'Reds, oranges, and yellows tend to feel warm, active, or urgent.',
     'Blues, greens, and blue-purples tend to feel cool, calm, or farther away.',
-    'Neutrals such as grays and beiges sit between warm and cool colors.',
+    'Neutral colors such as grays and beiges can sit between warm and cool or lean toward either temperature.',
     'Neutral colors can reduce visual demand and give saturated actions or alerts more emphasis.',
     'Warm and cool associations are tendencies. Context, culture, and surrounding colors affect how people respond.',
   ],
