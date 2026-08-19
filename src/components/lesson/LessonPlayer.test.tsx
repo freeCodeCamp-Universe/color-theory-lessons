@@ -7,10 +7,11 @@ import { useAppState } from '../../state/app-context.tsx';
 import type { LessonConfig } from '../../types/lesson.ts';
 
 vi.mock('../tools/ToolRenderer.tsx', async () => {
-  const { useEffect } = await import('react');
+  const { useEffect, useRef } = await import('react');
   return {
     ToolRenderer: ({ onChallengeComplete }: { onChallengeComplete?: () => void }) => {
-      useEffect(() => { onChallengeComplete?.(); }, []);
+      const initialOnChallengeComplete = useRef(onChallengeComplete);
+      useEffect(() => { initialOnChallengeComplete.current?.(); }, []);
       return null;
     },
   };
