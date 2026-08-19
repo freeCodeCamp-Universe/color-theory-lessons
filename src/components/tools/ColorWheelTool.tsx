@@ -127,7 +127,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
   const relatedColors = relatedH.map((h) => hslToHex(h, 70, 50));
 
   const relationshipDesc: Record<Relationship, string> = {
-    analogous: 'Two related hues, 30° on either side of the base.',
+    analogous: 'This tool places two related hues 30° on either side of the base.',
     complementary: 'One hue, 180° from the base.',
     triadic: 'Three hues spaced 120° apart.',
   };
