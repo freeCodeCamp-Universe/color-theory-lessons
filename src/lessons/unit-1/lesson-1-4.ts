@@ -4,7 +4,7 @@ export const lesson1_4: LessonConfig = {
   id: 'u1-l4',
   unitId: 'unit-1',
   title: 'Warm and Cool Colors in Practice',
-  interactionType: 'palette-builder',
+  interactionType: 'temperature-sorter',
   glossaryTerms: ['warm', 'cool', 'neutral', 'palette mood'],
   reviewTags: ['temperature', 'foundations', 'visual-vocabulary'],
   steps: [

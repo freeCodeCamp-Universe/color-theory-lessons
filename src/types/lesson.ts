@@ -22,7 +22,7 @@ export interface LessonConfig {
 export type InteractionType =
   | 'color-wheel'
   | 'rgb-mixer'
-  | 'palette-builder'
+  | 'temperature-sorter'
   | 'contrast-checker'
   | 'before-after'
   | 'slider-explore'
@@ -30,7 +30,6 @@ export type InteractionType =
   | 'logic-fixer'
   | 'mismatch-explainer'
   | 'background-shift'
-  | 'interface-tuner'
   | 'format-reveal'
   | 'hex-rgb-editor'
   | 'hsl-playground'
@@ -44,10 +43,8 @@ export type InteractionType =
   | 'color-only-detector'
   | 'state-workshop'
   | 'inclusive-review'
-  | 'broken-usable-cards'
   | 'text-contrast-lab'
   | 'component-checker'
-  | 'color-alone-rebuild'
   | 'audit-flow'
   | 'pattern-repair'
   | 'system-comparison'
@@ -55,8 +52,7 @@ export type InteractionType =
   | 'brand-pressure'
   | 'dark-translator'
   | 'chart-tuner'
-  | 'system-stress'
-  | 'none';
+  | 'system-stress';
 
 export type StepPanelConfig =
   | { type: 'color-wheel-preview'; relationship: 'analogous' | 'complementary' | 'triadic' }
