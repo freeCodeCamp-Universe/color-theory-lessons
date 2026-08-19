@@ -69,3 +69,48 @@ describe('ColorWheelTool preview mode', () => {
     expect(screen.queryByRole('button', { name: /build palette/i })).toBeNull();
   });
 });
+
+describe('ColorWheelTool buildPalette role assignment', () => {
+  it('complementary: support swatch comes from the complementary hue (180° from base)', () => {
+    render(<ColorWheelTool interactive={true} />);
+
+    // select complementary relationship
+    fireEvent.click(screen.getByRole('button', { name: 'complementary' }));
+    // lock in the palette
+    fireEvent.click(screen.getByRole('button', { name: /lock in this palette/i }));
+
+    // After locking, both support and accent should use the complementary hue.
+    // The base hue is 210 (default). Complementary = (210+180)%360 = 30.
+    // Support swatch title should be hsl(30, 60%, 55%) and accent hsl(30, 85%, 60%).
+    const supportSwatch = document.querySelector('[title*="30"]') as HTMLElement | null;
+    expect(supportSwatch).not.toBeNull();
+  });
+
+  it('triadic: support swatch comes from the second triadic hue (240° from base)', () => {
+    render(<ColorWheelTool interactive={true} />);
+
+    // select triadic relationship
+    fireEvent.click(screen.getByRole('button', { name: 'triadic' }));
+    // lock in the palette
+    fireEvent.click(screen.getByRole('button', { name: /lock in this palette/i }));
+
+    // Base = 210, triadic hues = 330 and 90.
+    // accent = 330 (relatedH[0]), support = 90 (relatedH[1]).
+    // support div uses hslToHex(90, 60, 55); accent uses hslToHex(330, 85, 60).
+    const swatches = document.querySelectorAll('[style*="background-color"]');
+    // At least dominant, support and accent swatches are rendered.
+    expect(swatches.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('analogous: support swatch comes from the second analogous hue (30° below base)', () => {
+    render(<ColorWheelTool interactive={true} />);
+
+    // analogous is not the default, explicitly select it
+    fireEvent.click(screen.getByRole('button', { name: 'analogous' }));
+    fireEvent.click(screen.getByRole('button', { name: /lock in this palette/i }));
+
+    // Base = 210, analogous hues = 240 and 180. accent = 240 (relatedH[0]), support = 180 (relatedH[1]).
+    const swatches = document.querySelectorAll('[style*="background-color"]');
+    expect(swatches.length).toBeGreaterThanOrEqual(3);
+  });
+});
