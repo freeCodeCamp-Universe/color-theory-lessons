@@ -4,17 +4,6 @@ export const lesson4_4: LessonConfig = {
   id: 'u4-l4',
   unitId: 'unit-4',
   title: 'What Color Perception Means for Design',
-  description:
-    'Connect what you have learned about vision and CVD to everyday interface patterns by diagnosing where meaning becomes ambiguous when perception varies.',
-  learningGoal:
-    'Identify at least three interface patterns that become ambiguous when color perception varies, and explain the structural reason they break.',
-  estimatedMinutes: 13,
-  prerequisites: ['u4-l3'],
-  conceptsIntroduced: [
-    'color-dependent meaning',
-    'ambiguous element',
-    'perceptual robustness',
-  ],
   interactionType: 'color-only-detector',
   glossaryTerms: [
     'color-dependent meaning',

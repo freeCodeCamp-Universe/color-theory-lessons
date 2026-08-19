@@ -3,11 +3,6 @@ import type { LessonConfig } from '../../types/lesson.ts';
 export const lesson5_4: LessonConfig = {
   id: 'u5-l4', unitId: 'unit-5',
   title: 'Accessible Patterns for Real Interfaces',
-  description: 'Apply accessible color principles to complete, repeating interface patterns: forms, links, alerts, charts, and navigation — building habits that scale across whole products.',
-  learningGoal: 'Apply accessible color decisions to common interface patterns and explain why system-level accessible patterns scale better than one-off fixes.',
-  estimatedMinutes: 17,
-  prerequisites: ['u5-l3'],
-  conceptsIntroduced: ['form validation', 'alert', 'notification', 'inline error', 'link distinction', 'chart palette', 'dashboard', 'pattern library'],
   interactionType: 'pattern-repair',
   glossaryTerms: ['form validation', 'alert', 'notification', 'inline error', 'link distinction', 'chart palette', 'dashboard', 'pattern library'],
   reviewTags: ['patterns', 'forms', 'alerts', 'charts', 'accessibility'],

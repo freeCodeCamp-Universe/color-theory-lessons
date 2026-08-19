@@ -4,21 +4,6 @@ export const lesson3_4: LessonConfig = {
   id: 'u3-l4',
   unitId: 'unit-3',
   title: 'Alpha, Transparency, and Layered Color',
-  description:
-    'Go deeper on RGBA behavior by testing how opacity and layering change perceived color over different backgrounds.',
-  learningGoal:
-    'Use alpha deliberately and explain why the same overlay looks different on different backgrounds.',
-  estimatedMinutes: 14,
-  prerequisites: ['u3-l3'],
-  conceptsIntroduced: [
-    'alpha',
-    'opacity',
-    'transparency',
-    'overlay',
-    'scrim',
-    'blend perception',
-    'layered interface',
-  ],
   interactionType: 'alpha-layer',
   glossaryTerms: [
     'opacity',

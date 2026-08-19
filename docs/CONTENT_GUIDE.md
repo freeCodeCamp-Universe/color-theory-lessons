@@ -16,11 +16,6 @@ export const lessonX_Y: LessonConfig = {
   id: 'uX-lY',            // Unique ID (e.g., 'u1-l7')
   unitId: 'unit-X',       // Parent unit ID
   title: 'Lesson Title',
-  description: 'A brief summary of what the user will learn.',
-  learningGoal: 'Identify the impact of...',
-  estimatedMinutes: 10,
-  prerequisites: [],      // Optional array of previous lesson IDs
-  conceptsIntroduced: ['concept-a', 'concept-b'],
   interactionType: 'tool-name', // Must exist in InteractionType enum
   steps: [
     { id: 's1', text: 'First instruction...' },

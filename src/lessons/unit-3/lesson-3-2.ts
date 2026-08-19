@@ -4,22 +4,6 @@ export const lesson3_2: LessonConfig = {
   id: 'u3-l2',
   unitId: 'unit-3',
   title: 'HEX and RGB',
-  description:
-    'Explore the two most common digital color formats by editing RGB sliders and HEX values in a live dual editor — then match three target UI colors.',
-  learningGoal:
-    'Read and adjust HEX and RGB values to produce a target color, and explain what changes when a single channel value changes.',
-  estimatedMinutes: 16,
-  prerequisites: ['u3-l1'],
-  conceptsIntroduced: [
-    'RGB',
-    'RGBA',
-    'HEX',
-    'channel',
-    'red channel',
-    'green channel',
-    'blue channel',
-    'shorthand HEX',
-  ],
   interactionType: 'hex-rgb-editor',
   glossaryTerms: ['channel', 'HEX', 'RGBA', 'shorthand HEX'],
   reviewTags: ['formats', 'HEX', 'RGB'],

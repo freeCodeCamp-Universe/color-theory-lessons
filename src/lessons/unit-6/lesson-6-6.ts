@@ -3,21 +3,6 @@ import type { LessonConfig } from '../../types/lesson.ts';
 export const lesson6_6: LessonConfig = {
   id: 'u6-l6', unitId: 'unit-6',
   title: 'Color Spaces and Modern Screens',
-  description: 'Understand sRGB and Display P3 color spaces, see how color behaves across CSS, SVG, and Canvas rendering contexts, and learn how wide-gamut displays affect system-level color decisions.',
-  learningGoal: 'Describe sRGB as the safe baseline, explain why Display P3 requires caution, and recognize that context effects and wide-gamut displays change how a color system is perceived.',
-  estimatedMinutes: 15,
-  prerequisites: ['u6-l5'],
-  conceptsIntroduced: [
-    'sRGB',
-    'Display P3',
-    'color space',
-    'Canvas',
-    'SVG',
-    'WebGL',
-    'context effect',
-    'simultaneous contrast',
-    'wide-gamut display',
-  ],
   interactionType: 'color-space-lab',
   glossaryTerms: [
     'sRGB',

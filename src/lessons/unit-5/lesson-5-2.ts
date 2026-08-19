@@ -3,11 +3,6 @@ import type { LessonConfig } from '../../types/lesson.ts';
 export const lesson5_2: LessonConfig = {
   id: 'u5-l2', unitId: 'unit-5',
   title: 'Non-Text Contrast for Controls and Graphics',
-  description: 'Extend accessible contrast thinking beyond text to the controls, icons, boundaries, and graphics that users depend on to navigate and operate interfaces.',
-  learningGoal: 'Identify weak non-text contrast in interface components and improve the visibility of controls, indicators, and meaningful graphics.',
-  estimatedMinutes: 16,
-  prerequisites: ['u5-l1'],
-  conceptsIntroduced: ['non-text contrast', 'user interface component', 'graphical object', 'focus indicator', 'boundary', 'outline', 'icon contrast', 'state visibility'],
   interactionType: 'component-checker',
   glossaryTerms: ['non-text contrast', 'user interface component', 'graphical object', 'focus indicator', 'boundary', 'outline', 'icon contrast', 'state visibility'],
   reviewTags: ['contrast', 'components', 'controls', 'WCAG'],

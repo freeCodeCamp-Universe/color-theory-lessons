@@ -4,19 +4,6 @@ export const lesson4_3: LessonConfig = {
   id: 'u4-l3',
   unitId: 'unit-4',
   title: 'Seeing Through Simulated Eyes',
-  description:
-    'Use CVD simulation to see how different vision types affect real interface elements, and identify which areas become indistinguishable.',
-  learningGoal:
-    'Identify which interface elements become problematic under protan, deutan, and tritan simulations.',
-  estimatedMinutes: 15,
-  prerequisites: ['u4-l2'],
-  conceptsIntroduced: [
-    'protan',
-    'deutan',
-    'tritan',
-    'backup cue',
-    'redundancy',
-  ],
   interactionType: 'interface-gallery',
   glossaryTerms: ['protan', 'deutan', 'tritan', 'backup cue', 'redundancy'],
   reviewTags: ['CVD', 'simulation', 'interface-review'],

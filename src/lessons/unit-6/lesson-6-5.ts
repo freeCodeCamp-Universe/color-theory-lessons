@@ -3,11 +3,6 @@ import type { LessonConfig } from '../../types/lesson.ts';
 export const lesson6_5: LessonConfig = {
   id: 'u6-l5', unitId: 'unit-6',
   title: 'Color for Charts and Data Visualization',
-  description: 'Choose and improve chart color palettes so data is easier to compare, interpret, and understand — with less dependence on color alone.',
-  learningGoal: 'Choose and revise chart colors so data is easier to interpret and less dependent on hue alone.',
-  estimatedMinutes: 16,
-  prerequisites: ['u6-l4'],
-  conceptsIntroduced: ['categorical palette', 'chart contrast', 'data emphasis', 'encoding', 'sequential palette', 'visual grouping'],
   interactionType: 'chart-tuner',
   glossaryTerms: ['categorical palette', 'chart contrast', 'data emphasis', 'encoding', 'sequential palette', 'visual grouping'],
   reviewTags: ['charts', 'data-visualization', 'color-systems'],

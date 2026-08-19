@@ -3,11 +3,6 @@ import type { LessonConfig } from '../../types/lesson.ts';
 export const lesson6_1: LessonConfig = {
   id: 'u6-l1', unitId: 'unit-6',
   title: 'From Individual Colors to Color Systems',
-  description: 'Move from lesson-level role assignment to product-level color governance by identifying where ad-hoc choices break consistency across screens.',
-  learningGoal: 'Identify system-level color inconsistencies and map them to missing or misused semantic roles.',
-  estimatedMinutes: 15,
-  prerequisites: ['u5-l6'],
-  conceptsIntroduced: ['color system', 'consistency'],
   interactionType: 'system-comparison',
   glossaryTerms: ['color system', 'consistency', 'semantic role'],
   reviewTags: ['systems', 'roles', 'consistency'],

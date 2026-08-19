@@ -4,21 +4,6 @@ export const lesson3_5: LessonConfig = {
   id: 'u3-l5',
   unitId: 'unit-3',
   title: 'Gradients, CSS Color Usage, and Theme Building',
-  description:
-    'Connect color formats to real product work by applying gradients and role assignments to build a coherent interface theme in a live sandbox.',
-  learningGoal:
-    'Apply role-based color usage to build a simple, coherent interface theme with a functional gradient.',
-  estimatedMinutes: 16,
-  prerequisites: ['u3-l4'],
-  conceptsIntroduced: [
-    'gradient',
-    'linear gradient',
-    'radial gradient',
-    'text color',
-    'border color',
-    'semantic color',
-    'theme',
-  ],
   interactionType: 'theme-sandbox',
   glossaryTerms: [
     'gradient',
