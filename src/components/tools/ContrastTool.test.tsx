@@ -5,26 +5,28 @@ import { ContrastTool } from './ContrastTool.tsx';
 beforeEach(() => localStorage.clear());
 afterEach(() => cleanup());
 
+// Lightness values chosen so that the computed WCAG contrast ratio is:
+//   heading (4.5:1 threshold): l=58 → ~4.36 (fail), l=60 → ~4.65 (pass)
+//   helper  (4.5:1 threshold): l=60 → ~4.41 (fail), l=62 → ~4.70 (pass)
+//   button  (3:1 threshold):   l=65 → ~2.89 (fail), l=64 → ~3.00 (pass)
+
 describe('ContrastTool', () => {
   describe('completion', () => {
-    it('calls onComplete when all three areas reach their threshold', () => {
+    it('calls onComplete when all three areas reach the WCAG AA threshold', () => {
       const onComplete = vi.fn();
       render(<ContrastTool interactive={true} onComplete={onComplete} />);
 
-      // heading: needs l >= 75 (text lightness)
       fireEvent.change(
         screen.getByRole('slider', { name: /Lightness for Section label/i }),
-        { target: { value: '80' } },
+        { target: { value: '60' } },
       );
-      // helper: needs l >= 65 (text lightness)
       fireEvent.change(
         screen.getByRole('slider', { name: /Lightness for Helper text below input/i }),
-        { target: { value: '70' } },
+        { target: { value: '62' } },
       );
-      // button: needs l <= 35 (background lightness)
       fireEvent.change(
         screen.getByRole('slider', { name: /Lightness for Submit button/i }),
-        { target: { value: '30' } },
+        { target: { value: '60' } },
       );
 
       fireEvent.click(screen.getByRole('button', { name: 'check' }));
@@ -32,23 +34,111 @@ describe('ContrastTool', () => {
       expect(onComplete).toHaveBeenCalledOnce();
     });
 
-    it('does not call onComplete when only some areas pass', () => {
+    it('does not call onComplete when one area is just below its threshold', () => {
       const onComplete = vi.fn();
       render(<ContrastTool interactive={true} onComplete={onComplete} />);
 
-      // Fix heading and helper only — button stays at default (~50), fails (needs <= 35)
+      // heading just below 4.5 (ratio ~4.36)
       fireEvent.change(
         screen.getByRole('slider', { name: /Lightness for Section label/i }),
-        { target: { value: '80' } },
+        { target: { value: '58' } },
       );
       fireEvent.change(
         screen.getByRole('slider', { name: /Lightness for Helper text below input/i }),
-        { target: { value: '70' } },
+        { target: { value: '62' } },
+      );
+      fireEvent.change(
+        screen.getByRole('slider', { name: /Lightness for Submit button/i }),
+        { target: { value: '64' } },
       );
 
       fireEvent.click(screen.getByRole('button', { name: 'check' }));
 
       expect(onComplete).not.toHaveBeenCalled();
+    });
+
+    it('does not call onComplete when only some areas pass', () => {
+      const onComplete = vi.fn();
+      render(<ContrastTool interactive={true} onComplete={onComplete} />);
+
+      // Fix heading and helper; put button above 3:1 threshold (l=65 → ratio ~2.89)
+      fireEvent.change(
+        screen.getByRole('slider', { name: /Lightness for Section label/i }),
+        { target: { value: '60' } },
+      );
+      fireEvent.change(
+        screen.getByRole('slider', { name: /Lightness for Helper text below input/i }),
+        { target: { value: '62' } },
+      );
+      fireEvent.change(
+        screen.getByRole('slider', { name: /Lightness for Submit button/i }),
+        { target: { value: '65' } },
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: 'check' }));
+
+      expect(onComplete).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('ratio display', () => {
+    it('shows the ratio and threshold for each area', () => {
+      render(<ContrastTool interactive={true} />);
+
+      // Three ratio displays should be present (one per area)
+      const ratioTexts = screen.getAllByText(/ratio:.*:1.*need.*:1.*WCAG AA/i);
+      expect(ratioTexts).toHaveLength(3);
+    });
+
+    it('marks a pair as passing when its ratio meets the threshold', () => {
+      render(<ContrastTool interactive={true} />);
+
+      // Set heading to a passing value
+      fireEvent.change(
+        screen.getByRole('slider', { name: /Lightness for Section label/i }),
+        { target: { value: '60' } },
+      );
+
+      // The "✓ readable" badge should appear (at least once)
+      expect(screen.getAllByText('✓ readable').length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('slider range', () => {
+    it('every slider has min=0 and max=100', () => {
+      render(<ContrastTool interactive={true} />);
+
+      screen.getAllByRole('slider').forEach((slider) => {
+        expect(slider).toHaveAttribute('min', '0');
+        expect(slider).toHaveAttribute('max', '100');
+      });
+    });
+
+    it('accepts lightness value of 0', () => {
+      render(<ContrastTool interactive={true} />);
+
+      const slider = screen.getByRole('slider', { name: /Lightness for Section label/i });
+      fireEvent.change(slider, { target: { value: '0' } });
+      expect(slider).toHaveValue('0');
+    });
+
+    it('accepts lightness value of 100', () => {
+      render(<ContrastTool interactive={true} />);
+
+      const slider = screen.getByRole('slider', { name: /Lightness for Section label/i });
+      fireEvent.change(slider, { target: { value: '100' } });
+      expect(slider).toHaveValue('100');
+    });
+  });
+
+  describe('failure message', () => {
+    it('shows failing pair labels in the retry message', () => {
+      render(<ContrastTool interactive={true} />);
+
+      // All defaults fail — click check without changing anything
+      fireEvent.click(screen.getByRole('button', { name: 'check' }));
+
+      expect(screen.getByText(/Still failing:/i)).toBeInTheDocument();
     });
   });
 
