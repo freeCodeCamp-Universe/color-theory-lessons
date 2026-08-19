@@ -21,5 +21,12 @@ describe('Milestone 1 configuration', () => {
     expect(quizQuestions).toBe(3);
     expect(challengePoints + quizQuestions).toBe(6);
     expect(milestone.passThreshold).toBe(4);
+
+    const correctChoiceIds = milestone.parts.flatMap((part) =>
+      part.kind === 'quiz'
+        ? part.questions.map((question) => question.choices.find((choice) => choice.isCorrect)?.id)
+        : [],
+    );
+    expect(correctChoiceIds).toEqual(['c', 'b', 'd']);
   });
 });
