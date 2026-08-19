@@ -65,6 +65,16 @@
   color: var(--red);
 }
 
+.result {
+  margin: 0;
+  padding: var(--spacing-sm);
+  border-left: 3px solid var(--yellow);
+  background-color: var(--primary-background);
+  color: var(--primary-foreground);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
 .actions {
   display: flex;
   justify-content: flex-end;

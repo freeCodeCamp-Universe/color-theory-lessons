@@ -10,6 +10,7 @@ import { ThemeFromScratchChallenge } from './challenges/ThemeFromScratchChalleng
 interface ChallengeRendererProps {
   challengeType: MilestoneChallengeType;
   onComplete: () => void;
+  sessionKey?: string;
 }
 
 function UnimplementedChallenge({ challengeType }: { challengeType: MilestoneChallengeType }) {
@@ -23,10 +24,10 @@ function UnimplementedChallenge({ challengeType }: { challengeType: MilestoneCha
   );
 }
 
-export function ChallengeRenderer({ challengeType, onComplete }: ChallengeRendererProps) {
+export function ChallengeRenderer({ challengeType, onComplete, sessionKey }: ChallengeRendererProps) {
   switch (challengeType) {
     case 'read-interface':
-      return <ReadInterfaceChallenge onComplete={onComplete} />;
+      return <ReadInterfaceChallenge onComplete={onComplete} sessionKey={sessionKey} />;
     case 'channel-prediction':
       return <ChannelPredictionChallenge onComplete={onComplete} />;
     case 'theme-from-scratch':
