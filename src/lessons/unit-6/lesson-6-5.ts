@@ -1,8 +1,9 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson6_5: LessonConfig = {
   id: 'u6-l5', unitId: 'unit-6',
-  title: 'Color for Charts and Data Visualization',
+  title: LESSON_TITLES['u6-l5'],
   interactionType: 'chart-tuner',
   glossaryTerms: ['categorical palette', 'chart contrast', 'data emphasis', 'encoding', 'sequential palette', 'visual grouping'],
   reviewTags: ['charts', 'data-visualization', 'color-systems'],

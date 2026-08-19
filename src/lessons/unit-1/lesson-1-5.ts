@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson1_5: LessonConfig = {
   id: 'u1-l5',
   unitId: 'unit-1',
-  title: 'Visual Hierarchy Through Color',
+  title: LESSON_TITLES['u1-l5'],
   interactionType: 'before-after',
   glossaryTerms: ['hierarchy', 'focal point', 'primary action', 'secondary action', 'accent color'],
   reviewTags: ['hierarchy', 'emphasis', 'foundations'],

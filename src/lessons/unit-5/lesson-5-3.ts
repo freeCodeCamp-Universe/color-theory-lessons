@@ -1,8 +1,9 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson5_3: LessonConfig = {
   id: 'u5-l3', unitId: 'unit-5',
-  title: 'Color-Only Problems and Redundant Cues',
+  title: LESSON_TITLES['u5-l3'],
   interactionType: 'state-workshop',
   glossaryTerms: [
     'use of color',

@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson2_3: LessonConfig = {
   id: 'u2-l3',
   unitId: 'unit-2',
-  title: 'Why Paint Logic Fails on Screens',
+  title: LESSON_TITLES['u2-l3'],
   interactionType: 'logic-fixer',
   glossaryTerms: ['paint logic', 'screen logic', 'mental model'],
   reviewTags: ['additive', 'mental-models', 'color-models'],

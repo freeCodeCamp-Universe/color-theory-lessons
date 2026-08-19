@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson4_4: LessonConfig = {
   id: 'u4-l4',
   unitId: 'unit-4',
-  title: 'What Color Perception Means for Design',
+  title: LESSON_TITLES['u4-l4'],
   interactionType: 'color-only-detector',
   glossaryTerms: [
     'color-dependent meaning',

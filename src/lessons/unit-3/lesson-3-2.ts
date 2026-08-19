@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson3_2: LessonConfig = {
   id: 'u3-l2',
   unitId: 'unit-3',
-  title: 'HEX and RGB',
+  title: LESSON_TITLES['u3-l2'],
   interactionType: 'hex-rgb-editor',
   glossaryTerms: ['channel', 'HEX', 'RGBA', 'shorthand HEX'],
   reviewTags: ['formats', 'HEX', 'RGB'],

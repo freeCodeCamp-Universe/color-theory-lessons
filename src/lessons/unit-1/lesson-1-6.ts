@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson1_6: LessonConfig = {
   id: 'u1-l6',
   unitId: 'unit-1',
-  title: 'Basic Color Relationships and Harmony',
+  title: LESSON_TITLES['u1-l6'],
   interactionType: 'color-wheel',
   glossaryTerms: ['analogous', 'complementary', 'triadic', 'palette', 'harmony', 'balance'],
   reviewTags: ['harmony', 'foundations', 'palette'],

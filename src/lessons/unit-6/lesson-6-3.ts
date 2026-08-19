@@ -1,8 +1,9 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson6_3: LessonConfig = {
   id: 'u6-l3', unitId: 'unit-6',
-  title: 'Brand Constraints and Hierarchy',
+  title: LESSON_TITLES['u6-l3'],
   interactionType: 'brand-pressure',
   glossaryTerms: ['accent overuse', 'brand color', 'supporting palette', 'tonal scale'],
   reviewTags: ['brand', 'hierarchy', 'neutrals', 'balance'],

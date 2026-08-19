@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson3_6: LessonConfig = {
   id: 'u3-l6',
   unitId: 'unit-3',
-  title: 'Design Tokens and Role-Based Color Systems',
+  title: LESSON_TITLES['u3-l6'],
   interactionType: 'token-map',
   glossaryTerms: [
     'design token',

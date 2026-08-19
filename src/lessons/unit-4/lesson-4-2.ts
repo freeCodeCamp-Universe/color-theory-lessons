@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson4_2: LessonConfig = {
   id: 'u4-l2',
   unitId: 'unit-4',
-  title: 'Types of Color Vision Deficiency',
+  title: LESSON_TITLES['u4-l2'],
   interactionType: 'vision-cards',
   glossaryTerms: [
     'color vision deficiency',

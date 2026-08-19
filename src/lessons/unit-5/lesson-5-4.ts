@@ -1,8 +1,9 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson5_4: LessonConfig = {
   id: 'u5-l4', unitId: 'unit-5',
-  title: 'Accessible Patterns for Real Interfaces',
+  title: LESSON_TITLES['u5-l4'],
   interactionType: 'pattern-repair',
   glossaryTerms: ['form validation', 'alert', 'notification', 'inline error', 'link distinction', 'chart palette', 'dashboard', 'pattern library'],
   reviewTags: ['patterns', 'forms', 'alerts', 'charts', 'accessibility'],

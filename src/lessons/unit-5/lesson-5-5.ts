@@ -1,8 +1,9 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson5_5: LessonConfig = {
   id: 'u5-l5', unitId: 'unit-5',
-  title: 'Accessibility Audit Workflow',
+  title: LESSON_TITLES['u5-l5'],
   interactionType: 'audit-flow',
   glossaryTerms: [
     'audit',

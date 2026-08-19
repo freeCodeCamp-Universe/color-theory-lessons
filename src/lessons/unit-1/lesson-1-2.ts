@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson1_2: LessonConfig = {
   id: 'u1-l2',
   unitId: 'unit-1',
-  title: 'Hue, Saturation, and Lightness',
+  title: LESSON_TITLES['u1-l2'],
   interactionType: 'slider-explore',
   glossaryTerms: ['hue', 'saturation', 'lightness', 'value', 'muted', 'vivid', 'tint', 'shade'],
   reviewTags: ['foundations', 'hue', 'saturation', 'lightness'],

@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson2_1: LessonConfig = {
   id: 'u2-l1',
   unitId: 'unit-2',
-  title: 'Two Ways Color Mixes',
+  title: LESSON_TITLES['u2-l1'],
   interactionType: 'additive-sort',
   glossaryTerms: ['additive color', 'subtractive color', 'pigment', 'RGB'],
   reviewTags: ['foundations', 'additive', 'subtractive', 'color-models'],
