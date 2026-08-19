@@ -4,7 +4,7 @@ export const lesson1_4: LessonConfig = {
   id: 'u1-l4',
   unitId: 'unit-1',
   title: 'Warm and Cool Colors in Practice',
-  description: 'Understand warm and cool color tendencies as a useful design lens — not a rigid rule.',
+  description: 'Understand warm and cool color tendencies as a useful design lens, not a rigid rule.',
   learningGoal: 'Use warm/cool language appropriately and make a basic mood-based palette adjustment.',
   estimatedMinutes: 11,
   prerequisites: ['u1-l2'],
