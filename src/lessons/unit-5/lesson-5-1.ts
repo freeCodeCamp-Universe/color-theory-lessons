@@ -5,7 +5,7 @@ export const lesson5_1: LessonConfig = {
   title: 'Text Contrast in Practice',
   interactionType: 'text-contrast-lab',
   glossaryTerms: ['text contrast', 'normal text', 'large text', 'contrast ratio', 'pass', 'fail'],
-  reviewTags: ['contrast', 'text', 'WCAG'],
+  reviewTags: ['contrast', 'text', 'wcag'],
   steps: [
     { text: 'In Unit 1, you learned that lightness difference — not hue — drives readable contrast. Now we quantify that with specific thresholds. A light gray label on a white card may feel elegant, but if the luminance difference is too small, many users will struggle to read it.' },
     { text: 'For most practical design work, remember two thresholds: 4.5:1 for normal body text and interface labels, and 3:1 for large text (18pt+ regular or 14pt+ bold).' },

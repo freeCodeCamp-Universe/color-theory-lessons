@@ -12,7 +12,7 @@ export const lesson3_6: LessonConfig = {
     'role token',
     'theme propagation',
   ],
-  reviewTags: ['formats', 'tokens', 'design-systems', 'themes'],
+  reviewTags: ['formats', 'tokens', 'design-systems', 'theme'],
   steps: [
     {
       text: 'A design token is a named variable that stores a color value. Instead of writing #0B57D0 in every button, a system defines --color-action-primary and references that name. The value can change without touching every component.',

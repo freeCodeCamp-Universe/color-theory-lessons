@@ -6,7 +6,7 @@ export const lesson4_3: LessonConfig = {
   title: 'Seeing Through Simulated Eyes',
   interactionType: 'interface-gallery',
   glossaryTerms: ['protan', 'deutan', 'tritan', 'backup cue', 'redundancy'],
-  reviewTags: ['CVD', 'simulation', 'interface-review'],
+  reviewTags: ['cvd', 'simulation', 'interface-review'],
   steps: [
     {
       text: 'Simulation tools apply a color transformation to show how an interface might appear under a particular CVD type. The result is an approximation — not an exact representation of any individual\'s experience — but it is a fast, practical first check for design problems.',

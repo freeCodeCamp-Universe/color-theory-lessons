@@ -5,7 +5,7 @@ export const lesson6_1: LessonConfig = {
   title: 'From Individual Colors to Color Systems',
   interactionType: 'system-comparison',
   glossaryTerms: ['color system', 'consistency', 'semantic role'],
-  reviewTags: ['systems', 'roles', 'consistency'],
+  reviewTags: ['color-systems', 'roles', 'consistency'],
   steps: [
     { text: 'A designer picking a new color for every button, card, and state creates an interface that slowly becomes inconsistent. When the same blue means \'primary action\' on one screen and \'informational note\' on another, users lose confidence.' },
     { text: 'Unit 3 covered assigning roles in a single interface. Here, the scope expands: a color system governs those roles across many screens, flows, and teams so meaning stays stable product-wide.' },

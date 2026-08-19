@@ -13,7 +13,7 @@ export const lesson3_4: LessonConfig = {
     'blend perception',
     'layered interface',
   ],
-  reviewTags: ['formats', 'alpha', 'transparency', 'layering'],
+  reviewTags: ['formats', 'alpha', 'layering'],
   steps: [
     {
       text: 'In the previous lesson you saw RGBA notation. Here you will apply it in context. A fully opaque color blocks everything behind it, while a semi-transparent color lets background values show through. Alpha controls this: 1 is fully opaque, 0 is fully transparent.',

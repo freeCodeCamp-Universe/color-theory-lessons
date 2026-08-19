@@ -5,7 +5,7 @@ export const lesson5_2: LessonConfig = {
   title: 'Non-Text Contrast for Controls and Graphics',
   interactionType: 'component-checker',
   glossaryTerms: ['non-text contrast', 'user interface component', 'graphical object', 'focus indicator', 'boundary', 'outline', 'icon contrast', 'state visibility'],
-  reviewTags: ['contrast', 'components', 'controls', 'WCAG'],
+  reviewTags: ['contrast', 'components', 'controls', 'wcag'],
   steps: [
     { text: 'Text contrast is the most discussed accessibility check, but it is not the only one. Many essential interface elements are not text: input borders, icon buttons, toggles, focus rings, chart marks, and status indicators all need clear visual distinction.' },
     { text: 'A control boundary tells users what is interactive. If the border of a text input is too close in lightness to the background, users cannot tell where they are supposed to click or type.' },

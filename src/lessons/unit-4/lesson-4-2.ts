@@ -16,7 +16,7 @@ export const lesson4_2: LessonConfig = {
     'achromatopsia',
     'simulation',
   ],
-  reviewTags: ['CVD', 'perception', 'accessibility'],
+  reviewTags: ['cvd', 'perception', 'accessibility'],
   steps: [
     {
       text: 'Color vision deficiency (CVD) refers to differences in how certain color distinctions are perceived, due to variation in cone function. It is not a single condition — there are multiple types and a range of severities.',

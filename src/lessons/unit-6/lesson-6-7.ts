@@ -9,7 +9,7 @@ export const lesson6_7: LessonConfig = {
     'stress test',
     'system review',
   ],
-  reviewTags: ['review', 'systems', 'capstone-prep', 'stress-test'],
+  reviewTags: ['review', 'color-systems', 'capstone-prep', 'stress-test'],
   steps: [
     {
       text: 'A color system is only as good as its worst context. A palette that looks great in a marketing mockup may have weak hierarchy in dark mode, indistinguishable states in a chart, or invisible alerts under CVD simulation. A stress test exposes these hidden weaknesses.',
