@@ -9,45 +9,32 @@ export const lesson2_4: LessonConfig = {
   reviewTags: ['subtractive', 'print', 'color-models', 'practical'],
   steps: [
     {
-      id: 's1',
       text: 'Pigments and inks do not shine light out at the viewer. They absorb some wavelengths of incoming light and reflect others back to your eye. The result depends on both the material and the quality of the light hitting it.',
-      highlights: ['absorb', 'reflect'],
     },
     {
-      id: 's2',
       text: 'A screen can display extremely vivid colors because it emits light directly. Print inks and paint can only reflect incoming light — they cannot reproduce that brightness. This creates a predictable gap between screen previews and physical results.',
     },
     {
-      id: 's3',
       text: 'The range of colors a device or medium can reproduce is called its gamut. Screens have a wide gamut because they emit light. Most print processes have a narrower gamut — some screen colors simply cannot be recreated with ink.',
-      highlights: ['gamut'],
     },
     {
-      id: 's4',
       text: 'For screen-first designers, this matters whenever work crosses into physical materials — packaging, printed cards, branded merchandise, signage. The difference is not a printing error. It is a fundamental difference between two color models.',
     },
     {
-      id: 's5-pantone',
       text: 'Because screens vary in calibration and gamut, no screen preview is a reliable reference for what ink on paper will look like. Physical color standards like Pantone exist to solve this: a numbered swatch looks the same regardless of which screen was used to design it, giving everyone in the production chain a shared ground truth.',
-      highlights: ['Pantone'],
     },
     {
-      id: 's6',
       text: 'The comparison tool shows the same color as a screen swatch and an approximation of how it might appear in print. In the challenge, you will identify the correct reasons why the two versions differ.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'For each scenario, select all the correct reasons why the screen color and the physical version look different. Some reasons are wrong — do not select those.',
-      type: 'identify-problem',
       hints: [
         'Think about what each medium is actually doing: emitting light vs reflecting it.',
         'The gap is not always a mistake — it can be a natural consequence of different models.',
         'Surface finish, ambient lighting, and gamut limits are all real factors.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

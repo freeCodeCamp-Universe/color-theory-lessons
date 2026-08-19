@@ -7,24 +7,20 @@ export const lesson6_1: LessonConfig = {
   glossaryTerms: ['color system', 'consistency', 'semantic role'],
   reviewTags: ['systems', 'roles', 'consistency'],
   steps: [
-    { id: 's1', text: 'A designer picking a new color for every button, card, and state creates an interface that slowly becomes inconsistent. When the same blue means \'primary action\' on one screen and \'informational note\' on another, users lose confidence.', highlights: ['color system', 'consistency'] },
-    { id: 's2', text: 'Unit 3 covered assigning roles in a single interface. Here, the scope expands: a color system governs those roles across many screens, flows, and teams so meaning stays stable product-wide.', highlights: ['semantic role'] },
-    { id: 's3', text: 'System-level failures are usually governance failures: one role used for two meanings, two roles used for one meaning, or local overrides that drift from shared tokens. Your job in this unit is to detect and correct those patterns early.' },
-    { id: 's4', text: 'A minimal system does not need to be large. Even a compact set of 8–12 roles can support a full product when each role has a clear boundary and change decisions are applied consistently.' },
-    { id: 's5', text: 'The comparison tool shows two versions of the same interface: one with ad-hoc color choices, and one with a consistent role-based system. Click the inconsistencies in the ad-hoc version to reveal what broke and why.' },
+    { text: 'A designer picking a new color for every button, card, and state creates an interface that slowly becomes inconsistent. When the same blue means \'primary action\' on one screen and \'informational note\' on another, users lose confidence.' },
+    { text: 'Unit 3 covered assigning roles in a single interface. Here, the scope expands: a color system governs those roles across many screens, flows, and teams so meaning stays stable product-wide.' },
+    { text: 'System-level failures are usually governance failures: one role used for two meanings, two roles used for one meaning, or local overrides that drift from shared tokens. Your job in this unit is to detect and correct those patterns early.' },
+    { text: 'A minimal system does not need to be large. Even a compact set of 8–12 roles can support a full product when each role has a clear boundary and change decisions are applied consistently.' },
+    { text: 'The comparison tool shows two versions of the same interface: one with ad-hoc color choices, and one with a consistent role-based system. Click the inconsistencies in the ad-hoc version to reveal what broke and why.' },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Identify every visual inconsistency in the ad-hoc interface version and explain which semantic role assignment would fix it.',
-      type: 'identify-problem',
       hints: [
         'Look for: same element with different colors on different screens, accent used for both interactive and decorative purposes, success and info colors that are too similar.',
         'Each inconsistency can be traced back to a missing role or a role used for two different purposes.',
         'A good system has one clear answer for "what color should this button be?"',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

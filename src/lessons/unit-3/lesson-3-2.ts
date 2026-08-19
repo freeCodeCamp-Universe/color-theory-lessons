@@ -9,44 +9,30 @@ export const lesson3_2: LessonConfig = {
   reviewTags: ['formats', 'HEX', 'RGB'],
   steps: [
     {
-      id: 's1',
       text: 'RGB describes a color by stating how much red, green, and blue light to mix. Each channel runs from 0 (none) to 255 (full). rgb(0, 0, 0) is no light at all — black. rgb(255, 255, 255) is all three channels at full — white.',
-      highlights: ['red', 'green', 'blue', 'channel'],
     },
     {
-      id: 's2',
       text: 'HEX is a compact way to encode the same three channels. A six-character HEX value like #1E40AF splits into three pairs: the first two are red, the next two are green, the last two are blue — each pair in base-16 notation.',
-      highlights: ['HEX'],
     },
     {
-      id: 's3',
       text: 'When all three RGB channels are equal — like rgb(120, 120, 120) — the result is always a neutral gray. No single channel dominates, so no hue appears. The same is true for #808080 or any HEX where both pairs in each channel match.',
-      highlights: ['neutral'],
     },
     {
-      id: 's4',
       text: 'Shorthand HEX compresses a value where each pair repeats: #AABBCC can be written as #ABC. This only works when each pair has two identical digits. #1E40AF cannot be shortened because none of its pairs repeat.',
-      highlights: ['shorthand HEX'],
     },
     {
-      id: 's5',
       text: 'RGBA adds a fourth value — the alpha channel — to RGB. It controls opacity, from 0 (fully transparent) to 1 (fully opaque). When you see rgba(30, 64, 175, 0.5), the color is that same blue at 50% opacity.',
-      highlights: ['RGBA', 'alpha channel'],
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt:
         'Use the editor to match three target UI colors. Adjust the sliders or type a HEX value. Load each preset to explore how values map to visible results.',
-      type: 'identify-problem',
       hints: [
         'Start with the preset closest to the target, then fine-tune.',
         'Watch which channel dominates in the target — that tells you which slider to push higher.',
         'Equal channel values always produce a neutral. If the target has a clear hue, at least one channel must be different.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

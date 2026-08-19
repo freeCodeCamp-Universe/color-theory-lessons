@@ -9,40 +9,29 @@ export const lesson2_3: LessonConfig = {
   reviewTags: ['additive', 'mental-models', 'color-models'],
   steps: [
     {
-      id: 's1',
       text: 'Many beginners apply paint intuition to screen design. This is understandable — paint is familiar. But screens are not layering wet pigment. They are controlling emitted light, and that changes how mixing, darkening, and brightening all work.',
     },
     {
-      id: 's2',
       text: 'With paint, mixing more colors absorbs more wavelengths and tends to produce darker, muddier results. With screen color, raising more channels adds more light — the result gets brighter, not muddier. More color on screen moves toward white, not mud.',
-      highlights: ['muddier', 'brighter'],
     },
     {
-      id: 's3',
       text: 'When a screen color looks dark, it is because the channel values are low — there is little light. Brightening it means raising the values, not thinning or diluting the color the way you would add water to paint.',
     },
     {
-      id: 's4',
       text: 'Red and green paint make a brownish mess. Red and green light make yellow. The same color names produce completely opposite visible results across the two models. Knowing which model you are in changes what you predict.',
-      highlights: ['yellow'],
     },
     {
-      id: 's5',
       text: 'The tool shows statements where a designer applies paint logic to a screen problem. For each one, pick the rewrite that uses correct screen-first thinking.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Each statement applies paint logic to a screen problem. Pick the rewrite that uses correct screen-first reasoning.',
-      type: 'identify-problem',
       hints: [
         'Ask: is this object emitting light or reflecting it? The answer changes everything.',
         'On screens, "darker" means lower channel values — less light. It does not mean more pigment.',
         'If the explanation uses words like "muddy," "dilute," or "absorb," it is probably paint logic.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

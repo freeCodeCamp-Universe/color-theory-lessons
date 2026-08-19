@@ -9,45 +9,32 @@ export const lesson4_3: LessonConfig = {
   reviewTags: ['CVD', 'simulation', 'interface-review'],
   steps: [
     {
-      id: 's1',
       text: 'Simulation tools apply a color transformation to show how an interface might appear under a particular CVD type. The result is an approximation — not an exact representation of any individual\'s experience — but it is a fast, practical first check for design problems.',
-      highlights: ['simulation'],
     },
     {
-      id: 's2',
       text: 'Under protan and deutan simulation, red and green hues converge — becoming hard to tell apart. A traffic-light status system (red = error, green = success) becomes ambiguous. The colors that relied on the red-green axis to carry meaning lose their distinction.',
-      highlights: ['protan', 'deutan'],
       panel: { type: 'interface-gallery-preview', simulation: 'protanopia' },
     },
     {
-      id: 's3',
       text: 'Under tritan simulation, blue and yellow converge. A yellow warning badge on a blue interface may become hard to distinguish. Blue links on certain backgrounds can lose their visual contrast.',
-      highlights: ['tritan'],
       panel: { type: 'interface-gallery-preview', simulation: 'tritanopia' },
     },
     {
-      id: 's4',
       text: 'Charts and maps are especially at risk. When a bar chart uses only green and red to distinguish series, protan or deutan simulation may make both bars look the same. Text paragraphs are usually less affected because they rely on lightness contrast, not hue distinction.',
       panel: { type: 'interface-gallery-preview', simulation: 'deuteranopia' },
     },
     {
-      id: 's5',
       text: 'The solution is not to avoid color — it is to add backup cues: icons, labels, patterns, or shapes that carry the same meaning. Redundancy means meaning survives even when color distinction is reduced.',
-      highlights: ['backup cue', 'redundancy'],
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt:
         'Switch the interface gallery through all four simulation modes. Explore each one and identify which elements become hard to distinguish.',
-      type: 'identify-problem',
       hints: [
         'Switch to Deuteranopia first — it is the most common type. Notice which status indicators look similar.',
         'Under Achromatopsia, only lightness differences remain. Which elements still have meaning?',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

@@ -9,41 +9,30 @@ export const lesson3_1: LessonConfig = {
   reviewTags: ['foundations', 'formats', 'HEX', 'RGB', 'HSL', 'implementation'],
   steps: [
     {
-      id: 's1',
       text: 'In digital products, the computer needs exact instructions. A vague description like "nice soft blue" cannot be reproduced reliably. Anywhere a color appears — a button, a background, a border — it needs a precise value that means the same thing to every tool and every browser.',
     },
     {
-      id: 's2',
       text: 'Designers encounter color values in many places: CSS files, design tool inspectors, browser dev tools, component libraries, and design token files. In all of them, the color is expressed as a specific format — not a feeling, but a number.',
-      highlights: ['color values'],
     },
     {
-      id: 's3',
       text: 'Three formats are especially common: HEX, RGB, and HSL. They all describe the same visible colors — just in different ways. HEX is compact and common in CSS. RGB maps directly to screen light channels. HSL matches how designers often describe adjustments.',
-      highlights: ['HEX', 'RGB', 'HSL'],
     },
     {
-      id: 's4',
       text: 'One important thing: a single visible color can be expressed in multiple valid formats. The swatch does not change — only the representation does. HEX #1E40AF, rgb(30, 64, 175), and hsl(224, 71%, 40%) can all describe the same blue.',
     },
     {
-      id: 's5',
       text: 'Click each colored element in the UI mockup. A panel will reveal the same color in all three formats. Notice how the visible result stays exactly the same while the representation changes.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt:
         'Click every colored element in the mockup to reveal its formats. Explore all of them before moving on.',
-      type: 'identify-problem',
       hints: [
         'Click directly on any colored region — background, button, text, border.',
         'Each element reveals HEX, RGB, and HSL for the same color.',
         'You do not need to memorize the values — focus on the structure of each format.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

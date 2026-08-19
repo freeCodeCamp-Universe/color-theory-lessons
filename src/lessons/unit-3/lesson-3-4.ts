@@ -16,42 +16,30 @@ export const lesson3_4: LessonConfig = {
   reviewTags: ['formats', 'alpha', 'transparency', 'layering'],
   steps: [
     {
-      id: 's1',
       text: 'In the previous lesson you saw RGBA notation. Here you will apply it in context. A fully opaque color blocks everything behind it, while a semi-transparent color lets background values show through. Alpha controls this: 1 is fully opaque, 0 is fully transparent.',
-      highlights: ['alpha', 'opacity', 'transparency'],
     },
     {
-      id: 's2',
       text: 'Designers use transparency for hover states, modal backdrops (scrims), disabled states, image overlays, and subtle layered surfaces. A single semi-transparent value can feel completely different depending on the background underneath.',
-      highlights: ['scrim', 'overlay'],
     },
     {
-      id: 's3',
       text: 'This is important: the perceived result is relational. A dark overlay at 50% opacity looks subtle on a dark background but heavy on a light background. You cannot judge a transparent color in isolation — the background always matters.',
-      highlights: ['blend perception'],
     },
     {
-      id: 's4',
       text: 'Transparency can also create accessibility problems. Semi-transparent text over a textured or variable background may become unreadable in some areas. Always test overlays in realistic contexts, not just on a blank page.',
     },
     {
-      id: 's5',
       text: 'Use the layer stack simulator. Choose a foreground color, adjust its alpha, and place it over different backgrounds to see how the perceived result changes.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt:
         'Create four useful overlays: a modal scrim, a card hover state, an image text overlay, and a disabled button state. Adjust the foreground color and alpha for each context.',
-      type: 'fix-interface',
       hints: [
         'A modal scrim is usually a dark color at around 40-60% opacity — enough to dim the background without hiding it completely.',
         'Hover states are typically subtle — try a light or dark overlay at low opacity (10-20%).',
         'For text readability over images, you need enough overlay opacity that the text contrast passes.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

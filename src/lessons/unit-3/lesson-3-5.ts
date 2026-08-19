@@ -17,42 +17,31 @@ export const lesson3_5: LessonConfig = {
   reviewTags: ['formats', 'gradients', 'themes', 'semantic-color'],
   steps: [
     {
-      id: 's1',
       text: 'In this lesson, treat colors as assignments in a UI: background, surface, text, border, accent, success, warning, and error. The task is practical: place each color where it belongs so the interface reads clearly and consistently.',
-      highlights: ['semantic color', 'theme'],
     },
     {
-      id: 's2',
       text: 'A gradient is a controlled transition between two or more colors. CSS supports linear-gradient (a direction-based blend) and radial-gradient (a center-outward blend). Gradients can add hierarchy, depth, or energy — but they should serve a purpose, not just decorate.',
-      highlights: ['gradient', 'linear gradient', 'radial gradient'],
     },
     {
-      id: 's3',
       text: 'In CSS, roles are usually assigned through custom properties. Instead of repeating "#2563EB" in many rules, assign a role variable and apply it to buttons, links, and focus rings. This keeps the lesson focused on implementation rather than one-off values.',
     },
     {
-      id: 's4',
       text: 'A theme is the set of role assignments used by a given interface mode. In the sandbox, you will swap assignments and immediately see how readability, hierarchy, and emphasis change across components.',
     },
     {
-      id: 's5',
       text: 'The theme sandbox lets you assign colors to common roles and apply a gradient to a hero panel. Build a coherent theme where text is readable, accents are purposeful, and the gradient supports — not fights — the rest of the interface.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt:
         'Build a coherent interface theme by assigning colors to all roles and creating a functional gradient. The theme must pass basic readability checks.',
-      type: 'build-palette',
       hints: [
         'Start with the background and surface — these set the overall tone.',
         'Make sure primary text has strong contrast against the surface.',
         'Use the gradient to add visual interest to the hero area without hurting text readability.',
         'Status colors (success, warning, error) should be distinct from each other and from the accent.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

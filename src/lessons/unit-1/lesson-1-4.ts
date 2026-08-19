@@ -9,40 +9,29 @@ export const lesson1_4: LessonConfig = {
   reviewTags: ['temperature', 'foundations', 'visual-vocabulary'],
   steps: [
     {
-      id: 's1',
       text: 'Colors tend to feel warm (reds, oranges, yellows) or cool (blues, greens, blue-purples). Neutrals like grays and beiges sit in between.',
-      highlights: ['warm', 'cool'],
     },
     {
-      id: 's2',
       text: 'Warm colors often feel active or urgent and can appear closer. Cool colors often feel calmer and can appear farther away. These are tendencies, not universal truths; context and culture affect how people respond.',
     },
     {
-      id: 's3',
       text: 'Neutral colors can make an interface feel calmer and less visually demanding. They also give saturated colors more emphasis when used for actions, alerts, and other focal elements.',
-      highlights: ['neutral'],
     },
     {
-      id: 's4',
       text: 'A red button in a mostly cool interface can feel energetic or urgent because its temperature differs from the surrounding colors. The same red may draw less attention among other saturated warm colors.',
     },
     {
-      id: 's5',
       text: 'Now apply color temperature first to individual colors, then to the mood of an interface.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Complete the activity in two stages. First, sort each swatch as warm, cool, or neutral. Then match a palette direction to each interface goal.',
-      type: 'identify-problem',
       hints: [
         'Start with the dominant hue. Reds, oranges, and yellows usually read as warm, while blues, blue-greens, and blue-purples usually read as cool.',
         'Compare an uncertain swatch with the warmer and cooler examples. If neither temperature dominates, it may belong in the neutral group.',
         'Use the intended mood as your guide. Consider whether the goal needs more energy, more calm, or less color emphasis.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

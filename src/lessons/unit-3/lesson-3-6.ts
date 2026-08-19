@@ -15,42 +15,30 @@ export const lesson3_6: LessonConfig = {
   reviewTags: ['formats', 'tokens', 'design-systems', 'themes'],
   steps: [
     {
-      id: 's1',
       text: 'A design token is a named variable that stores a color value. Instead of writing #0B57D0 in every button, a system defines --color-action-primary and references that name. The value can change without touching every component.',
-      highlights: ['design token', 'variable'],
     },
     {
-      id: 's2',
       text: 'Tokens work at different levels. An alias token points to a base value — like --blue-600: #1E40AF. A role token assigns meaning to an alias — like --color-action-primary: var(--blue-600). The role name describes usage, not appearance.',
-      highlights: ['alias token', 'role token'],
     },
     {
-      id: 's3',
       text: 'This separation makes updates powerful. Change --blue-600 and every role that references it updates automatically. Switch from light to dark theme by swapping the values behind the same role names. This is theme propagation.',
-      highlights: ['theme propagation'],
     },
     {
-      id: 's4',
       text: 'Good token names describe what the color does, not what it looks like. --color-text-primary is better than --dark-gray because the role stays meaningful even if the value changes. --color-success-bg is better than --green-100 for the same reason.',
     },
     {
-      id: 's5',
       text: 'The token map shows a base value connected to several role tokens. Change the base and watch every role update across the interface. Then sort items into raw values, alias tokens, and role tokens.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt:
         'Use the token map to fix a broken interface by adjusting base values, then sort items into the correct category: raw value, alias token, or role token.',
-      type: 'sort',
       hints: [
         'A raw value is a specific code like #1E40AF. An alias points to that value. A role describes what the alias is used for.',
         'If you change a base value and multiple interface elements update, those elements reference the same token.',
         'Role tokens describe function: --color-text-primary, --color-success-bg. Alias tokens describe the palette: --blue-600.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

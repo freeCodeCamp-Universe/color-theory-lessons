@@ -53,8 +53,8 @@ function makeLesson(overrides?: Partial<LessonConfig>): LessonConfig {
     unitId: 'unit-test',
     title: 'Test Lesson',
     interactionType: 'color-wheel',
-    steps: [{ id: 's1', text: 'Step one' }],
-    challenges: [{ id: 'c1', prompt: 'Do the thing', type: 'match-target', hints: [] }],
+    steps: [{ text: 'Step one' }],
+    challenge: { prompt: 'Do the thing', hints: [] },
     quizItems: [
       {
         id: 'q1',
@@ -85,13 +85,27 @@ async function advanceThroughChallenge() {
 }
 
 describe('LessonPlayer', () => {
+  describe('challenge content', () => {
+    it('renders the prompt and hints from the lesson challenge', () => {
+      renderLesson(makeLesson({
+        challenge: {
+          prompt: 'Match the target color.',
+          hints: ['Adjust one channel at a time.'],
+        },
+      }));
+
+      expect(screen.getByText('Match the target color.')).toBeInTheDocument();
+      expect(screen.getByText('Adjust one channel at a time.')).toBeInTheDocument();
+    });
+  });
+
   describe('step position', () => {
     it('restores the current step after the player remounts', () => {
       const lesson = makeLesson({
         steps: [
-          { id: 's1', text: 'Step one' },
-          { id: 's2', text: 'Step two' },
-          { id: 's3', text: 'Step three' },
+          { text: 'Step one' },
+          { text: 'Step two' },
+          { text: 'Step three' },
         ],
       });
       const firstRender = renderLesson(lesson);

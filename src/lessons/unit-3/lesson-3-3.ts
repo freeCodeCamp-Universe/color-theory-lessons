@@ -9,44 +9,32 @@ export const lesson3_3: LessonConfig = {
   reviewTags: ['formats', 'HSL', 'design-adjustment'],
   steps: [
     {
-      id: 's1',
       text: 'Unit 1 introduced hue, saturation, and lightness as visible properties. HSL turns those same properties into a practical color format you can use in code: hsl(hue, saturation%, lightness%).',
-      highlights: ['HSL'],
     },
     {
-      id: 's2',
       text: 'Hue is a degree on the color wheel (0-360). Saturation is a percentage — 0% is fully muted gray, 100% is fully vivid. Lightness is also a percentage — 0% is black, 100% is white, 50% is the purest version of that hue.',
-      highlights: ['hue', 'saturation', 'lightness'],
       panel: { type: 'hsl-playground-preview' },
     },
     {
-      id: 's3',
       text: 'HSL is often easier for design tasks because each property maps to a visible change. Want to mute a color? Lower saturation. Want a lighter version? Raise lightness. Want a nearby color? Shift hue. In RGB, these same adjustments often require changing multiple channels.',
       panel: { type: 'hsl-playground-preview' },
     },
     {
-      id: 's4',
       text: 'HSLA adds an alpha value for transparency, just like RGBA. hsla(220, 60%, 50%, 0.5) is that blue at 50% opacity. The "A" stands for alpha in both cases.',
-      highlights: ['HSLA', 'alpha'],
     },
     {
-      id: 's5',
       text: 'The playground shows the same color in all three formats simultaneously — HSL, HEX, and RGB. Adjust the sliders and watch how each format updates. Then match three target colors using HSL controls.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt:
         'Match three target colors using the HSL sliders. All three formats update live so you can see how your HSL changes translate to HEX and RGB.',
-      type: 'match-target',
       hints: [
         'Start with hue to get the right color family, then adjust saturation and lightness.',
         'A very muted target means low saturation. A very light target means high lightness.',
         'If the target looks gray, saturation is near zero — focus on lightness to match brightness.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

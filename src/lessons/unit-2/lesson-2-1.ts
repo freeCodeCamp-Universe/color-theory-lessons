@@ -9,40 +9,29 @@ export const lesson2_1: LessonConfig = {
   reviewTags: ['foundations', 'additive', 'subtractive', 'color-models'],
   steps: [
     {
-      id: 's1',
       text: 'Color is not created the same way everywhere. A glowing screen and a painted wall both show color, but they are doing completely different things to produce it.',
     },
     {
-      id: 's2',
       text: 'Additive color starts from darkness and builds up by adding light. Screens, projectors, and LEDs emit red, green, and blue light. Combine more of them and the result gets brighter — add all three at full intensity and you get white.',
-      highlights: ['additive color'],
     },
     {
-      id: 's3',
       text: 'Subtractive color starts from light hitting a material. Pigments and inks absorb some wavelengths and reflect others back to your eye. Mix more pigments together and more light gets absorbed — results tend to get darker and muddier.',
-      highlights: ['subtractive color'],
     },
     {
-      id: 's4',
       text: 'This is why paint intuition does not transfer to screen design. On a screen, mixing more color channels adds brightness. With pigment, mixing more colors removes it. The rules run in opposite directions.',
     },
     {
-      id: 's5',
       text: 'Look at the two diagrams in the sorting tool. The dark one shows light combining — colors brighten toward white. The light one shows pigment combining — colors darken toward black. Sort the examples shown into the correct model.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Sort each example into the correct color model. Ask yourself: is this object emitting light, or reflecting light that hits it?',
-      type: 'sort',
       hints: [
         'If it glows on its own — phone, monitor, projector — it is additive.',
         'If it relies on external light to be seen — paint, ink, printed paper — it is subtractive.',
         'LED signs and projector beams are light sources, even though they project onto surfaces.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

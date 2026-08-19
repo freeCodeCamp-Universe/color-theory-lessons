@@ -18,17 +18,13 @@ export const lessonX_Y: LessonConfig = {
   title: 'Lesson Title',
   interactionType: 'tool-name', // Must exist in InteractionType enum
   steps: [
-    { id: 's1', text: 'First instruction...' },
-    { id: 's2', text: 'Second instruction...', highlights: ['word'] }
+    { text: 'First instruction...' },
+    { text: 'Second instruction...' }
   ],
-  challenges: [
-    {
-      id: 'c1',
-      prompt: 'Complete the interaction to...',
-      type: 'match-target',
-      hints: ['Hint 1', 'Hint 2']
-    }
-  ],
+  challenge: {
+    prompt: 'Complete the interaction to...',
+    hints: ['Hint 1', 'Hint 2']
+  },
   quizItems: [
     {
       id: 'q1',
@@ -113,6 +109,5 @@ Current configured structure in `src/data/milestones.ts`:
 New terms should be added to `src/data/glossary.ts`. If a lesson's `glossaryTerms` array contains a string that matches a `term` in this file, that term will be unlocked and displayed in the user's glossary once they finish the lesson.
 
 ## Content Best Practices
-- **Step Highlights**: Use the `highlights` array in a `LessonStep` to visually emphasize key words in the UI.
 - **Quiz Explanations**: Always provide an `explanation` for both correct and incorrect choices. This is where the actual teaching happens for users who guess.
 - **Incremental Difficulty**: Ensure that early steps in a lesson prepare the user for the subsequent challenge and quiz.

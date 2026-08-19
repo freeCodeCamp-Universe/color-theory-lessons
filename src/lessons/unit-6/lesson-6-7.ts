@@ -12,42 +12,30 @@ export const lesson6_7: LessonConfig = {
   reviewTags: ['review', 'systems', 'capstone-prep', 'stress-test'],
   steps: [
     {
-      id: 's1',
       text: 'A color system is only as good as its worst context. A palette that looks great in a marketing mockup may have weak hierarchy in dark mode, indistinguishable states in a chart, or invisible alerts under CVD simulation. A stress test exposes these hidden weaknesses.',
-      highlights: ['stress test'],
     },
     {
-      id: 's2',
       text: 'Apply your system to five contexts: light mode, dark mode, chart view, alert stack, and simulated CVD. Each context exercises different roles — surfaces, text hierarchy, semantic states, data encoding, and perceptual robustness.',
-      highlights: ['system review'],
     },
     {
-      id: 's3',
       text: 'A consistency audit checks governance patterns across the system, not just one screen. Common failures include role drift (one role used for two meanings), role duplication (two roles doing one job), and local overrides that bypass shared tokens.',
-      highlights: ['consistency audit'],
     },
     {
-      id: 's4',
       text: 'Before shipping, verify both quality and governance: hierarchy (is the primary action clearly dominant?), readability (does all text meet contrast thresholds?), semantic clarity (do success/warning/error feel distinct?), dark mode (do all roles still work?), chart readability (are series distinguishable?), CVD robustness (do backup cues survive simulation?), and token propagation (do fixes apply consistently across contexts?).',
     },
     {
-      id: 's5',
       text: 'This is a synthesis exercise — everything from Units 1 through 6 comes together. Your visual vocabulary, additive-model understanding, format knowledge, perception awareness, accessibility skills, and systems thinking all contribute to evaluating a color system holistically.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Run the stress test on the sample color system. Mark every weakness you find across light, dark, chart, alert, and simulation contexts, then tag each issue as role drift, missing role, or token override.',
-      type: 'explore-all',
       hints: [
         'Toggle between all five contexts before marking anything — the same issue might appear in multiple views.',
         'Ask: does hierarchy still work? Are states distinct? Is anything too loud or too faint?',
         'For each issue, classify the root cause: role drift, missing role definition, or token override.',
         'Simulation failures often appear in the chart and alert views — check those carefully.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',
