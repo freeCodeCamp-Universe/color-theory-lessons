@@ -1,6 +1,7 @@
 import { memo, useState, useEffect, useRef, useMemo } from 'react';
 import type { HSL } from '../../utils/color.ts';
 import { hslString } from '../../utils/color.ts';
+import { HueWheel } from './HueWheel.tsx';
 import shellStyles from './ToolShell.module.css';
 import styles from './HSLSliderTool.module.css';
 
@@ -47,6 +48,9 @@ export const HSLSliderTool = memo(function HSLSliderTool({ interactive = true, o
   const [allDone, setAllDone] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (timerRef.current !== null) clearTimeout(timerRef.current); }, []);
+
+  // State used only in the previewDimension branch (always declared to follow Rules of Hooks)
+  const [previewCurrent, setPreviewCurrent] = useState<HSL>({ h: 200, s: 70, l: 55 });
 
   const target = TARGETS[targetIdx];
 
@@ -98,7 +102,8 @@ export const HSLSliderTool = memo(function HSLSliderTool({ interactive = true, o
   );
 
   if (previewDimension) {
-    const preview: HSL = { h: 200, s: 70, l: 55 };
+    const preview = previewCurrent;
+    const setPreview = setPreviewCurrent;
     const pHueGrad = `linear-gradient(to right, hsl(0,${preview.s}%,${preview.l}%), hsl(60,${preview.s}%,${preview.l}%), hsl(120,${preview.s}%,${preview.l}%), hsl(180,${preview.s}%,${preview.l}%), hsl(240,${preview.s}%,${preview.l}%), hsl(300,${preview.s}%,${preview.l}%), hsl(360,${preview.s}%,${preview.l}%))`;
     const pSatGrad = `linear-gradient(to right, hsl(${preview.h},0%,${preview.l}%), hsl(${preview.h},100%,${preview.l}%))`;
     const pLightGrad = `linear-gradient(to right, hsl(${preview.h},${preview.s}%,0%), hsl(${preview.h},${preview.s}%,50%), hsl(${preview.h},${preview.s}%,100%))`;
@@ -106,36 +111,52 @@ export const HSLSliderTool = memo(function HSLSliderTool({ interactive = true, o
     const labels = { h: 'Hue', s: 'Saturation', l: 'Lightness' };
     const maxes = { h: 360, s: 100, l: 100 };
     const units = { h: '°', s: '%', l: '%' };
+    const isHueDimension = previewDimension === 'h';
     return (
       <div className={shellStyles.shell}>
         <span className={shellStyles.toolLabel}>HSL color lab</span>
         <div className={styles.root}>
-          <div className={styles.swatchRow}>
-            <div className={styles.swatchBox}>
-              <span className={styles.swatchLabel}>color</span>
-              <div className={styles.swatch} style={{ backgroundColor: hslString(preview) }} />
-              <span className={styles.hslValue}>H:{preview.h} S:{preview.s}% L:{preview.l}%</span>
-            </div>
-          </div>
-          <div className={styles.sliders}>
-            {(['h', 's', 'l'] as const).map((ch) => (
-              <div key={ch} className={styles.sliderRow}>
-                <div className={styles.sliderHeader}>
-                  <span className={styles.sliderName} style={{ color: ch === previewDimension ? 'var(--yellow)' : undefined }}>{labels[ch]}</span>
-                  <span className={styles.sliderVal}>{preview[ch]}{units[ch]}</span>
+          <div style={{ display: 'flex', gap: 'var(--spacing-lg)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+            {isHueDimension && (
+              <HueWheel
+                hue={preview.h}
+                interactive={interactive}
+                onChange={(h) => setPreview((prev) => ({ ...prev, h }))}
+              />
+            )}
+            <div style={{ flex: 1, minWidth: '180px', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+              <div className={styles.swatchRow}>
+                <div className={styles.swatchBox}>
+                  <span className={styles.swatchLabel}>color</span>
+                  <div className={styles.swatch} style={{ backgroundColor: hslString(preview) }} />
+                  <span className={styles.hslValue}>H:{preview.h} S:{preview.s}% L:{preview.l}%</span>
                 </div>
-                <input
-                  type="range"
-                  className={styles.slider}
-                  min={0}
-                  max={maxes[ch]}
-                  value={preview[ch]}
-                  disabled
-                  style={{ background: gradients[ch], opacity: ch === previewDimension ? 1 : 0.4 }}
-                  aria-label={`${labels[ch]}: ${preview[ch]}${units[ch]}`}
-                />
               </div>
-            ))}
+              <div className={styles.sliders}>
+                {(['h', 's', 'l'] as const).map((ch) => {
+                  const isActive = ch === previewDimension;
+                  return (
+                    <div key={ch} className={styles.sliderRow}>
+                      <div className={styles.sliderHeader}>
+                        <span className={styles.sliderName} style={{ color: isActive ? 'var(--yellow)' : undefined }}>{labels[ch]}</span>
+                        <span className={styles.sliderVal}>{preview[ch]}{units[ch]}</span>
+                      </div>
+                      <input
+                        type="range"
+                        className={styles.slider}
+                        min={0}
+                        max={maxes[ch]}
+                        value={preview[ch]}
+                        disabled={!isActive || !interactive}
+                        style={{ background: gradients[ch], opacity: isActive ? 1 : 0.4 }}
+                        onChange={(e) => isActive && setPreview((prev) => ({ ...prev, [ch]: Number(e.target.value) }))}
+                        aria-label={`${labels[ch]}: ${preview[ch]}${units[ch]}`}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </div>
