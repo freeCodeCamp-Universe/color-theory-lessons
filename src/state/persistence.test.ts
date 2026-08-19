@@ -1,5 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { loadState, saveState } from './persistence.ts';
+import {
+  clearMilestoneSessions,
+  loadState,
+  MILESTONE_SESSION_PREFIX,
+  READ_INTERFACE_SESSION_PREFIX,
+  saveState,
+} from './persistence.ts';
 import type { ProgressState } from '../types/progress.ts';
 
 const STORAGE_KEY = 'color-theory-course-state';
@@ -25,7 +31,10 @@ const sampleProgress: ProgressState = {
 
 const samplePrefs = { reducedMotion: true, colorBlindnessMode: 'deuteranopia' };
 
-beforeEach(() => localStorage.clear());
+beforeEach(() => {
+  localStorage.clear();
+  sessionStorage.clear();
+});
 
 describe('loadState', () => {
   it('returns defaults when localStorage is empty', () => {
@@ -127,5 +136,30 @@ describe('round-trip', () => {
     const { progress, preferences } = loadState();
     expect(progress.completedLessons).toHaveLength(0);
     expect(preferences.reducedMotion).toBe(false);
+  });
+});
+
+describe('clearMilestoneSessions', () => {
+  it('removes milestone player and Read Interface challenge sessions', () => {
+    sessionStorage.setItem(`${MILESTONE_SESSION_PREFIX}milestone-1`, 'milestone state');
+    sessionStorage.setItem(`${READ_INTERFACE_SESSION_PREFIX}milestone-1:1`, 'challenge state');
+    sessionStorage.setItem('color-theory-course-lesson-session:u1-l1', 'lesson state');
+    sessionStorage.setItem('unrelated-key', 'unrelated state');
+
+    clearMilestoneSessions();
+
+    expect(sessionStorage.getItem(`${MILESTONE_SESSION_PREFIX}milestone-1`)).toBeNull();
+    expect(sessionStorage.getItem(`${READ_INTERFACE_SESSION_PREFIX}milestone-1:1`)).toBeNull();
+    expect(sessionStorage.getItem('color-theory-course-lesson-session:u1-l1')).toBe('lesson state');
+    expect(sessionStorage.getItem('unrelated-key')).toBe('unrelated state');
+  });
+
+  it('does not throw when session storage is unavailable', () => {
+    sessionStorage.setItem(`${MILESTONE_SESSION_PREFIX}milestone-1`, 'milestone state');
+    vi.spyOn(Storage.prototype, 'key').mockImplementationOnce(() => {
+      throw new Error('SecurityError');
+    });
+
+    expect(() => clearMilestoneSessions()).not.toThrow();
   });
 });

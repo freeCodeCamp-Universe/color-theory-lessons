@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import type { MilestoneConfig } from '../../types/milestone.ts';
 import { useMilestoneCompletion } from '../../hooks/useMilestoneCompletion.ts';
 import { units } from '../../data/units.ts';
+import { MILESTONE_SESSION_PREFIX } from '../../state/persistence.ts';
 import { ChallengeRenderer } from './ChallengeRenderer.tsx';
 import { InterfaceMockup } from './InterfaceMockup.tsx';
 import styles from './MilestonePlayer.module.css';
@@ -30,8 +31,6 @@ interface MilestoneSessionState {
   completedChallenges: string[];
   attemptId: number;
 }
-
-const MILESTONE_SESSION_PREFIX = 'color-theory-course-milestone-session:';
 
 function phaseForPart(milestone: MilestoneConfig, index: number): Extract<Phase, 'question' | 'challenge'> {
   return milestone.parts[index]?.kind === 'challenge' ? 'challenge' : 'question';

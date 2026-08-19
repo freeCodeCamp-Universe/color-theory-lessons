@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { READ_INTERFACE_SESSION_PREFIX } from '../../../state/persistence.ts';
 import styles from './ReadInterfaceChallenge.module.css';
 import { InterfaceMockup } from '../InterfaceMockup.tsx';
 
@@ -32,8 +33,6 @@ const TARGETS: Target[] = [
 ];
 
 const MIN_TO_PASS = 4;
-
-const READ_INTERFACE_SESSION_PREFIX = 'color-theory-course-read-interface-session:';
 
 interface ReadInterfaceSession {
   version: 1;
