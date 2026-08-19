@@ -101,11 +101,69 @@ const twoPartMilestone: MilestoneConfig = {
 };
 
 describe('MilestonePlayer', () => {
+  describe('accessible radio roles', () => {
+    it('renders choices as radio inputs', () => {
+      renderMilestone(singleQuestionMilestone);
+      expect(screen.getAllByRole('radio')).toHaveLength(2);
+    });
+
+    it('renders choices inside a radio group (fieldset/group role)', () => {
+      renderMilestone(singleQuestionMilestone);
+      expect(screen.getByRole('group')).toBeInTheDocument();
+    });
+
+    it('radio inputs are unchecked by default', () => {
+      renderMilestone(singleQuestionMilestone);
+      screen.getAllByRole('radio').forEach((r) => {
+        expect(r).not.toBeChecked();
+      });
+    });
+
+    it('selecting a choice checks that radio and unchecks others', () => {
+      renderMilestone(singleQuestionMilestone);
+      const [blueRadio, redRadio] = screen.getAllByRole('radio');
+
+      fireEvent.click(blueRadio);
+      expect(blueRadio).toBeChecked();
+      expect(redRadio).not.toBeChecked();
+
+      fireEvent.click(redRadio);
+      expect(redRadio).toBeChecked();
+      expect(blueRadio).not.toBeChecked();
+    });
+
+    it('radio inputs are disabled after submission', async () => {
+      renderMilestone(singleQuestionMilestone);
+      const [blueRadio] = screen.getAllByRole('radio');
+
+      fireEvent.click(blueRadio);
+      fireEvent.click(screen.getByRole('button', { name: 'check' }));
+
+      await waitFor(() => {
+        screen.getAllByRole('radio').forEach((r) => {
+          expect(r).toBeDisabled();
+        });
+      });
+    });
+
+    it('selected radio remains checked after submission', async () => {
+      renderMilestone(singleQuestionMilestone);
+      const [blueRadio] = screen.getAllByRole('radio');
+
+      fireEvent.click(blueRadio);
+      fireEvent.click(screen.getByRole('button', { name: 'check' }));
+
+      await waitFor(() => {
+        expect(blueRadio).toBeChecked();
+      });
+    });
+  });
+
   describe('COMPLETE_MILESTONE dispatch', () => {
     it('dispatches COMPLETE_MILESTONE after completing the only quiz part', async () => {
       renderMilestone(singleQuestionMilestone);
 
-      fireEvent.click(screen.getByRole('button', { name: /Blue/i }));
+      fireEvent.click(screen.getByRole('radio', { name: /Blue/i }));
       fireEvent.click(screen.getByRole('button', { name: 'check' }));
       await waitFor(() => screen.getByRole('button', { name: 'finish milestone →' }));
       fireEvent.click(screen.getByRole('button', { name: 'finish milestone →' }));
@@ -118,7 +176,7 @@ describe('MilestonePlayer', () => {
     it('dispatches with the correct milestone id', async () => {
       renderMilestone({ ...singleQuestionMilestone, id: 'milestone-specific-id' });
 
-      fireEvent.click(screen.getByRole('button', { name: /Blue/i }));
+      fireEvent.click(screen.getByRole('radio', { name: /Blue/i }));
       fireEvent.click(screen.getByRole('button', { name: 'check' }));
       fireEvent.click(await screen.findByRole('button', { name: 'finish milestone →' }));
 
@@ -131,14 +189,14 @@ describe('MilestonePlayer', () => {
       renderMilestone(singleQuestionMilestone);
 
       // Complete the milestone
-      fireEvent.click(screen.getByRole('button', { name: /Blue/i }));
+      fireEvent.click(screen.getByRole('radio', { name: /Blue/i }));
       fireEvent.click(screen.getByRole('button', { name: 'check' }));
       fireEvent.click(await screen.findByRole('button', { name: 'finish milestone →' }));
       await waitFor(() => screen.getByRole('button', { name: 'retry milestone' }));
 
       // Retry and complete again
       fireEvent.click(screen.getByRole('button', { name: 'retry milestone' }));
-      fireEvent.click(await screen.findByRole('button', { name: /Blue/i }));
+      fireEvent.click(await screen.findByRole('radio', { name: /Blue/i }));
       fireEvent.click(screen.getByRole('button', { name: 'check' }));
       fireEvent.click(await screen.findByRole('button', { name: 'finish milestone →' }));
 
@@ -156,7 +214,7 @@ describe('MilestonePlayer', () => {
       renderMilestone(twoPartMilestone);
 
       // Part 1
-      fireEvent.click(screen.getByRole('button', { name: /Yes/i }));
+      fireEvent.click(screen.getByRole('radio', { name: /Yes/i }));
       fireEvent.click(screen.getByRole('button', { name: 'check' }));
       fireEvent.click(await screen.findByRole('button', { name: 'finish part →' }));
 
@@ -168,7 +226,7 @@ describe('MilestonePlayer', () => {
       fireEvent.click(screen.getByRole('button', { name: 'next part →' }));
 
       // Part 2
-      fireEvent.click(await screen.findByRole('button', { name: /Maybe/i }));
+      fireEvent.click(await screen.findByRole('radio', { name: /Maybe/i }));
       fireEvent.click(screen.getByRole('button', { name: 'check' }));
       fireEvent.click(await screen.findByRole('button', { name: 'finish milestone →' }));
 

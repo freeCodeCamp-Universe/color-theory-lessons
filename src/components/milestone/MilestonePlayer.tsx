@@ -190,31 +190,43 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
 
             <p className={styles.questionPrompt}>{currentQuestion.prompt}</p>
 
-            <div className={styles.choices}>
+            <fieldset className={styles.choices}>
+              <legend className={styles.choicesLegend}>{currentQuestion.prompt}</legend>
               {currentQuestion.choices.map((choice) => {
                 const isSelected = selectedChoice === choice.id;
                 const showResult = submitted;
+                const choiceClass = `${styles.choice} ${
+                  showResult && choice.isCorrect
+                    ? styles.correct
+                    : showResult && isSelected && !choice.isCorrect
+                      ? styles.incorrect
+                      : isSelected && !showResult
+                        ? styles.chosen
+                        : ''
+                }`;
+                const inputId = `choice-${currentQuestion.id}-${choice.id}`;
                 return (
-                  <button
+                  <label
                     key={choice.id}
-                    className={`${styles.choice} ${
-                      showResult && choice.isCorrect
-                        ? styles.correct
-                        : showResult && isSelected && !choice.isCorrect
-                          ? styles.incorrect
-                          : isSelected && !showResult
-                            ? styles.chosen
-                            : ''
-                    }`}
-                    onClick={() => handleChoiceSelect(choice.id)}
-                    disabled={submitted && !choice.isCorrect && selectedChoice !== choice.id}
+                    htmlFor={inputId}
+                    className={choiceClass}
                   >
+                    <input
+                      type="radio"
+                      id={inputId}
+                      name={`question-${currentQuestion.id}`}
+                      value={choice.id}
+                      checked={isSelected}
+                      onChange={() => handleChoiceSelect(choice.id)}
+                      disabled={submitted}
+                      className={styles.choiceRadio}
+                    />
                     <span className={styles.choiceKey}>{choice.id}.</span>
                     <span>{choice.label}</span>
-                  </button>
+                  </label>
                 );
               })}
-            </div>
+            </fieldset>
 
             {submitted && currentQuestion.choices.find((c) => c.id === selectedChoice)?.explanation && (
               <p className={styles.explanation}>
