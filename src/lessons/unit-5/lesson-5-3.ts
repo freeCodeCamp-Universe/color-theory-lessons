@@ -22,43 +22,29 @@ export const lesson5_3: LessonConfig = {
   reviewTags: ['color-only', 'wcag', 'redundancy', 'states', 'charts', 'backup-cues'],
   steps: [
     {
-      id: 's1',
       text: 'In Unit 4 you observed that designs relying on hue alone break when color perception varies. WCAG 1.4.1 "Use of Color" formalizes this observation: color must not be the only visual means of conveying information. The goal is not to remove color but to ensure it is not the sole carrier of meaning.',
-      highlights: ['use of color'],
     },
     {
-      id: 's2',
       text: 'Semantic states — success, warning, error, info — are a fundamental UI pattern. Most start with color alone: a green badge, a yellow badge, a red badge. Each state should communicate through at least two channels: a success state can use green color + a checkmark icon + the label "Success."',
-      highlights: ['success state', 'warning state', 'error state', 'info state'],
     },
     {
-      id: 's3',
       text: 'Form validation is a specific case. A red border alone is weak. The strongest form error combines: a colored border or outline, an error icon, and a clear text message beneath the field. Validation feedback should answer "what went wrong and how to fix it."',
-      highlights: ['validation feedback', 'status message'],
     },
     {
-      id: 's4',
       text: 'Charts with multiple series are especially vulnerable. Two strong fixes: direct labels placed adjacent to each line or bar (eliminating the need for a color-only legend) and pattern fills — hatching or textures — that make series distinguishable without relying on hue.',
-      highlights: ['direct label', 'pattern fill', 'chart series', 'annotation'],
     },
     {
-      id: 's5',
       text: 'The principle is redundancy: meaning carried by two or more signals. If color fades under CVD simulation, the icon or label still communicates. A good test: if you removed all color and every element\'s meaning was still clear, the design is robust.',
-      highlights: ['redundant cue'],
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Add at least one non-color cue to each of the four semantic states. Toggle icon, label, and border style to build a more robust state system.',
-      type: 'add-cues',
       hints: [
         'Toggle at least one of the three cues (icon, label, border) for each state card.',
         'All four states need at least one cue enabled before the challenge is complete.',
         'Start by asking: if I removed hue, what would still communicate meaning?',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

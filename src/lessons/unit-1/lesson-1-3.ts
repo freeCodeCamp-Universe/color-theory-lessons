@@ -9,41 +9,29 @@ export const lesson1_3: LessonConfig = {
   reviewTags: ['contrast', 'readability', 'foundations'],
   steps: [
     {
-      id: 's1',
       text: 'Text and its background can have different hues and still be hard to distinguish when they appear similarly light or dark. Changing hue alone does not guarantee readable text.',
-      highlights: ['contrast'],
     },
     {
-      id: 's2',
       text: 'Labels, button text, navigation links, helper text, and placeholder text all rely on contrast with their backgrounds. When contrast is low, their letter shapes are harder to distinguish.',
-      highlights: ['readability'],
     },
     {
-      id: 's3',
       text: 'The Web Content Accessibility Guidelines (WCAG) define minimum contrast ratios for text. WCAG calculates contrast from the relative luminance of the foreground and background colors, not from their hue or HSL lightness values. At Level AA, text needs at least 4.5:1 contrast. Text that is at least 18 pt, or at least 14 pt and bold, qualifies as large text and needs at least 3:1.',
-      highlights: ['foreground', 'background', 'lightness'],
     },
     {
-      id: 's4',
       text: 'A palette can look appealing while text and controls still blend into their backgrounds. Check the contrast of each foreground and background pair instead of judging readability from the palette as a whole.',
     },
     {
-      id: 's5',
       text: 'A contrast problem does not have one fixed solution. Depending on the color pair, you can change the foreground, the background, or both.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Repair three low-contrast text pairs in the dashboard card: the section label, the helper text, and the Submit text on its button background.',
-      type: 'adjust-contrast',
       hints: [
         'The section label sits on a dark background. Increase the label\'s lightness to raise its contrast.',
         'Increase the helper text\'s lightness so it stands out from the dark background.',
         'The Submit text is white. Decrease the button background\'s lightness to raise the contrast.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

@@ -9,41 +9,29 @@ export const lesson1_5: LessonConfig = {
   reviewTags: ['hierarchy', 'emphasis', 'foundations'],
   steps: [
     {
-      id: 's1',
       text: 'Visual hierarchy organizes interface elements by importance. It directs attention first to the main content or action, then to supporting information, while background elements remain less prominent.',
-      highlights: ['hierarchy'],
     },
     {
-      id: 's2',
       text: 'Color can create emphasis when one element differs from its surroundings. Reserving an accent color for the focal point makes it more prominent than nearby elements that use neutral or muted colors.',
-      highlights: ['emphasis', 'accent color'],
     },
     {
-      id: 's3',
       text: 'Applying saturated accent colors to several elements gives each of them a strong color signal. Color then no longer indicates which element should receive attention first.',
     },
     {
-      id: 's4',
       text: 'Supporting elements can use neutral or less saturated colors while maintaining readable contrast with their backgrounds. The focal point can use the accent color to distinguish it from those supporting elements.',
-      highlights: ['focal point'],
     },
     {
-      id: 's5',
       text: 'The exercise applies visual hierarchy to three actions: Submit, Save Draft, and Cancel. Their styling should reflect their relative importance as primary, secondary, and tertiary actions.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Assign a visual role to each action so Submit receives the most emphasis, Save Draft remains available without competing with it, and Cancel receives the least emphasis.',
-      type: 'fix-interface',
       hints: [
         'Only one action should use the filled accent treatment.',
         'An outlined treatment keeps an action visible without giving it the same emphasis as a filled accent.',
         'A text-link treatment gives a tertiary action less emphasis than filled or outlined actions.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

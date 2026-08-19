@@ -11,7 +11,7 @@ The application is built as a data-driven React SPA. It separates lesson content
 The app follows a strict hierarchy for content delivery:
 
 - **Type Definitions (`src/types/lesson.ts`)**: Define the `LessonConfig` interface, which all lessons must adhere to.
-- **Static Lessons (`src/lessons/unit-X/lesson-X-Y.ts`)**: Pure data files containing the steps, challenges, and quiz questions for a specific lesson.
+- **Static Lessons (`src/lessons/unit-X/lesson-X-Y.ts`)**: Pure data files containing the steps, challenge, and quiz questions for a specific lesson.
 - **Lesson Registry (`src/lessons/lesson-registry.ts`)**: A central index that imports all individual lesson files and exports them as a searchable array.
 - **Lesson Player (`src/components/lesson/LessonPlayer.tsx`)**: The stateful component that consumes a `LessonConfig` and manages the user's progress through its phases (Steps -> Challenge -> Quiz -> Complete).
 

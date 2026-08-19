@@ -9,45 +9,34 @@ export const lesson1_1: LessonConfig = {
   reviewTags: ['foundations', 'visual-vocabulary', 'color-function'],
   steps: [
     {
-      id: 's1',
       text: 'Color directs attention and communicates structure in an interface. In the example, notice which element stands out first, how the navigation is separated from the content, and which color marks progress.',
       panel: { type: 'before-after-preview', mockup: 'purposeful' },
     },
     {
-      id: 's2',
       text: 'A shared color cue can mark related items as one group. A different background color can also separate navigation from the page content.',
-      highlights: ['grouping', 'separate sections'],
       panel: { type: 'before-after-preview', mockup: 'purposeful' },
     },
     {
-      id: 's3',
       text: 'Many interfaces use green for success, red for errors, and yellow for warnings. Users learn these meanings through repeated use, so the colors act as status cues.',
-      highlights: ['status'],
       panel: { type: 'before-after-preview', mockup: 'purposeful' },
     },
     {
-      id: 's4',
       text: 'Colors without a defined role add competing signals. In the noisy example, several unrelated elements use saturated colors, so the primary action no longer stands out.',
       panel: { type: 'before-after-preview', mockup: 'noisy' },
     },
     {
-      id: 's5',
       text: 'The same interface can use color for several jobs at once.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Select each colored area and identify its role: drawing attention, grouping items, signaling status, separating sections, or serving no clear purpose.',
-      type: 'identify-problem',
       hints: [
         'Compare the gold button with the gray text around it. Its stronger contrast draws attention.',
         'A colored border can mark the content inside it as one group.',
         'A status color marks an outcome such as success, warning, or error.',
         'A background color can mark the boundary between navigation and page content.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

@@ -16,42 +16,29 @@ export const lesson5_5: LessonConfig = {
   reviewTags: ['audit', 'workflow', 'process', 'inclusive-design'],
   steps: [
     {
-      id: 's1',
       text: 'A contrast checker calculates a ratio — it does not decide whether a design is accessible. Judgment still requires testing in context: at real sizes, with real content, in a realistic layout. A body text color that barely passes on a chip may fail in context on a colored card.',
-      highlights: ['checker', 'context'],
     },
     {
-      id: 's2',
       text: 'A practical audit workflow has four stages: (1) Identify priority elements on the current screen or flow — text, controls, states, and graphics that carry meaning. (2) Check contrast ratios for text and non-text components. (3) Simulate CVD conditions and identify ambiguous elements. (4) Verify task completion — can users still accomplish their goals?',
-      highlights: ['audit', 'priority element'],
     },
     {
-      id: 's3',
       text: 'Priority elements are the ones users depend on to complete tasks: headlines, body text, buttons, input fields, links, form feedback, alerts, and chart marks. Secondary or decorative elements are lower priority. Start your audit with the elements that matter most.',
-      highlights: ['review pass'],
     },
     {
-      id: 's4',
       text: 'After contrast checks, ask: does any element rely on color alone? A passing ratio does not fix a color-alone problem — both checks must be done separately. Then simulate at least two CVD types and walk through the core user flows.',
-      highlights: ['verification', 'task check'],
     },
     {
-      id: 's5',
       text: 'The most valuable question during simulated review is not "do the colors look different?" but "can the user complete the task?" Run through the core user flows for this interface slice — fill a form, read a chart, understand a status indicator — and flag anywhere meaning is lost.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Work through the full audit checklist on the mock interface — identify priority elements, check contrast, flag color-only issues, and simulate CVD.',
-      type: 'audit',
       hints: [
         'Start with text elements before checking controls and graphics.',
         'A passing ratio does not fix a color-only problem — check both separately.',
         'Simulate at least two CVD modes before marking the simulation step complete.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

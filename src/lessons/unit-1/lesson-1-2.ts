@@ -9,44 +9,32 @@ export const lesson1_2: LessonConfig = {
   reviewTags: ['foundations', 'hue', 'saturation', 'lightness'],
   steps: [
     {
-      id: 's1',
       text: 'The HSL color model describes a color with three values: hue, saturation, and lightness. Each value controls a different part of the model.',
     },
     {
-      id: 's2',
       text: 'Hue identifies a color family, such as red, orange, yellow, green, blue, or purple. In HSL, hue is represented by an angle around the color wheel.',
-      highlights: ['hue'],
       panel: { type: 'hsl-slider-preview', dimension: 'h' },
     },
     {
-      id: 's3',
       text: 'In HSL, saturation controls how vivid or muted a color appears. With hue and lightness fixed, lowering saturation moves the color toward gray.',
-      highlights: ['saturation', 'muted', 'vivid'],
       panel: { type: 'hsl-slider-preview', dimension: 's' },
     },
     {
-      id: 's4',
       text: 'In HSL, lightness controls how light or dark a color appears. At 0% the color is black, and at 100% it is white. With hue and saturation fixed, changing lightness produces lighter or darker versions of the color.',
-      highlights: ['lightness', 'value', 'tint', 'shade'],
       panel: { type: 'hsl-slider-preview', dimension: 'l' },
     },
     {
-      id: 's5',
       text: 'Change one HSL value while the other two stay fixed. This isolates the effect of hue, saturation, or lightness on the resulting color.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Complete three color matches, one each for hue, saturation, and lightness.',
-      type: 'match-target',
       hints: [
         'A change from one color family to another means the hue changed.',
         'Compare how vivid or muted the colors look while hue and lightness remain fixed. That difference comes from saturation.',
         'Lightness is the changing value when one color is darker or lighter and the other two values match.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

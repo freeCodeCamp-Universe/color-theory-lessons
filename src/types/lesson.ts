@@ -12,7 +12,7 @@ export interface LessonConfig {
   title: string;
   interactionType: InteractionType;
   steps: LessonStep[];
-  challenges: Challenge[];
+  challenge: Challenge;
   quizItems: QuizItem[];
   glossaryTerms: string[];
   reviewTags: string[];
@@ -68,31 +68,14 @@ export type StepPanelConfig =
   | { type: 'before-after-preview'; mockup: 'purposeful' | 'noisy' };
 
 export interface LessonStep {
-  id: string;
   text: string;
-  highlights?: string[];
   panel?: StepPanelConfig | null;
 }
 
 export interface Challenge {
-  id: string;
   prompt: string;
-  type: ChallengeType;
   hints: string[];
 }
-
-export type ChallengeType =
-  | 'build-palette'
-  | 'fix-interface'
-  | 'match-target'
-  | 'adjust-contrast'
-  | 'identify-problem'
-  | 'sort'
-  | 'explore-all'
-  | 'add-cues'
-  | 'audit'
-  | 'repair'
-  | 'system-build';
 
 export interface QuizItem {
   id: string;

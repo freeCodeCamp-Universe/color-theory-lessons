@@ -198,7 +198,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
   }
 
   const question = phase === 'quiz' ? lesson.quizItems[quizIndex] : null;
-  const challenge = lesson.challenges[0] ?? null;
+  const challenge = lesson.challenge;
   const currentStep = lesson.steps[stepIndex];
 
   const hasRightPanel =

@@ -13,41 +13,29 @@ export const lesson4_4: LessonConfig = {
   reviewTags: ['color-alone', 'observation', 'accessibility', 'ui-patterns'],
   steps: [
     {
-      id: 's1',
       text: 'Now that you understand how CVD changes what people see, look at common interface patterns through that lens. Some designs survive color perception differences just fine. Others fall apart — and the reason is almost always the same: the meaning lives entirely in the hue.',
     },
     {
-      id: 's2',
       text: 'Status indicators are a classic example. A red dot for error and a green dot for success may look distinct to most people, but under deuteranopia simulation those two hues converge. Without any other visual signal, the dots become indistinguishable.',
-      highlights: ['ambiguous element'],
     },
     {
-      id: 's3',
       text: 'Form fields that signal errors with only a red border face the same problem. The color shift may be invisible or subtle under certain CVD types. Diagnose the failure first: error meaning is present, but encoded in a single fragile channel.',
     },
     {
-      id: 's4',
       text: 'Charts and data visualizations are especially vulnerable. When series are distinguished only by hue, a CVD simulation can make two or three series look identical. This is not just a theoretical concern — it directly blocks comprehension.',
-      highlights: ['color-dependent meaning'],
     },
     {
-      id: 's5',
       text: 'Notice the pattern: designs that rely on a single visual channel (hue) to carry meaning are fragile. Your outcome here is diagnostic: name where meaning depends on hue alone and why that creates ambiguity. In the next unit, you will learn the repair techniques and guidelines for building robust alternatives.',
-      highlights: ['perceptual robustness'],
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt:
         'Review the six UI examples. Click the ones where meaning would become ambiguous if the viewer could not distinguish the hues used.',
-      type: 'identify-problem',
       hints: [
         'Imagine the colors shift so that reds and greens look the same. Which elements lose their meaning?',
         'Three of the six examples rely on hue alone. The others have a backup signal.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

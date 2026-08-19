@@ -9,41 +9,29 @@ export const lesson2_5: LessonConfig = {
   reviewTags: ['additive', 'display', 'perception', 'interface'],
   steps: [
     {
-      id: 's1',
       text: 'A display does not paint a flat surface. It controls many tiny light-producing elements arranged in a grid. Each element can emit red, green, or blue light at a specific intensity.',
-      highlights: ['light-producing elements'],
     },
     {
-      id: 's2',
       text: 'From a normal viewing distance your eye blends all those tiny elements into a single unified color. You do not see the individual parts — only the combined result. Zoom into a screen photo and the subpixels become visible; step back and they vanish into a smooth swatch.',
     },
     {
-      id: 's3',
       text: 'Because screen color is made from emitted light rather than reflected pigment, it can appear luminous in a way paint cannot match. The display is literally sending light straight to your eyes — not bouncing ambient light off an inert surface.',
-      highlights: ['luminous', 'emitted light'],
     },
     {
-      id: 's4',
       text: 'This luminous quality changes depending on surrounding color. On a dark background, a vivid accent has high contrast with its surroundings and appears to stand out — almost to glow. On a light background, the same accent competes with brightness already present and reads as less intense.',
-      highlights: ['dark background', 'contrast'],
     },
     {
-      id: 's5',
       text: 'Use the pixel explorer to see how subpixels combine into a perceived color. Then in the challenge, compare the same accent on a dark and light background and pick the explanation that best describes what you see.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'The same accent color is shown on a dark background and a light background. Pick the answer that best explains why one context makes it appear more vivid.',
-      type: 'identify-problem',
       hints: [
         'Ask: is the display adding brightness here, or is something reducing it?',
         'Think about what "contrast" means when the surrounding area is near-black versus near-white.',
         'The accent\'s RGB values do not change — only the context does.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

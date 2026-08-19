@@ -19,46 +19,32 @@ export const lesson4_2: LessonConfig = {
   reviewTags: ['CVD', 'perception', 'accessibility'],
   steps: [
     {
-      id: 's1',
       text: 'Color vision deficiency (CVD) refers to differences in how certain color distinctions are perceived, due to variation in cone function. It is not a single condition — there are multiple types and a range of severities.',
-      highlights: ['color vision deficiency'],
     },
     {
-      id: 's2',
       text: 'CVD is grouped by which cone type is affected. Protan types involve the red-sensitive cone; deutan types involve the green-sensitive cone; tritan types involve the blue-sensitive cone. The suffix "-opia" indicates absence or very low function; "-anomaly" indicates reduced sensitivity.',
-      highlights: ['protanopia', 'deuteranopia', 'tritanopia'],
       panel: { type: 'vision-cards-preview', expandedNames: ['Protanopia', 'Deuteranopia', 'Tritanopia'] },
     },
     {
-      id: 's3',
       text: 'Deuteranomaly — reduced green cone sensitivity — is the most common form of CVD, affecting roughly 5–8% of males with Northern European ancestry. Deuteranopia (absent green cones) and protanopia (absent red cones) are less common. Tritan types are rare.',
-      highlights: ['deuteranomaly', 'protanomaly'],
       panel: { type: 'vision-cards-preview', expandedNames: ['Deuteranomaly', 'Protanomaly'] },
     },
     {
-      id: 's4',
       text: 'Achromatopsia is a rare condition (affecting roughly 1 in 30,000 people) where very limited or no cone function is present. Individuals with achromatopsia perceive only brightness — all hues appear as shades of gray. This is distinct from the partial cone differences that characterize most CVD types.',
-      highlights: ['achromatopsia'],
       panel: { type: 'vision-cards-preview', expandedNames: ['Achromatopsia'] },
     },
     {
-      id: 's5',
       text: 'As a designer, your goal is robustness, not diagnosis. You cannot know which viewers have CVD or which type — and the percentages are significant enough that assuming all viewers share your color experience is risky. Simulation tools help you see how your interface looks under various CVD conditions.',
-      highlights: ['simulation'],
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt:
         'Expand each vision type card to learn about the condition, the common design risk, and which colors are most affected.',
-      type: 'explore-all',
       hints: [
         'Click a card header to expand it. Each card shows a description, a design risk, and the affected colors.',
         'There are six card types — protan, deutan, tritan, and achromatopsia variants. Expand all of them.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

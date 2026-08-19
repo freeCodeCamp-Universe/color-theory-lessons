@@ -18,42 +18,29 @@ export const lesson6_6: LessonConfig = {
   reviewTags: ['color-spaces', 'sRGB', 'Display-P3', 'context', 'wide-gamut'],
   steps: [
     {
-      id: 's1',
       text: 'Before stress-testing your color system in the next lesson, you need to understand one more layer: the color space your values live in. sRGB is the standard color space for most web work. It defines the range of colors that virtually every screen can display. When you write a HEX, RGB, or HSL value in CSS, you are working in sRGB by default.',
-      highlights: ['sRGB', 'color space'],
     },
     {
-      id: 's2',
       text: "Display P3 is a wider color space available on many modern screens — especially Apple devices. It can represent more vivid colors than sRGB. If a user's screen does not support P3, those extra-vivid colors are clipped back to the nearest sRGB equivalent. Design for sRGB first, then enhance with P3 where supported.",
-      highlights: ['Display P3', 'wide-gamut display'],
     },
     {
-      id: 's3',
       text: 'Colors appear not only in CSS but in SVG graphics, HTML Canvas elements, and WebGL scenes. A chart bar in Canvas, an icon fill in SVG, a 3D surface in WebGL — each rendering context uses explicit color values. The context changes, but the need for thoughtful color decisions does not.',
-      highlights: ['Canvas', 'SVG', 'WebGL'],
     },
     {
-      id: 's4',
       text: 'Color does not exist in isolation. The same hex value looks different depending on surroundings: a neutral gray on white looks warm; the same gray on a blue background looks cool. This context effect — also called simultaneous contrast — means your system must be tested in real layouts, not just in swatch grids.',
-      highlights: ['context effect', 'simultaneous contrast'],
     },
     {
-      id: 's5',
       text: 'Wide-gamut displays can make carefully chosen colors appear overwhelming on newer hardware. A saturated cyan or vivid orange that looks fine on a standard sRGB screen may appear even more intense on a P3 display. Use restrained saturation and test across display types.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Sort items into three categories: raw value, semantic role, or rendering/device context. Then identify which colors might be risky in a sRGB-only environment.',
-      type: 'sort',
       hints: [
         'A raw value is a specific number like #0B57D0 or rgb(34, 34, 34).',
         'A semantic role is a token name like --color-text-primary or --color-success-bg.',
         'A rendering context is where the color appears: Display P3, Canvas chart fill, SVG icon fill.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

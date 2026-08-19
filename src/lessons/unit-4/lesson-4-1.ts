@@ -17,43 +17,29 @@ export const lesson4_1: LessonConfig = {
   reviewTags: ['perception', 'vision', 'biology-basics'],
   steps: [
     {
-      id: 's1',
       text: 'You have learned to describe color, mix it on screen, and express it in code. But there is another side to every color decision: the person looking at the screen. A digital screen emits light. But when you see a color, you are not seeing the screen itself — you are seeing the result of your eye and brain interpreting that light. Color is a perceptual experience, not a physical property of the display.',
-      highlights: ['color perception', 'visual system'],
     },
     {
-      id: 's2',
       text: 'Light enters the eye and lands on the retina at the back of the eye. The retina contains two types of photoreceptor cells: rods and cones. Rods respond to low-light conditions and do not contribute much to color vision. Cones are responsible for color.',
-      highlights: ['retina', 'rod', 'cone'],
     },
     {
-      id: 's3',
       text: 'Humans typically have three cone types, each most sensitive to a different range of wavelengths — broadly corresponding to long (red), medium (green), and short (blue). The brain compares the signals from these three cone types to construct the experience of color.',
-      highlights: ['cone', 'color vision'],
     },
     {
-      id: 's4',
       text: 'The retina sends signals along the optic nerve to the visual cortex in the brain, where the final experience of color is assembled. Context, memory, and surrounding colors all influence the result. Simultaneous contrast — where a color looks different depending on its neighbors — is one example.',
-      highlights: ['optic nerve', 'visual system'],
     },
     {
-      id: 's5',
       text: 'Because color perception depends on each individual\'s visual system, two people looking at the same interface may not perceive it identically. Good design accounts for this variation rather than assuming all viewers share the same experience.',
-      highlights: ['color perception'],
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt:
         'Click through each part of the visual pathway to reveal how it contributes to color perception.',
-      type: 'explore-all',
       hints: [
         'Start with the light source and follow the path into the eye.',
         'Each step has a short design implication — read it before moving on.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

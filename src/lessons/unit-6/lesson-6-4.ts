@@ -7,24 +7,20 @@ export const lesson6_4: LessonConfig = {
   glossaryTerms: ['dark mode', 'inverse text', 'light mode', 'mode adaptation', 'surface depth', 'theme pairing', 'tonal separation'],
   reviewTags: ['dark-mode', 'theme', 'hierarchy', 'adaptation'],
   steps: [
-    { id: 's1', text: 'Dark mode is not the inverse of light mode. Inverting light values produces unnatural results: pure black backgrounds feel harsh, pure white text creates intense halation, and surfaces that were separated in light mode may blur together in dark mode.', highlights: ['dark mode', 'light mode', 'theme pairing'] },
-    { id: 's2', text: 'Dark theme backgrounds are typically a very dark but not pure-black neutral — something in the range of #0f172a to #1e293b, for example. The exact values will depend on your palette; what matters is avoiding pure black and leaving room for surface layers above it.', highlights: ['surface depth', 'tonal separation'] },
-    { id: 's3', text: 'Text in dark mode is usually a soft off-white rather than pure white. As a starting point, primary text might be around #f8fafc while secondary text is around #94a3b8 — still high contrast against the dark surface, but less fatiguing than full-brightness white.', highlights: ['inverse text'] },
-    { id: 's4', text: 'Accent colors often need to be lighter or less saturated in dark mode. A vivid blue that read well on a white background may feel overwhelming on a dark surface. Mode adaptation means reviewing each role, not just toggling a switch.', highlights: ['mode adaptation'] },
-    { id: 's5', text: 'In the dark translator, you start with a light theme and assign a dark equivalent for each role. The preview toggles live between modes. Your task: maintain hierarchy, readable text, and distinct semantic states in both.' },
+    { text: 'Dark mode is not the inverse of light mode. Inverting light values produces unnatural results: pure black backgrounds feel harsh, pure white text creates intense halation, and surfaces that were separated in light mode may blur together in dark mode.' },
+    { text: 'Dark theme backgrounds are typically a very dark but not pure-black neutral — something in the range of #0f172a to #1e293b, for example. The exact values will depend on your palette; what matters is avoiding pure black and leaving room for surface layers above it.' },
+    { text: 'Text in dark mode is usually a soft off-white rather than pure white. As a starting point, primary text might be around #f8fafc while secondary text is around #94a3b8 — still high contrast against the dark surface, but less fatiguing than full-brightness white.' },
+    { text: 'Accent colors often need to be lighter or less saturated in dark mode. A vivid blue that read well on a white background may feel overwhelming on a dark surface. Mode adaptation means reviewing each role, not just toggling a switch.' },
+    { text: 'In the dark translator, you start with a light theme and assign a dark equivalent for each role. The preview toggles live between modes. Your task: maintain hierarchy, readable text, and distinct semantic states in both.' },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Assign dark theme equivalents for each semantic role. The preview must show clear hierarchy and readable text in both light and dark modes.',
-      type: 'system-build',
       hints: [
         'Keep dark backgrounds in the #0f172a–#334155 range for usable depth.',
         'Lighten your accent slightly for dark mode — vivid colors intensify on dark backgrounds.',
         'Check secondary text contrast in dark mode — it can fall below threshold even if primary text passes.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

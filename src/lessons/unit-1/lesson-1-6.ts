@@ -9,44 +9,32 @@ export const lesson1_6: LessonConfig = {
   reviewTags: ['harmony', 'foundations', 'palette'],
   steps: [
     {
-      id: 's1',
       text: 'A color wheel shows relationships between hues based on their positions. Hues can sit next to each other, opposite each other, or at equal intervals around the wheel. Designers use these positions as starting points for building palettes.',
     },
     {
-      id: 's2',
       text: 'Analogous colors sit next to each other on the color wheel. Their hue angles are close together, so the changes from one color to the next are gradual. An analogous palette can use one hue as the dominant color and nearby hues as supporting colors.',
-      highlights: ['analogous'],
       panel: { type: 'color-wheel-preview', relationship: 'analogous' },
     },
     {
-      id: 's3',
       text: 'Complementary colors sit opposite each other on the color wheel, 180 degrees apart. This is the largest possible separation between two hue angles. In an interface, one hue can be dominant while the other appears in smaller areas as an accent.',
-      highlights: ['complementary'],
       panel: { type: 'color-wheel-preview', relationship: 'complementary' },
     },
     {
-      id: 's4',
       text: 'Triadic palettes use three hues spaced 120 degrees apart around the color wheel. The hues have equal angular separation, but they do not need equal visual weight. One hue can be dominant while the other two support it.',
-      highlights: ['triadic'],
       panel: { type: 'color-wheel-preview', relationship: 'triadic' },
     },
     {
-      id: 's5',
       text: 'Color harmony describes how the colors in a palette relate to one another. A simple interface palette can start with one dominant hue, supporting hues chosen from a color-wheel relationship, and neutral colors for surfaces or text. Use the tool to choose a relationship and base hue.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Build a starter palette by choosing an analogous, complementary, or triadic relationship and adjusting the base hue. After you lock it in, identify how the selected relationship positions its hues on the color wheel.',
-      type: 'build-palette',
       hints: [
         'The base hue is the starting point. The wheel marks the other hues in the selected relationship.',
         'In this tool, analogous hues are 30 degrees from the base, a complementary hue is 180 degrees from the base, and triadic hues are 120 degrees apart.',
         'Look at the positions of the marked hues before answering the reflection question.',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

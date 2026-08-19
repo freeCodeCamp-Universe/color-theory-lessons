@@ -7,24 +7,20 @@ export const lesson6_2: LessonConfig = {
   glossaryTerms: ['component state', 'disabled', 'elevated surface', 'hover', 'primary text', 'secondary text', 'semantic status'],
   reviewTags: ['roles', 'components', 'states', 'hierarchy'],
   steps: [
-    { id: 's1', text: 'A useful role set covers four areas: structural (backgrounds, surfaces, dividers), content (primary text, secondary text, and inverse text — text placed on dark or colored surfaces), interactive (primary action, secondary action, focus, links), and semantic (success, warning, error, info).', highlights: ['primary text', 'secondary text', 'semantic status'] },
-    { id: 's2', text: 'Text usually needs at least two levels. Primary text is used for headings and important labels. Secondary text is used for supporting information, captions, and metadata. Without this separation, everything fights for attention.' },
-    { id: 's3', text: 'Surfaces also need levels: the page background, the card surface on top of it, and sometimes a raised panel on top of the card. Without tonal separation between surfaces, the layout loses depth and visual structure.', highlights: ['elevated surface'] },
-    { id: 's4', text: 'Interactive roles need more than a single action color. A button also has hover, focus, pressed, and disabled states. Each needs a clear visual treatment — not just a different hex, but a meaningful role.', highlights: ['component state', 'hover', 'disabled'] },
-    { id: 's5', text: 'In the role builder, assign colors to each semantic slot. A live preview shows how your choices affect a card, a button, an alert, and a form field. The tool flags obvious problems like indistinct statuses or weak text hierarchy.' },
+    { text: 'A useful role set covers four areas: structural (backgrounds, surfaces, dividers), content (primary text, secondary text, and inverse text — text placed on dark or colored surfaces), interactive (primary action, secondary action, focus, links), and semantic (success, warning, error, info).' },
+    { text: 'Text usually needs at least two levels. Primary text is used for headings and important labels. Secondary text is used for supporting information, captions, and metadata. Without this separation, everything fights for attention.' },
+    { text: 'Surfaces also need levels: the page background, the card surface on top of it, and sometimes a raised panel on top of the card. Without tonal separation between surfaces, the layout loses depth and visual structure.' },
+    { text: 'Interactive roles need more than a single action color. A button also has hover, focus, pressed, and disabled states. Each needs a clear visual treatment — not just a different hex, but a meaningful role.' },
+    { text: 'In the role builder, assign colors to each semantic slot. A live preview shows how your choices affect a card, a button, an alert, and a form field. The tool flags obvious problems like indistinct statuses or weak text hierarchy.' },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Assign colors to all required semantic roles so the live preview shows clear hierarchy, readable text, and distinguishable status states.',
-      type: 'system-build',
       hints: [
         'Start with surfaces and text — get the background and readability right before adding accent colors.',
         'Keep success/warning/error visually distinct — not just different hues but different enough lightness too.',
         'Check: can you tell what is interactive vs informational vs structural?',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',

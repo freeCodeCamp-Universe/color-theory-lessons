@@ -14,41 +14,28 @@ export const lesson5_6: LessonConfig = {
   reviewTags: ['workflow', 'inclusive-design', 'testing', 'user-research'],
   steps: [
     {
-      id: 's1',
       text: 'CVD simulation is a useful approximation, but it is not a perfect substitute for user research. Different people with the same CVD type can have different experiences. Simulation gives you a fast first pass — it does not give you a complete picture.',
-      highlights: ['approximation'],
     },
     {
-      id: 's2',
       text: 'A repeatable inclusive workflow: (1) View in normal mode and identify all elements that use color to carry meaning. (2) Switch to each simulation mode. (3) Identify which elements become ambiguous. (4) Add backup cues. (5) Re-check in simulation mode.',
-      highlights: ['workflow', 'inclusive design'],
     },
     {
-      id: 's3',
       text: 'Inclusive checks should happen early in the design process, not only as a final compliance step. Structural changes — like adding a second column to a legend or switching from color-only dots to labeled badges — are much cheaper to make before designs are locked.',
-      highlights: ['robustness'],
     },
     {
-      id: 's4',
       text: 'User testing with people who have CVD adds value that simulation cannot provide: real reactions, task completion rates, and the nuances of individual experience. Even occasional user testing significantly improves your understanding beyond what any filter can show.',
-      highlights: ['user test'],
     },
     {
-      id: 's5',
       text: 'Accessible color design is not a separate phase — it is a quality lens applied throughout regular design work. Check early, simulate often, and validate with real users when possible. The goal is to make accessibility a habit, not a last-minute task.',
     },
   ],
-  challenges: [
-    {
-      id: 'c1',
+  challenge: {
       prompt: 'Work through the inclusive review checklist for the sample interface. Mark each item as Pass or Needs Work based on what you observe.',
-      type: 'explore-all',
       hints: [
         'Read each checklist item carefully. The sample interface has real problems — look for them.',
         'For each item, ask: can a user complete the task without relying on hue alone?',
       ],
-    },
-  ],
+  },
   quizItems: [
     {
       id: 'q1',
