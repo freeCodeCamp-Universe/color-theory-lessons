@@ -25,7 +25,7 @@ export const lesson1_6: LessonConfig = {
     },
     {
       id: 's3',
-      text: 'Complementary colors sit opposite each other on the color wheel, 180 degrees apart. This pairing creates a large hue difference. In an interface, one hue can be dominant while the other appears in smaller areas as an accent.',
+      text: 'Complementary colors sit opposite each other on the color wheel, 180 degrees apart. This is the largest possible separation between two hue angles. In an interface, one hue can be dominant while the other appears in smaller areas as an accent.',
       highlights: ['complementary'],
       panel: { type: 'color-wheel-preview', relationship: 'complementary' },
     },
@@ -66,7 +66,7 @@ export const lesson1_6: LessonConfig = {
     },
     {
       id: 'q2',
-      prompt: 'Why might too many unrelated accent colors weaken a design?',
+      prompt: 'Why can several accent colors with similar visual weight weaken a design?',
       choices: [
         { id: 'a', label: 'They use too much screen space.', isCorrect: false, explanation: 'Changing an element\'s color does not change the amount of screen space it occupies. The issue is competing emphasis.' },
         { id: 'b', label: 'They can make the intended priority unclear.', isCorrect: true, explanation: 'When several accents have similar visual weight, no single accent identifies the primary element.' },
