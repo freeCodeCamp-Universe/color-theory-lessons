@@ -68,7 +68,7 @@ export const lesson1_5: LessonConfig = {
     'Visual hierarchy directs attention to the main content or action before supporting information and background elements.',
     'Reserving an accent color for one focal point makes it more prominent than neutral or muted elements nearby.',
     'Applying saturated accent colors to several elements creates competing signals instead of a clear primary emphasis.',
-    'Supporting elements can use neutral or less saturated colors while maintaining readable contrast with their backgrounds.',
+    'Supporting elements can remain readable with neutral or less saturated colors that contrast with the background.',
     'A filled accent can mark the primary action, an outline can mark a secondary action, and a text link can mark a tertiary action.',
   ],
 };
