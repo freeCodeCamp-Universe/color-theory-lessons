@@ -15,7 +15,7 @@ export const lesson1_6: LessonConfig = {
   steps: [
     {
       id: 's1',
-      text: 'Some colors feel related because they share a similar hue range. Others create tension because they sit opposite each other. These relationships are predictable.',
+      text: 'A color wheel shows relationships between hues based on their positions. Hues can sit next to each other, opposite each other, or at equal intervals around the wheel. Designers use these positions as starting points for building palettes.',
     },
     {
       id: 's2',
