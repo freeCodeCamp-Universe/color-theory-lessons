@@ -4,7 +4,6 @@ export const lesson6_1: LessonConfig = {
   id: 'u6-l1', unitId: 'unit-6',
   title: 'From Individual Colors to Color Systems',
   interactionType: 'system-comparison',
-  glossaryTerms: ['color system', 'consistency', 'semantic role'],
   reviewTags: ['systems', 'roles', 'consistency'],
   steps: [
     { text: 'A designer picking a new color for every button, card, and state creates an interface that slowly becomes inconsistent. When the same blue means \'primary action\' on one screen and \'informational note\' on another, users lose confidence.' },

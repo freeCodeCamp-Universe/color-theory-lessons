@@ -5,7 +5,6 @@ export const lesson1_3: LessonConfig = {
   unitId: 'unit-1',
   title: 'Contrast and Readability',
   interactionType: 'contrast-checker',
-  glossaryTerms: ['contrast', 'readability', 'legibility', 'foreground', 'background'],
   reviewTags: ['contrast', 'readability', 'foundations'],
   steps: [
     {

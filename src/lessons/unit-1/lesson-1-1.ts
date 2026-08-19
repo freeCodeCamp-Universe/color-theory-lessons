@@ -5,7 +5,6 @@ export const lesson1_1: LessonConfig = {
   unitId: 'unit-1',
   title: 'What Color Does in Interface Design',
   interactionType: 'before-after',
-  glossaryTerms: ['emphasis', 'grouping', 'status color', 'visual cue', 'readability'],
   reviewTags: ['foundations', 'visual-vocabulary', 'color-function'],
   steps: [
     {

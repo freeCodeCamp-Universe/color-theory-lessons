@@ -5,7 +5,6 @@ export const lesson1_6: LessonConfig = {
   unitId: 'unit-1',
   title: 'Basic Color Relationships and Harmony',
   interactionType: 'color-wheel',
-  glossaryTerms: ['analogous', 'complementary', 'triadic', 'palette', 'harmony', 'balance'],
   reviewTags: ['harmony', 'foundations', 'palette'],
   steps: [
     {

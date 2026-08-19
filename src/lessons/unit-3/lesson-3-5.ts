@@ -5,15 +5,6 @@ export const lesson3_5: LessonConfig = {
   unitId: 'unit-3',
   title: 'Gradients, CSS Color Usage, and Theme Building',
   interactionType: 'theme-sandbox',
-  glossaryTerms: [
-    'gradient',
-    'linear gradient',
-    'radial gradient',
-    'border color',
-    'text color',
-    'semantic color',
-    'theme',
-  ],
   reviewTags: ['formats', 'gradients', 'themes', 'semantic-color'],
   steps: [
     {

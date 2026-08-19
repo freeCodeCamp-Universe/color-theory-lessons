@@ -5,7 +5,6 @@ export const lesson1_2: LessonConfig = {
   unitId: 'unit-1',
   title: 'Hue, Saturation, and Lightness',
   interactionType: 'slider-explore',
-  glossaryTerms: ['hue', 'saturation', 'lightness', 'value', 'muted', 'vivid', 'tint', 'shade'],
   reviewTags: ['foundations', 'hue', 'saturation', 'lightness'],
   steps: [
     {

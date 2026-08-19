@@ -5,11 +5,6 @@ export const lesson4_4: LessonConfig = {
   unitId: 'unit-4',
   title: 'What Color Perception Means for Design',
   interactionType: 'color-only-detector',
-  glossaryTerms: [
-    'color-dependent meaning',
-    'ambiguous element',
-    'perceptual robustness',
-  ],
   reviewTags: ['color-alone', 'observation', 'accessibility', 'ui-patterns'],
   steps: [
     {

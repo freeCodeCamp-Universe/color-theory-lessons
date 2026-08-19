@@ -5,7 +5,6 @@ export const lesson2_2: LessonConfig = {
   unitId: 'unit-2',
   title: 'How RGB Light Works',
   interactionType: 'rgb-mixer',
-  glossaryTerms: ['red channel', 'green channel', 'blue channel', 'channel intensity', 'additive primary'],
   reviewTags: ['additive', 'RGB', 'color-models', 'screens'],
   steps: [
     {

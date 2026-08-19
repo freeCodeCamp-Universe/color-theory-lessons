@@ -28,7 +28,6 @@ function makeLesson(overrides?: Partial<LessonConfig>): LessonConfig {
     steps: [{ text: 'Step' }],
     challenge: { prompt: 'Do the thing', hints: [] },
     quizItems: [],
-    glossaryTerms: [],
     reviewTags: [],
     ...overrides,
   };
@@ -103,24 +102,4 @@ describe('useLessonCompletion', () => {
     });
   });
 
-  describe('ADD_GLOSSARY_TERMS dispatch', () => {
-    it('adds terms when lesson has glossaryTerms', () => {
-      const lesson = makeLesson({ glossaryTerms: ['hue', 'saturation'] });
-      const { result } = renderHook(() => useTestHook(lesson), { wrapper });
-
-      act(() => result.current.hook.completeLesson([]));
-
-      expect(result.current.state.glossaryTermsSeen).toContain('hue');
-      expect(result.current.state.glossaryTermsSeen).toContain('saturation');
-    });
-
-    it('does not dispatch ADD_GLOSSARY_TERMS when glossaryTerms is empty', () => {
-      const lesson = makeLesson({ glossaryTerms: [] });
-      const { result } = renderHook(() => useTestHook(lesson), { wrapper });
-
-      act(() => result.current.hook.completeLesson([]));
-
-      expect(result.current.state.glossaryTermsSeen).toHaveLength(0);
-    });
-  });
 });

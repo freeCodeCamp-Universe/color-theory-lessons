@@ -4,15 +4,6 @@ export const lesson5_5: LessonConfig = {
   id: 'u5-l5', unitId: 'unit-5',
   title: 'Accessibility Audit Workflow',
   interactionType: 'audit-flow',
-  glossaryTerms: [
-    'audit',
-    'checker',
-    'context',
-    'priority element',
-    'verification',
-    'review pass',
-    'task check',
-  ],
   reviewTags: ['audit', 'workflow', 'process', 'inclusive-design'],
   steps: [
     {

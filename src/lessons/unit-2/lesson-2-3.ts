@@ -5,7 +5,6 @@ export const lesson2_3: LessonConfig = {
   unitId: 'unit-2',
   title: 'Why Paint Logic Fails on Screens',
   interactionType: 'logic-fixer',
-  glossaryTerms: ['paint logic', 'screen logic', 'mental model'],
   reviewTags: ['additive', 'mental-models', 'color-models'],
   steps: [
     {

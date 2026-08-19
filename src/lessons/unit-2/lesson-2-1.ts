@@ -5,7 +5,6 @@ export const lesson2_1: LessonConfig = {
   unitId: 'unit-2',
   title: 'Two Ways Color Mixes',
   interactionType: 'additive-sort',
-  glossaryTerms: ['additive color', 'subtractive color', 'pigment', 'RGB'],
   reviewTags: ['foundations', 'additive', 'subtractive', 'color-models'],
   steps: [
     {

@@ -5,7 +5,6 @@ export const lesson2_5: LessonConfig = {
   unitId: 'unit-2',
   title: 'Seeing Pixels as Light, Not Paint',
   interactionType: 'background-shift',
-  glossaryTerms: ['pixel', 'luminous color', 'accent color', 'dark interface'],
   reviewTags: ['additive', 'display', 'perception', 'interface'],
   steps: [
     {

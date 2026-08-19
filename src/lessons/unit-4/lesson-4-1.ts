@@ -5,15 +5,6 @@ export const lesson4_1: LessonConfig = {
   unitId: 'unit-4',
   title: 'How Humans Perceive Color',
   interactionType: 'eye-diagram',
-  glossaryTerms: [
-    'color perception',
-    'color vision',
-    'cone',
-    'rod',
-    'retina',
-    'optic nerve',
-    'visual system',
-  ],
   reviewTags: ['perception', 'vision', 'biology-basics'],
   steps: [
     {
