@@ -69,3 +69,30 @@ describe('ColorWheelTool preview mode', () => {
     expect(screen.queryByRole('button', { name: /build palette/i })).toBeNull();
   });
 });
+
+describe('ColorWheelTool locked palette behavior', () => {
+  it('keeps the locked relationship and reflection synchronized by disabling further control changes', () => {
+    render(<ColorWheelTool interactive={true} />);
+
+    const wheel = screen.getByRole('slider', { name: /Color wheel hue selector/i });
+    const baseHueInput = screen.getByRole('slider', { name: /Base hue/i });
+
+    fireEvent.change(baseHueInput, { target: { value: '45' } });
+    fireEvent.click(screen.getByRole('button', { name: 'complementary' }));
+    fireEvent.click(screen.getByRole('button', { name: /lock in this palette/i }));
+
+    expect(baseHueInput).toBeDisabled();
+    expect(wheel).toHaveAttribute('tabindex', '-1');
+    expect(screen.getByRole('button', { name: 'analogous' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'complementary' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'triadic' })).toBeDisabled();
+    expect(screen.getByText(/Selected relationship:/i)).toHaveTextContent('Selected relationship: complementary.');
+    expect(screen.getByText('Where is a complementary hue positioned relative to the base hue?')).toBeInTheDocument();
+
+    fireEvent.keyDown(wheel, { key: 'ArrowRight' });
+
+    expect(baseHueInput).toHaveValue('45');
+    expect(screen.getByText(/Selected relationship:/i)).toHaveTextContent('Selected relationship: complementary.');
+    expect(screen.getByText('Where is a complementary hue positioned relative to the base hue?')).toBeInTheDocument();
+  });
+});
