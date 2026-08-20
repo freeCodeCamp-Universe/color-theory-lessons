@@ -1,11 +1,11 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson1_4: LessonConfig = {
   id: 'u1-l4',
   unitId: 'unit-1',
-  title: 'Warm and Cool Colors in Practice',
+  title: LESSON_TITLES['u1-l4'],
   interactionType: 'palette-builder',
-  glossaryTerms: ['warm', 'cool', 'neutral', 'palette mood'],
   reviewTags: ['temperature', 'foundations', 'visual-vocabulary'],
   steps: [
     {

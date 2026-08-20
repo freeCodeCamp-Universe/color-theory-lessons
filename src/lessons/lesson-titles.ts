@@ -1,4 +1,5 @@
-/** Lesson ID → display title, kept in sync with each lesson's LessonConfig.title. */
+/** Single authoritative source for lesson display titles. Lesson files and the
+ *  Home page both derive their titles from this map. */
 export const LESSON_TITLES: Record<string, string> = {
   'u1-l1': 'What Color Does in Interface Design',
   'u1-l2': 'Hue, Saturation, and Lightness',
@@ -8,9 +9,9 @@ export const LESSON_TITLES: Record<string, string> = {
   'u1-l6': 'Basic Color Relationships and Harmony',
   'u2-l1': 'Two Ways Color Mixes',
   'u2-l2': 'How RGB Light Works',
-  'u2-l3': 'Subtractive Color for Digital Designers',
-  'u2-l4': 'Seeing Pixels as Light, Not Paint',
-  'u2-l5': 'Applying Additive Thinking to UI Design',
+  'u2-l3': 'Why Paint Logic Fails on Screens',
+  'u2-l4': 'Subtractive Color for Digital Designers',
+  'u2-l5': 'Seeing Pixels as Light, Not Paint',
   'u3-l1': 'Why Digital Design Needs Color Formats',
   'u3-l2': 'HEX and RGB',
   'u3-l3': 'HSL and HSLA',

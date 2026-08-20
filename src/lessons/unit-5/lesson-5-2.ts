@@ -1,10 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson5_2: LessonConfig = {
   id: 'u5-l2', unitId: 'unit-5',
-  title: 'Non-Text Contrast for Controls and Graphics',
+  title: LESSON_TITLES['u5-l2'],
   interactionType: 'component-checker',
-  glossaryTerms: ['non-text contrast', 'user interface component', 'graphical object', 'focus indicator', 'boundary', 'outline', 'icon contrast', 'state visibility'],
   reviewTags: ['contrast', 'components', 'controls', 'WCAG'],
   steps: [
     { text: 'Text contrast is the most discussed accessibility check, but it is not the only one. Many essential interface elements are not text: input borders, icon buttons, toggles, focus rings, chart marks, and status indicators all need clear visual distinction.' },
