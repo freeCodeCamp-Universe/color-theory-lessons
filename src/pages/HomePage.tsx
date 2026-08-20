@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { units } from '../data/units.ts';
 import { getMilestoneById } from '../data/milestones.ts';
-import { LESSON_TITLES } from '../data/lessonTitles.ts';
+import { LESSON_TITLES } from '../lessons/lesson-titles.ts';
 import { useAppState, useAppDispatch } from '../state/app-context.tsx';
 import styles from './HomePage.module.css';
 

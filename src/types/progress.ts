@@ -8,6 +8,4 @@ export interface ProgressState {
   quizBestScores: Record<string, number>;
   /** Array of IDs for unit milestones completed. */
   completedMilestones: string[];
-  /** Set of term names from the glossary that the user has "discovered" in lessons. */
-  glossaryTermsSeen: string[];
 }
