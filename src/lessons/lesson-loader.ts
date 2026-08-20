@@ -1,4 +1,5 @@
 import type { LessonConfig } from '../types/lesson.ts';
+import { validateLessonQuiz } from './quiz-utils.ts';
 
 type LessonLoader = () => Promise<LessonConfig>;
 
@@ -40,13 +41,13 @@ const lessonLoaders: Record<string, LessonLoader> = {
 };
 
 export async function loadLessonById(id: string): Promise<LessonConfig | undefined> {
-  const loader = lessonLoaders[id];
+  const loader = Object.hasOwn(lessonLoaders, id) ? lessonLoaders[id] : undefined;
   if (!loader) return undefined;
-  return loader();
+  return validateLessonQuiz(await loader());
 }
 
 export function prefetchLessonById(id: string): void {
-  const loader = lessonLoaders[id];
+  const loader = Object.hasOwn(lessonLoaders, id) ? lessonLoaders[id] : undefined;
   if (!loader) return;
   void loader();
 }
