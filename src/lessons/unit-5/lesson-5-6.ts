@@ -36,25 +36,25 @@ export const lesson5_6: LessonConfig = {
       prompt: "Is simulation a perfect representation of a CVD user's experience?",
       choices: [
         {
-          id: 'a',
+          stableId: 'yes-simulation-shows-exactly-what-every-cvd-user-sees',
           label: 'Yes — simulation shows exactly what every CVD user sees',
           isCorrect: false,
           explanation: 'Simulation is a mathematical approximation. Real users with the same CVD type can still vary.',
         },
         {
-          id: 'b',
+          stableId: 'no-it-is-a-useful-approximation-and-real-user-testing-still-adds',
           label: 'No — it is a useful approximation, and real user testing still adds value',
           isCorrect: true,
           explanation: 'Simulation gives a fast first-pass check. User testing provides real task completion data and individual nuance.',
         },
         {
-          id: 'c',
+          stableId: 'yes-all-protan-users-see-the-same-filtered-result',
           label: 'Yes — all protan users see the same filtered result',
           isCorrect: false,
           explanation: 'Even within the same CVD category, individuals vary. Simulation is an average approximation.',
         },
         {
-          id: 'd',
+          stableId: 'no-simulation-is-inaccurate-and-should-not-be-used',
           label: 'No — simulation is inaccurate and should not be used',
           isCorrect: false,
           explanation: 'Simulation is a valuable first-pass tool despite being an approximation.',
@@ -66,25 +66,25 @@ export const lesson5_6: LessonConfig = {
       prompt: 'Why should inclusive color checks happen early in the design process?',
       choices: [
         {
-          id: 'a',
+          stableId: 'because-tools-only-work-on-early-stage-designs',
           label: 'Because tools only work on early-stage designs',
           isCorrect: false,
           explanation: 'Tools work at any stage. The reason to check early is about the cost of changes.',
         },
         {
-          id: 'b',
+          stableId: 'because-structural-fixes-are-much-harder-after-the-design-is-loc',
           label: 'Because structural fixes are much harder after the design is locked — catching problems early is cheaper',
           isCorrect: true,
           explanation: 'Switching from color-only dots to labeled badges is trivial in a design file and very costly in a shipped product.',
         },
         {
-          id: 'c',
+          stableId: 'because-accessibility-problems-disappear-later-in-the-process',
           label: 'Because accessibility problems disappear later in the process',
           isCorrect: false,
           explanation: 'Accessibility problems do not self-resolve. They become harder and more expensive to fix over time.',
         },
         {
-          id: 'd',
+          stableId: 'because-inclusive-design-only-applies-to-wireframes',
           label: 'Because inclusive design only applies to wireframes',
           isCorrect: false,
           explanation: 'Inclusive design applies throughout the entire design and development process.',
@@ -96,25 +96,25 @@ export const lesson5_6: LessonConfig = {
       prompt: 'What does user testing with CVD users add that simulation cannot?',
       choices: [
         {
-          id: 'a',
+          stableId: 'nothing-simulation-is-sufficient-for-all-accessibility-checking',
           label: 'Nothing — simulation is sufficient for all accessibility checking',
           isCorrect: false,
           explanation: 'Simulation is a mathematical approximation. Real users provide nuance, reactions, and task completion data that filters cannot capture.',
         },
         {
-          id: 'b',
+          stableId: 'real-task-completion-data-individual-nuance-and-practical-reacti',
           label: 'Real task completion data, individual nuance, and practical reactions to design choices',
           isCorrect: true,
           explanation: 'Even occasional user testing significantly improves understanding beyond what any filter can show.',
         },
         {
-          id: 'c',
+          stableId: 'more-accurate-color-values-for-the-design-system',
           label: 'More accurate color values for the design system',
           isCorrect: false,
           explanation: 'User testing is about usability and comprehension, not about calibrating color values.',
         },
         {
-          id: 'd',
+          stableId: 'faster-audit-turnaround',
           label: 'Faster audit turnaround',
           isCorrect: false,
           explanation: 'User testing is typically slower than simulation — its value is depth of insight, not speed.',

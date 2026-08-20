@@ -15,8 +15,8 @@ function makeLesson(overrides?: Partial<LessonConfig>): LessonConfig {
         id: 'q1',
         prompt: 'Question one?',
         choices: [
-          { id: 'legacy-a', stableId: 'alpha', label: 'Alpha', isCorrect: true },
-          { id: 'legacy-b', stableId: 'beta', label: 'Beta', isCorrect: false },
+          { stableId: 'alpha', label: 'Alpha', isCorrect: true },
+          { stableId: 'beta', label: 'Beta', isCorrect: false },
         ],
       },
     ],
@@ -34,8 +34,8 @@ describe('quiz-utils', () => {
           id: 'q1',
           prompt: 'Question one?',
           choices: [
-            { id: 'legacy-b', stableId: 'beta', label: 'Beta', isCorrect: false },
-            { id: 'legacy-a', stableId: 'alpha', label: 'Alpha', isCorrect: true },
+            { stableId: 'beta', label: 'Beta', isCorrect: false },
+            { stableId: 'alpha', label: 'Alpha', isCorrect: true },
           ],
         },
       ],
@@ -51,7 +51,7 @@ describe('quiz-utils', () => {
         {
           id: 'q1',
           prompt: 'Another question?',
-          choices: [{ id: 'legacy-c', stableId: 'gamma', label: 'Gamma', isCorrect: true }],
+          choices: [{ stableId: 'gamma', label: 'Gamma', isCorrect: true }],
         },
       ],
     }))).toThrow(/Duplicate quiz question id "q1"/);
@@ -64,11 +64,25 @@ describe('quiz-utils', () => {
           id: 'q1',
           prompt: 'Question one?',
           choices: [
-            { id: 'legacy-a', stableId: 'alpha', label: 'Alpha', isCorrect: true },
-            { id: 'legacy-b', stableId: 'alpha', label: 'Also Alpha', isCorrect: false },
+            { stableId: 'alpha', label: 'Alpha', isCorrect: true },
+            { stableId: 'alpha', label: 'Also Alpha', isCorrect: false },
           ],
         },
       ],
     }))).toThrow(/Duplicate quiz choice id "alpha"/);
+  });
+
+  it('throws when a choice has an empty stable id', () => {
+    expect(() => validateLessonQuiz(makeLesson({
+      quizItems: [
+        {
+          id: 'q1',
+          prompt: 'Question one?',
+          choices: [
+            { stableId: '  ', label: 'Alpha', isCorrect: true },
+          ],
+        },
+      ],
+    }))).toThrow(/Empty stable quiz choice id/);
   });
 });

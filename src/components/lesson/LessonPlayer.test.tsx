@@ -62,16 +62,16 @@ function makeLesson(overrides?: Partial<LessonConfig>): LessonConfig {
         id: 'q1',
         prompt: 'First question?',
         choices: [
-          { id: 'legacy-a', stableId: 'correct-answer', label: 'Correct Answer', isCorrect: true },
-          { id: 'legacy-b', stableId: 'wrong-answer', label: 'Wrong Answer', isCorrect: false },
+          { stableId: 'correct-answer', label: 'Correct Answer', isCorrect: true },
+          { stableId: 'wrong-answer', label: 'Wrong Answer', isCorrect: false },
         ],
       },
       {
         id: 'q2',
         prompt: 'Second question?',
         choices: [
-          { id: 'legacy-a', stableId: 'right-choice', label: 'Right Choice', isCorrect: true },
-          { id: 'legacy-b', stableId: 'bad-choice', label: 'Bad Choice', isCorrect: false },
+          { stableId: 'right-choice', label: 'Right Choice', isCorrect: true },
+          { stableId: 'bad-choice', label: 'Bad Choice', isCorrect: false },
         ],
       },
     ],
@@ -266,16 +266,16 @@ describe('LessonPlayer', () => {
           id: 'q1',
           prompt: 'First question?',
           choices: [
-            { id: 'a', stableId: 'wrong-answer', label: 'Wrong Answer', isCorrect: false },
-            { id: 'b', stableId: 'correct-answer', label: 'Correct Answer', isCorrect: true },
+            { stableId: 'wrong-answer', label: 'Wrong Answer', isCorrect: false },
+            { stableId: 'correct-answer', label: 'Correct Answer', isCorrect: true },
           ],
         },
         {
           id: 'q2',
           prompt: 'Second question?',
           choices: [
-            { id: 'a', stableId: 'bad-choice', label: 'Bad Choice', isCorrect: false },
-            { id: 'b', stableId: 'right-choice', label: 'Right Choice', isCorrect: true },
+            { stableId: 'bad-choice', label: 'Bad Choice', isCorrect: false },
+            { stableId: 'right-choice', label: 'Right Choice', isCorrect: true },
           ],
         },
       ],
@@ -313,8 +313,8 @@ describe('LessonPlayer', () => {
           id: 'q1',
           prompt: 'First question?',
           choices: [
-            { id: 'legacy-a', stableId: 'correct-answer', label: 'Updated Correct Answer', isCorrect: true },
-            { id: 'legacy-b', stableId: 'wrong-answer', label: 'Wrong Answer', isCorrect: false },
+            { stableId: 'correct-answer', label: 'Updated Correct Answer', isCorrect: true },
+            { stableId: 'wrong-answer', label: 'Wrong Answer', isCorrect: false },
           ],
         },
         ...lesson.quizItems.slice(1),

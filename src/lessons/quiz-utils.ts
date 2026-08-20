@@ -1,11 +1,7 @@
 import type { LessonConfig, QuizChoice, QuizItem } from '../types/lesson.ts';
 
-function normalizeChoiceMeaning(label: string): string {
-  return label.trim().replace(/\s+/g, ' ').toLowerCase();
-}
-
 export function getQuizChoiceStableId(choice: QuizChoice): string {
-  return choice.stableId?.trim() || normalizeChoiceMeaning(choice.label);
+  return choice.stableId.trim();
 }
 
 export function getLessonChoiceLabel(index: number): string {
@@ -53,6 +49,11 @@ export function validateLessonQuiz(lesson: LessonConfig): LessonConfig {
     const choiceIds = new Set<string>();
     for (const choice of question.choices) {
       const choiceId = getQuizChoiceStableId(choice);
+      if (!choiceId) {
+        throw new Error(
+          `Empty stable quiz choice id in lesson "${lesson.id}" question "${question.id}".`,
+        );
+      }
       if (choiceIds.has(choiceId)) {
         throw new Error(
           `Duplicate quiz choice id "${choiceId}" in lesson "${lesson.id}" question "${question.id}".`,

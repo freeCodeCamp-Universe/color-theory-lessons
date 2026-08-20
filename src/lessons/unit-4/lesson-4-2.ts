@@ -41,14 +41,14 @@ export const lesson4_2: LessonConfig = {
       prompt: 'Is color vision deficiency one single condition?',
       choices: [
         {
-          id: 'a',
+          stableId: 'yes-all-cvd-is-red-green-color-blindness',
           label: 'Yes — all CVD is red-green color blindness',
           isCorrect: false,
           explanation:
             '"Red-green color blindness" is a common simplification, but CVD includes multiple types affecting different cone types, plus tritan types affecting blue-yellow, and achromatopsia affecting all hues.',
         },
         {
-          id: 'b',
+          stableId: 'no-there-are-multiple-types-and-severities-each-affecting-differ',
           label:
             'No — there are multiple types and severities, each affecting different color distinctions',
           isCorrect: true,
@@ -56,14 +56,14 @@ export const lesson4_2: LessonConfig = {
             'CVD includes protan, deutan, tritan, and achromatic types, each with absent (-opia) and reduced (-anomaly) severity variants.',
         },
         {
-          id: 'c',
+          stableId: 'yes-all-cvd-causes-complete-inability-to-see-any-color',
           label: 'Yes — all CVD causes complete inability to see any color',
           isCorrect: false,
           explanation:
             'Only achromatopsia involves very limited hue perception. Most CVD types reduce or shift specific color distinctions, not all color perception.',
         },
         {
-          id: 'd',
+          stableId: 'no-but-all-types-affect-only-the-blue-yellow-axis',
           label: 'No — but all types affect only the blue-yellow axis',
           isCorrect: false,
           explanation:
@@ -76,28 +76,28 @@ export const lesson4_2: LessonConfig = {
       prompt: 'Which CVD type involves difficulty with blue-yellow distinctions?',
       choices: [
         {
-          id: 'a',
+          stableId: 'protan-types-protanopia-protanomaly',
           label: 'Protan types (protanopia/protanomaly)',
           isCorrect: false,
           explanation:
             'Protan types affect the red-sensitive cone, weakening red-green distinctions.',
         },
         {
-          id: 'b',
+          stableId: 'deutan-types-deuteranopia-deuteranomaly',
           label: 'Deutan types (deuteranopia/deuteranomaly)',
           isCorrect: false,
           explanation:
             'Deutan types affect the green-sensitive cone, also weakening red-green distinctions.',
         },
         {
-          id: 'c',
+          stableId: 'tritan-types-tritanopia-tritanomaly',
           label: 'Tritan types (tritanopia/tritanomaly)',
           isCorrect: true,
           explanation:
             'Tritan types affect the blue-sensitive cone. Blue and yellow become harder to distinguish.',
         },
         {
-          id: 'd',
+          stableId: 'achromatopsia',
           label: 'Achromatopsia',
           isCorrect: false,
           explanation:
@@ -110,14 +110,14 @@ export const lesson4_2: LessonConfig = {
       prompt: 'Why is relying only on your own color perception risky when designing?',
       choices: [
         {
-          id: 'a',
+          stableId: 'because-your-monitor-may-not-be-calibrated-correctly',
           label: 'Because your monitor may not be calibrated correctly',
           isCorrect: false,
           explanation:
             'Display calibration is a factor, but the core issue is that your visual system may not represent other users\' experience.',
         },
         {
-          id: 'b',
+          stableId: 'because-your-vision-may-not-represent-other-users-experience-cvd',
           label:
             'Because your vision may not represent other users\' experience — CVD is common enough to design for',
           isCorrect: true,
@@ -125,14 +125,14 @@ export const lesson4_2: LessonConfig = {
             'CVD affects a significant percentage of users. Designing only for your own perception excludes users whose experience differs — and you cannot tell which users they are.',
         },
         {
-          id: 'c',
+          stableId: 'because-design-tools-do-not-show-accurate-colors',
           label: 'Because design tools do not show accurate colors',
           isCorrect: false,
           explanation:
             'Modern design tools generally show accurate colors. The issue is perceptual variation across users.',
         },
         {
-          id: 'd',
+          stableId: 'because-color-perception-degrades-with-age-for-everyone',
           label: 'Because color perception degrades with age for everyone',
           isCorrect: false,
           explanation:

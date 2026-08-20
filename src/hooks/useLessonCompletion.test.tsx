@@ -64,8 +64,8 @@ describe('useLessonCompletion', () => {
   describe('COMPLETE_QUIZ dispatch', () => {
     const quizLesson = makeLesson({
       quizItems: [
-        { id: 'q1', prompt: 'Q1?', choices: [{ id: 'a', label: 'A', isCorrect: true }] },
-        { id: 'q2', prompt: 'Q2?', choices: [{ id: 'a', label: 'A', isCorrect: true }] },
+        { id: 'q1', prompt: 'Q1?', choices: [{ stableId: 'a', label: 'A', isCorrect: true }] },
+        { id: 'q2', prompt: 'Q2?', choices: [{ stableId: 'a', label: 'A', isCorrect: true }] },
       ],
     });
 

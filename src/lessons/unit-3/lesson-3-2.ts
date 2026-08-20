@@ -39,28 +39,28 @@ export const lesson3_2: LessonConfig = {
       prompt: 'What do equal RGB channel values always produce?',
       choices: [
         {
-          id: 'a',
+          stableId: 'a-neutral-gray-or-white-or-black',
           label: 'A neutral gray (or white or black)',
           isCorrect: true,
           explanation:
             'When R, G, and B are equal, no single channel dominates and no hue appears. The result is a neutral — ranging from black at 0,0,0 to white at 255,255,255.',
         },
         {
-          id: 'b',
+          stableId: 'a-saturated-color-with-medium-brightness',
           label: 'A saturated color with medium brightness',
           isCorrect: false,
           explanation:
             'Equal channel values suppress all hue. Only when channels differ does a color appear.',
         },
         {
-          id: 'c',
+          stableId: 'a-very-dark-color',
           label: 'A very dark color',
           isCorrect: false,
           explanation:
             'Low equal values give a dark neutral, but equal values at higher settings produce lighter neutrals. The key result is always neutral, not always dark.',
         },
         {
-          id: 'd',
+          stableId: 'an-error-rgb-must-have-at-least-one-dominant-channel',
           label: 'An error — RGB must have at least one dominant channel',
           isCorrect: false,
           explanation:
@@ -73,28 +73,28 @@ export const lesson3_2: LessonConfig = {
       prompt: 'Which value is likely closer to white: #F4F4F4 or #1A1A1A?',
       choices: [
         {
-          id: 'a',
+          stableId: 'f4f4f4',
           label: '#F4F4F4',
           isCorrect: true,
           explanation:
             'F4 in hex is 244 in decimal — close to the maximum of 255. High equal channel values produce a very light neutral. #1A1A1A has channels of only 26, producing a very dark neutral.',
         },
         {
-          id: 'b',
+          stableId: '1a1a1a',
           label: '#1A1A1A',
           isCorrect: false,
           explanation:
             '1A in hex is only 26 in decimal. All three channels near zero produce dark neutrals, not light ones.',
         },
         {
-          id: 'c',
+          stableId: 'they-would-appear-identical',
           label: 'They would appear identical',
           isCorrect: false,
           explanation:
             'F4 is 244 and 1A is 26. These are very different channel values producing very different brightness levels.',
         },
         {
-          id: 'd',
+          stableId: 'you-cannot-tell-without-knowing-which-channel-is-r-g-or-b',
           label: 'You cannot tell without knowing which channel is R, G, or B',
           isCorrect: false,
           explanation:
@@ -107,28 +107,28 @@ export const lesson3_2: LessonConfig = {
       prompt: 'Which format is generally easier to reason about when you want to increase only the blue in a color?',
       choices: [
         {
-          id: 'a',
+          stableId: 'hex-because-the-pair-positions-are-fixed',
           label: 'HEX, because the pair positions are fixed',
           isCorrect: false,
           explanation:
             'While HEX does have fixed positions, you would need to calculate base-16 values mentally. RGB sliders are more direct for intentional single-channel adjustments.',
         },
         {
-          id: 'b',
+          stableId: 'rgb-because-each-channel-is-a-separate-decimal-number-you-can-ad',
           label: 'RGB, because each channel is a separate decimal number you can adjust directly',
           isCorrect: true,
           explanation:
             'RGB gives you three independent decimal values. Increasing the blue value directly raises blue light. HEX encodes the same data but requires converting from base-16 mentally.',
         },
         {
-          id: 'c',
+          stableId: 'both-are-equally-easy',
           label: 'Both are equally easy',
           isCorrect: false,
           explanation:
             'They encode the same information, but RGB is more readable for direct single-channel adjustments because you work in decimal, not base-16.',
         },
         {
-          id: 'd',
+          stableId: 'neither-you-should-use-hsl-for-any-channel-change',
           label: 'Neither — you should use HSL for any channel change',
           isCorrect: false,
           explanation:
@@ -141,28 +141,28 @@ export const lesson3_2: LessonConfig = {
       prompt: 'Can #ABC be a valid HEX color value?',
       choices: [
         {
-          id: 'a',
+          stableId: 'no-hex-values-must-always-be-six-characters',
           label: 'No — HEX values must always be six characters',
           isCorrect: false,
           explanation:
             'Shorthand HEX with three characters is perfectly valid in CSS. #ABC expands to #AABBCC, where each single digit is simply doubled.',
         },
         {
-          id: 'b',
+          stableId: 'yes-it-is-shorthand-for-aabbcc',
           label: 'Yes — it is shorthand for #AABBCC',
           isCorrect: true,
           explanation:
             'Shorthand HEX works when each channel digit in the six-character form is repeated. #ABC expands to #AABBCC — A→AA, B→BB, C→CC.',
         },
         {
-          id: 'c',
+          stableId: 'only-in-older-css-versions',
           label: 'Only in older CSS versions',
           isCorrect: false,
           explanation:
             'Three-character HEX has been valid in CSS since CSS1 and remains fully supported today.',
         },
         {
-          id: 'd',
+          stableId: 'yes-but-only-if-a-b-and-c-are-valid-hex-digits',
           label: 'Yes — but only if A, B, and C are valid hex digits',
           isCorrect: false,
           explanation:

@@ -77,8 +77,7 @@ export interface Challenge {
 }
 
 export interface QuizChoice {
-  id: string;
-  stableId?: string;
+  stableId: string;
   label: string;
   isCorrect: boolean;
   explanation?: string;

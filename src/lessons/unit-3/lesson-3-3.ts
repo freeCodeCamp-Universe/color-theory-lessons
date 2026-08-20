@@ -41,28 +41,28 @@ export const lesson3_3: LessonConfig = {
       prompt: 'Which HSL property would you change to make a vivid blue more muted?',
       choices: [
         {
-          id: 'a',
+          stableId: 'hue',
           label: 'Hue',
           isCorrect: false,
           explanation:
             'Hue shifts the color family. To mute the color without changing its family, lower saturation.',
         },
         {
-          id: 'b',
+          stableId: 'saturation',
           label: 'Saturation',
           isCorrect: true,
           explanation:
             'Lowering saturation moves the color toward gray, making it more muted while keeping the same hue and lightness.',
         },
         {
-          id: 'c',
+          stableId: 'lightness',
           label: 'Lightness',
           isCorrect: false,
           explanation:
             'Lightness changes how light or dark the color is, not how vivid or muted it appears.',
         },
         {
-          id: 'd',
+          stableId: 'alpha',
           label: 'Alpha',
           isCorrect: false,
           explanation:
@@ -75,28 +75,28 @@ export const lesson3_3: LessonConfig = {
       prompt: 'When is HSL generally more practical than RGB for a design adjustment?',
       choices: [
         {
-          id: 'a',
+          stableId: 'when-you-want-to-create-a-lighter-version-of-an-accent-color',
           label: 'When you want to create a lighter version of an accent color',
           isCorrect: true,
           explanation:
             'In HSL, you raise lightness. In RGB, you would need to increase all three channels in a balanced way — less intuitive and harder to predict.',
         },
         {
-          id: 'b',
+          stableId: 'when-you-need-to-set-a-specific-red-channel-value',
           label: 'When you need to set a specific red channel value',
           isCorrect: false,
           explanation:
             'RGB gives direct access to individual channels. If the task is "change the red channel," RGB is the more direct tool.',
         },
         {
-          id: 'c',
+          stableId: 'hsl-is-always-more-practical-than-rgb',
           label: 'HSL is always more practical than RGB',
           isCorrect: false,
           explanation:
             'Neither format is universally better. HSL is easier for hue, saturation, and lightness tasks; RGB is more direct for channel-specific adjustments.',
         },
         {
-          id: 'd',
+          stableId: 'when-you-want-to-convert-a-color-to-grayscale',
           label: 'When you want to convert a color to grayscale',
           isCorrect: false,
           explanation:
@@ -109,27 +109,27 @@ export const lesson3_3: LessonConfig = {
       prompt: 'What does the A in HSLA represent?',
       choices: [
         {
-          id: 'a',
+          stableId: 'accent-the-emphasis-level-of-the-color',
           label: 'Accent — the emphasis level of the color',
           isCorrect: false,
           explanation: 'The A stands for alpha, which controls opacity/transparency.',
         },
         {
-          id: 'b',
+          stableId: 'alpha-the-opacity-of-the-color-from-0-transparent-to-1-opaque',
           label: 'Alpha — the opacity of the color from 0 (transparent) to 1 (opaque)',
           isCorrect: true,
           explanation:
             'Alpha controls how transparent or opaque the color is. It works the same way in HSLA as in RGBA.',
         },
         {
-          id: 'c',
+          stableId: 'angle-the-rotation-of-hue-on-the-color-wheel',
           label: 'Angle — the rotation of hue on the color wheel',
           isCorrect: false,
           explanation:
             'Hue is already expressed as a degree (angle). The A specifically adds transparency control.',
         },
         {
-          id: 'd',
+          stableId: 'amplitude-how-strong-the-color-signal-is',
           label: 'Amplitude — how strong the color signal is',
           isCorrect: false,
           explanation: 'The A stands for alpha. There is no amplitude property in CSS color formats.',
