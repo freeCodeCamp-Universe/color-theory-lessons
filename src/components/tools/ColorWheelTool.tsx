@@ -136,7 +136,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
 
   function buildPalette() {
     const accent = relatedH[0];
-    const support = relationship === 'triadic' ? relatedH[1] : relatedH[0];
+    const support = relationship === 'complementary' ? relatedH[0] : relatedH[1];
     setPalette({ dominant: baseH, support, accent });
   }
 
