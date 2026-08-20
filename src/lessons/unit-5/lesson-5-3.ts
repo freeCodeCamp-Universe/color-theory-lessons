@@ -4,21 +4,6 @@ export const lesson5_3: LessonConfig = {
   id: 'u5-l3', unitId: 'unit-5',
   title: 'Color-Only Problems and Redundant Cues',
   interactionType: 'state-workshop',
-  glossaryTerms: [
-    'use of color',
-    'redundant cue',
-    'annotation',
-    'chart series',
-    'direct label',
-    'error state',
-    'info state',
-    'pattern fill',
-    'success state',
-    'validation feedback',
-    'warning state',
-    'status message',
-    'validation state',
-  ],
   reviewTags: ['color-only', 'wcag', 'redundancy', 'states', 'charts', 'backup-cues'],
   steps: [
     {

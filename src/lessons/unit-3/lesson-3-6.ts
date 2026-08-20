@@ -5,13 +5,6 @@ export const lesson3_6: LessonConfig = {
   unitId: 'unit-3',
   title: 'Design Tokens and Role-Based Color Systems',
   interactionType: 'token-map',
-  glossaryTerms: [
-    'design token',
-    'variable',
-    'alias token',
-    'role token',
-    'theme propagation',
-  ],
   reviewTags: ['formats', 'tokens', 'design-systems', 'themes'],
   steps: [
     {

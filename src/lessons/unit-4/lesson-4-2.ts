@@ -5,17 +5,6 @@ export const lesson4_2: LessonConfig = {
   unitId: 'unit-4',
   title: 'Types of Color Vision Deficiency',
   interactionType: 'vision-cards',
-  glossaryTerms: [
-    'color vision deficiency',
-    'protanopia',
-    'protanomaly',
-    'deuteranopia',
-    'deuteranomaly',
-    'tritanopia',
-    'tritanomaly',
-    'achromatopsia',
-    'simulation',
-  ],
   reviewTags: ['CVD', 'perception', 'accessibility'],
   steps: [
     {

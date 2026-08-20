@@ -4,7 +4,6 @@ export const lesson6_5: LessonConfig = {
   id: 'u6-l5', unitId: 'unit-6',
   title: 'Color for Charts and Data Visualization',
   interactionType: 'chart-tuner',
-  glossaryTerms: ['categorical palette', 'chart contrast', 'data emphasis', 'encoding', 'sequential palette', 'visual grouping'],
   reviewTags: ['charts', 'data-visualization', 'color-systems'],
   steps: [
     { text: 'Interface colors and chart colors do different jobs. Interface colors guide navigation and meaning. Chart colors encode data — they represent groups, magnitudes, or emphasis. They need different design strategies.' },

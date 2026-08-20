@@ -5,7 +5,6 @@ export const lesson2_4: LessonConfig = {
   unitId: 'unit-2',
   title: 'Subtractive Color for Digital Designers',
   interactionType: 'mismatch-explainer',
-  glossaryTerms: ['absorption', 'reflection', 'color gamut', 'subtractive primary'],
   reviewTags: ['subtractive', 'print', 'color-models', 'practical'],
   steps: [
     {

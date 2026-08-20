@@ -5,7 +5,6 @@ export const lesson3_2: LessonConfig = {
   unitId: 'unit-3',
   title: 'HEX and RGB',
   interactionType: 'hex-rgb-editor',
-  glossaryTerms: ['channel', 'HEX', 'RGBA', 'shorthand HEX'],
   reviewTags: ['formats', 'HEX', 'RGB'],
   steps: [
     {

@@ -35,7 +35,6 @@ export const lessonX_Y: LessonConfig = {
       ]
     }
   ],
-  glossaryTerms: ['term-a'], // Terms that will be "unlocked" on completion
   reviewTags: ['foundations'] // For grouping in the Review page
 };
 ```
@@ -106,7 +105,7 @@ Current configured structure in `src/data/milestones.ts`:
 - Milestone 6: two challenges (3 + 3 pts) + 4-question quiz, pass 7
 
 ## Adding Glossary Terms
-New terms should be added to `src/data/glossary.ts`. If a lesson's `glossaryTerms` array contains a string that matches a `term` in this file, that term will be unlocked and displayed in the user's glossary once they finish the lesson.
+New terms should be added to `src/data/glossary.ts`. Each entry has a `relatedLessons` array — the IDs of lessons whose completion will make that term visible in the learner's glossary. To link a term to a new lesson, add the lesson's `id` to that term's `relatedLessons` array.
 
 ## Content Best Practices
 - **Quiz Explanations**: Always provide an `explanation` for both correct and incorrect choices. This is where the actual teaching happens for users who guess.

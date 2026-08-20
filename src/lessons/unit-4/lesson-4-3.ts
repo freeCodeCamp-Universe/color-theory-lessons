@@ -5,7 +5,6 @@ export const lesson4_3: LessonConfig = {
   unitId: 'unit-4',
   title: 'Seeing Through Simulated Eyes',
   interactionType: 'interface-gallery',
-  glossaryTerms: ['protan', 'deutan', 'tritan', 'backup cue', 'redundancy'],
   reviewTags: ['CVD', 'simulation', 'interface-review'],
   steps: [
     {

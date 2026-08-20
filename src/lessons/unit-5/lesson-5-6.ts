@@ -4,13 +4,6 @@ export const lesson5_6: LessonConfig = {
   id: 'u5-l6', unitId: 'unit-5',
   title: 'Inclusive Testing and Review',
   interactionType: 'inclusive-review',
-  glossaryTerms: [
-    'approximation',
-    'inclusive design',
-    'robustness',
-    'user test',
-    'workflow',
-  ],
   reviewTags: ['workflow', 'inclusive-design', 'testing', 'user-research'],
   steps: [
     {

@@ -4,17 +4,6 @@ export const lesson6_6: LessonConfig = {
   id: 'u6-l6', unitId: 'unit-6',
   title: 'Color Spaces and Modern Screens',
   interactionType: 'color-space-lab',
-  glossaryTerms: [
-    'sRGB',
-    'Display P3',
-    'color space',
-    'Canvas',
-    'SVG',
-    'WebGL',
-    'context effect',
-    'simultaneous contrast',
-    'wide-gamut display',
-  ],
   reviewTags: ['color-spaces', 'sRGB', 'Display-P3', 'context', 'wide-gamut'],
   steps: [
     {

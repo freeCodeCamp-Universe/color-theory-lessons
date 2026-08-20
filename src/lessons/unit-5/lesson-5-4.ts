@@ -4,7 +4,6 @@ export const lesson5_4: LessonConfig = {
   id: 'u5-l4', unitId: 'unit-5',
   title: 'Accessible Patterns for Real Interfaces',
   interactionType: 'pattern-repair',
-  glossaryTerms: ['form validation', 'alert', 'notification', 'inline error', 'link distinction', 'chart palette', 'dashboard', 'pattern library'],
   reviewTags: ['patterns', 'forms', 'alerts', 'charts', 'accessibility'],
   steps: [
     { text: 'Individual repairs are useful. But patterns are more powerful. If the form validation pattern across your whole product uses a red border + error icon + inline message, every form gets the repair for free.' },

@@ -5,7 +5,6 @@ export const lesson3_1: LessonConfig = {
   unitId: 'unit-3',
   title: 'Why Digital Design Needs Color Formats',
   interactionType: 'format-reveal',
-  glossaryTerms: ['color value', 'color format', 'implementation', 'token'],
   reviewTags: ['foundations', 'formats', 'HEX', 'RGB', 'HSL', 'implementation'],
   steps: [
     {

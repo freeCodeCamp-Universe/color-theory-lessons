@@ -5,7 +5,6 @@ export const lesson3_3: LessonConfig = {
   unitId: 'unit-3',
   title: 'HSL and HSLA',
   interactionType: 'hsl-playground',
-  glossaryTerms: ['HSL', 'HSLA', 'alpha', 'color family', 'tonal variation'],
   reviewTags: ['formats', 'HSL', 'design-adjustment'],
   steps: [
     {
