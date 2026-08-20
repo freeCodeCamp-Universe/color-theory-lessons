@@ -11,11 +11,12 @@ Navigate to the appropriate unit folder (e.g., `src/lessons/unit-1/`) and create
 
 ```typescript
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lessonX_Y: LessonConfig = {
   id: 'uX-lY',            // Unique ID (e.g., 'u1-l7')
   unitId: 'unit-X',       // Parent unit ID
-  title: 'Lesson Title',
+  title: LESSON_TITLES['uX-lY'],
   interactionType: 'tool-name', // Must exist in InteractionType enum
   steps: [
     { text: 'First instruction...' },
@@ -35,12 +36,24 @@ export const lessonX_Y: LessonConfig = {
       ]
     }
   ],
-  glossaryTerms: ['term-a'], // Terms that will be "unlocked" on completion
   reviewTags: ['foundations'] // For grouping in the Review page
 };
 ```
 
-### 2. Register the Lesson
+### 2. Add the Lesson Title
+
+Add the lesson ID and display title to `LESSON_TITLES` in `src/lessons/lesson-titles.ts`:
+
+```typescript
+export const LESSON_TITLES: Record<string, string> = {
+  // ... existing titles
+  'uX-lY': 'Lesson Title',
+};
+```
+
+The Home page and lesson file both read the title from this map.
+
+### 3. Register the Lesson
 Import and add your new lesson to the `lessonRegistry` array in `src/lessons/lesson-registry.ts`.
 
 ```typescript
@@ -52,7 +65,7 @@ export const lessonRegistry: LessonConfig[] = [
 ];
 ```
 
-### 3. Update the Unit Configuration
+### 4. Update the Unit Configuration
 Ensure the lesson's ID is included in the `lessons` array for its parent unit in `src/data/units.ts`.
 
 ## Adding a Milestone
@@ -106,7 +119,7 @@ Current configured structure in `src/data/milestones.ts`:
 - Milestone 6: two challenges (3 + 3 pts) + 4-question quiz, pass 7
 
 ## Adding Glossary Terms
-New terms should be added to `src/data/glossary.ts`. If a lesson's `glossaryTerms` array contains a string that matches a `term` in this file, that term will be unlocked and displayed in the user's glossary once they finish the lesson.
+New terms should be added to `src/data/glossary.ts`. Each entry has a `relatedLessons` array — the IDs of lessons whose completion will make that term visible in the learner's glossary. To link a term to a new lesson, add the lesson's `id` to that term's `relatedLessons` array.
 
 ## Content Best Practices
 - **Quiz Explanations**: Always provide an `explanation` for both correct and incorrect choices. This is where the actual teaching happens for users who guess.

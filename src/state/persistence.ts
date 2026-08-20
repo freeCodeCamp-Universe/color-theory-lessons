@@ -1,7 +1,7 @@
 import type { ProgressState } from '../types/progress.ts';
 
 const STORAGE_KEY = 'color-theory-course-state';
-const VERSION = 2;
+const VERSION = 3;
 
 interface StoredState {
   version: number;
@@ -17,7 +17,6 @@ const defaultProgress: ProgressState = {
   completedQuizzes: [],
   quizBestScores: {},
   completedMilestones: [],
-  glossaryTermsSeen: [],
 };
 
 const defaultPreferences = {

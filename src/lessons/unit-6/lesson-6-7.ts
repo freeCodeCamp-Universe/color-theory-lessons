@@ -1,14 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson6_7: LessonConfig = {
   id: 'u6-l7', unitId: 'unit-6',
-  title: 'Final System Review and Stress Test',
+  title: LESSON_TITLES['u6-l7'],
   interactionType: 'system-stress',
-  glossaryTerms: [
-    'consistency audit',
-    'stress test',
-    'system review',
-  ],
   reviewTags: ['review', 'systems', 'capstone-prep', 'stress-test'],
   steps: [
     {

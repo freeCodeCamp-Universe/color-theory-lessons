@@ -1,11 +1,11 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson4_3: LessonConfig = {
   id: 'u4-l3',
   unitId: 'unit-4',
-  title: 'Seeing Through Simulated Eyes',
+  title: LESSON_TITLES['u4-l3'],
   interactionType: 'interface-gallery',
-  glossaryTerms: ['protan', 'deutan', 'tritan', 'backup cue', 'redundancy'],
   reviewTags: ['CVD', 'simulation', 'interface-review'],
   steps: [
     {

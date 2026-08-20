@@ -20,7 +20,6 @@ function makeLesson(overrides?: Partial<LessonConfig>): LessonConfig {
         ],
       },
     ],
-    glossaryTerms: [],
     reviewTags: [],
     ...overrides,
   };

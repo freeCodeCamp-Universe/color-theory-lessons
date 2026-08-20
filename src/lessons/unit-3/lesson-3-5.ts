@@ -1,19 +1,11 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson3_5: LessonConfig = {
   id: 'u3-l5',
   unitId: 'unit-3',
-  title: 'Gradients, CSS Color Usage, and Theme Building',
+  title: LESSON_TITLES['u3-l5'],
   interactionType: 'theme-sandbox',
-  glossaryTerms: [
-    'gradient',
-    'linear gradient',
-    'radial gradient',
-    'border color',
-    'text color',
-    'semantic color',
-    'theme',
-  ],
   reviewTags: ['formats', 'gradients', 'themes', 'semantic-color'],
   steps: [
     {

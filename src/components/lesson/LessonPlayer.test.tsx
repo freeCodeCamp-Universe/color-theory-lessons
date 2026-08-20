@@ -27,7 +27,6 @@ function StateReader() {
     <>
       <div data-testid="quiz-scores">{JSON.stringify(state.quizBestScores)}</div>
       <div data-testid="completed-lessons">{state.completedLessons.join(',')}</div>
-      <div data-testid="glossary-terms">{state.glossaryTermsSeen.join(',')}</div>
       <div data-testid="completed-quizzes">{state.completedQuizzes.join(',')}</div>
     </>
   );
@@ -76,7 +75,6 @@ function makeLesson(overrides?: Partial<LessonConfig>): LessonConfig {
         ],
       },
     ],
-    glossaryTerms: [],
     reviewTags: [],
     ...overrides,
   };
@@ -202,28 +200,6 @@ describe('LessonPlayer', () => {
       await waitFor(() => {
         expect(screen.getByTestId('completed-lessons').textContent).toContain('test-lesson');
         expect(screen.getByTestId('completed-quizzes').textContent).toBe('');
-      });
-    });
-  });
-
-  describe('glossary terms dispatch', () => {
-    it('dispatches ADD_GLOSSARY_TERMS when lesson has glossaryTerms', async () => {
-      renderLesson(makeLesson({ quizItems: [], glossaryTerms: ['hue', 'saturation'] }));
-
-      fireEvent.click(await screen.findByRole('button', { name: 'finish lesson →' }));
-
-      await waitFor(() => {
-        expect(screen.getByTestId('glossary-terms').textContent).toBe('hue,saturation');
-      });
-    });
-
-    it('does not dispatch ADD_GLOSSARY_TERMS when glossaryTerms is empty', async () => {
-      renderLesson(makeLesson({ quizItems: [], glossaryTerms: [] }));
-
-      fireEvent.click(await screen.findByRole('button', { name: 'finish lesson →' }));
-
-      await waitFor(() => {
-        expect(screen.getByTestId('glossary-terms').textContent).toBe('');
       });
     });
   });
