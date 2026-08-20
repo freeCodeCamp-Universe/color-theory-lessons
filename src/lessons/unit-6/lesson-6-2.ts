@@ -1,8 +1,9 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson6_2: LessonConfig = {
   id: 'u6-l2', unitId: 'unit-6',
-  title: 'Building Semantic Color Roles for UI',
+  title: LESSON_TITLES['u6-l2'],
   interactionType: 'role-builder',
   reviewTags: ['roles', 'components', 'states', 'hierarchy'],
   steps: [

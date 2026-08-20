@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson1_1: LessonConfig = {
   id: 'u1-l1',
   unitId: 'unit-1',
-  title: 'What Color Does in Interface Design',
+  title: LESSON_TITLES['u1-l1'],
   interactionType: 'before-after',
   reviewTags: ['foundations', 'visual-vocabulary', 'color-function'],
   steps: [

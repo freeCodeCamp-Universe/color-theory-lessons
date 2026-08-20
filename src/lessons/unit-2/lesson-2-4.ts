@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson2_4: LessonConfig = {
   id: 'u2-l4',
   unitId: 'unit-2',
-  title: 'Subtractive Color for Digital Designers',
+  title: LESSON_TITLES['u2-l4'],
   interactionType: 'mismatch-explainer',
   reviewTags: ['subtractive', 'print', 'color-models', 'practical'],
   steps: [

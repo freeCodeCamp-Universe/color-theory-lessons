@@ -1,8 +1,9 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson5_6: LessonConfig = {
   id: 'u5-l6', unitId: 'unit-5',
-  title: 'Inclusive Testing and Review',
+  title: LESSON_TITLES['u5-l6'],
   interactionType: 'inclusive-review',
   reviewTags: ['workflow', 'inclusive-design', 'testing', 'user-research'],
   steps: [

@@ -1,8 +1,9 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson5_1: LessonConfig = {
   id: 'u5-l1', unitId: 'unit-5',
-  title: 'Text Contrast in Practice',
+  title: LESSON_TITLES['u5-l1'],
   interactionType: 'text-contrast-lab',
   reviewTags: ['contrast', 'text', 'WCAG'],
   steps: [

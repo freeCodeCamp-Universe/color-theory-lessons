@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson4_1: LessonConfig = {
   id: 'u4-l1',
   unitId: 'unit-4',
-  title: 'How Humans Perceive Color',
+  title: LESSON_TITLES['u4-l1'],
   interactionType: 'eye-diagram',
   reviewTags: ['perception', 'vision', 'biology-basics'],
   steps: [

@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson2_2: LessonConfig = {
   id: 'u2-l2',
   unitId: 'unit-2',
-  title: 'How RGB Light Works',
+  title: LESSON_TITLES['u2-l2'],
   interactionType: 'rgb-mixer',
   reviewTags: ['additive', 'RGB', 'color-models', 'screens'],
   steps: [

@@ -1,8 +1,9 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson6_1: LessonConfig = {
   id: 'u6-l1', unitId: 'unit-6',
-  title: 'From Individual Colors to Color Systems',
+  title: LESSON_TITLES['u6-l1'],
   interactionType: 'system-comparison',
   reviewTags: ['systems', 'roles', 'consistency'],
   steps: [

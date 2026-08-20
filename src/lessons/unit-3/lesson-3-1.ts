@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson3_1: LessonConfig = {
   id: 'u3-l1',
   unitId: 'unit-3',
-  title: 'Why Digital Design Needs Color Formats',
+  title: LESSON_TITLES['u3-l1'],
   interactionType: 'format-reveal',
   reviewTags: ['foundations', 'formats', 'HEX', 'RGB', 'HSL', 'implementation'],
   steps: [

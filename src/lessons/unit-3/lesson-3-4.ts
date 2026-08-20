@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson3_4: LessonConfig = {
   id: 'u3-l4',
   unitId: 'unit-3',
-  title: 'Alpha, Transparency, and Layered Color',
+  title: LESSON_TITLES['u3-l4'],
   interactionType: 'alpha-layer',
   reviewTags: ['formats', 'alpha', 'transparency', 'layering'],
   steps: [

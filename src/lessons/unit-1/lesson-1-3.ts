@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson1_3: LessonConfig = {
   id: 'u1-l3',
   unitId: 'unit-1',
-  title: 'Contrast and Readability',
+  title: LESSON_TITLES['u1-l3'],
   interactionType: 'contrast-checker',
   reviewTags: ['contrast', 'readability', 'foundations'],
   steps: [

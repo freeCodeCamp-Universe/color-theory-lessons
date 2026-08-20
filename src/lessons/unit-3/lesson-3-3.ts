@@ -1,9 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson3_3: LessonConfig = {
   id: 'u3-l3',
   unitId: 'unit-3',
-  title: 'HSL and HSLA',
+  title: LESSON_TITLES['u3-l3'],
   interactionType: 'hsl-playground',
   reviewTags: ['formats', 'HSL', 'design-adjustment'],
   steps: [
