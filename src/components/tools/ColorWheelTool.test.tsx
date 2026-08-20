@@ -78,7 +78,7 @@ describe('ColorWheelTool locked palette behavior', () => {
     const baseHueInput = screen.getByRole('slider', { name: /Base hue/i });
 
     fireEvent.change(baseHueInput, { target: { value: '45' } });
-    fireEvent.click(screen.getByRole('button', { name: 'complementary' }));
+    fireEvent.click(screen.getByRole('button', { name: 'analogous' }));
     fireEvent.click(screen.getByRole('button', { name: /lock in this palette/i }));
 
     expect(baseHueInput).toBeDisabled();
@@ -86,13 +86,15 @@ describe('ColorWheelTool locked palette behavior', () => {
     expect(screen.getByRole('button', { name: 'analogous' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'complementary' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'triadic' })).toBeDisabled();
-    expect(screen.getByText(/Selected relationship:/i)).toHaveTextContent('Selected relationship: complementary.');
-    expect(screen.getByText('Where is a complementary hue positioned relative to the base hue?')).toBeInTheDocument();
+    expect(screen.getByText(/Selected relationship:/i)).toHaveTextContent('Selected relationship: analogous.');
+    expect(screen.getByText('Where are analogous hues positioned relative to the base hue?')).toBeInTheDocument();
 
+    fireEvent.change(baseHueInput, { target: { value: '90' } });
     fireEvent.keyDown(wheel, { key: 'ArrowRight' });
+    fireEvent.click(screen.getByRole('button', { name: 'triadic' }));
 
     expect(baseHueInput).toHaveValue('45');
-    expect(screen.getByText(/Selected relationship:/i)).toHaveTextContent('Selected relationship: complementary.');
-    expect(screen.getByText('Where is a complementary hue positioned relative to the base hue?')).toBeInTheDocument();
+    expect(screen.getByText(/Selected relationship:/i)).toHaveTextContent('Selected relationship: analogous.');
+    expect(screen.getByText('Where are analogous hues positioned relative to the base hue?')).toBeInTheDocument();
   });
 });
