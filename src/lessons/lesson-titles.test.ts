@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { units } from '../data/units.ts';
 import { lessonRegistry } from './lesson-registry.ts';
 import { LESSON_TITLES } from './lesson-titles.ts';
 
@@ -9,6 +10,23 @@ describe('lesson title consistency', () => {
         LESSON_TITLES[lesson.id],
         `Lesson "${lesson.id}" has no entry in LESSON_TITLES`,
       ).toBeDefined();
+    }
+  });
+
+  it('every lesson ID in the unit configuration resolves to a registered lesson and title', () => {
+    const registryIds = new Set(lessonRegistry.map((lesson) => lesson.id));
+
+    for (const unit of units) {
+      for (const lessonId of unit.lessons) {
+        expect(
+          registryIds.has(lessonId),
+          `Unit "${unit.id}" contains unregistered lesson ID "${lessonId}"`,
+        ).toBe(true);
+        expect(
+          LESSON_TITLES[lessonId],
+          `Unit "${unit.id}" lesson "${lessonId}" has no entry in LESSON_TITLES`,
+        ).toBeDefined();
+      }
     }
   });
 
