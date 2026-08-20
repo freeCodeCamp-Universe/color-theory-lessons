@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { units } from '../data/units.ts';
 import { getMilestoneById } from '../data/milestones.ts';
-import { LESSON_TITLES } from '../data/lessonTitles.ts';
+import { LESSON_TITLES } from '../lessons/lesson-titles.ts';
 import { useAppState, useAppDispatch } from '../state/app-context.tsx';
 import styles from './HomePage.module.css';
 
@@ -57,7 +57,8 @@ export function HomePage() {
           {units.map((unit, i) => {
             const total = unit.lessons.length;
             const done = unit.lessons.filter((id) => completedLessons.includes(id)).length;
-            const complete = total > 0 && done === total;
+            const milestoneDone = !unit.milestoneId || completedMilestones.includes(unit.milestoneId);
+            const complete = total > 0 && done === total && milestoneDone;
             const started = done > 0 && !complete;
             const firstLesson = unit.lessons[0];
 

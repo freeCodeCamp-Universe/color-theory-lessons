@@ -68,6 +68,11 @@ React 19 + TypeScript + Vite. No backend. Deployed via freeCodeCamp Universe (`p
 npm run build   # tsc + vite build
 ```
 
+## Pull Request Reviews
+
+- When asked to review a GitHub pull request, check out that pull request in the primary worktree before inspecting or testing it.
+- If uncommitted changes make checkout unsafe, stop and ask the user how to proceed. Do not substitute a remote ref or temporary worktree unless the user authorizes it.
+
 ## Verification Before Commits
 
 - After the user approves a text-only change, apply it and create its atomic commit without requiring runtime verification.

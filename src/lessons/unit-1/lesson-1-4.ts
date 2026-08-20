@@ -1,11 +1,11 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson1_4: LessonConfig = {
   id: 'u1-l4',
   unitId: 'unit-1',
-  title: 'Warm and Cool Colors in Practice',
+  title: LESSON_TITLES['u1-l4'],
   interactionType: 'temperature-sorter',
-  glossaryTerms: ['warm', 'cool', 'neutral', 'palette mood'],
   reviewTags: ['temperature', 'foundations', 'visual-vocabulary'],
   steps: [
     {
@@ -37,30 +37,30 @@ export const lesson1_4: LessonConfig = {
       id: 'q1',
       prompt: 'Which palette feels cooler overall?',
       choices: [
-        { id: 'a', label: 'Navy, slate, dusty teal, off-white', isCorrect: true, explanation: 'Navy and teal are cool hues. Slate and off-white are neutral. The overall tendency is cool.' },
-        { id: 'b', label: 'Terracotta, peach, sand, warm brown', isCorrect: false, explanation: 'Terracotta, peach, and warm brown are all in the warm range.' },
-        { id: 'c', label: 'Forest green, gold, cream, tan', isCorrect: false, explanation: 'Gold, cream, and tan are warm. Forest green is cool but it is outnumbered by warm tones here.' },
-        { id: 'd', label: 'Coral, rust, ivory, stone', isCorrect: false, explanation: 'Coral and rust push the palette toward warm.' },
+        { stableId: 'navy-slate-dusty-teal-off-white', label: 'Navy, slate, dusty teal, off-white', isCorrect: true, explanation: 'Navy and teal are cool hues. Slate and off-white are neutral. The overall tendency is cool.' },
+        { stableId: 'terracotta-peach-sand-warm-brown', label: 'Terracotta, peach, sand, warm brown', isCorrect: false, explanation: 'Terracotta, peach, and warm brown are all in the warm range.' },
+        { stableId: 'forest-green-gold-cream-tan', label: 'Forest green, gold, cream, tan', isCorrect: false, explanation: 'Gold, cream, and tan are warm. Forest green is cool but it is outnumbered by warm tones here.' },
+        { stableId: 'coral-rust-ivory-stone', label: 'Coral, rust, ivory, stone', isCorrect: false, explanation: 'Coral and rust push the palette toward warm.' },
       ],
     },
     {
       id: 'q2',
       prompt: 'A fintech dashboard uses mostly cool grays and blues. Which accent would create warm-cool contrast around an expiring offer?',
       choices: [
-        { id: 'a', label: 'A slightly warmer blue', isCorrect: false, explanation: 'A warmer blue remains close to the existing cool palette, so the temperature contrast would be weaker.' },
-        { id: 'b', label: 'A brighter, lighter gray', isCorrect: false, explanation: 'This changes lightness rather than creating warm-cool contrast.' },
-        { id: 'c', label: 'A warm orange or amber accent', isCorrect: true, explanation: 'Orange and amber are warm, so they contrast with the cool grays and blues.' },
-        { id: 'd', label: 'A softer teal', isCorrect: false, explanation: 'Teal is cool, so it would not create warm-cool contrast.' },
+        { stableId: 'a-slightly-warmer-blue', label: 'A slightly warmer blue', isCorrect: false, explanation: 'A warmer blue remains close to the existing cool palette, so the temperature contrast would be weaker.' },
+        { stableId: 'a-brighter-lighter-gray', label: 'A brighter, lighter gray', isCorrect: false, explanation: 'This changes lightness rather than creating warm-cool contrast.' },
+        { stableId: 'a-warm-orange-or-amber-accent', label: 'A warm orange or amber accent', isCorrect: true, explanation: 'Orange and amber are warm, so they contrast with the cool grays and blues.' },
+        { stableId: 'a-softer-teal', label: 'A softer teal', isCorrect: false, explanation: 'Teal is cool, so it would not create warm-cool contrast.' },
       ],
     },
     {
       id: 'q3',
       prompt: 'Which statement is most accurate about warm and cool colors in UI design?',
       choices: [
-        { id: 'a', label: 'Warm colors are the strongest choice for any warning or error.', isCorrect: false, explanation: 'Warm colors can support warnings and errors, but their meaning depends on conventions and context.' },
-        { id: 'b', label: 'Cool palettes are generally more professional than warm palettes.', isCorrect: false, explanation: 'Some industries favor cool palettes, but professional interfaces can also use warm colors.' },
-        { id: 'c', label: 'Warm and cool tendencies are useful starting points that depend on context.', isCorrect: true, explanation: 'Temperature is a starting point. Surrounding colors and product goals shape its effect.' },
-        { id: 'd', label: 'A color\'s temperature determines how much attention it receives.', isCorrect: false, explanation: 'Temperature can affect attention, but surrounding colors, saturation, and contrast also matter.' },
+        { stableId: 'warm-colors-are-the-strongest-choice-for-any-warning-or-error', label: 'Warm colors are the strongest choice for any warning or error.', isCorrect: false, explanation: 'Warm colors can support warnings and errors, but their meaning depends on conventions and context.' },
+        { stableId: 'cool-palettes-are-generally-more-professional-than-warm-palettes', label: 'Cool palettes are generally more professional than warm palettes.', isCorrect: false, explanation: 'Some industries favor cool palettes, but professional interfaces can also use warm colors.' },
+        { stableId: 'warm-and-cool-tendencies-are-useful-starting-points-that-depend-', label: 'Warm and cool tendencies are useful starting points that depend on context.', isCorrect: true, explanation: 'Temperature is a starting point. Surrounding colors and product goals shape its effect.' },
+        { stableId: 'a-color-s-temperature-determines-how-much-attention-it-receives', label: 'A color\'s temperature determines how much attention it receives.', isCorrect: false, explanation: 'Temperature can affect attention, but surrounding colors, saturation, and contrast also matter.' },
       ],
     },
   ],
