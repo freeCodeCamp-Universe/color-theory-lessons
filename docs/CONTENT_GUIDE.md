@@ -11,11 +11,12 @@ Navigate to the appropriate unit folder (e.g., `src/lessons/unit-1/`) and create
 
 ```typescript
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lessonX_Y: LessonConfig = {
   id: 'uX-lY',            // Unique ID (e.g., 'u1-l7')
   unitId: 'unit-X',       // Parent unit ID
-  title: 'Lesson Title',
+  title: LESSON_TITLES['uX-lY'],
   interactionType: 'tool-name', // Must exist in InteractionType enum
   steps: [
     { text: 'First instruction...' },
@@ -39,7 +40,20 @@ export const lessonX_Y: LessonConfig = {
 };
 ```
 
-### 2. Register the Lesson
+### 2. Add the Lesson Title
+
+Add the lesson ID and display title to `LESSON_TITLES` in `src/lessons/lesson-titles.ts`:
+
+```typescript
+export const LESSON_TITLES: Record<string, string> = {
+  // ... existing titles
+  'uX-lY': 'Lesson Title',
+};
+```
+
+The Home page and lesson file both read the title from this map.
+
+### 3. Register the Lesson
 Import and add your new lesson to the `lessonRegistry` array in `src/lessons/lesson-registry.ts`.
 
 ```typescript
@@ -51,7 +65,7 @@ export const lessonRegistry: LessonConfig[] = [
 ];
 ```
 
-### 3. Update the Unit Configuration
+### 4. Update the Unit Configuration
 Ensure the lesson's ID is included in the `lessons` array for its parent unit in `src/data/units.ts`.
 
 ## Adding a Milestone
