@@ -1,11 +1,11 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson3_1: LessonConfig = {
   id: 'u3-l1',
   unitId: 'unit-3',
-  title: 'Why Digital Design Needs Color Formats',
+  title: LESSON_TITLES['u3-l1'],
   interactionType: 'format-reveal',
-  glossaryTerms: ['color value', 'color format', 'implementation', 'token'],
   reviewTags: ['foundations', 'formats', 'HEX', 'RGB', 'HSL', 'implementation'],
   steps: [
     {
@@ -39,28 +39,28 @@ export const lesson3_1: LessonConfig = {
       prompt: 'Why is a precise color value more useful than a vague description in a digital handoff?',
       choices: [
         {
-          id: 'a',
+          stableId: 'because-developers-prefer-reading-numbers-over-words',
           label: 'Because developers prefer reading numbers over words',
           isCorrect: false,
           explanation:
             'The reason is not about preference — it is about reproducibility. A vague description cannot be reliably implemented across tools, screens, and contributors.',
         },
         {
-          id: 'b',
+          stableId: 'because-a-precise-value-can-be-reproduced-exactly-across-every-t',
           label: 'Because a precise value can be reproduced exactly across every tool, browser, and screen',
           isCorrect: true,
           explanation:
             'A specific format like #1E40AF means the same blue everywhere — in CSS, design tools, and browsers — with no guesswork.',
         },
         {
-          id: 'c',
+          stableId: 'because-color-formats-are-required-by-accessibility-standards',
           label: 'Because color formats are required by accessibility standards',
           isCorrect: false,
           explanation:
             'Accessibility standards require sufficient contrast, not a specific format. Formats are about precision and reproducibility, not compliance.',
         },
         {
-          id: 'd',
+          stableId: 'because-vague-descriptions-are-only-acceptable-for-prototypes',
           label: 'Because vague descriptions are only acceptable for prototypes',
           isCorrect: false,
           explanation:
@@ -73,28 +73,28 @@ export const lesson3_1: LessonConfig = {
       prompt: 'Can one visible color be correctly described by more than one format?',
       choices: [
         {
-          id: 'a',
+          stableId: 'no-each-visible-color-has-exactly-one-correct-format',
           label: 'No — each visible color has exactly one correct format',
           isCorrect: false,
           explanation:
             'HEX, RGB, and HSL can all describe the exact same visible color. The format is the representation, not the color itself.',
         },
         {
-          id: 'b',
+          stableId: 'yes-hex-rgb-and-hsl-can-all-describe-the-same-visible-color',
           label: 'Yes — HEX, RGB, and HSL can all describe the same visible color',
           isCorrect: true,
           explanation:
             'For example, #1E40AF, rgb(30, 64, 175), and hsl(224, 71%, 40%) are all valid descriptions of the same blue. The swatch stays the same; only the notation changes.',
         },
         {
-          id: 'c',
+          stableId: 'only-if-the-color-is-a-standard-web-safe-color',
           label: 'Only if the color is a standard web-safe color',
           isCorrect: false,
           explanation:
             'Any color can be expressed in multiple formats. The concept of "web-safe colors" is an outdated limitation from early displays and has no bearing on format equivalence.',
         },
         {
-          id: 'd',
+          stableId: 'yes-but-only-hex-and-rgb-hsl-is-a-different-color-system',
           label: 'Yes, but only HEX and RGB — HSL is a different color system',
           isCorrect: false,
           explanation:
@@ -107,28 +107,28 @@ export const lesson3_1: LessonConfig = {
       prompt: 'Which of these is the most implementation-ready description of a button color?',
       choices: [
         {
-          id: 'a',
+          stableId: 'a-warm-coral-sort-of-red',
           label: '"A warm coral sort of red"',
           isCorrect: false,
           explanation:
             'This is subjective. Two designers would produce different results from this description.',
         },
         {
-          id: 'b',
+          stableId: 'something-between-orange-and-red-not-too-bright',
           label: '"Something between orange and red, not too bright"',
           isCorrect: false,
           explanation:
             'Still subjective and vague. It cannot be reliably turned into a specific color across tools.',
         },
         {
-          id: 'c',
+          stableId: 'e05252',
           label: '#E05252',
           isCorrect: true,
           explanation:
             'A HEX value is implementation-ready — it produces the same color in every browser, design tool, and handoff document with no interpretation required.',
         },
         {
-          id: 'd',
+          stableId: 'use-the-error-red-from-the-style-guide',
           label: '"Use the error red from the style guide"',
           isCorrect: false,
           explanation:
