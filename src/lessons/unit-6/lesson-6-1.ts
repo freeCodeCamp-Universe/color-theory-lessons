@@ -1,10 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson6_1: LessonConfig = {
   id: 'u6-l1', unitId: 'unit-6',
-  title: 'From Individual Colors to Color Systems',
+  title: LESSON_TITLES['u6-l1'],
   interactionType: 'system-comparison',
-  glossaryTerms: ['color system', 'consistency', 'semantic role'],
   reviewTags: ['systems', 'roles', 'consistency'],
   steps: [
     { text: 'A designer picking a new color for every button, card, and state creates an interface that slowly becomes inconsistent. When the same blue means \'primary action\' on one screen and \'informational note\' on another, users lose confidence.' },
@@ -26,30 +26,30 @@ export const lesson6_1: LessonConfig = {
       id: 'q1',
       prompt: 'What is the main advantage of semantic color roles over storing decisions as hex values?',
       choices: [
-        { id: 'a', label: 'Hex values are harder to type', isCorrect: false, explanation: 'Ease of typing is not the reason semantic roles are used.' },
-        { id: 'b', label: 'Semantic roles describe what a color does, making decisions reusable and product-consistent', isCorrect: true, explanation: 'Correct. \'action-primary\' tells the whole team what that color is for, regardless of its current hex value.' },
-        { id: 'c', label: 'Semantic roles use less memory', isCorrect: false, explanation: 'Memory usage is not affected by how color names are organized.' },
-        { id: 'd', label: 'Hex values cannot be changed later', isCorrect: false, explanation: 'Hex values can always be changed — that is not the advantage of semantic roles.' },
+        { stableId: 'hex-values-are-harder-to-type', label: 'Hex values are harder to type', isCorrect: false, explanation: 'Ease of typing is not the reason semantic roles are used.' },
+        { stableId: 'semantic-roles-describe-what-a-color-does-making-decisions-reusa', label: 'Semantic roles describe what a color does, making decisions reusable and product-consistent', isCorrect: true, explanation: 'Correct. \'action-primary\' tells the whole team what that color is for, regardless of its current hex value.' },
+        { stableId: 'semantic-roles-use-less-memory', label: 'Semantic roles use less memory', isCorrect: false, explanation: 'Memory usage is not affected by how color names are organized.' },
+        { stableId: 'hex-values-cannot-be-changed-later', label: 'Hex values cannot be changed later', isCorrect: false, explanation: 'Hex values can always be changed — that is not the advantage of semantic roles.' },
       ],
     },
     {
       id: 'q2',
       prompt: 'A product uses the same bright blue for primary buttons, informational callouts, and decorative dividers. What is the risk?',
       choices: [
-        { id: 'a', label: 'The blue may go out of fashion', isCorrect: false, explanation: 'Visual trends are not the primary risk here.' },
-        { id: 'b', label: 'The blue carries too many different meanings — users cannot tell what is interactive and what is decorative', isCorrect: true, explanation: 'Correct. When one color does too many jobs, users cannot tell what is interactive and what is purely visual.' },
-        { id: 'c', label: 'Blue is not accessible', isCorrect: false, explanation: 'Blue can be accessible — the issue here is overuse and mixed meaning, not the hue itself.' },
-        { id: 'd', label: 'Decorative elements should always match buttons', isCorrect: false, explanation: 'Decorative elements should generally not match interactive elements — that is the source of the problem.' },
+        { stableId: 'the-blue-may-go-out-of-fashion', label: 'The blue may go out of fashion', isCorrect: false, explanation: 'Visual trends are not the primary risk here.' },
+        { stableId: 'the-blue-carries-too-many-different-meanings-users-cannot-tell-w', label: 'The blue carries too many different meanings — users cannot tell what is interactive and what is decorative', isCorrect: true, explanation: 'Correct. When one color does too many jobs, users cannot tell what is interactive and what is purely visual.' },
+        { stableId: 'blue-is-not-accessible', label: 'Blue is not accessible', isCorrect: false, explanation: 'Blue can be accessible — the issue here is overuse and mixed meaning, not the hue itself.' },
+        { stableId: 'decorative-elements-should-always-match-buttons', label: 'Decorative elements should always match buttons', isCorrect: false, explanation: 'Decorative elements should generally not match interactive elements — that is the source of the problem.' },
       ],
     },
     {
       id: 'q3',
       prompt: 'Which name is more useful in a design system?',
       choices: [
-        { id: 'a', label: '#2563EB', isCorrect: false, explanation: 'A hex value tells you the color but not its purpose.' },
-        { id: 'b', label: 'blue-500', isCorrect: false, explanation: 'A scale name describes position but not function.' },
-        { id: 'c', label: 'action-primary-bg', isCorrect: true, explanation: 'This tells every designer and developer what the color is for, which prevents misuse and inconsistency.' },
-        { id: 'd', label: 'accent', isCorrect: false, explanation: 'Too vague — every component might interpret \'accent\' differently.' },
+        { stableId: '2563eb', label: '#2563EB', isCorrect: false, explanation: 'A hex value tells you the color but not its purpose.' },
+        { stableId: 'blue-500', label: 'blue-500', isCorrect: false, explanation: 'A scale name describes position but not function.' },
+        { stableId: 'action-primary-bg', label: 'action-primary-bg', isCorrect: true, explanation: 'This tells every designer and developer what the color is for, which prevents misuse and inconsistency.' },
+        { stableId: 'accent', label: 'accent', isCorrect: false, explanation: 'Too vague — every component might interpret \'accent\' differently.' },
       ],
     },
   ],

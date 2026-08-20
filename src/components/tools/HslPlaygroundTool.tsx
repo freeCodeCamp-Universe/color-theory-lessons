@@ -1,5 +1,6 @@
 import { memo, useState } from 'react';
 import { hslToHex, hexToRgb, hslString } from '../../utils/color.ts';
+import { HUE_MAX, HueWheel } from './HueWheel.tsx';
 import shellStyles from './ToolShell.module.css';
 
 interface Target {
@@ -70,45 +71,54 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({ interactive =
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>hsl playground</span>
 
-      {/* Current color display */}
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'stretch' }}>
-        <div style={{
-          width: 80, minHeight: 80, borderRadius: 'var(--radius-md)',
-          background: hex, border: '2px solid var(--border)',
-        }} />
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', lineHeight: 1.7 }}>
-          <div><span style={{ color: 'var(--muted)' }}>HSL</span> {hslString({ h, s, l })}</div>
-          <div><span style={{ color: 'var(--muted)' }}>HEX</span> {hex}</div>
-          <div><span style={{ color: 'var(--muted)' }}>RGB</span> rgb({rgb.r}, {rgb.g}, {rgb.b})</div>
-        </div>
-      </div>
+      <div style={{ display: 'flex', gap: 'var(--spacing-lg)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+        <HueWheel
+          hue={h}
+          interactive={interactive && !allDone}
+          onChange={setH}
+        />
+        <div style={{ flex: 1, minWidth: '180px' }}>
+          {/* Current color display */}
+          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'stretch' }}>
+            <div style={{
+              width: 80, minHeight: 80, borderRadius: 'var(--radius-md)',
+              background: hex, border: '2px solid var(--border)',
+            }} />
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', lineHeight: 1.7 }}>
+              <div><span style={{ color: 'var(--muted)' }}>HSL</span> {hslString({ h, s, l })}</div>
+              <div><span style={{ color: 'var(--muted)' }}>HEX</span> {hex}</div>
+              <div><span style={{ color: 'var(--muted)' }}>RGB</span> rgb({rgb.r}, {rgb.g}, {rgb.b})</div>
+            </div>
+          </div>
 
-      {/* Sliders */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginBottom: '1rem' }}>
-        <label style={{ fontSize: '0.82rem' }}>
-          Hue: {h}°
-          <input type="range" min={0} max={360} value={h} disabled={!interactive || allDone}
-            onChange={(e) => setH(Number(e.target.value))}
-            style={{ width: '100%', accentColor: 'var(--yellow)' }}
-            aria-label={`Hue: ${h} degrees`}
-          />
-        </label>
-        <label style={{ fontSize: '0.82rem' }}>
-          Saturation: {s}%
-          <input type="range" min={0} max={100} value={s} disabled={!interactive || allDone}
-            onChange={(e) => setS(Number(e.target.value))}
-            style={{ width: '100%', accentColor: 'var(--yellow)' }}
-            aria-label={`Saturation: ${s} percent`}
-          />
-        </label>
-        <label style={{ fontSize: '0.82rem' }}>
-          Lightness: {l}%
-          <input type="range" min={0} max={100} value={l} disabled={!interactive || allDone}
-            onChange={(e) => setL(Number(e.target.value))}
-            style={{ width: '100%', accentColor: 'var(--yellow)' }}
-            aria-label={`Lightness: ${l} percent`}
-          />
-        </label>
+          {/* Sliders */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginBottom: '1rem' }}>
+            <label style={{ fontSize: '0.82rem' }}>
+              Hue: {h}°
+              <input type="range" min={0} max={HUE_MAX} value={h} disabled={!interactive || allDone}
+                onChange={(e) => setH(Number(e.target.value))}
+                style={{ width: '100%', accentColor: 'var(--yellow)' }}
+                aria-label={`Hue: ${h} degrees`}
+              />
+            </label>
+            <label style={{ fontSize: '0.82rem' }}>
+              Saturation: {s}%
+              <input type="range" min={0} max={100} value={s} disabled={!interactive || allDone}
+                onChange={(e) => setS(Number(e.target.value))}
+                style={{ width: '100%', accentColor: 'var(--yellow)' }}
+                aria-label={`Saturation: ${s} percent`}
+              />
+            </label>
+            <label style={{ fontSize: '0.82rem' }}>
+              Lightness: {l}%
+              <input type="range" min={0} max={100} value={l} disabled={!interactive || allDone}
+                onChange={(e) => setL(Number(e.target.value))}
+                style={{ width: '100%', accentColor: 'var(--yellow)' }}
+                aria-label={`Lightness: ${l} percent`}
+              />
+            </label>
+          </div>
+        </div>
       </div>
 
       {/* Target area */}
