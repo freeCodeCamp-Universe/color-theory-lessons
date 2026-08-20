@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { HSLSliderTool } from './HSLSliderTool.tsx';
 
@@ -63,6 +63,33 @@ describe('HSLSliderTool previewDimension — interactive', () => {
     const newHue = Number(wheel.getAttribute('aria-valuenow'));
     const hueSlider = screen.getByRole('slider', { name: /^Hue: /i });
     expect(Number(hueSlider.getAttribute('value'))).toBe(newHue);
+  });
+
+  it('clicking the hue wheel updates the slider, value display, and swatch', () => {
+    render(<HSLSliderTool interactive={true} previewDimension="h" />);
+    const wheel = screen.getByRole('slider', { name: /Hue wheel/i });
+    const hueSlider = screen.getByRole('slider', { name: /^Hue: /i });
+
+    vi.spyOn(wheel, 'getBoundingClientRect').mockReturnValue({
+      bottom: 200,
+      height: 200,
+      left: 0,
+      right: 200,
+      top: 0,
+      width: 200,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    fireEvent.click(wheel, { clientX: 185, clientY: 100 });
+
+    expect(wheel).toHaveAttribute('aria-valuenow', '90');
+    expect(hueSlider).toHaveValue('90');
+    const valueDisplay = screen.getByText('H:90 S:70% L:55%');
+    expect(valueDisplay.previousElementSibling).toHaveStyle({
+      backgroundColor: 'hsl(90, 70%, 55%)',
+    });
   });
 
   it('hue wraps past 359 without a visual break', () => {
