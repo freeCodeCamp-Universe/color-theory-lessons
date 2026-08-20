@@ -85,6 +85,7 @@ function ColorWheel({ baseH, relatedH, interactive, onChange }: ColorWheelProps)
       aria-valuemin={0}
       aria-valuemax={359}
       aria-valuenow={baseH}
+      aria-disabled={!interactive}
       aria-label={`Color wheel hue selector: ${baseH}°`}
       style={{ cursor: interactive ? 'crosshair' : 'default', flexShrink: 0, outline: 'none' }}
     >

@@ -83,6 +83,7 @@ describe('ColorWheelTool locked palette behavior', () => {
 
     expect(baseHueInput).toBeDisabled();
     expect(wheel).toHaveAttribute('tabindex', '-1');
+    expect(wheel).toHaveAttribute('aria-disabled', 'true');
     expect(screen.getByRole('button', { name: 'analogous' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'complementary' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'triadic' })).toBeDisabled();
