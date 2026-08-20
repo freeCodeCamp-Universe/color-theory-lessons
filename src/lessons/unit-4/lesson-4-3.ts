@@ -41,14 +41,14 @@ export const lesson4_3: LessonConfig = {
       prompt: 'What is a simulation tool useful for in inclusive design?',
       choices: [
         {
-          id: 'a',
+          stableId: 'diagnosing-which-users-have-cvd',
           label: 'Diagnosing which users have CVD',
           isCorrect: false,
           explanation:
             'Simulation is for designers to review their interfaces — it does not identify which users have CVD.',
         },
         {
-          id: 'b',
+          stableId: 'revealing-which-interface-areas-have-color-only-meaning-under-cv',
           label:
             'Revealing which interface areas have color-only meaning under CVD conditions',
           isCorrect: true,
@@ -56,14 +56,14 @@ export const lesson4_3: LessonConfig = {
             'Simulation helps you see which elements lose their meaning when color distinctions are reduced — making it easier to spot where backup cues are needed.',
         },
         {
-          id: 'c',
+          stableId: 'checking-whether-colors-are-within-the-srgb-gamut',
           label: 'Checking whether colors are within the sRGB gamut',
           isCorrect: false,
           explanation:
             'Gamut checking is a separate concern from CVD simulation.',
         },
         {
-          id: 'd',
+          stableId: 'automatically-fixing-all-color-accessibility-problems',
           label: 'Automatically fixing all color-accessibility problems',
           isCorrect: false,
           explanation:
@@ -76,28 +76,28 @@ export const lesson4_3: LessonConfig = {
       prompt: 'Which CVD types affect red-green distinctions?',
       choices: [
         {
-          id: 'a',
+          stableId: 'tritan-types-only',
           label: 'Tritan types only',
           isCorrect: false,
           explanation:
             'Tritan types affect blue-yellow distinctions, not red-green.',
         },
         {
-          id: 'b',
+          stableId: 'protan-and-deutan-types',
           label: 'Protan and deutan types',
           isCorrect: true,
           explanation:
             'Protan types affect red-sensitive cones and deutan types affect green-sensitive cones — both weaken the ability to distinguish red from green.',
         },
         {
-          id: 'c',
+          stableId: 'achromatopsia-only',
           label: 'Achromatopsia only',
           isCorrect: false,
           explanation:
             'Achromatopsia affects all hues, but protan and deutan types specifically target the red-green axis.',
         },
         {
-          id: 'd',
+          stableId: 'all-cvd-types-equally',
           label: 'All CVD types equally',
           isCorrect: false,
           explanation:
@@ -111,7 +111,7 @@ export const lesson4_3: LessonConfig = {
         'Why might a color-coded chart be riskier than a text paragraph under CVD simulation?',
       choices: [
         {
-          id: 'a',
+          stableId: 'charts-use-more-colors-than-paragraphs-so-they-are-always-harder',
           label:
             'Charts use more colors than paragraphs, so they are always harder to read',
           isCorrect: false,
@@ -119,7 +119,7 @@ export const lesson4_3: LessonConfig = {
             'Using more colors is only a problem if those colors are the sole differentiating signal.',
         },
         {
-          id: 'b',
+          stableId: 'charts-use-color-as-the-primary-channel-for-data-distinction-whi',
           label:
             'Charts use color as the primary channel for data distinction, while paragraphs rely on lightness contrast for readability',
           isCorrect: true,
@@ -127,7 +127,7 @@ export const lesson4_3: LessonConfig = {
             'Chart series are often differentiated only by hue. Under CVD simulation, those hues may converge. Text paragraphs primarily use lightness contrast, which simulation does not eliminate.',
         },
         {
-          id: 'c',
+          stableId: 'text-paragraphs-are-automatically-accessible-so-charts-are-alway',
           label:
             'Text paragraphs are automatically accessible, so charts are always worse',
           isCorrect: false,
@@ -135,7 +135,7 @@ export const lesson4_3: LessonConfig = {
             'Text can also have color-only meaning problems (e.g., colored error text). The specific issue with charts is their reliance on hue alone for series identity.',
         },
         {
-          id: 'd',
+          stableId: 'charts-always-have-bad-contrast-ratios',
           label: 'Charts always have bad contrast ratios',
           isCorrect: false,
           explanation:

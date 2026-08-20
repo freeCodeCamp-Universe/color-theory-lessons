@@ -39,28 +39,28 @@ export const lesson3_6: LessonConfig = {
       prompt: 'What problem do design tokens help solve?',
       choices: [
         {
-          id: 'a',
+          stableId: 'they-make-colors-load-faster-in-the-browser',
           label: 'They make colors load faster in the browser',
           isCorrect: false,
           explanation:
             'Token naming does not affect rendering speed. Tokens solve a maintenance and consistency problem, not a performance problem.',
         },
         {
-          id: 'b',
+          stableId: 'they-separate-color-meaning-from-raw-values-so-updates-are-easie',
           label: 'They separate color meaning from raw values so updates are easier and more consistent',
           isCorrect: true,
           explanation:
             'When a value changes, every component referencing the token updates automatically. This keeps the system consistent without manual find-and-replace.',
         },
         {
-          id: 'c',
+          stableId: 'they-automatically-fix-contrast-problems',
           label: 'They automatically fix contrast problems',
           isCorrect: false,
           explanation:
             'Tokens do not check contrast. They organize color decisions — but designers still need to verify accessibility.',
         },
         {
-          id: 'd',
+          stableId: 'they-are-required-by-css-to-define-custom-properties',
           label: 'They are required by CSS to define custom properties',
           isCorrect: false,
           explanation:
@@ -73,27 +73,27 @@ export const lesson3_6: LessonConfig = {
       prompt: 'What stays the same when a token value changes but the token role does not?',
       choices: [
         {
-          id: 'a',
+          stableId: 'the-visible-color-on-screen',
           label: 'The visible color on screen',
           isCorrect: false,
           explanation:
             'The visible color changes because the value behind the token changed. What stays the same is the role — the purpose the token serves.',
         },
         {
-          id: 'b',
+          stableId: 'the-role-name-and-its-meaning-in-the-system',
           label: 'The role name and its meaning in the system',
           isCorrect: true,
           explanation:
             '--color-action-primary still means "primary action color" even if the value behind it switches from blue to purple. The role is stable; the value is swappable.',
         },
         {
-          id: 'c',
+          stableId: 'the-hex-code-stored-in-the-token',
           label: 'The HEX code stored in the token',
           isCorrect: false,
           explanation: 'The HEX code is exactly what changed. The question is about what remains stable.',
         },
         {
-          id: 'd',
+          stableId: 'nothing-everything-changes-when-a-token-value-changes',
           label: 'Nothing — everything changes when a token value changes',
           isCorrect: false,
           explanation:
@@ -106,27 +106,27 @@ export const lesson3_6: LessonConfig = {
       prompt: 'Which is a role token name?',
       choices: [
         {
-          id: 'a',
+          stableId: '0b57d0',
           label: '#0B57D0',
           isCorrect: false,
           explanation: 'This is a raw hex value, not a token name at all.',
         },
         {
-          id: 'b',
+          stableId: 'blue-600',
           label: '--blue-600',
           isCorrect: false,
           explanation:
             'This is an alias token — it names a palette step but does not describe a usage role.',
         },
         {
-          id: 'c',
+          stableId: 'color-text-primary',
           label: '--color-text-primary',
           isCorrect: true,
           explanation:
             'This name describes a function (primary text color), not an appearance. It stays meaningful even if the underlying value changes.',
         },
         {
-          id: 'd',
+          stableId: 'rgb-34-34-34',
           label: 'rgb(34, 34, 34)',
           isCorrect: false,
           explanation: 'This is a raw RGB value, not a token.',

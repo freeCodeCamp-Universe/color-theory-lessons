@@ -1,4 +1,5 @@
 import type { LessonConfig } from '../types/lesson.ts';
+import { validateLessonQuiz } from './quiz-utils.ts';
 import { lesson1_1 } from './unit-1/lesson-1-1.ts';
 import { lesson1_2 } from './unit-1/lesson-1-2.ts';
 import { lesson1_3 } from './unit-1/lesson-1-3.ts';
@@ -69,7 +70,7 @@ export const lessonRegistry: LessonConfig[] = [
   lesson6_5,
   lesson6_6,
   lesson6_7,
-];
+].map(validateLessonQuiz);
 
 export function getLessonById(id: string): LessonConfig | undefined {
   return lessonRegistry.find((l) => l.id === id);

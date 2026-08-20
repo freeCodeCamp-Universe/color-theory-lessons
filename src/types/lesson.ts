@@ -76,11 +76,18 @@ export interface Challenge {
   hints: string[];
 }
 
+export interface QuizChoice {
+  stableId: string;
+  label: string;
+  isCorrect: boolean;
+  explanation?: string;
+}
+
 export interface QuizItem {
   id: string;
   prompt: string;
   colorSwatches?: { label: string; color: string }[];
-  choices: { id: string; label: string; isCorrect: boolean; explanation?: string }[];
+  choices: QuizChoice[];
 }
 
 export interface GlossaryTerm {

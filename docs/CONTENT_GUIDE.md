@@ -31,14 +31,18 @@ export const lessonX_Y: LessonConfig = {
       id: 'q1',
       prompt: 'Question text?',
       choices: [
-        { id: 'a', label: 'Correct Choice', isCorrect: true, explanation: 'Why this is right.' },
-        { id: 'b', label: 'Wrong Choice', isCorrect: false, explanation: 'Why this is wrong.' }
+        { stableId: 'correct-choice', label: 'Correct Choice', isCorrect: true, explanation: 'Why this is right.' },
+        { stableId: 'wrong-choice', label: 'Wrong Choice', isCorrect: false, explanation: 'Why this is wrong.' }
       ]
     }
   ],
   reviewTags: ['foundations'] // For grouping in the Review page
 };
 ```
+
+Each quiz choice needs a unique `stableId` within its question. Keep that ID with
+the same logical choice when answers are reordered or their wording changes. The
+learner-facing A, B, C, and D labels come from the choices' array order.
 
 ### 2. Add the Lesson Title
 

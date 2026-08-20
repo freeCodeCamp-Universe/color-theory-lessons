@@ -37,25 +37,25 @@ export const lesson5_3: LessonConfig = {
       prompt: 'What does WCAG 1.4.1 "Use of Color" require?',
       choices: [
         {
-          id: 'a',
+          stableId: 'that-interfaces-use-no-more-than-five-colors',
           label: 'That interfaces use no more than five colors',
           isCorrect: false,
           explanation: 'WCAG does not limit the number of colors — it requires that color is not the sole means of conveying information.',
         },
         {
-          id: 'b',
+          stableId: 'that-color-is-not-the-only-visual-means-of-conveying-information',
           label: 'That color is not the only visual means of conveying information',
           isCorrect: true,
           explanation: 'If removing the color difference removes all meaning, the design has a color-alone problem. A second channel (icon, label, pattern) must also carry the meaning.',
         },
         {
-          id: 'c',
+          stableId: 'that-all-colors-must-pass-contrast-ratio-thresholds',
           label: 'That all colors must pass contrast ratio thresholds',
           isCorrect: false,
           explanation: 'Contrast ratios are covered by separate WCAG criteria. 1.4.1 is specifically about whether color is the sole information carrier.',
         },
         {
-          id: 'd',
+          stableId: 'that-color-must-be-removed-from-interactive-elements',
           label: 'That color must be removed from interactive elements',
           isCorrect: false,
           explanation: 'Color is encouraged — it just cannot be the only signal. The goal is redundancy, not removal.',
@@ -67,25 +67,25 @@ export const lesson5_3: LessonConfig = {
       prompt: 'Why is a green border alone a weak success message?',
       choices: [
         {
-          id: 'a',
+          stableId: 'because-green-is-not-a-good-success-color',
           label: 'Because green is not a good success color',
           isCorrect: false,
           explanation: 'Green is conventionally associated with success. The weakness is not the color choice — it is relying on color alone.',
         },
         {
-          id: 'b',
+          stableId: 'because-it-conveys-meaning-only-through-hue-which-may-not-be-dis',
           label: 'Because it conveys meaning only through hue, which may not be distinguishable under CVD or low-color conditions',
           isCorrect: true,
           explanation: 'A green border is invisible as a "success" signal to someone who cannot perceive that hue. Adding an icon and text makes the success state robust.',
         },
         {
-          id: 'c',
+          stableId: 'because-borders-should-not-be-used-in-accessible-designs',
           label: 'Because borders should not be used in accessible designs',
           isCorrect: false,
           explanation: 'Borders are a perfectly valid UI element. The issue is using color as the only channel.',
         },
         {
-          id: 'd',
+          stableId: 'because-success-messages-must-always-use-a-modal-dialog',
           label: 'Because success messages must always use a modal dialog',
           isCorrect: false,
           explanation: 'Inline success feedback is a common and appropriate pattern. The form of feedback is not the issue — the lack of backup cues is.',
@@ -97,25 +97,25 @@ export const lesson5_3: LessonConfig = {
       prompt: 'What does redundancy mean in accessible design?',
       choices: [
         {
-          id: 'a',
+          stableId: 'repeating-the-same-content-multiple-times-unnecessarily',
           label: 'Repeating the same content multiple times unnecessarily',
           isCorrect: false,
           explanation: 'Redundancy here means providing meaning through more than one visual channel.',
         },
         {
-          id: 'b',
+          stableId: 'conveying-meaning-through-more-than-one-visual-channel-so-that-l',
           label: 'Conveying meaning through more than one visual channel so that losing any one does not break the design',
           isCorrect: true,
           explanation: 'Redundant cues make designs robust — if color is lost, icons and labels still communicate.',
         },
         {
-          id: 'c',
+          stableId: 'using-the-same-color-for-all-states-to-reduce-confusion',
           label: 'Using the same color for all states to reduce confusion',
           isCorrect: false,
           explanation: 'Same color for all states would remove distinction entirely.',
         },
         {
-          id: 'd',
+          stableId: 'adding-extra-whitespace-to-improve-readability',
           label: 'Adding extra whitespace to improve readability',
           isCorrect: false,
           explanation: 'Whitespace is a layout concept, not a redundancy strategy.',
