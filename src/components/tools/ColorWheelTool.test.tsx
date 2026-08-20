@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { ColorWheelTool } from './ColorWheelTool.tsx';
+import { hslToHex } from '../../utils/color.ts';
 
 beforeEach(() => localStorage.clear());
 afterEach(() => cleanup());
@@ -67,6 +68,44 @@ describe('ColorWheelTool preview mode', () => {
     render(<ColorWheelTool interactive={false} previewRelationship="complementary" />);
     expect(screen.queryByRole('button', { name: /lock palette/i })).toBeNull();
     expect(screen.queryByRole('button', { name: /build palette/i })).toBeNull();
+  });
+});
+
+describe('ColorWheelTool buildPalette role assignment', () => {
+  it('complementary: support swatch comes from the complementary hue (180° from base)', () => {
+    render(<ColorWheelTool interactive={true} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'complementary' }));
+    fireEvent.click(screen.getByRole('button', { name: /lock in this palette/i }));
+
+    const supportSwatch = screen.getByText('support').parentElement!;
+    const accentSwatch = screen.getByText('accent').parentElement!;
+    expect(supportSwatch).toHaveStyle({ backgroundColor: hslToHex(30, 60, 55) });
+    expect(accentSwatch).toHaveStyle({ backgroundColor: hslToHex(30, 85, 60) });
+  });
+
+  it('triadic: support swatch comes from the second triadic hue (240° from base)', () => {
+    render(<ColorWheelTool interactive={true} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'triadic' }));
+    fireEvent.click(screen.getByRole('button', { name: /lock in this palette/i }));
+
+    const supportSwatch = screen.getByText('support').parentElement!;
+    const accentSwatch = screen.getByText('accent').parentElement!;
+    expect(supportSwatch).toHaveStyle({ backgroundColor: hslToHex(90, 60, 55) });
+    expect(accentSwatch).toHaveStyle({ backgroundColor: hslToHex(330, 85, 60) });
+  });
+
+  it('analogous: support swatch comes from the second analogous hue (30° below base)', () => {
+    render(<ColorWheelTool interactive={true} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'analogous' }));
+    fireEvent.click(screen.getByRole('button', { name: /lock in this palette/i }));
+
+    const supportSwatch = screen.getByText('support').parentElement!;
+    const accentSwatch = screen.getByText('accent').parentElement!;
+    expect(supportSwatch).toHaveStyle({ backgroundColor: hslToHex(180, 60, 55) });
+    expect(accentSwatch).toHaveStyle({ backgroundColor: hslToHex(240, 85, 60) });
   });
 });
 
