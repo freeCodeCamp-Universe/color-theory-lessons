@@ -3,14 +3,13 @@ import { loadState, saveState } from './persistence.ts';
 import type { ProgressState } from '../types/progress.ts';
 
 const STORAGE_KEY = 'color-theory-course-state';
-const VERSION = 2;
+const VERSION = 3;
 
 const emptyProgress: ProgressState = {
   completedLessons: [],
   completedQuizzes: [],
   quizBestScores: {},
   completedMilestones: [],
-  glossaryTermsSeen: [],
 };
 
 const defaultPrefs = { reducedMotion: false, colorBlindnessMode: null };
@@ -20,7 +19,6 @@ const sampleProgress: ProgressState = {
   completedQuizzes: ['unit-1-l1'],
   quizBestScores: { 'unit-1-l1': 80 },
   completedMilestones: ['milestone-1'],
-  glossaryTermsSeen: ['hue', 'saturation'],
 };
 
 const samplePrefs = { reducedMotion: true, colorBlindnessMode: 'deuteranopia' };
@@ -91,7 +89,6 @@ describe('saveState', () => {
     expect(progress.completedLessons).toEqual(sampleProgress.completedLessons);
     expect(progress.quizBestScores).toEqual(sampleProgress.quizBestScores);
     expect(progress.completedMilestones).toEqual(sampleProgress.completedMilestones);
-    expect(progress.glossaryTermsSeen).toEqual(sampleProgress.glossaryTermsSeen);
   });
 
   it('persists preferences correctly', () => {

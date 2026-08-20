@@ -6,7 +6,6 @@ export const lesson2_2: LessonConfig = {
   unitId: 'unit-2',
   title: LESSON_TITLES['u2-l2'],
   interactionType: 'rgb-mixer',
-  glossaryTerms: ['red channel', 'green channel', 'blue channel', 'channel intensity', 'additive primary'],
   reviewTags: ['additive', 'RGB', 'color-models', 'screens'],
   steps: [
     {

@@ -6,7 +6,6 @@ export const lesson1_5: LessonConfig = {
   unitId: 'unit-1',
   title: LESSON_TITLES['u1-l5'],
   interactionType: 'before-after',
-  glossaryTerms: ['hierarchy', 'focal point', 'primary action', 'secondary action', 'accent color'],
   reviewTags: ['hierarchy', 'emphasis', 'foundations'],
   steps: [
     {

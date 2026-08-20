@@ -12,9 +12,6 @@ export function useLessonCompletion(lesson: LessonConfig) {
 
   function completeLesson(answers: QuizAnswer[]) {
     dispatch({ type: 'COMPLETE_LESSON', lessonId: lesson.id });
-    if (lesson.glossaryTerms.length > 0) {
-      dispatch({ type: 'ADD_GLOSSARY_TERMS', terms: lesson.glossaryTerms });
-    }
     if (lesson.quizItems.length > 0) {
       const correctCount = answers.filter((a) => a.isCorrect).length;
       dispatch({

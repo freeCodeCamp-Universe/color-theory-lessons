@@ -5,11 +5,6 @@ export const lesson6_7: LessonConfig = {
   id: 'u6-l7', unitId: 'unit-6',
   title: LESSON_TITLES['u6-l7'],
   interactionType: 'system-stress',
-  glossaryTerms: [
-    'consistency audit',
-    'stress test',
-    'system review',
-  ],
   reviewTags: ['review', 'systems', 'capstone-prep', 'stress-test'],
   steps: [
     {

@@ -6,7 +6,6 @@ export const lesson2_1: LessonConfig = {
   unitId: 'unit-2',
   title: LESSON_TITLES['u2-l1'],
   interactionType: 'additive-sort',
-  glossaryTerms: ['additive color', 'subtractive color', 'pigment', 'RGB'],
   reviewTags: ['foundations', 'additive', 'subtractive', 'color-models'],
   steps: [
     {

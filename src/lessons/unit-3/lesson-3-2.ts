@@ -6,7 +6,6 @@ export const lesson3_2: LessonConfig = {
   unitId: 'unit-3',
   title: LESSON_TITLES['u3-l2'],
   interactionType: 'hex-rgb-editor',
-  glossaryTerms: ['channel', 'HEX', 'RGBA', 'shorthand HEX'],
   reviewTags: ['formats', 'HEX', 'RGB'],
   steps: [
     {

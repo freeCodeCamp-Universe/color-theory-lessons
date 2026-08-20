@@ -6,14 +6,6 @@ export const lesson3_4: LessonConfig = {
   unitId: 'unit-3',
   title: LESSON_TITLES['u3-l4'],
   interactionType: 'alpha-layer',
-  glossaryTerms: [
-    'opacity',
-    'transparency',
-    'overlay',
-    'scrim',
-    'blend perception',
-    'layered interface',
-  ],
   reviewTags: ['formats', 'alpha', 'transparency', 'layering'],
   steps: [
     {

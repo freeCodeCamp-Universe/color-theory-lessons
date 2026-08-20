@@ -6,11 +6,6 @@ export const lesson4_4: LessonConfig = {
   unitId: 'unit-4',
   title: LESSON_TITLES['u4-l4'],
   interactionType: 'color-only-detector',
-  glossaryTerms: [
-    'color-dependent meaning',
-    'ambiguous element',
-    'perceptual robustness',
-  ],
   reviewTags: ['color-alone', 'observation', 'accessibility', 'ui-patterns'],
   steps: [
     {

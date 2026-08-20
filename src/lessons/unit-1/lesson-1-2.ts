@@ -6,7 +6,6 @@ export const lesson1_2: LessonConfig = {
   unitId: 'unit-1',
   title: LESSON_TITLES['u1-l2'],
   interactionType: 'slider-explore',
-  glossaryTerms: ['hue', 'saturation', 'lightness', 'value', 'muted', 'vivid', 'tint', 'shade'],
   reviewTags: ['foundations', 'hue', 'saturation', 'lightness'],
   steps: [
     {

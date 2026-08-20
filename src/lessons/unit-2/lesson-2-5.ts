@@ -6,7 +6,6 @@ export const lesson2_5: LessonConfig = {
   unitId: 'unit-2',
   title: LESSON_TITLES['u2-l5'],
   interactionType: 'background-shift',
-  glossaryTerms: ['pixel', 'luminous color', 'accent color', 'dark interface'],
   reviewTags: ['additive', 'display', 'perception', 'interface'],
   steps: [
     {

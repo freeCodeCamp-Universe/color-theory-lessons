@@ -6,7 +6,6 @@ export const lesson2_3: LessonConfig = {
   unitId: 'unit-2',
   title: LESSON_TITLES['u2-l3'],
   interactionType: 'logic-fixer',
-  glossaryTerms: ['paint logic', 'screen logic', 'mental model'],
   reviewTags: ['additive', 'mental-models', 'color-models'],
   steps: [
     {

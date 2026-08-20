@@ -6,7 +6,6 @@ export const lesson2_4: LessonConfig = {
   unitId: 'unit-2',
   title: LESSON_TITLES['u2-l4'],
   interactionType: 'mismatch-explainer',
-  glossaryTerms: ['absorption', 'reflection', 'color gamut', 'subtractive primary'],
   reviewTags: ['subtractive', 'print', 'color-models', 'practical'],
   steps: [
     {

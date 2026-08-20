@@ -6,7 +6,6 @@ export const lesson1_6: LessonConfig = {
   unitId: 'unit-1',
   title: LESSON_TITLES['u1-l6'],
   interactionType: 'color-wheel',
-  glossaryTerms: ['analogous', 'complementary', 'triadic', 'palette', 'harmony', 'balance'],
   reviewTags: ['harmony', 'foundations', 'palette'],
   steps: [
     {

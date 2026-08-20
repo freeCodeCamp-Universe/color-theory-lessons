@@ -14,7 +14,6 @@ export interface LessonConfig {
   steps: LessonStep[];
   challenge: Challenge;
   quizItems: QuizItem[];
-  glossaryTerms: string[];
   reviewTags: string[];
   keyPoints?: string[];
 }

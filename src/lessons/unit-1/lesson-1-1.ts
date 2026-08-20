@@ -6,7 +6,6 @@ export const lesson1_1: LessonConfig = {
   unitId: 'unit-1',
   title: LESSON_TITLES['u1-l1'],
   interactionType: 'before-after',
-  glossaryTerms: ['emphasis', 'grouping', 'status color', 'visual cue', 'readability'],
   reviewTags: ['foundations', 'visual-vocabulary', 'color-function'],
   steps: [
     {

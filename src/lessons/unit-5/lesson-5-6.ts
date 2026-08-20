@@ -5,13 +5,6 @@ export const lesson5_6: LessonConfig = {
   id: 'u5-l6', unitId: 'unit-5',
   title: LESSON_TITLES['u5-l6'],
   interactionType: 'inclusive-review',
-  glossaryTerms: [
-    'approximation',
-    'inclusive design',
-    'robustness',
-    'user test',
-    'workflow',
-  ],
   reviewTags: ['workflow', 'inclusive-design', 'testing', 'user-research'],
   steps: [
     {

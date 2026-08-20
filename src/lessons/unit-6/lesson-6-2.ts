@@ -5,7 +5,6 @@ export const lesson6_2: LessonConfig = {
   id: 'u6-l2', unitId: 'unit-6',
   title: LESSON_TITLES['u6-l2'],
   interactionType: 'role-builder',
-  glossaryTerms: ['component state', 'disabled', 'elevated surface', 'hover', 'primary text', 'secondary text', 'semantic status'],
   reviewTags: ['roles', 'components', 'states', 'hierarchy'],
   steps: [
     { text: 'A useful role set covers four areas: structural (backgrounds, surfaces, dividers), content (primary text, secondary text, and inverse text — text placed on dark or colored surfaces), interactive (primary action, secondary action, focus, links), and semantic (success, warning, error, info).' },

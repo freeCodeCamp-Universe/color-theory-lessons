@@ -5,7 +5,6 @@ export const lesson6_4: LessonConfig = {
   id: 'u6-l4', unitId: 'unit-6',
   title: LESSON_TITLES['u6-l4'],
   interactionType: 'dark-translator',
-  glossaryTerms: ['dark mode', 'inverse text', 'light mode', 'mode adaptation', 'surface depth', 'theme pairing', 'tonal separation'],
   reviewTags: ['dark-mode', 'theme', 'hierarchy', 'adaptation'],
   steps: [
     { text: 'Dark mode is not the inverse of light mode. Inverting light values produces unnatural results: pure black backgrounds feel harsh, pure white text creates intense halation, and surfaces that were separated in light mode may blur together in dark mode.' },

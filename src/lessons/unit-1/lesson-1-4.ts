@@ -6,7 +6,6 @@ export const lesson1_4: LessonConfig = {
   unitId: 'unit-1',
   title: LESSON_TITLES['u1-l4'],
   interactionType: 'palette-builder',
-  glossaryTerms: ['warm', 'cool', 'neutral', 'palette mood'],
   reviewTags: ['temperature', 'foundations', 'visual-vocabulary'],
   steps: [
     {

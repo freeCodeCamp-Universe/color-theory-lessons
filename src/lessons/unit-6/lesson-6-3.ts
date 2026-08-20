@@ -5,7 +5,6 @@ export const lesson6_3: LessonConfig = {
   id: 'u6-l3', unitId: 'unit-6',
   title: LESSON_TITLES['u6-l3'],
   interactionType: 'brand-pressure',
-  glossaryTerms: ['accent overuse', 'brand color', 'supporting palette', 'tonal scale'],
   reviewTags: ['brand', 'hierarchy', 'neutrals', 'balance'],
   steps: [
     { text: 'Unit 1 showed that hierarchy requires restraint — accent colors lose impact when overused. Brand colors pose the same risk at a system level: chosen for marketing materials with high contrast and bold typography, they can overwhelm an interface when applied to backgrounds, small labels, icons, and states simultaneously.' },

@@ -7,7 +7,6 @@ const baseState = {
   completedQuizzes: [],
   quizBestScores: {},
   completedMilestones: [],
-  glossaryTermsSeen: [],
   preferences: { reducedMotion: false, colorBlindnessMode: null },
 } satisfies ProgressState & { preferences: { reducedMotion: boolean; colorBlindnessMode: string | null } };
 
@@ -62,25 +61,6 @@ describe('appReducer', () => {
     });
   });
 
-  describe('ADD_GLOSSARY_TERMS', () => {
-    it('appends new terms', () => {
-      const next = appReducer(baseState, { type: 'ADD_GLOSSARY_TERMS', terms: ['hue', 'saturation'] });
-      expect(next.glossaryTermsSeen).toEqual(['hue', 'saturation']);
-    });
-
-    it('deduplicates already-seen terms', () => {
-      const first = appReducer(baseState, { type: 'ADD_GLOSSARY_TERMS', terms: ['hue'] });
-      const second = appReducer(first, { type: 'ADD_GLOSSARY_TERMS', terms: ['hue', 'lightness'] });
-      expect(second.glossaryTermsSeen).toEqual(['hue', 'lightness']);
-    });
-
-    it('returns the same reference when no new terms added', () => {
-      const first = appReducer(baseState, { type: 'ADD_GLOSSARY_TERMS', terms: ['hue'] });
-      const second = appReducer(first, { type: 'ADD_GLOSSARY_TERMS', terms: ['hue'] });
-      expect(second).toBe(first);
-    });
-  });
-
   describe('SET_PREFERENCE', () => {
     it('updates the specified preference key', () => {
       const next = appReducer(baseState, { type: 'SET_PREFERENCE', key: 'reducedMotion', value: true });
@@ -107,14 +87,12 @@ describe('appReducer', () => {
         completedQuizzes: ['unit-1-l1'],
         quizBestScores: { 'unit-1-l1': 80 },
         completedMilestones: ['milestone-1'],
-        glossaryTermsSeen: ['hue'],
       };
       const next = appReducer(withProgress, { type: 'RESET_PROGRESS' });
       expect(next.completedLessons).toHaveLength(0);
       expect(next.completedQuizzes).toHaveLength(0);
       expect(next.quizBestScores).toEqual({});
       expect(next.completedMilestones).toHaveLength(0);
-      expect(next.glossaryTermsSeen).toHaveLength(0);
     });
 
     it('preserves preferences', () => {

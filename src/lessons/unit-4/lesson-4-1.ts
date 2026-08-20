@@ -6,15 +6,6 @@ export const lesson4_1: LessonConfig = {
   unitId: 'unit-4',
   title: LESSON_TITLES['u4-l1'],
   interactionType: 'eye-diagram',
-  glossaryTerms: [
-    'color perception',
-    'color vision',
-    'cone',
-    'rod',
-    'retina',
-    'optic nerve',
-    'visual system',
-  ],
   reviewTags: ['perception', 'vision', 'biology-basics'],
   steps: [
     {

@@ -6,17 +6,6 @@ export const lesson4_2: LessonConfig = {
   unitId: 'unit-4',
   title: LESSON_TITLES['u4-l2'],
   interactionType: 'vision-cards',
-  glossaryTerms: [
-    'color vision deficiency',
-    'protanopia',
-    'protanomaly',
-    'deuteranopia',
-    'deuteranomaly',
-    'tritanopia',
-    'tritanomaly',
-    'achromatopsia',
-    'simulation',
-  ],
   reviewTags: ['CVD', 'perception', 'accessibility'],
   steps: [
     {

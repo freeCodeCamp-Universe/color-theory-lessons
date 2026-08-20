@@ -6,7 +6,6 @@ export const lesson4_3: LessonConfig = {
   unitId: 'unit-4',
   title: LESSON_TITLES['u4-l3'],
   interactionType: 'interface-gallery',
-  glossaryTerms: ['protan', 'deutan', 'tritan', 'backup cue', 'redundancy'],
   reviewTags: ['CVD', 'simulation', 'interface-review'],
   steps: [
     {
