@@ -1,10 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson6_4: LessonConfig = {
   id: 'u6-l4', unitId: 'unit-6',
-  title: 'Dark Mode and Theme Pairing',
+  title: LESSON_TITLES['u6-l4'],
   interactionType: 'dark-translator',
-  glossaryTerms: ['dark mode', 'inverse text', 'light mode', 'mode adaptation', 'surface depth', 'theme pairing', 'tonal separation'],
   reviewTags: ['dark-mode', 'theme', 'hierarchy', 'adaptation'],
   steps: [
     { text: 'Dark mode is not the inverse of light mode. Inverting light values produces unnatural results: pure black backgrounds feel harsh, pure white text creates intense halation, and surfaces that were separated in light mode may blur together in dark mode.' },
@@ -26,30 +26,30 @@ export const lesson6_4: LessonConfig = {
       id: 'q1',
       prompt: 'Why is simple inversion not a reliable dark mode strategy?',
       choices: [
-        { id: 'a', label: 'CSS cannot invert values', isCorrect: false, explanation: 'CSS can invert values — that is not the problem.' },
-        { id: 'b', label: 'Inverted colors never pass contrast', isCorrect: false, explanation: 'Inverted colors can pass contrast — but they often fail for structural reasons.' },
-        { id: 'c', label: 'Inverted values often collapse surface separation, create harsh extremes, and can break semantic meaning', isCorrect: true, explanation: 'A value that was light on dark may invert to something too similar to another role.' },
-        { id: 'd', label: 'Users dislike inverted themes', isCorrect: false, explanation: 'User preference is not the reason inversion fails technically.' },
+        { stableId: 'css-cannot-invert-values', label: 'CSS cannot invert values', isCorrect: false, explanation: 'CSS can invert values — that is not the problem.' },
+        { stableId: 'inverted-colors-never-pass-contrast', label: 'Inverted colors never pass contrast', isCorrect: false, explanation: 'Inverted colors can pass contrast — but they often fail for structural reasons.' },
+        { stableId: 'inverted-values-often-collapse-surface-separation-create-harsh-e', label: 'Inverted values often collapse surface separation, create harsh extremes, and can break semantic meaning', isCorrect: true, explanation: 'A value that was light on dark may invert to something too similar to another role.' },
+        { stableId: 'users-dislike-inverted-themes', label: 'Users dislike inverted themes', isCorrect: false, explanation: 'User preference is not the reason inversion fails technically.' },
       ],
     },
     {
       id: 'q2',
       prompt: 'Why might a saturated accent color need adjustment in dark mode?',
       choices: [
-        { id: 'a', label: 'Colors always need to match exactly across modes', isCorrect: false, explanation: 'Matching exactly across modes is not the goal — visual balance is.' },
-        { id: 'b', label: 'Vivid colors appear more intense on dark backgrounds — they can dominate or feel aggressive where they felt balanced in light mode', isCorrect: true, explanation: 'Correct. Dark backgrounds amplify perceived saturation, requiring accent colors to be softened.' },
-        { id: 'c', label: 'Dark mode requires desaturated colors', isCorrect: false, explanation: 'Dark mode does not require full desaturation — just appropriate adjustment.' },
-        { id: 'd', label: 'Browsers change color values in dark mode', isCorrect: false, explanation: 'Browsers do not change color values — perception changes due to the dark context.' },
+        { stableId: 'colors-always-need-to-match-exactly-across-modes', label: 'Colors always need to match exactly across modes', isCorrect: false, explanation: 'Matching exactly across modes is not the goal — visual balance is.' },
+        { stableId: 'vivid-colors-appear-more-intense-on-dark-backgrounds-they-can-do', label: 'Vivid colors appear more intense on dark backgrounds — they can dominate or feel aggressive where they felt balanced in light mode', isCorrect: true, explanation: 'Correct. Dark backgrounds amplify perceived saturation, requiring accent colors to be softened.' },
+        { stableId: 'dark-mode-requires-desaturated-colors', label: 'Dark mode requires desaturated colors', isCorrect: false, explanation: 'Dark mode does not require full desaturation — just appropriate adjustment.' },
+        { stableId: 'browsers-change-color-values-in-dark-mode', label: 'Browsers change color values in dark mode', isCorrect: false, explanation: 'Browsers do not change color values — perception changes due to the dark context.' },
       ],
     },
     {
       id: 'q3',
       prompt: 'What makes surfaces in a dark theme \'separated\'?',
       choices: [
-        { id: 'a', label: 'Using slightly different dark values for each surface layer — page, card, raised panel — so depth and hierarchy remain visible', isCorrect: true, explanation: 'Correct. Subtle lightness differences between surface layers create depth without being jarring.' },
-        { id: 'b', label: 'Adding white borders to each layer', isCorrect: false, explanation: 'Borders can help, but tonal separation is the primary technique for dark surfaces.' },
-        { id: 'c', label: 'Inverting the light theme surface values', isCorrect: false, explanation: 'Inversion rarely produces good dark surface separation.' },
-        { id: 'd', label: 'Using pure black for all backgrounds', isCorrect: false, explanation: 'Pure black for all backgrounds eliminates all separation between layers.' },
+        { stableId: 'using-slightly-different-dark-values-for-each-surface-layer-page', label: 'Using slightly different dark values for each surface layer — page, card, raised panel — so depth and hierarchy remain visible', isCorrect: true, explanation: 'Correct. Subtle lightness differences between surface layers create depth without being jarring.' },
+        { stableId: 'adding-white-borders-to-each-layer', label: 'Adding white borders to each layer', isCorrect: false, explanation: 'Borders can help, but tonal separation is the primary technique for dark surfaces.' },
+        { stableId: 'inverting-the-light-theme-surface-values', label: 'Inverting the light theme surface values', isCorrect: false, explanation: 'Inversion rarely produces good dark surface separation.' },
+        { stableId: 'using-pure-black-for-all-backgrounds', label: 'Using pure black for all backgrounds', isCorrect: false, explanation: 'Pure black for all backgrounds eliminates all separation between layers.' },
       ],
     },
   ],

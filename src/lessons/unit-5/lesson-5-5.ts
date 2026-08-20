@@ -1,18 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson5_5: LessonConfig = {
   id: 'u5-l5', unitId: 'unit-5',
-  title: 'Accessibility Audit Workflow',
+  title: LESSON_TITLES['u5-l5'],
   interactionType: 'audit-flow',
-  glossaryTerms: [
-    'audit',
-    'checker',
-    'context',
-    'priority element',
-    'verification',
-    'review pass',
-    'task check',
-  ],
   reviewTags: ['audit', 'workflow', 'process', 'inclusive-design'],
   steps: [
     {
@@ -45,25 +37,25 @@ export const lesson5_5: LessonConfig = {
       prompt: 'What does a contrast checker tool do?',
       choices: [
         {
-          id: 'a',
+          stableId: 'it-automatically-repairs-contrast-failures',
           label: 'It automatically repairs contrast failures',
           isCorrect: false,
           explanation: 'A checker tells you the ratio and pass/fail status — you still need to decide how to fix it.',
         },
         {
-          id: 'b',
+          stableId: 'it-calculates-the-contrast-ratio-between-two-colors-and-reports-',
           label: 'It calculates the contrast ratio between two colors and reports pass/fail status',
           isCorrect: true,
           explanation: 'A checker is a calculation tool, not a repair tool. It gives you data; you apply judgment.',
         },
         {
-          id: 'c',
+          stableId: 'it-converts-colors-to-accessible-versions-automatically',
           label: 'It converts colors to accessible versions automatically',
           isCorrect: false,
           explanation: 'No standard checker auto-converts colors. It reports ratios so you can make informed adjustments.',
         },
         {
-          id: 'd',
+          stableId: 'it-checks-animation-and-motion-accessibility',
           label: 'It checks animation and motion accessibility',
           isCorrect: false,
           explanation: 'Motion accessibility is a separate concern from color contrast.',
@@ -75,25 +67,25 @@ export const lesson5_5: LessonConfig = {
       prompt: 'What should you look for during a simulated review?',
       choices: [
         {
-          id: 'a',
+          stableId: 'whether-the-colors-still-look-different-from-each-other',
           label: 'Whether the colors still look different from each other',
           isCorrect: false,
           explanation: 'Colors may still be slightly different while being practically indistinguishable. The relevant question is whether tasks can be completed.',
         },
         {
-          id: 'b',
+          stableId: 'whether-the-user-can-still-complete-the-task-not-just-whether-co',
           label: 'Whether the user can still complete the task, not just whether colors look different',
           isCorrect: true,
           explanation: 'Task completion is the meaningful measure. A status indicator that requires perfect hue discrimination to interpret is a design problem regardless of subtle color differences.',
         },
         {
-          id: 'c',
+          stableId: 'whether-the-interface-looks-visually-appealing-in-simulation-mod',
           label: 'Whether the interface looks visually appealing in simulation mode',
           isCorrect: false,
           explanation: 'Aesthetic appearance under simulation is not the goal. The goal is functional clarity.',
         },
         {
-          id: 'd',
+          stableId: 'whether-the-page-renders-without-errors',
           label: 'Whether the page renders without errors',
           isCorrect: false,
           explanation: 'Technical rendering is a separate concern. Simulated review is about perceptual and functional accessibility.',
@@ -105,25 +97,25 @@ export const lesson5_5: LessonConfig = {
       prompt: 'After contrast passes, what should you check next?',
       choices: [
         {
-          id: 'a',
+          stableId: 'animation-and-transition-speed',
           label: 'Animation and transition speed',
           isCorrect: false,
           explanation: 'Motion is a separate accessibility concern from color.',
         },
         {
-          id: 'b',
+          stableId: 'whether-any-element-still-relies-on-color-alone-to-communicate-m',
           label: 'Whether any element still relies on color alone to communicate meaning',
           isCorrect: true,
           explanation: 'Contrast and color-alone are separate concerns. A passing ratio does not fix a color-only problem.',
         },
         {
-          id: 'c',
+          stableId: 'typography-scale',
           label: 'Typography scale',
           isCorrect: false,
           explanation: 'Typography scale affects which contrast threshold applies, but is not the next audit step.',
         },
         {
-          id: 'd',
+          stableId: 'whether-the-brand-palette-is-on-trend',
           label: "Whether the brand palette is on-trend",
           isCorrect: false,
           explanation: 'Trend alignment is not an accessibility concern.',
