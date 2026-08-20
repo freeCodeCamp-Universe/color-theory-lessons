@@ -5,10 +5,30 @@ import { ContrastTool } from './ContrastTool.tsx';
 beforeEach(() => localStorage.clear());
 afterEach(() => cleanup());
 
-// Lightness values chosen so that the computed WCAG contrast ratio is:
-//   heading (4.5:1 threshold): l=58 → ~4.36 (fail), l=60 → ~4.65 (pass)
-//   helper  (4.5:1 threshold): l=60 → ~4.41 (fail), l=62 → ~4.70 (pass)
-//   button  (4.5:1 threshold): l=54 → ~4.48 (fail), l=53 → ~4.67 (pass)
+const boundaryCases = [
+  {
+    label: 'Section label',
+    below: { lightness: 59, ratio: '4.48' },
+    firstPassing: { lightness: 60, ratio: '4.65' },
+    above: { lightness: 61, ratio: '4.83' },
+  },
+  {
+    label: 'Helper text below input',
+    below: { lightness: 60, ratio: '4.41' },
+    firstPassing: { lightness: 61, ratio: '4.57' },
+    above: { lightness: 62, ratio: '4.70' },
+  },
+  {
+    label: 'Submit button',
+    below: { lightness: 54, ratio: '4.48' },
+    firstPassing: { lightness: 53, ratio: '4.67' },
+    above: { lightness: 52, ratio: '4.86' },
+  },
+] as const;
+
+function ratioPattern(ratio: string): RegExp {
+  return new RegExp(`ratio: ${ratio.replace('.', '\\.')}:1`);
+}
 
 describe('ContrastTool', () => {
   describe('completion', () => {
@@ -90,18 +110,28 @@ describe('ContrastTool', () => {
       expect(ratioTexts).toHaveLength(3);
     });
 
-    it('marks a pair as passing when its ratio meets the threshold', () => {
-      render(<ContrastTool interactive={true} />);
+    it.each(boundaryCases)(
+      'applies the threshold at each supported boundary step for $label',
+      ({ label, below, firstPassing, above }) => {
+        render(<ContrastTool interactive={true} />);
 
-      // Set heading to a passing value
-      fireEvent.change(
-        screen.getByRole('slider', { name: /Lightness for Section label/i }),
-        { target: { value: '60' } },
-      );
+        const slider = screen.getByRole('slider', {
+          name: new RegExp(`Lightness for ${label}`, 'i'),
+        });
 
-      // The "✓ readable" badge should appear (at least once)
-      expect(screen.getAllByText('✓ readable').length).toBeGreaterThan(0);
-    });
+        fireEvent.change(slider, { target: { value: below.lightness } });
+        expect(screen.getByText(ratioPattern(below.ratio))).toBeInTheDocument();
+        expect(screen.queryByText('✓ readable')).not.toBeInTheDocument();
+
+        fireEvent.change(slider, { target: { value: firstPassing.lightness } });
+        expect(screen.getByText(ratioPattern(firstPassing.ratio))).toBeInTheDocument();
+        expect(screen.getAllByText('✓ readable')).toHaveLength(1);
+
+        fireEvent.change(slider, { target: { value: above.lightness } });
+        expect(screen.getByText(ratioPattern(above.ratio))).toBeInTheDocument();
+        expect(screen.getAllByText('✓ readable')).toHaveLength(1);
+      },
+    );
   });
 
   describe('slider range', () => {
@@ -135,10 +165,21 @@ describe('ContrastTool', () => {
     it('shows failing pair labels in the retry message', () => {
       render(<ContrastTool interactive={true} />);
 
-      // All defaults fail — click check without changing anything
+      fireEvent.change(
+        screen.getByRole('slider', { name: /Lightness for Section label/i }),
+        { target: { value: '60' } },
+      );
+      fireEvent.change(
+        screen.getByRole('slider', { name: /Lightness for Helper text below input/i }),
+        { target: { value: '61' } },
+      );
       fireEvent.click(screen.getByRole('button', { name: 'check' }));
 
-      expect(screen.getByText(/Still failing:/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Still failing: Submit button. Select retry to continue adjusting.',
+        ),
+      ).toBeInTheDocument();
     });
   });
 
