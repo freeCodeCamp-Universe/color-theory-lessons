@@ -15,7 +15,7 @@ interface ProblemArea {
 const AREAS: ProblemArea[] = [
   { id: 'heading', label: 'Section label', textColor: '#858591', bgColor: '#2a2a40', fixBg: false, threshold: 4.5 },
   { id: 'helper', label: 'Helper text below input', textColor: '#5a5a6e', bgColor: '#2a2a40', fixBg: false, threshold: 4.5 },
-  { id: 'button', label: 'Submit button', textColor: '#ffffff', bgColor: '#8080a8', fixBg: true, threshold: 3 },
+  { id: 'button', label: 'Submit button', textColor: '#ffffff', bgColor: '#8080a8', fixBg: true, threshold: 4.5 },
 ];
 
 const AREA_GRADIENTS: Record<string, string> = Object.fromEntries(

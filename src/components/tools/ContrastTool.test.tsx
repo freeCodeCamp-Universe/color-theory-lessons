@@ -8,7 +8,7 @@ afterEach(() => cleanup());
 // Lightness values chosen so that the computed WCAG contrast ratio is:
 //   heading (4.5:1 threshold): l=58 → ~4.36 (fail), l=60 → ~4.65 (pass)
 //   helper  (4.5:1 threshold): l=60 → ~4.41 (fail), l=62 → ~4.70 (pass)
-//   button  (3:1 threshold):   l=65 → ~2.89 (fail), l=64 → ~3.00 (pass)
+//   button  (4.5:1 threshold): l=54 → ~4.48 (fail), l=53 → ~4.67 (pass)
 
 describe('ContrastTool', () => {
   describe('completion', () => {
@@ -26,7 +26,7 @@ describe('ContrastTool', () => {
       );
       fireEvent.change(
         screen.getByRole('slider', { name: /Lightness for Submit button/i }),
-        { target: { value: '60' } },
+        { target: { value: '53' } },
       );
 
       fireEvent.click(screen.getByRole('button', { name: 'check' }));
@@ -49,7 +49,7 @@ describe('ContrastTool', () => {
       );
       fireEvent.change(
         screen.getByRole('slider', { name: /Lightness for Submit button/i }),
-        { target: { value: '64' } },
+        { target: { value: '53' } },
       );
 
       fireEvent.click(screen.getByRole('button', { name: 'check' }));
@@ -61,7 +61,7 @@ describe('ContrastTool', () => {
       const onComplete = vi.fn();
       render(<ContrastTool interactive={true} onComplete={onComplete} />);
 
-      // Fix heading and helper; put button above 3:1 threshold (l=65 → ratio ~2.89)
+      // Fix heading and helper; leave the button just below 4.5:1.
       fireEvent.change(
         screen.getByRole('slider', { name: /Lightness for Section label/i }),
         { target: { value: '60' } },
@@ -72,7 +72,7 @@ describe('ContrastTool', () => {
       );
       fireEvent.change(
         screen.getByRole('slider', { name: /Lightness for Submit button/i }),
-        { target: { value: '65' } },
+        { target: { value: '54' } },
       );
 
       fireEvent.click(screen.getByRole('button', { name: 'check' }));
