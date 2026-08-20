@@ -43,6 +43,7 @@ describe('HSLSliderTool previewDimension — interactive', () => {
   it('changing the hue slider updates the HSL value display', () => {
     render(<HSLSliderTool interactive={true} previewDimension="h" />);
     const hueSlider = screen.getByRole('slider', { name: /^Hue: /i });
+    expect(hueSlider).toHaveAttribute('max', '359');
     fireEvent.change(hueSlider, { target: { value: '45' } });
     expect(screen.getByText(/H:45/)).toBeInTheDocument();
   });
@@ -75,6 +76,21 @@ describe('HSLSliderTool previewDimension — interactive', () => {
   });
 });
 
+describe('HSLSliderTool exercise', () => {
+  it('keeps the hue wheel and slider synchronized', () => {
+    render(<HSLSliderTool interactive={true} />);
+    const wheel = screen.getByRole('slider', { name: /Hue wheel/i });
+    const hueSlider = screen.getByRole('slider', { name: /^Hue: /i });
+
+    expect(screen.getByText(/hue wheel and slider/i)).toBeInTheDocument();
+    expect(hueSlider).toHaveAttribute('max', '359');
+    fireEvent.keyDown(wheel, { key: 'ArrowRight' });
+
+    expect(wheel).toHaveAttribute('aria-valuenow', '5');
+    expect(hueSlider).toHaveValue('5');
+  });
+});
+
 describe('HueWheel accessibility', () => {
   it('wheel is focusable in interactive mode', () => {
     render(<HSLSliderTool interactive={true} previewDimension="h" />);
@@ -86,5 +102,6 @@ describe('HueWheel accessibility', () => {
     render(<HSLSliderTool interactive={false} previewDimension="h" />);
     const wheel = screen.getByRole('slider', { name: /Hue wheel/i });
     expect(wheel).toHaveAttribute('tabindex', '-1');
+    expect(wheel).toHaveAttribute('aria-disabled', 'true');
   });
 });

@@ -1,7 +1,7 @@
 import { memo, useState, useEffect, useRef, useMemo } from 'react';
 import type { HSL } from '../../utils/color.ts';
 import { hslString } from '../../utils/color.ts';
-import { HueWheel } from './HueWheel.tsx';
+import { HUE_MAX, HueWheel } from './HueWheel.tsx';
 import shellStyles from './ToolShell.module.css';
 import styles from './HSLSliderTool.module.css';
 
@@ -109,7 +109,7 @@ export const HSLSliderTool = memo(function HSLSliderTool({ interactive = true, o
     const pLightGrad = `linear-gradient(to right, hsl(${preview.h},${preview.s}%,0%), hsl(${preview.h},${preview.s}%,50%), hsl(${preview.h},${preview.s}%,100%))`;
     const gradients = { h: pHueGrad, s: pSatGrad, l: pLightGrad };
     const labels = { h: 'Hue', s: 'Saturation', l: 'Lightness' };
-    const maxes = { h: 360, s: 100, l: 100 };
+    const maxes = { h: HUE_MAX, s: 100, l: 100 };
     const units = { h: '°', s: '%', l: '%' };
     const isHueDimension = previewDimension === 'h';
     return (
@@ -168,23 +168,30 @@ export const HSLSliderTool = memo(function HSLSliderTool({ interactive = true, o
       <span className={shellStyles.toolLabel}>HSL color lab</span>
 
       <div className={styles.root}>
-        {/* Swatches */}
-        <div className={styles.swatchRow}>
-          <div className={styles.swatchBox}>
-            <span className={styles.swatchLabel}>your color</span>
-            <div className={styles.swatch} style={{ backgroundColor: hslString(current) }} />
-            <span className={styles.hslValue}>
-              H:{current.h} S:{current.s}% L:{current.l}%
-            </span>
-          </div>
-          <div className={styles.swatchBox}>
-            <span className={styles.swatchLabel}>target</span>
-            <div className={styles.swatch} style={{ backgroundColor: hslString(target.target) }} />
-            <span className={styles.hslValue}>
-              {target.locked === 'h' ? `H:?` : `H:${target.target.h}`}{' '}
-              {target.locked === 's' ? `S:?` : `S:${target.target.s}%`}{' '}
-              {target.locked === 'l' ? `L:?` : `L:${target.target.l}%`}
-            </span>
+        <div style={{ display: 'flex', gap: 'var(--spacing-lg)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+          <HueWheel
+            hue={current.h}
+            interactive={interactive && target.locked === 'h' && !checked && !allDone}
+            onChange={(h) => updateChannel('h', h)}
+          />
+          {/* Swatches */}
+          <div className={styles.swatchRow} style={{ flex: 1, minWidth: '180px' }}>
+            <div className={styles.swatchBox}>
+              <span className={styles.swatchLabel}>your color</span>
+              <div className={styles.swatch} style={{ backgroundColor: hslString(current) }} />
+              <span className={styles.hslValue}>
+                H:{current.h} S:{current.s}% L:{current.l}%
+              </span>
+            </div>
+            <div className={styles.swatchBox}>
+              <span className={styles.swatchLabel}>target</span>
+              <div className={styles.swatch} style={{ backgroundColor: hslString(target.target) }} />
+              <span className={styles.hslValue}>
+                {target.locked === 'h' ? `H:?` : `H:${target.target.h}`}{' '}
+                {target.locked === 's' ? `S:?` : `S:${target.target.s}%`}{' '}
+                {target.locked === 'l' ? `L:?` : `L:${target.target.l}%`}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -194,9 +201,13 @@ export const HSLSliderTool = memo(function HSLSliderTool({ interactive = true, o
             {targetIdx + 1}/{TARGETS.length}: {target.name}
           </span>
           <p style={{ fontSize: '0.85rem', color: 'var(--secondary-foreground)', marginTop: '4px' }}>
-            Only the <strong style={{ color: 'var(--primary-foreground)' }}>
-              {target.locked === 'h' ? 'hue' : target.locked === 's' ? 'saturation' : 'lightness'}
-            </strong> slider is unlocked. Adjust it to match the target, then check.
+            {target.locked === 'h' ? (
+              <>The <strong style={{ color: 'var(--primary-foreground)' }}>hue wheel and slider</strong> are unlocked. Adjust either control to match the target, then check.</>
+            ) : (
+              <>Only the <strong style={{ color: 'var(--primary-foreground)' }}>
+                {target.locked === 's' ? 'saturation' : 'lightness'}
+              </strong> slider is unlocked. Adjust it to match the target, then check.</>
+            )}
           </p>
         </div>
 
@@ -204,7 +215,7 @@ export const HSLSliderTool = memo(function HSLSliderTool({ interactive = true, o
         <div className={styles.sliders}>
           {(['h', 's', 'l'] as const).map((ch) => {
             const isLocked = target.locked !== ch;
-            const max = ch === 'h' ? 360 : 100;
+            const max = ch === 'h' ? HUE_MAX : 100;
             const label = ch === 'h' ? 'Hue' : ch === 's' ? 'Saturation' : 'Lightness';
             const unit = ch === 'h' ? '°' : '%';
             const gradient = ch === 'h' ? hueGradient : ch === 's' ? satGradient : lightGradient;

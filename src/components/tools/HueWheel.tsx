@@ -9,6 +9,8 @@ interface HueWheelProps {
   onChange: (hue: number) => void;
 }
 
+export const HUE_MAX = 359;
+
 /**
  * A circular hue-selector widget.
  *
@@ -87,8 +89,9 @@ export const HueWheel = memo(function HueWheel({ hue, interactive, onChange }: H
       onBlur={() => setFocused(false)}
       tabIndex={interactive ? 0 : -1}
       role="slider"
+      aria-disabled={!interactive}
       aria-valuemin={0}
-      aria-valuemax={359}
+      aria-valuemax={HUE_MAX}
       aria-valuenow={hue}
       aria-label={`Hue wheel: ${hue}°`}
       style={{ cursor: interactive ? 'crosshair' : 'default', flexShrink: 0, outline: 'none' }}
