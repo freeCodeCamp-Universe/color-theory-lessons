@@ -1,10 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson6_3: LessonConfig = {
   id: 'u6-l3', unitId: 'unit-6',
-  title: 'Brand Constraints and Hierarchy',
+  title: LESSON_TITLES['u6-l3'],
   interactionType: 'brand-pressure',
-  glossaryTerms: ['accent overuse', 'brand color', 'supporting palette', 'tonal scale'],
   reviewTags: ['brand', 'hierarchy', 'neutrals', 'balance'],
   steps: [
     { text: 'Unit 1 showed that hierarchy requires restraint — accent colors lose impact when overused. Brand colors pose the same risk at a system level: chosen for marketing materials with high contrast and bold typography, they can overwhelm an interface when applied to backgrounds, small labels, icons, and states simultaneously.' },
@@ -26,30 +26,30 @@ export const lesson6_3: LessonConfig = {
       id: 'q1',
       prompt: 'Why is one brand color not enough to build a complete interface?',
       choices: [
-        { id: 'a', label: 'Brand colors are always too dark', isCorrect: false, explanation: 'Brand colors vary in darkness — that is not the core limitation.' },
-        { id: 'b', label: 'Interfaces need neutrals, surface levels, text hierarchy, states, and semantic roles — one hue cannot cover all of these without creating confusion', isCorrect: true, explanation: 'Correct. A single hue cannot serve structural, semantic, and interactive roles simultaneously without losing distinction.' },
-        { id: 'c', label: 'Regulations require multiple colors', isCorrect: false, explanation: 'No regulation specifies a minimum number of colors in an interface.' },
-        { id: 'd', label: 'Brand guidelines always forbid overuse', isCorrect: false, explanation: 'Brand guidelines do not typically restrict color count in this way.' },
+        { stableId: 'brand-colors-are-always-too-dark', label: 'Brand colors are always too dark', isCorrect: false, explanation: 'Brand colors vary in darkness — that is not the core limitation.' },
+        { stableId: 'interfaces-need-neutrals-surface-levels-text-hierarchy-states-an', label: 'Interfaces need neutrals, surface levels, text hierarchy, states, and semantic roles — one hue cannot cover all of these without creating confusion', isCorrect: true, explanation: 'Correct. A single hue cannot serve structural, semantic, and interactive roles simultaneously without losing distinction.' },
+        { stableId: 'regulations-require-multiple-colors', label: 'Regulations require multiple colors', isCorrect: false, explanation: 'No regulation specifies a minimum number of colors in an interface.' },
+        { stableId: 'brand-guidelines-always-forbid-overuse', label: 'Brand guidelines always forbid overuse', isCorrect: false, explanation: 'Brand guidelines do not typically restrict color count in this way.' },
       ],
     },
     {
       id: 'q2',
       prompt: 'A strong saturated brand color appears on page backgrounds, cards, buttons, links, icons, and badges simultaneously. What is the likely result?',
       choices: [
-        { id: 'a', label: 'The brand becomes more recognizable', isCorrect: false, explanation: 'Overuse actually makes the brand feel overwhelming, not more recognizable.' },
-        { id: 'b', label: 'Contrast improves everywhere', isCorrect: false, explanation: 'Contrast depends on lightness relationships, not on saturation of the dominant color.' },
-        { id: 'c', label: 'Hierarchy collapses — every element competes equally for attention, making the interface hard to scan', isCorrect: true, explanation: 'Correct. When everything uses the same emphasis, nothing stands out and scanning becomes difficult.' },
-        { id: 'd', label: 'Users trust the product more', isCorrect: false, explanation: 'Brand overuse typically reduces usability, which erodes trust.' },
+        { stableId: 'the-brand-becomes-more-recognizable', label: 'The brand becomes more recognizable', isCorrect: false, explanation: 'Overuse actually makes the brand feel overwhelming, not more recognizable.' },
+        { stableId: 'contrast-improves-everywhere', label: 'Contrast improves everywhere', isCorrect: false, explanation: 'Contrast depends on lightness relationships, not on saturation of the dominant color.' },
+        { stableId: 'hierarchy-collapses-every-element-competes-equally-for-attention', label: 'Hierarchy collapses — every element competes equally for attention, making the interface hard to scan', isCorrect: true, explanation: 'Correct. When everything uses the same emphasis, nothing stands out and scanning becomes difficult.' },
+        { stableId: 'users-trust-the-product-more', label: 'Users trust the product more', isCorrect: false, explanation: 'Brand overuse typically reduces usability, which erodes trust.' },
       ],
     },
     {
       id: 'q3',
       prompt: 'What is the most effective role for a saturated brand color in an interface?',
       choices: [
-        { id: 'a', label: 'Page backgrounds', isCorrect: false, explanation: 'Saturated page backgrounds make text hard to read and create visual fatigue.' },
-        { id: 'b', label: 'Primary interactive elements — buttons, links, and key highlights — where it needs to attract attention', isCorrect: true, explanation: 'Brand colors earn attention, so they belong on the interactive elements that need to attract clicks.' },
-        { id: 'c', label: 'All text colors', isCorrect: false, explanation: 'Saturated colors on text can reduce readability and create visual noise.' },
-        { id: 'd', label: 'Chart backgrounds', isCorrect: false, explanation: 'Chart backgrounds should be neutral to avoid interfering with data encoding.' },
+        { stableId: 'page-backgrounds', label: 'Page backgrounds', isCorrect: false, explanation: 'Saturated page backgrounds make text hard to read and create visual fatigue.' },
+        { stableId: 'primary-interactive-elements-buttons-links-and-key-highlights-wh', label: 'Primary interactive elements — buttons, links, and key highlights — where it needs to attract attention', isCorrect: true, explanation: 'Brand colors earn attention, so they belong on the interactive elements that need to attract clicks.' },
+        { stableId: 'all-text-colors', label: 'All text colors', isCorrect: false, explanation: 'Saturated colors on text can reduce readability and create visual noise.' },
+        { stableId: 'chart-backgrounds', label: 'Chart backgrounds', isCorrect: false, explanation: 'Chart backgrounds should be neutral to avoid interfering with data encoding.' },
       ],
     },
   ],

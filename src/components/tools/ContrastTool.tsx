@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { hexToHsl } from '../../utils/color.ts';
+import { hexToHsl, hexToRgb, contrastRatioWcag } from '../../utils/color.ts';
 import shellStyles from './ToolShell.module.css';
 
 interface ProblemArea {
@@ -8,21 +8,47 @@ interface ProblemArea {
   textColor: string;
   bgColor: string;
   fixBg: boolean; // true = user adjusts bg lightness; false = adjust text lightness
-  minL: number; // lightness boundary that makes it "readable"
+  /** WCAG AA contrast ratio threshold required to pass. */
+  threshold: number;
 }
 
 const AREAS: ProblemArea[] = [
-  { id: 'heading', label: 'Section label', textColor: '#858591', bgColor: '#2a2a40', fixBg: false, minL: 75 },
-  { id: 'helper', label: 'Helper text below input', textColor: '#5a5a6e', bgColor: '#2a2a40', fixBg: false, minL: 65 },
-  { id: 'button', label: 'Submit button', textColor: '#ffffff', bgColor: '#8080a8', fixBg: true, minL: 35 },
+  { id: 'heading', label: 'Section label', textColor: '#858591', bgColor: '#2a2a40', fixBg: false, threshold: 4.5 },
+  { id: 'helper', label: 'Helper text below input', textColor: '#5a5a6e', bgColor: '#2a2a40', fixBg: false, threshold: 4.5 },
+  { id: 'button', label: 'Submit button', textColor: '#ffffff', bgColor: '#8080a8', fixBg: true, threshold: 4.5 },
 ];
 
 const AREA_GRADIENTS: Record<string, string> = Object.fromEntries(
   AREAS.map((area) => {
     const { h, s } = area.fixBg ? hexToHsl(area.bgColor) : hexToHsl(area.textColor);
-    return [area.id, `linear-gradient(to right, hsl(${h},${s}%,5%), hsl(${h},${s}%,50%), hsl(${h},${s}%,95%))`];
+    return [area.id, `linear-gradient(to right, hsl(${h},${s}%,0%), hsl(${h},${s}%,50%), hsl(${h},${s}%,100%))`];
   }),
 );
+
+/** Compute the WCAG contrast ratio for a problem area given the current lightness value. */
+function computeRatio(area: ProblemArea, l: number): number {
+  const base = area.fixBg ? hexToHsl(area.bgColor) : hexToHsl(area.textColor);
+  const adjustedHex = hslToApproxRgb(base.h, base.s, l);
+  const fixedRgb = hexToRgb(area.fixBg ? area.textColor : area.bgColor);
+  return contrastRatioWcag(adjustedHex, fixedRgb);
+}
+
+/** Convert HSL to an RGB object (in-memory, no hex round-trip needed). */
+function hslToApproxRgb(h: number, s: number, l: number): { r: number; g: number; b: number } {
+  const sn = s / 100;
+  const ln = l / 100;
+  const c = (1 - Math.abs(2 * ln - 1)) * sn;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = ln - c / 2;
+  let r = 0, g = 0, b = 0;
+  if (h < 60) { r = c; g = x; }
+  else if (h < 120) { r = x; g = c; }
+  else if (h < 180) { g = c; b = x; }
+  else if (h < 240) { g = x; b = c; }
+  else if (h < 300) { r = x; b = c; }
+  else { r = c; b = x; }
+  return { r: Math.round((r + m) * 255), g: Math.round((g + m) * 255), b: Math.round((b + m) * 255) };
+}
 
 interface ContrastToolProps {
   interactive?: boolean;
@@ -39,8 +65,7 @@ export const ContrastTool = memo(function ContrastTool({ interactive = true, onC
   const [checked, setChecked] = useState(false);
 
   function isFixed(area: ProblemArea) {
-    const l = lightness[area.id];
-    return area.fixBg ? l <= area.minL : l >= area.minL;
+    return computeRatio(area, lightness[area.id]) >= area.threshold;
   }
 
   function handleChange(id: string, val: number) {
@@ -61,6 +86,10 @@ export const ContrastTool = memo(function ContrastTool({ interactive = true, onC
     setChecked(false);
   }
 
+  const failingLabels = checked && !completed
+    ? AREAS.filter((area) => !isFixed(area)).map((area) => area.label)
+    : [];
+
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>contrast repair lab</span>
@@ -71,7 +100,8 @@ export const ContrastTool = memo(function ContrastTool({ interactive = true, onC
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
         {AREAS.map((area) => {
           const l = lightness[area.id];
-          const fixed = isFixed(area);
+          const ratio = computeRatio(area, l);
+          const fixed = ratio >= area.threshold;
 
           // Compute displayed color
           const baseHSL = area.fixBg
@@ -107,6 +137,11 @@ export const ContrastTool = memo(function ContrastTool({ interactive = true, onC
                 </span>
               </div>
 
+              {/* Ratio display */}
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: fixed ? 'var(--green)' : 'var(--yellow)' }}>
+                ratio: {ratio.toFixed(2)}:1 — need {area.threshold}:1 (WCAG AA)
+              </div>
+
               {/* Preview */}
               <div
                 style={{
@@ -139,8 +174,8 @@ export const ContrastTool = memo(function ContrastTool({ interactive = true, onC
                 </div>
                 <input
                   type="range"
-                  min={5}
-                  max={95}
+                  min={0}
+                  max={100}
                   value={l}
                   disabled={completed || !interactive}
                   style={{
@@ -184,7 +219,9 @@ export const ContrastTool = memo(function ContrastTool({ interactive = true, onC
       {checked && !completed && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--red)' }}>
-            One or more color pairs do not pass yet. Select retry to continue adjusting.
+            {failingLabels.length > 0
+              ? `Still failing: ${failingLabels.join(', ')}. Select retry to continue adjusting.`
+              : 'One or more color pairs do not pass yet. Select retry to continue adjusting.'}
           </p>
           <button
             onClick={handleRetry}

@@ -6,11 +6,14 @@ import { AppProvider } from '../../state/app-provider.tsx';
 import { useAppState } from '../../state/app-context.tsx';
 import type { LessonConfig } from '../../types/lesson.ts';
 
+const sessionKey = (lessonId: string) => `color-theory-course-lesson-session:${lessonId}`;
+
 vi.mock('../tools/ToolRenderer.tsx', async () => {
-  const { useEffect } = await import('react');
+  const { useEffect, useRef } = await import('react');
   return {
     ToolRenderer: ({ onChallengeComplete }: { onChallengeComplete?: () => void }) => {
-      useEffect(() => { onChallengeComplete?.(); }, []);
+      const initialOnChallengeComplete = useRef(onChallengeComplete);
+      useEffect(() => { initialOnChallengeComplete.current?.(); }, []);
       return null;
     },
   };
@@ -24,7 +27,6 @@ function StateReader() {
     <>
       <div data-testid="quiz-scores">{JSON.stringify(state.quizBestScores)}</div>
       <div data-testid="completed-lessons">{state.completedLessons.join(',')}</div>
-      <div data-testid="glossary-terms">{state.glossaryTermsSeen.join(',')}</div>
       <div data-testid="completed-quizzes">{state.completedQuizzes.join(',')}</div>
     </>
   );
@@ -60,20 +62,19 @@ function makeLesson(overrides?: Partial<LessonConfig>): LessonConfig {
         id: 'q1',
         prompt: 'First question?',
         choices: [
-          { id: 'a', label: 'Correct Answer', isCorrect: true },
-          { id: 'b', label: 'Wrong Answer', isCorrect: false },
+          { stableId: 'correct-answer', label: 'Correct Answer', isCorrect: true },
+          { stableId: 'wrong-answer', label: 'Wrong Answer', isCorrect: false },
         ],
       },
       {
         id: 'q2',
         prompt: 'Second question?',
         choices: [
-          { id: 'a', label: 'Right Choice', isCorrect: true },
-          { id: 'b', label: 'Bad Choice', isCorrect: false },
+          { stableId: 'right-choice', label: 'Right Choice', isCorrect: true },
+          { stableId: 'bad-choice', label: 'Bad Choice', isCorrect: false },
         ],
       },
     ],
-    glossaryTerms: [],
     reviewTags: [],
     ...overrides,
   };
@@ -203,25 +204,146 @@ describe('LessonPlayer', () => {
     });
   });
 
-  describe('glossary terms dispatch', () => {
-    it('dispatches ADD_GLOSSARY_TERMS when lesson has glossaryTerms', async () => {
-      renderLesson(makeLesson({ quizItems: [], glossaryTerms: ['hue', 'saturation'] }));
+  it('restores the selected choice and submitted feedback on the final quiz question after remounting', async () => {
+    const lesson = makeLesson();
+    const firstRender = renderLesson(lesson);
+    await advanceThroughChallenge();
 
-      fireEvent.click(await screen.findByRole('button', { name: 'finish lesson →' }));
+    fireEvent.click(screen.getByRole('button', { name: /Correct Answer/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'next question →' }));
 
-      await waitFor(() => {
-        expect(screen.getByTestId('glossary-terms').textContent).toBe('hue,saturation');
-      });
+    fireEvent.click(screen.getByRole('button', { name: /Right Choice/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+    expect(screen.getByRole('button', { name: 'finish lesson →' })).toBeInTheDocument();
+    firstRender.unmount();
+
+    renderLesson(lesson);
+    expect(screen.getByText('question 2 of 2')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'finish lesson →' })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'finish lesson →' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('2 of 2 quiz questions correct.')).toBeInTheDocument();
+    });
+  });
+
+  it('restores the final score screen after remounting an unchanged completed quiz', async () => {
+    const lesson = makeLesson();
+    const firstRender = renderLesson(lesson);
+    await advanceThroughChallenge();
+
+    fireEvent.click(screen.getByRole('button', { name: /Correct Answer/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'next question →' }));
+    fireEvent.click(screen.getByRole('button', { name: /Right Choice/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'finish lesson →' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('2 of 2 quiz questions correct.')).toBeInTheDocument();
+    });
+    firstRender.unmount();
+
+    renderLesson(lesson);
+    expect(screen.getByText('2 of 2 quiz questions correct.')).toBeInTheDocument();
+  });
+
+  it('keeps saved answers attached to the same logical choice after a harmless choice reorder', async () => {
+    const originalLesson = makeLesson();
+    const firstRender = renderLesson(originalLesson);
+    await advanceThroughChallenge();
+
+    fireEvent.click(screen.getByRole('button', { name: /Correct Answer/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'next question →' }));
+    firstRender.unmount();
+
+    const reorderedLesson = makeLesson({
+      quizItems: [
+        {
+          id: 'q1',
+          prompt: 'First question?',
+          choices: [
+            { stableId: 'wrong-answer', label: 'Wrong Answer', isCorrect: false },
+            { stableId: 'correct-answer', label: 'Correct Answer', isCorrect: true },
+          ],
+        },
+        {
+          id: 'q2',
+          prompt: 'Second question?',
+          choices: [
+            { stableId: 'bad-choice', label: 'Bad Choice', isCorrect: false },
+            { stableId: 'right-choice', label: 'Right Choice', isCorrect: true },
+          ],
+        },
+      ],
     });
 
-    it('does not dispatch ADD_GLOSSARY_TERMS when glossaryTerms is empty', async () => {
-      renderLesson(makeLesson({ quizItems: [], glossaryTerms: [] }));
+    renderLesson(reorderedLesson);
+    expect(screen.getByText('question 2 of 2')).toBeInTheDocument();
+    expect(screen.getByText('Second question?')).toBeInTheDocument();
+    expect(screen.getByText('A.')).toBeInTheDocument();
+    expect(screen.getByText('B.')).toBeInTheDocument();
 
-      fireEvent.click(await screen.findByRole('button', { name: 'finish lesson →' }));
+    fireEvent.click(screen.getByRole('button', { name: /Right Choice/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'finish lesson →' }));
 
-      await waitFor(() => {
-        expect(screen.getByTestId('glossary-terms').textContent).toBe('');
-      });
+    await waitFor(() => {
+      const scores = JSON.parse(screen.getByTestId('quiz-scores').textContent ?? '{}');
+      expect(scores['test-lesson']).toBe(100);
     });
+  });
+
+  it('restarts only the quiz when the saved quiz signature no longer matches', async () => {
+    const lesson = makeLesson();
+    const firstRender = renderLesson(lesson);
+    await advanceThroughChallenge();
+
+    fireEvent.click(screen.getByRole('button', { name: /Correct Answer/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'next question →' }));
+    firstRender.unmount();
+
+    renderLesson(makeLesson({
+      quizItems: [
+        {
+          id: 'q1',
+          prompt: 'First question?',
+          choices: [
+            { stableId: 'correct-answer', label: 'Updated Correct Answer', isCorrect: true },
+            { stableId: 'wrong-answer', label: 'Wrong Answer', isCorrect: false },
+          ],
+        },
+        ...lesson.quizItems.slice(1),
+      ],
+    }));
+
+    expect(screen.getByText('question 1 of 2')).toBeInTheDocument();
+    expect(screen.queryByText('1 / 1')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'check' })).toBeDisabled();
+  });
+
+  it('invalidates legacy quiz sessions without a quiz signature while preserving challenge completion', async () => {
+    const lesson = makeLesson();
+
+    sessionStorage.setItem(sessionKey(lesson.id), JSON.stringify({
+      version: 1,
+      phase: 'quiz',
+      stepIndex: 0,
+      challengeDone: true,
+      quizIndex: 1,
+      answers: [{ questionId: 'q1', choiceId: 'a', isCorrect: true }],
+      selectedChoice: 'b',
+      submitted: true,
+    }));
+
+    renderLesson(lesson);
+
+    expect(screen.getByText('question 1 of 2')).toBeInTheDocument();
+    expect(screen.getByText('First question?')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'check' })).toBeDisabled();
   });
 });

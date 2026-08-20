@@ -1,15 +1,11 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson4_4: LessonConfig = {
   id: 'u4-l4',
   unitId: 'unit-4',
-  title: 'What Color Perception Means for Design',
+  title: LESSON_TITLES['u4-l4'],
   interactionType: 'color-only-detector',
-  glossaryTerms: [
-    'color-dependent meaning',
-    'ambiguous element',
-    'perceptual robustness',
-  ],
   reviewTags: ['color-alone', 'observation', 'accessibility', 'ui-patterns'],
   steps: [
     {
@@ -42,14 +38,14 @@ export const lesson4_4: LessonConfig = {
       prompt: 'Why do status dots with only red and green hues break down under CVD?',
       choices: [
         {
-          id: 'a',
+          stableId: 'red-and-green-are-ugly-together',
           label: 'Red and green are ugly together',
           isCorrect: false,
           explanation:
             'Aesthetics are not the issue. The problem is that deuteranopia and protanopia make red and green look very similar, removing the only distinction.',
         },
         {
-          id: 'b',
+          stableId: 'under-protan-and-deutan-cvd-those-hues-converge-and-the-dots-bec',
           label:
             'Under protan and deutan CVD, those hues converge and the dots become indistinguishable',
           isCorrect: true,
@@ -57,14 +53,14 @@ export const lesson4_4: LessonConfig = {
             'When the sole distinguishing feature is a red-green hue difference, CVD that affects red-green perception removes that distinction entirely.',
         },
         {
-          id: 'c',
+          stableId: 'screens-cannot-display-red-and-green-at-the-same-time',
           label: 'Screens cannot display red and green at the same time',
           isCorrect: false,
           explanation:
             'Screens display both fine. The issue is how certain visual systems perceive them, not how the display produces them.',
         },
         {
-          id: 'd',
+          stableId: 'the-dots-are-too-small-to-see-color-clearly',
           label: 'The dots are too small to see color clearly',
           isCorrect: false,
           explanation:
@@ -77,14 +73,14 @@ export const lesson4_4: LessonConfig = {
       prompt: 'What makes a chart series robust against color perception differences?',
       choices: [
         {
-          id: 'a',
+          stableId: 'using-only-blue-and-orange-since-those-are-safe-for-everyone',
           label: 'Using only blue and orange, since those are safe for everyone',
           isCorrect: false,
           explanation:
             'No two-color pair is universally safe across all CVD types. Robustness comes from pairing color with other visual cues.',
         },
         {
-          id: 'b',
+          stableId: 'pairing-hue-with-other-visual-signals-like-labels-patterns-or-li',
           label:
             'Pairing hue with other visual signals like labels, patterns, or line styles',
           isCorrect: true,
@@ -92,14 +88,14 @@ export const lesson4_4: LessonConfig = {
             'When color is not the only way to tell series apart, the chart remains comprehensible even when hue differences are reduced or lost.',
         },
         {
-          id: 'c',
+          stableId: 'using-maximum-saturation-for-every-series',
           label: 'Using maximum saturation for every series',
           isCorrect: false,
           explanation:
             'High saturation does not solve the problem — two saturated colors can still look the same under CVD.',
         },
         {
-          id: 'd',
+          stableId: 'avoiding-color-entirely-and-using-only-gray-shades',
           label: 'Avoiding color entirely and using only gray shades',
           isCorrect: false,
           explanation:
@@ -112,14 +108,14 @@ export const lesson4_4: LessonConfig = {
       prompt: 'What is the common pattern behind designs that break down when color perception varies?',
       choices: [
         {
-          id: 'a',
+          stableId: 'they-use-too-many-colors',
           label: 'They use too many colors',
           isCorrect: false,
           explanation:
             'The number of colors is not the issue. Even two colors can fail if hue is the only distinguishing signal.',
         },
         {
-          id: 'b',
+          stableId: 'they-rely-on-hue-difference-as-the-only-visual-signal-carrying-m',
           label:
             'They rely on hue difference as the only visual signal carrying meaning',
           isCorrect: true,
@@ -127,14 +123,14 @@ export const lesson4_4: LessonConfig = {
             'When meaning lives entirely in hue and that hue distinction is lost, nothing else communicates the information.',
         },
         {
-          id: 'c',
+          stableId: 'they-do-not-use-enough-contrast',
           label: 'They do not use enough contrast',
           isCorrect: false,
           explanation:
             'Contrast is a related but separate concern. An element can have good lightness contrast but still rely on hue alone for its meaning.',
         },
         {
-          id: 'd',
+          stableId: 'they-use-old-fashioned-color-choices',
           label: 'They use old-fashioned color choices',
           isCorrect: false,
           explanation:
