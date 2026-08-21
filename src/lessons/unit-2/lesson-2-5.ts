@@ -65,10 +65,10 @@ export const lesson2_5: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Dark interfaces use near-black or very dark surfaces as primary backgrounds.',
-    'A dark background amplifies perceived saturation — colors that look moderate on white can appear intense on dark.',
-    'Luminous colors (light, warm, or vivid values on very dark surfaces) can cause eye strain and feel harsh.',
-    'Color choices made on a light canvas may need significant adjustment before they work on a dark interface.',
-    'Testing on the actual dark background is the only reliable way to evaluate colors for dark mode.',
+    'A display pixel typically combines independently controlled red, green, and blue subpixels.',
+    'At a normal viewing distance, subpixel light combines in your visual system, so you perceive one color per pixel.',
+    'Displays direct controlled light toward the viewer, while paint and ink reflect ambient light.',
+    'A bright accent has greater luminance contrast against a dark background, which can make it appear more prominent.',
+    'Changing the background can change an accent’s perceived prominence without changing its RGB values.',
   ],
 };

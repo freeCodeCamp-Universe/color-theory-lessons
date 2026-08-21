@@ -65,10 +65,10 @@ export const lesson2_3: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Screen logic: mixing more light makes colors brighter; combining all primaries at full strength gives white.',
-    'Paint logic: mixing more pigment makes colors darker; all primaries combined approach black.',
-    'The two mental models are not interchangeable — applying paint logic to screens produces wrong predictions.',
-    'Designers who move between print and screen work need to consciously switch models.',
-    'Black on a screen is the complete absence of emitted light, not a color mixed from other colors.',
+    'Increasing RGB channel values adds emitted light; raising all three values moves the color toward white.',
+    'Mixing pigments often increases the range of wavelengths absorbed, producing darker and less saturated results.',
+    'Paint and screen models are not interchangeable. Applying paint logic to screens produces wrong predictions.',
+    'Identify whether color comes from emitted light or a material before predicting how it will mix.',
+    'A screen color becomes darker when its RGB values decrease and the display emits less light; no black pigment is added.',
   ],
 };

@@ -68,10 +68,10 @@ export const lesson2_4: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Color gamut is the full range of colors a device or medium can reproduce.',
-    'Screens generally have a wider gamut than print — some screen colors simply cannot be reproduced in ink.',
-    'Pigments absorb certain wavelengths; the wavelengths not absorbed are what the eye perceives as color.',
-    'Subtractive primaries (cyan, magenta, yellow) each absorb one third of white light when fully applied.',
-    'Pantone is a standardized physical color reference system used to communicate exact color intent across screens and print, where screen preview cannot be trusted.',
+    'A gamut is the range of colors a device or medium can reproduce.',
+    'A color inside a display’s gamut can fall outside the gamut of a specific ink, printer, and paper combination.',
+    'Pigments and inks absorb some wavelengths of incoming light and reflect others toward the viewer.',
+    'A screen preview cannot guarantee how ink will look on a physical material.',
+    'A physical color standard such as a Pantone swatch provides a shared target, but material, finish, lighting, and swatch condition still affect its appearance.',
   ],
 };
