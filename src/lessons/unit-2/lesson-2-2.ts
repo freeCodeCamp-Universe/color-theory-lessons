@@ -62,7 +62,7 @@ export const lesson2_2: LessonConfig = {
       choices: [
         { stableId: 'red-and-green', label: 'Red and green', isCorrect: false, explanation: 'High red and green with low blue produces yellow, not purple.' },
         { stableId: 'green-and-blue', label: 'Green and blue', isCorrect: false, explanation: 'High green and blue with low red produces cyan. Purple requires red and blue.' },
-        { stableId: 'red-and-blue', label: 'Red and blue', isCorrect: true, explanation: 'Purple uses red and blue light, usually with blue higher than red, while green stays low. Equal high values of red and blue produce magenta.' },
+        { stableId: 'red-and-blue', label: 'Red and blue', isCorrect: true, explanation: 'A vivid purple uses elevated red and blue channels while green stays low. Changing the balance and intensity of red and blue produces different purple colors.' },
         { stableId: 'all-three-equally', label: 'All three equally', isCorrect: false, explanation: 'Equal RGB channels represent a neutral gray or white. A purple hue requires more blue and red than green.' },
       ],
     },
