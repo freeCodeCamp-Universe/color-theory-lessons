@@ -29,7 +29,7 @@ export function ChallengeRenderer({ challengeType, onComplete, sessionKey }: Cha
     case 'read-interface':
       return <ReadInterfaceChallenge onComplete={onComplete} sessionKey={sessionKey} />;
     case 'channel-prediction':
-      return <ChannelPredictionChallenge onComplete={onComplete} />;
+      return <ChannelPredictionChallenge onComplete={onComplete} sessionKey={sessionKey} />;
     case 'theme-from-scratch':
       return <ThemeFromScratchChallenge onComplete={onComplete} />;
     case 'simulation-spotter':

@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { MilestonePlayer } from './MilestonePlayer.tsx';
 import { AppProvider } from '../../state/app-provider.tsx';
 import { useAppState } from '../../state/app-context.tsx';
+import { getMilestoneById } from '../../data/milestones.ts';
 import type { MilestoneConfig } from '../../types/milestone.ts';
 
 vi.mock('./ChallengeRenderer.tsx', () => ({
@@ -344,6 +345,31 @@ describe('MilestonePlayer', () => {
       fireEvent.click(screen.getByRole('button', { name: 'complete test challenge' }));
       expect(screen.getByText('3 of 3 points earned')).toBeInTheDocument();
       expect(screen.getByTestId('completed-milestones')).toHaveTextContent('');
+    });
+
+    it('unlocks Unit 3 after passing the configured Milestone 2 flow', async () => {
+      const milestone = getMilestoneById('milestone-2');
+      if (!milestone) throw new Error('Milestone 2 configuration was not found');
+      renderMilestone(milestone);
+      completeChallengePart();
+
+      for (let index = 0; index < 3; index += 1) {
+        const choices = screen.getAllByRole('radio');
+        fireEvent.click(choices[index === 0 ? 0 : 1]);
+        fireEvent.click(screen.getByRole('button', { name: 'check' }));
+        fireEvent.click(screen.getByRole('button', {
+          name: index < 2 ? 'next →' : 'finish milestone →',
+        }));
+      }
+
+      expect(screen.getByText('4 of 6 points.', { exact: false })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'continue to Unit 3 →' })).toHaveAttribute(
+        'href',
+        '/lesson/u3-l1',
+      );
+      await waitFor(() => {
+        expect(screen.getByTestId('completed-milestones')).toHaveTextContent('milestone-2');
+      });
     });
 
     it('moves focus when the learner advances to a new phase or question', () => {
