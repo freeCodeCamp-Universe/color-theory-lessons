@@ -66,7 +66,7 @@ export const lesson2_3: LessonConfig = {
   ],
   keyPoints: [
     'Increasing RGB channel values adds emitted light; raising all three values moves the color toward white.',
-    'Mixing pigments often increases the wavelengths absorbed, producing darker and less saturated results.',
+    'Mixing pigments often increases the range of wavelengths absorbed, producing darker and less saturated results.',
     'Paint and screen models are not interchangeable. Applying paint logic to screens produces wrong predictions.',
     'Identify whether color comes from emitted light or a material before predicting how it will mix.',
     'A screen color becomes darker when its RGB values decrease and the display emits less light; no black pigment is added.',
