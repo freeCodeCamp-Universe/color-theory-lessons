@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { hexToRgb, hexToHsl } from '../../utils/color.ts';
+import { hexToRgb, hslToHex } from '../../utils/color.ts';
 import shellStyles from './ToolShell.module.css';
 import styles from './FormatRevealTool.module.css';
 
@@ -66,6 +66,75 @@ interface FormatRevealToolProps {
   onComplete?: () => void;
 }
 
+interface HslDisplay {
+  h: number;
+  s: number;
+  l: number;
+}
+
+function hexToPreciseHsl(hex: string): HslDisplay {
+  const { r, g, b } = hexToRgb(hex);
+  const rn = r / 255;
+  const gn = g / 255;
+  const bn = b / 255;
+  const max = Math.max(rn, gn, bn);
+  const min = Math.min(rn, gn, bn);
+  const l = (max + min) / 2;
+
+  if (max === min) {
+    return { h: 0, s: 0, l: l * 100 };
+  }
+
+  const d = max - min;
+  const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+  let h: number;
+
+  switch (max) {
+    case rn:
+      h = ((gn - bn) / d + (gn < bn ? 6 : 0)) / 6;
+      break;
+    case gn:
+      h = ((bn - rn) / d + 2) / 6;
+      break;
+    default:
+      h = ((rn - gn) / d + 4) / 6;
+      break;
+  }
+
+  return { h: h * 360, s: s * 100, l: l * 100 };
+}
+
+function roundTo(value: number, decimals: number): number {
+  return Number(value.toFixed(decimals));
+}
+
+function formatHslValue(value: number): string {
+  return Number.isInteger(value) ? String(value) : value.toString();
+}
+
+function getRoundTripHsl(hex: string): HslDisplay {
+  const precise = hexToPreciseHsl(hex);
+  const targetHex = hex.toUpperCase();
+
+  for (let decimals = 0; decimals <= 4; decimals += 1) {
+    const candidate = {
+      h: roundTo(precise.h, decimals),
+      s: roundTo(precise.s, decimals),
+      l: roundTo(precise.l, decimals),
+    };
+
+    if (hslToHex(candidate.h, candidate.s, candidate.l).toUpperCase() === targetHex) {
+      return candidate;
+    }
+  }
+
+  return {
+    h: roundTo(precise.h, 4),
+    s: roundTo(precise.s, 4),
+    l: roundTo(precise.l, 4),
+  };
+}
+
 export const FormatRevealTool = memo(function FormatRevealTool({ interactive = true, onComplete }: FormatRevealToolProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [revealed, setRevealed] = useState<Set<string>>(new Set());
@@ -84,7 +153,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({ interactive = t
 
   const selected = ELEMENTS.find((e) => e.id === selectedId) ?? null;
   const rgb = selected ? hexToRgb(selected.hex) : null;
-  const hsl = selected ? hexToHsl(selected.hex) : null;
+  const hsl = selected ? getRoundTripHsl(selected.hex) : null;
 
   const remaining = ELEMENTS.length - revealed.size;
 
@@ -226,7 +295,9 @@ export const FormatRevealTool = memo(function FormatRevealTool({ interactive = t
                 </div>
                 <div className={styles.formatBlock}>
                   <span className={styles.formatName}>HSL</span>
-                  <code className={styles.formatValue}>hsl({hsl.h}, {hsl.s}%, {hsl.l}%)</code>
+                  <code className={styles.formatValue}>
+                    hsl({formatHslValue(hsl.h)}, {formatHslValue(hsl.s)}%, {formatHslValue(hsl.l)}%)
+                  </code>
                   <p className={styles.formatNote}>Hue, saturation, lightness. Often easier for design-oriented adjustments.</p>
                 </div>
               </div>

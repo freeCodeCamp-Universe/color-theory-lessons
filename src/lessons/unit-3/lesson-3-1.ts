@@ -18,7 +18,7 @@ export const lesson3_1: LessonConfig = {
       text: 'Three formats are especially common: HEX, RGB, and HSL. They all describe the same visible colors — just in different ways. HEX is compact and common in CSS. RGB maps directly to screen light channels. HSL matches how designers often describe adjustments.',
     },
     {
-      text: 'One important thing: a single visible color can be expressed in multiple valid formats. The swatch does not change — only the representation does. HEX #1E40AF, rgb(30, 64, 175), and hsl(224, 71%, 40%) can all describe the same blue.',
+      text: 'One important thing: a single visible color can be expressed in multiple valid formats. The swatch does not change — only the representation does. HEX #1E40AF, rgb(30, 64, 175), and hsl(225.9, 70.7%, 40.2%) can all describe the same blue.',
     },
     {
       text: 'Click each colored element in the UI mockup. A panel will reveal the same color in all three formats. Notice how the visible result stays exactly the same while the representation changes.',
@@ -84,7 +84,7 @@ export const lesson3_1: LessonConfig = {
           label: 'Yes — HEX, RGB, and HSL can all describe the same visible color',
           isCorrect: true,
           explanation:
-            'For example, #1E40AF, rgb(30, 64, 175), and hsl(224, 71%, 40%) are all valid descriptions of the same blue. The swatch stays the same; only the notation changes.',
+            'For example, #1E40AF, rgb(30, 64, 175), and hsl(225.9, 70.7%, 40.2%) are all valid descriptions of the same blue. The swatch stays the same; only the notation changes.',
         },
         {
           stableId: 'only-if-the-color-is-a-standard-web-safe-color',
