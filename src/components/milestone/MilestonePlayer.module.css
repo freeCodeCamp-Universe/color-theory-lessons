@@ -116,6 +116,33 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.choicesLegend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.choiceRadio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .choice {
@@ -134,12 +161,17 @@
   width: 100%;
 }
 
-.choice:hover:not(.chosen):not(.correct):not(.incorrect) {
+.choice:hover:not(.chosen):not(.correct):not(.incorrect):has(input:not(:disabled)) {
   border-color: var(--secondary-foreground);
   background-color: var(--gray-75);
 }
 
-.choice:disabled {
+.choice:has(input:focus-visible) {
+  outline: 2px solid var(--accent-cta);
+  outline-offset: 1px;
+}
+
+.choice:has(input:disabled) {
   cursor: default;
   opacity: 1;
 }
