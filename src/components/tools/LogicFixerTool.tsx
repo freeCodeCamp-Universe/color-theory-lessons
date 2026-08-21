@@ -23,10 +23,10 @@ const SCENARIOS: Scenario[] = [
     ],
   },
   {
-    statement: '"Setting the red and green channels to full intensity will make a muddy brown."',
+    statement: '"Setting the red and green channels to full intensity while blue remains off will make a muddy brown."',
     choices: [
       { id: 'a', label: 'Red and green light behave the same way as red and green paint.', isCorrect: false },
-      { id: 'b', label: 'Red and green light at full intensity produce yellow, not brown.', isCorrect: true },
+      { id: 'b', label: 'With blue off, full-intensity red and green light produce yellow, not brown.', isCorrect: true },
       { id: 'c', label: 'Adding blue light is what makes red and green produce yellow.', isCorrect: false },
       { id: 'd', label: 'Mixing red and green channels gives orange, not brown.', isCorrect: false },
     ],
@@ -103,7 +103,7 @@ export const LogicFixerTool = memo(function LogicFixerTool({ interactive = true,
           gap: '4px',
         }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', textTransform: 'uppercase', color: '#7a5000', letterSpacing: '0.05em' }}>paint logic</span>
-          <span style={{ fontSize: '0.8rem', color: '#4a3000' }}>mixed pigments → darker, less saturated</span>
+          <span style={{ fontSize: '0.8rem', color: '#4a3000' }}>pigment mixtures often look darker and less saturated</span>
           <span style={{ fontSize: '0.8rem', color: '#4a3000' }}>ideal subtractive primaries → black</span>
         </div>
         <div style={{
