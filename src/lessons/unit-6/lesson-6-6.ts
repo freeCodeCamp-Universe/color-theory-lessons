@@ -1,21 +1,11 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson6_6: LessonConfig = {
   id: 'u6-l6', unitId: 'unit-6',
-  title: 'Color Spaces and Modern Screens',
+  title: LESSON_TITLES['u6-l6'],
   interactionType: 'color-space-lab',
-  glossaryTerms: [
-    'sRGB',
-    'Display P3',
-    'color space',
-    'Canvas',
-    'SVG',
-    'WebGL',
-    'context effect',
-    'simultaneous contrast',
-    'wide-gamut display',
-  ],
-  reviewTags: ['color-spaces', 'sRGB', 'Display-P3', 'context', 'wide-gamut'],
+  reviewTags: ['color-spaces', 'srgb', 'display-p3', 'context', 'wide-gamut'],
   steps: [
     {
       text: 'Before stress-testing your color system in the next lesson, you need to understand one more layer: the color space your values live in. sRGB is the standard color space for most web work. It defines the range of colors that virtually every screen can display. When you write a HEX, RGB, or HSL value in CSS, you are working in sRGB by default.',
@@ -46,30 +36,30 @@ export const lesson6_6: LessonConfig = {
       id: 'q1',
       prompt: 'Which is the safer baseline for most web design work?',
       choices: [
-        { id: 'a', label: 'Display P3 — because it has more vivid colors', isCorrect: false, explanation: 'P3 offers wider gamut, but not all screens support it. sRGB is the safe baseline that works everywhere.' },
-        { id: 'b', label: 'sRGB — because it is supported by virtually all screens', isCorrect: true, explanation: 'sRGB is the universal default. Design in sRGB first, then enhance with P3 where supported.' },
-        { id: 'c', label: 'Neither — CSS automatically picks the right one', isCorrect: false, explanation: 'CSS uses sRGB by default. The designer still needs to be aware of the color space.' },
-        { id: 'd', label: 'It depends on which browser the user prefers', isCorrect: false, explanation: 'sRGB is the safe universal baseline regardless of browser.' },
+        { stableId: 'display-p3-because-it-has-more-vivid-colors', label: 'Display P3 — because it has more vivid colors', isCorrect: false, explanation: 'P3 offers wider gamut, but not all screens support it. sRGB is the safe baseline that works everywhere.' },
+        { stableId: 'srgb-because-it-is-supported-by-virtually-all-screens', label: 'sRGB — because it is supported by virtually all screens', isCorrect: true, explanation: 'sRGB is the universal default. Design in sRGB first, then enhance with P3 where supported.' },
+        { stableId: 'neither-css-automatically-picks-the-right-one', label: 'Neither — CSS automatically picks the right one', isCorrect: false, explanation: 'CSS uses sRGB by default. The designer still needs to be aware of the color space.' },
+        { stableId: 'it-depends-on-which-browser-the-user-prefers', label: 'It depends on which browser the user prefers', isCorrect: false, explanation: 'sRGB is the safe universal baseline regardless of browser.' },
       ],
     },
     {
       id: 'q2',
       prompt: 'Why can the same hex color look different in different interface contexts?',
       choices: [
-        { id: 'a', label: 'Browsers apply different color profiles randomly', isCorrect: false, explanation: 'Browsers do not apply random color profiles — the effect is perceptual.' },
-        { id: 'b', label: 'Surrounding colors influence perception — a neutral looks warmer or cooler depending on adjacent hues', isCorrect: true, explanation: 'Simultaneous contrast means every color is perceived relative to its neighbors.' },
-        { id: 'c', label: 'Hex values shift when loaded in different files', isCorrect: false, explanation: 'Hex values are exact — they do not shift between files.' },
-        { id: 'd', label: 'Color memory is inaccurate', isCorrect: false, explanation: 'Color memory can be inaccurate, but simultaneous contrast is a perceptual phenomenon, not a memory one.' },
+        { stableId: 'browsers-apply-different-color-profiles-randomly', label: 'Browsers apply different color profiles randomly', isCorrect: false, explanation: 'Browsers do not apply random color profiles — the effect is perceptual.' },
+        { stableId: 'surrounding-colors-influence-perception-a-neutral-looks-warmer-o', label: 'Surrounding colors influence perception — a neutral looks warmer or cooler depending on adjacent hues', isCorrect: true, explanation: 'Simultaneous contrast means every color is perceived relative to its neighbors.' },
+        { stableId: 'hex-values-shift-when-loaded-in-different-files', label: 'Hex values shift when loaded in different files', isCorrect: false, explanation: 'Hex values are exact — they do not shift between files.' },
+        { stableId: 'color-memory-is-inaccurate', label: 'Color memory is inaccurate', isCorrect: false, explanation: 'Color memory can be inaccurate, but simultaneous contrast is a perceptual phenomenon, not a memory one.' },
       ],
     },
     {
       id: 'q3',
       prompt: 'What is the practical design lesson of wide-gamut displays?',
       choices: [
-        { id: 'a', label: 'Never use saturated colors', isCorrect: false, explanation: 'Saturated colors are not forbidden — they should be used with awareness of display variation.' },
-        { id: 'b', label: 'Standard sRGB is always safer and should be used exclusively', isCorrect: false, explanation: 'Wide gamut is increasingly common and worth preparing for, not avoiding.' },
-        { id: 'c', label: 'Colors may appear more vivid than expected — use restrained saturation and test on multiple display types', isCorrect: true, explanation: 'Wide-gamut displays can make carefully chosen colors appear overwhelming on newer hardware.' },
-        { id: 'd', label: 'Wide-gamut displays are only for photographers', isCorrect: false, explanation: 'Wide-gamut displays are standard on many consumer devices including phones and laptops.' },
+        { stableId: 'never-use-saturated-colors', label: 'Never use saturated colors', isCorrect: false, explanation: 'Saturated colors are not forbidden — they should be used with awareness of display variation.' },
+        { stableId: 'standard-srgb-is-always-safer-and-should-be-used-exclusively', label: 'Standard sRGB is always safer and should be used exclusively', isCorrect: false, explanation: 'Wide gamut is increasingly common and worth preparing for, not avoiding.' },
+        { stableId: 'colors-may-appear-more-vivid-than-expected-use-restrained-satura', label: 'Colors may appear more vivid than expected — use restrained saturation and test on multiple display types', isCorrect: true, explanation: 'Wide-gamut displays can make carefully chosen colors appear overwhelming on newer hardware.' },
+        { stableId: 'wide-gamut-displays-are-only-for-photographers', label: 'Wide-gamut displays are only for photographers', isCorrect: false, explanation: 'Wide-gamut displays are standard on many consumer devices including phones and laptops.' },
       ],
     },
   ],

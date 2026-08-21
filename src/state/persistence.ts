@@ -1,7 +1,7 @@
 import type { ProgressState } from '../types/progress.ts';
 
 const STORAGE_KEY = 'color-theory-course-state';
-const VERSION = 2;
+const VERSION = 3;
 
 export const MILESTONE_SESSION_PREFIX = 'color-theory-course-milestone-session:';
 export const READ_INTERFACE_SESSION_PREFIX = 'color-theory-course-read-interface-session:';
@@ -20,7 +20,6 @@ const defaultProgress: ProgressState = {
   completedQuizzes: [],
   quizBestScores: {},
   completedMilestones: [],
-  glossaryTermsSeen: [],
 };
 
 const defaultPreferences = {

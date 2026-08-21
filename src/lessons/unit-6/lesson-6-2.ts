@@ -1,10 +1,10 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson6_2: LessonConfig = {
   id: 'u6-l2', unitId: 'unit-6',
-  title: 'Building Semantic Color Roles for UI',
+  title: LESSON_TITLES['u6-l2'],
   interactionType: 'role-builder',
-  glossaryTerms: ['component state', 'disabled', 'elevated surface', 'hover', 'primary text', 'secondary text', 'semantic status'],
   reviewTags: ['roles', 'components', 'states', 'hierarchy'],
   steps: [
     { text: 'A useful role set covers four areas: structural (backgrounds, surfaces, dividers), content (primary text, secondary text, and inverse text — text placed on dark or colored surfaces), interactive (primary action, secondary action, focus, links), and semantic (success, warning, error, info).' },
@@ -26,30 +26,30 @@ export const lesson6_2: LessonConfig = {
       id: 'q1',
       prompt: 'Why should a system usually include at least two text roles?',
       choices: [
-        { id: 'a', label: 'Contrast rules require it', isCorrect: false, explanation: 'WCAG does not require two text roles — the reasoning is about visual hierarchy.' },
-        { id: 'b', label: 'To create hierarchy — primary text draws attention, secondary text supports without competing', isCorrect: true, explanation: 'Correct. Two text roles allow information to have weight and hierarchy without every element demanding equal attention.' },
-        { id: 'c', label: 'Components need many text colors to look complex', isCorrect: false, explanation: 'Complexity is not a goal — clear hierarchy is.' },
-        { id: 'd', label: 'Brand guidelines require two text colors', isCorrect: false, explanation: 'Text hierarchy is a usability concern, not a brand guideline requirement.' },
+        { stableId: 'contrast-rules-require-it', label: 'Contrast rules require it', isCorrect: false, explanation: 'WCAG does not require two text roles — the reasoning is about visual hierarchy.' },
+        { stableId: 'to-create-hierarchy-primary-text-draws-attention-secondary-text-', label: 'To create hierarchy — primary text draws attention, secondary text supports without competing', isCorrect: true, explanation: 'Correct. Two text roles allow information to have weight and hierarchy without every element demanding equal attention.' },
+        { stableId: 'components-need-many-text-colors-to-look-complex', label: 'Components need many text colors to look complex', isCorrect: false, explanation: 'Complexity is not a goal — clear hierarchy is.' },
+        { stableId: 'brand-guidelines-require-two-text-colors', label: 'Brand guidelines require two text colors', isCorrect: false, explanation: 'Text hierarchy is a usability concern, not a brand guideline requirement.' },
       ],
     },
     {
       id: 'q2',
       prompt: 'A button has only a default color. No hover, focus, pressed, or disabled state is defined. What is missing?',
       choices: [
-        { id: 'a', label: 'Brand alignment', isCorrect: false, explanation: 'Brand alignment is not the issue — component state feedback is.' },
-        { id: 'b', label: 'Component state treatments — without them users cannot tell whether a button responded to their input', isCorrect: true, explanation: 'Correct. States communicate feedback — users need to know when something is being hovered, focused, or is unavailable.' },
-        { id: 'c', label: 'Dark mode support', isCorrect: false, explanation: 'Dark mode is a separate concern from component states.' },
-        { id: 'd', label: 'Icon support', isCorrect: false, explanation: 'Icons are optional — component states are not.' },
+        { stableId: 'brand-alignment', label: 'Brand alignment', isCorrect: false, explanation: 'Brand alignment is not the issue — component state feedback is.' },
+        { stableId: 'component-state-treatments-without-them-users-cannot-tell-whethe', label: 'Component state treatments — without them users cannot tell whether a button responded to their input', isCorrect: true, explanation: 'Correct. States communicate feedback — users need to know when something is being hovered, focused, or is unavailable.' },
+        { stableId: 'dark-mode-support', label: 'Dark mode support', isCorrect: false, explanation: 'Dark mode is a separate concern from component states.' },
+        { stableId: 'icon-support', label: 'Icon support', isCorrect: false, explanation: 'Icons are optional — component states are not.' },
       ],
     },
     {
       id: 'q3',
       prompt: 'An interface has one surface color used everywhere — page, cards, panels, and overlays. What breaks?',
       choices: [
-        { id: 'a', label: 'Text contrast always fails', isCorrect: false, explanation: 'Text contrast depends on text/background pairs, not on surface uniformity.' },
-        { id: 'b', label: 'Buttons become unclickable', isCorrect: false, explanation: 'Button functionality is not affected by surface uniformity.' },
-        { id: 'c', label: 'Visual depth and structure — without surface levels, the layout loses hierarchy and components blur together', isCorrect: true, explanation: 'Correct. Depth and separation between layers require distinct surface values.' },
-        { id: 'd', label: 'Brand colors dominate', isCorrect: false, explanation: 'Surface uniformity is a structural problem, not a brand color problem.' },
+        { stableId: 'text-contrast-always-fails', label: 'Text contrast always fails', isCorrect: false, explanation: 'Text contrast depends on text/background pairs, not on surface uniformity.' },
+        { stableId: 'buttons-become-unclickable', label: 'Buttons become unclickable', isCorrect: false, explanation: 'Button functionality is not affected by surface uniformity.' },
+        { stableId: 'visual-depth-and-structure-without-surface-levels-the-layout-los', label: 'Visual depth and structure — without surface levels, the layout loses hierarchy and components blur together', isCorrect: true, explanation: 'Correct. Depth and separation between layers require distinct surface values.' },
+        { stableId: 'brand-colors-dominate', label: 'Brand colors dominate', isCorrect: false, explanation: 'Surface uniformity is a structural problem, not a brand color problem.' },
       ],
     },
   ],

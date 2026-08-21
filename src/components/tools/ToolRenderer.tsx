@@ -12,7 +12,6 @@ const AdditiveSortTool = lazy(() => import('./AdditiveSortTool.tsx').then((m) =>
 const RGBMixerTool = lazy(() => import('./RGBMixerTool.tsx').then((m) => ({ default: m.RGBMixerTool })));
 const MismatchExplainerTool = lazy(() => import('./MismatchExplainerTool.tsx').then((m) => ({ default: m.MismatchExplainerTool })));
 const BackgroundShiftTool = lazy(() => import('./BackgroundShiftTool.tsx').then((m) => ({ default: m.BackgroundShiftTool })));
-const InterfaceTunerTool = lazy(() => import('./InterfaceTunerTool.tsx').then((m) => ({ default: m.InterfaceTunerTool })));
 const FormatRevealTool = lazy(() => import('./FormatRevealTool.tsx').then((m) => ({ default: m.FormatRevealTool })));
 const HexRgbEditorTool = lazy(() => import('./HexRgbEditorTool.tsx').then((m) => ({ default: m.HexRgbEditorTool })));
 const HslPlaygroundTool = lazy(() => import('./HslPlaygroundTool.tsx').then((m) => ({ default: m.HslPlaygroundTool })));
@@ -75,7 +74,7 @@ export function ToolRenderer({ lesson, onChallengeComplete }: ToolRendererProps)
       tool = <ContrastTool interactive={true} onComplete={onChallengeComplete} />;
       break;
 
-    case 'palette-builder':
+    case 'temperature-sorter':
       tool = <TemperatureSorterTool interactive={true} onComplete={onChallengeComplete} />;
       break;
 
@@ -97,10 +96,6 @@ export function ToolRenderer({ lesson, onChallengeComplete }: ToolRendererProps)
 
     case 'background-shift':
       tool = <BackgroundShiftTool interactive={true} onComplete={onChallengeComplete} />;
-      break;
-
-    case 'interface-tuner':
-      tool = <InterfaceTunerTool interactive={true} onComplete={onChallengeComplete} />;
       break;
 
     case 'format-reveal':
@@ -199,16 +194,12 @@ export function ToolRenderer({ lesson, onChallengeComplete }: ToolRendererProps)
       tool = <LogicFixerTool interactive={true} onComplete={onChallengeComplete} />;
       break;
 
-    default:
-      tool = (
-        <div className={shellStyles.shell}>
-          <span className={shellStyles.toolLabel}>interactive tool</span>
-          <p style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>
-            Tool for <code>{lesson.interactionType}</code> not yet implemented.
-          </p>
-        </div>
-      );
+    default: {
+      const _exhaustive: never = lesson.interactionType;
+      tool = null;
+      void _exhaustive;
       break;
+    }
   }
 
   return (

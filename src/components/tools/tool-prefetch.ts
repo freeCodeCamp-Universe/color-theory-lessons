@@ -11,7 +11,7 @@ export function prefetchToolByInteractionType(interactionType: InteractionType):
     case 'contrast-checker':
       void import('./ContrastTool.tsx');
       break;
-    case 'palette-builder':
+    case 'temperature-sorter':
       void import('./TemperatureSorterTool.tsx');
       break;
     case 'color-wheel':
@@ -28,9 +28,6 @@ export function prefetchToolByInteractionType(interactionType: InteractionType):
       break;
     case 'background-shift':
       void import('./BackgroundShiftTool.tsx');
-      break;
-    case 'interface-tuner':
-      void import('./InterfaceTunerTool.tsx');
       break;
     case 'format-reveal':
       void import('./FormatRevealTool.tsx');
@@ -104,7 +101,10 @@ export function prefetchToolByInteractionType(interactionType: InteractionType):
     case 'logic-fixer':
       void import('./LogicFixerTool.tsx');
       break;
-    case 'none':
+    default: {
+      const _exhaustive: never = interactionType;
+      void _exhaustive;
       break;
+    }
   }
 }

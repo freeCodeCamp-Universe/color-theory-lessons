@@ -23,7 +23,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
       completedQuizzes: state.completedQuizzes,
       quizBestScores: state.quizBestScores,
       completedMilestones: state.completedMilestones,
-      glossaryTermsSeen: state.glossaryTermsSeen,
     };
     saveState(progress, state.preferences);
   }, [
@@ -31,7 +30,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     state.completedQuizzes,
     state.quizBestScores,
     state.completedMilestones,
-    state.glossaryTermsSeen,
     state.preferences,
   ]);
 

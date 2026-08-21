@@ -18,7 +18,6 @@ export type Action =
   | { type: 'COMPLETE_LESSON'; lessonId: string }
   | { type: 'COMPLETE_QUIZ'; quizId: string; score: number }
   | { type: 'COMPLETE_MILESTONE'; milestoneId: string }
-  | { type: 'ADD_GLOSSARY_TERMS'; terms: string[] }
   | { type: 'SET_PREFERENCE'; key: keyof AppState['preferences']; value: string | boolean | null }
   | { type: 'RESET_PROGRESS' };
 
@@ -66,17 +65,6 @@ export function appReducer(state: AppState, action: Action): AppState {
         completedMilestones: [...state.completedMilestones, action.milestoneId],
       };
 
-    case 'ADD_GLOSSARY_TERMS': {
-      const newTerms = action.terms.filter(
-        (t) => !state.glossaryTermsSeen.includes(t),
-      );
-      if (newTerms.length === 0) return state;
-      return {
-        ...state,
-        glossaryTermsSeen: [...state.glossaryTermsSeen, ...newTerms],
-      };
-    }
-
     case 'SET_PREFERENCE':
       return {
         ...state,
@@ -93,7 +81,6 @@ export function appReducer(state: AppState, action: Action): AppState {
         completedQuizzes: [],
         quizBestScores: {},
         completedMilestones: [],
-        glossaryTermsSeen: [],
       };
 
     default:
