@@ -106,7 +106,7 @@ describe('ContrastTool', () => {
       render(<ContrastTool interactive={true} />);
 
       // Three ratio displays should be present (one per area)
-      const ratioTexts = screen.getAllByText(/ratio:.*:1.*need.*:1.*WCAG AA/i);
+      const ratioTexts = screen.getAllByText(/ratio:.*:1.*WCAG AA requires.*:1/i);
       expect(ratioTexts).toHaveLength(3);
     });
 
