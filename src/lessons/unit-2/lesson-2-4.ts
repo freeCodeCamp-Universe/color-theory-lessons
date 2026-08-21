@@ -9,30 +9,30 @@ export const lesson2_4: LessonConfig = {
   reviewTags: ['subtractive', 'print', 'color-models', 'practical'],
   steps: [
     {
-      text: 'Pigments and inks do not shine light out at the viewer. They absorb some wavelengths of incoming light and reflect others back to your eye. The result depends on both the material and the quality of the light hitting it.',
+      text: 'Pigments and inks do not shine light out at the viewer. They absorb some wavelengths of incoming light and reflect others back to your eye. The result depends on the material and on the wavelengths and intensity of the light striking it.',
     },
     {
-      text: 'A screen can display extremely vivid colors because it emits light directly. Print inks and paint can only reflect incoming light — they cannot reproduce that brightness. This creates a predictable gap between screen previews and physical results.',
+      text: 'A screen emits light directly, while ink and paint absorb some wavelengths of incoming light and reflect others. A display can produce colors that a particular ink-and-paper combination cannot reproduce, so a physical result can differ from its screen preview.',
     },
     {
-      text: 'The range of colors a device or medium can reproduce is called its gamut. Screens have a wide gamut because they emit light. Most print processes have a narrower gamut — some screen colors simply cannot be recreated with ink.',
+      text: 'The range of colors a device or medium can reproduce is called its gamut. Each display and print process has its own gamut. A color that falls inside a display’s gamut can fall outside the gamut of a specific ink, printer, and paper combination.',
     },
     {
-      text: 'For screen-first designers, this matters whenever work crosses into physical materials — packaging, printed cards, branded merchandise, signage. The difference is not a printing error. It is a fundamental difference between two color models.',
+      text: 'Screen-first designers encounter this difference when their work moves to packaging, printed cards, branded merchandise, or signage. A mismatch does not by itself prove that someone made an error. The display and the physical material produce color through different processes.',
     },
     {
-      text: 'Because screens vary in calibration and gamut, no screen preview is a reliable reference for what ink on paper will look like. Physical color standards like Pantone exist to solve this: a numbered swatch looks the same regardless of which screen was used to design it, giving everyone in the production chain a shared ground truth.',
+      text: 'A screen preview cannot guarantee how ink will look on a physical material. A physical color standard such as a Pantone swatch gives designers and suppliers a shared target that they can compare under controlled lighting. The material, finish, lighting, and condition of the swatch can still affect its appearance.',
     },
     {
-      text: 'The comparison tool shows the same color as a screen swatch and an approximation of how it might appear in print. In the challenge, you will identify the correct reasons why the two versions differ.',
+      text: 'The comparison tool shows a screen color beside a simulated print result. The simulation illustrates possible differences, but it is not a print proof. For each scenario, identify the reasons that explain the difference.',
     },
   ],
   challenge: {
-      prompt: 'For each scenario, select all the correct reasons why the screen color and the physical version look different. Some reasons are wrong — do not select those.',
+      prompt: 'For each scenario, select every reason that explains why the screen color and the physical version look different.',
       hints: [
-        'Think about what each medium is actually doing: emitting light vs reflecting it.',
-        'The gap is not always a mistake — it can be a natural consequence of different models.',
-        'Surface finish, ambient lighting, and gamut limits are all real factors.',
+        'Compare the light each medium sends to your eyes: a screen emits light, while a physical material reflects it.',
+        'A mismatch can result from the two color processes even when the designer and printer follow their specifications.',
+        'Check whether the material, surface finish, ambient lighting, or gamut could change the result.',
       ],
   },
   quizItems: [
@@ -40,30 +40,30 @@ export const lesson2_4: LessonConfig = {
       id: 'q1',
       prompt: 'A printed brochure shows a company\'s brand color. Which color model best describes how that color is produced?',
       choices: [
-        { stableId: 'additive-the-ink-emits-rgb-light', label: 'Additive — the ink emits RGB light', isCorrect: false, explanation: 'Ink does not emit light. It absorbs some wavelengths and reflects others.' },
-        { stableId: 'subtractive-the-ink-absorbs-some-wavelengths-and-reflects-others', label: 'Subtractive — the ink absorbs some wavelengths and reflects others', isCorrect: true, explanation: 'Print is a subtractive process. The ink absorbs certain wavelengths of incoming light and reflects the rest to the viewer\'s eye.' },
-        { stableId: 'neither-print-uses-a-completely-separate-model', label: 'Neither — print uses a completely separate model', isCorrect: false, explanation: 'Print is a classic example of subtractive color, using CMYK inks that absorb light selectively.' },
+        { stableId: 'additive-the-ink-emits-rgb-light', label: 'Additive: the ink emits RGB light', isCorrect: false, explanation: 'Ink does not emit light. It absorbs some wavelengths and reflects others.' },
+        { stableId: 'subtractive-the-ink-absorbs-some-wavelengths-and-reflects-others', label: 'Subtractive: the ink absorbs some wavelengths and reflects others', isCorrect: true, explanation: 'Printing uses subtractive color. The ink absorbs some wavelengths of incoming light and reflects the rest toward the viewer.' },
+        { stableId: 'neither-print-uses-a-completely-separate-model', label: 'Neither: print uses a separate model', isCorrect: false, explanation: 'Printing with inks is an example of subtractive color.' },
         { stableId: 'both-equally', label: 'Both equally', isCorrect: false, explanation: 'Print is subtractive. Screens are additive. They are distinct models, not a mix.' },
       ],
     },
     {
       id: 'q2',
-      prompt: 'A designer is shipping a brand color to both a website and a printed packaging run. What is the most reliable way to ensure both versions look intentionally matched?',
+      prompt: 'A brand color will appear on a website and printed packaging. What gives the print supplier the clearest physical color target?',
       choices: [
-        { stableId: 'export-the-same-hex-value-to-the-print-file', label: 'Export the same hex value to the print file.', isCorrect: false, explanation: 'Hex values describe RGB light. Print uses ink and a different gamut — the same hex will look different in print, not the same.' },
-        { stableId: 'use-a-physical-color-standard-like-a-pantone-swatch-as-the-share', label: 'Use a physical color standard like a Pantone swatch as the shared reference.', isCorrect: true, explanation: 'A numbered physical swatch looks the same regardless of which screen was used to design it. It gives everyone in the production chain a shared ground truth.' },
-        { stableId: 'adjust-screen-brightness-until-the-screen-matches-the-print-samp', label: 'Adjust screen brightness until the screen matches the print sample by eye.', isCorrect: false, explanation: 'Monitor brightness affects perception but does not change the print output. The gap is in the medium, not the display setting.' },
-        { stableId: 'use-a-slightly-different-hue-in-print-to-compensate-for-the-expe', label: 'Use a slightly different hue in print to compensate for the expected dullness.', isCorrect: false, explanation: 'This creates two mismatched brand colors instead of one reliable reference. A color standard is the right tool for cross-media consistency.' },
+        { stableId: 'export-the-same-hex-value-to-the-print-file', label: 'Send the website’s hex value as the only print specification.', isCorrect: false, explanation: 'A hex value encodes an RGB color, not a physical ink target. The print workflow needs a suitable color conversion or physical reference.' },
+        { stableId: 'use-a-physical-color-standard-like-a-pantone-swatch-as-the-share', label: 'Give the supplier a current Pantone swatch as the shared reference.', isCorrect: true, explanation: 'A physical swatch gives the designer and supplier a target to compare under controlled conditions. They must still account for the packaging material, finish, inks, and printing process.' },
+        { stableId: 'adjust-screen-brightness-until-the-screen-matches-the-print-samp', label: 'Adjust the screen brightness until the preview matches a print sample by eye.', isCorrect: false, explanation: 'Changing screen brightness does not define or change the ink and material used for production.' },
+        { stableId: 'use-a-slightly-different-hue-in-print-to-compensate-for-the-expe', label: 'Guess a different print hue to compensate for the expected change.', isCorrect: false, explanation: 'A guessed adjustment does not give the supplier a repeatable physical target.' },
       ],
     },
     {
       id: 'q3',
-      prompt: 'A developer says: "I only build web apps, so subtractive color has nothing to teach me." What is the strongest counterargument?',
+      prompt: 'Why is subtractive color useful to a developer who mainly builds web apps?',
       choices: [
-        { stableId: 'web-apps-sometimes-use-blue-which-is-a-subtractive-primary', label: 'Web apps sometimes use blue, which is a subtractive primary.', isCorrect: false, explanation: 'This is unrelated — blue in RGB is an additive primary, not a subtractive one.' },
-        { stableId: 'understanding-the-subtractive-model-explains-why-screen-to-physi', label: 'Understanding the subtractive model explains why screen-to-physical gaps exist, which matters whenever work crosses media.', isCorrect: true, explanation: 'Even screen-first designers encounter physical color — icons become stickers, brand colors go on merchandise, app colors appear in print. Knowing why the gap exists prevents false expectations.' },
+        { stableId: 'web-apps-sometimes-use-blue-which-is-a-subtractive-primary', label: 'Web apps use blue, which is a subtractive primary.', isCorrect: false, explanation: 'Blue is an additive primary in RGB. The subtractive primaries used in CMY mixing are cyan, magenta, and yellow.' },
+        { stableId: 'understanding-the-subtractive-model-explains-why-screen-to-physi', label: 'It explains why a digital color can change when the design moves to physical media.', isCorrect: true, explanation: 'A web product’s colors may also appear on stickers, merchandise, packaging, or printed material. Subtractive color explains why those results can differ from the screen version.' },
         { stableId: 'subtractive-color-affects-how-browsers-render-colors', label: 'Subtractive color affects how browsers render colors.', isCorrect: false, explanation: 'Browsers render using additive RGB. Subtractive color is not part of the browser rendering model.' },
-        { stableId: 'you-need-to-know-cmyk-to-pass-design-job-interviews', label: 'You need to know CMYK to pass design job interviews.', isCorrect: false, explanation: 'This may or may not be true, but it is not the conceptual reason why subtractive color matters to screen designers.' },
+        { stableId: 'you-need-to-know-cmyk-to-pass-design-job-interviews', label: 'Every design job interview tests CMYK knowledge.', isCorrect: false, explanation: 'Interview requirements do not explain how subtractive color applies when digital work moves to physical media.' },
       ],
     },
   ],

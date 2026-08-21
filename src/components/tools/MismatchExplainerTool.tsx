@@ -17,24 +17,24 @@ interface Scenario {
 const SCENARIOS: Scenario[] = [
   {
     title: 'Website button vs printed brochure',
-    description: 'A designer chose a vivid blue for their primary button. The printed brochure version looks noticeably duller.',
+    description: 'A designer chose a vivid blue for their primary button. The printed brochure version looks duller.',
     screenColor: '#1a5fe8',
     reasons: [
-      { id: 'a', label: 'Screen emits blue light directly; the print can only reflect ambient light off ink.', isCorrect: true },
-      { id: 'b', label: 'Print ink absorbs some of the wavelengths the screen color contains, limiting how vivid it can appear.', isCorrect: true },
-      { id: 'c', label: 'The designer chose the wrong shade of blue for print use.', isCorrect: false },
+      { id: 'a', label: 'The screen emits light, while the printed ink reflects light from the surroundings.', isCorrect: true },
+      { id: 'b', label: 'The blue falls outside the gamut of the ink, printer, and paper used for the brochure.', isCorrect: true },
+      { id: 'c', label: 'A duller print proves that the designer chose the wrong blue.', isCorrect: false },
       { id: 'd', label: 'Printed colors always look the same as screen colors under good lighting.', isCorrect: false },
     ],
   },
   {
     title: 'Brand green on screen vs painted wall',
-    description: 'A brand\'s signature green looks consistent across two phones but clearly different on a freshly painted wall sample.',
+    description: 'A brand\'s signature green looks consistent across two phones but different on a freshly painted wall sample.',
     screenColor: '#00b450',
     reasons: [
-      { id: 'a', label: 'Paint pigments absorb and reflect light differently than RGB screen channels.', isCorrect: true },
+      { id: 'a', label: 'Paint pigments absorb and reflect incoming light, while phone screens emit light from RGB subpixels.', isCorrect: true },
       { id: 'b', label: 'Phones always show color more accurately than any other medium.', isCorrect: false },
       { id: 'c', label: 'The wall surface and finish affect how ambient light reflects off the color.', isCorrect: true },
-      { id: 'd', label: 'The two phones were calibrated to the same color profile, so they agreed on the result.', isCorrect: false },
+      { id: 'd', label: 'The phones agreeing proves that the painted wall must match them.', isCorrect: false },
     ],
   },
   {
@@ -42,9 +42,9 @@ const SCENARIOS: Scenario[] = [
     description: 'A vivid orange used as the app\'s accent color arrives on printed packaging looking less saturated and slightly brownish.',
     screenColor: '#e85a10',
     reasons: [
-      { id: 'a', label: 'The packaging printer made a calibration error.', isCorrect: false },
-      { id: 'b', label: 'The screen gamut includes saturated oranges that fall outside what most print inks can reproduce.', isCorrect: true },
-      { id: 'c', label: 'Subtractive ink mixing absorbs some of the orange wavelengths, shifting the result.', isCorrect: true },
+      { id: 'a', label: 'A brownish result proves that the printer made a calibration error.', isCorrect: false },
+      { id: 'b', label: 'The orange falls outside the gamut of the inks and packaging material used for this print run.', isCorrect: true },
+      { id: 'c', label: 'The screen creates orange with emitted RGB light, while the printed inks absorb and reflect incoming light.', isCorrect: true },
       { id: 'd', label: 'Orange cannot be mixed from CMYK inks at all.', isCorrect: false },
     ],
   },
@@ -117,7 +117,7 @@ export const MismatchExplainerTool = memo(function MismatchExplainerTool({ inter
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)' }}>emits light</span>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: '110px' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>print approx.</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>print simulation</span>
           <div style={{ height: '60px', borderRadius: 'var(--radius-sm)', backgroundColor: scenario.screenColor, filter: printFilter(), border: '1px solid rgba(0,0,0,0.08)' }} />
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)' }}>reflects light</span>
         </div>
