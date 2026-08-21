@@ -21,7 +21,7 @@ const SCENARIOS: Scenario[] = [
     screenColor: '#1a5fe8',
     reasons: [
       { id: 'a', label: 'The screen emits light, while the printed ink reflects light from the surroundings.', isCorrect: true },
-      { id: 'b', label: 'The blue falls outside the gamut of the ink, printer, and paper used for the brochure.', isCorrect: true },
+      { id: 'b', label: 'A color gamut that does not include the blue used on screen.', isCorrect: true },
       { id: 'c', label: 'A duller print proves that the designer chose the wrong blue.', isCorrect: false },
       { id: 'd', label: 'Printed colors always look the same as screen colors under good lighting.', isCorrect: false },
     ],
@@ -43,7 +43,7 @@ const SCENARIOS: Scenario[] = [
     screenColor: '#e85a10',
     reasons: [
       { id: 'a', label: 'A brownish result proves that the printer made a calibration error.', isCorrect: false },
-      { id: 'b', label: 'The orange falls outside the gamut of the inks and packaging material used for this print run.', isCorrect: true },
+      { id: 'b', label: 'A print gamut that does not include the orange used in the app.', isCorrect: true },
       { id: 'c', label: 'The screen creates orange with emitted RGB light, while the printed inks absorb and reflect incoming light.', isCorrect: true },
       { id: 'd', label: 'Orange cannot be mixed from CMYK inks at all.', isCorrect: false },
     ],
@@ -137,7 +137,7 @@ export const MismatchExplainerTool = memo(function MismatchExplainerTool({ inter
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
-              why do they look different? select all that apply
+              which factors could explain the difference? select all that apply
             </span>
             {scenario.reasons.map((reason) => {
               const isSelected = selected.has(reason.id);

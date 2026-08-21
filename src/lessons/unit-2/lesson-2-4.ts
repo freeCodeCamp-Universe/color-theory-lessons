@@ -24,11 +24,11 @@ export const lesson2_4: LessonConfig = {
       text: 'A screen preview cannot guarantee how ink will look on a physical material. A physical color standard such as a Pantone swatch gives designers and suppliers a shared target that they can compare under controlled lighting. The material, finish, lighting, and condition of the swatch can still affect its appearance.',
     },
     {
-      text: 'The comparison tool shows a screen color beside a simulated material result. The simulation illustrates possible differences; it does not predict the result for a specific material. For each scenario, identify the reasons that explain the difference.',
+      text: 'The comparison tool shows a screen color beside a simulated material result. The simulation illustrates possible differences; it does not predict the result for a specific material. For each scenario, identify the factors that could explain the difference.',
     },
   ],
   challenge: {
-      prompt: 'For each scenario, select every reason that explains why the screen color and the physical version look different.',
+      prompt: 'For each scenario, select every factor that could explain why the screen color and the physical version look different.',
       hints: [
         'Compare the light each medium sends to your eyes: a screen emits light, while a physical material reflects it.',
         'A mismatch can result from the two color processes even when the designer and printer follow their specifications.',
