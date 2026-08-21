@@ -9,27 +9,27 @@ export const lesson2_1: LessonConfig = {
   reviewTags: ['foundations', 'additive', 'subtractive', 'color-models'],
   steps: [
     {
-      text: 'Color is not created the same way everywhere. A glowing screen and a painted wall both show color, but they are doing completely different things to produce it.',
+      text: 'A screen and a painted wall can both show color, but they interact with light in different ways. A screen emits light, while paint changes which wavelengths of incoming light are reflected to your eyes.',
     },
     {
-      text: 'Additive color starts from darkness and builds up by adding light. Screens, projectors, and LEDs emit red, green, and blue light. Combine more of them and the result gets brighter — add all three at full intensity and you get white.',
+      text: 'Additive mixing combines emitted light. Screens, projectors, and LED lights use red, green, and blue light. Increasing a channel adds light. Combining all three channels at full intensity produces white.',
     },
     {
-      text: 'Subtractive color starts from light hitting a material. Pigments and inks absorb some wavelengths and reflect others back to your eye. Mix more pigments together and more light gets absorbed — results tend to get darker and muddier.',
+      text: 'Subtractive mixing begins with light striking a material. Pigments and inks absorb some wavelengths and reflect others. Mixing pigments often increases absorption, so the result tends to look darker and less saturated.',
     },
     {
-      text: 'This is why paint intuition does not transfer to screen design. On a screen, mixing more color channels adds brightness. With pigment, mixing more colors removes it. The rules run in opposite directions.',
+      text: 'Paint-mixing intuition does not transfer directly to screen design. Increasing RGB channels adds emitted light. Mixing pigments changes which wavelengths are absorbed and reflected.',
     },
     {
-      text: 'Look at the two diagrams in the sorting tool. The dark one shows light combining — colors brighten toward white. The light one shows pigment combining — colors darken toward black. Sort the examples shown into the correct model.',
+      text: 'Compare the two diagrams in the sorting tool. The dark diagram shows additive mixing: overlapping light moves toward white. The light diagram shows subtractive mixing: overlapping pigments move toward black. Then sort each example into the correct model.',
     },
   ],
   challenge: {
-      prompt: 'Sort each example into the correct color model. Ask yourself: is this object emitting light, or reflecting light that hits it?',
+      prompt: 'Sort each example into the correct color model. Decide whether it produces color with emitted light or with materials that absorb and reflect incoming light.',
       hints: [
-        'If it glows on its own — phone, monitor, projector — it is additive.',
-        'If it relies on external light to be seen — paint, ink, printed paper — it is subtractive.',
-        'LED signs and projector beams are light sources, even though they project onto surfaces.',
+        'Phones, monitors, projectors, and LED signs are additive because they emit light.',
+        'Paint, ink, and printed paper use subtractive mixing because they absorb some wavelengths and reflect others.',
+        'Classify a projector beam by its light source, not by the surface it hits.',
       ],
   },
   quizItems: [
@@ -37,19 +37,19 @@ export const lesson2_1: LessonConfig = {
       id: 'q1',
       prompt: 'Which color model describes how a laptop display creates color?',
       choices: [
-        { stableId: 'additive-it-emits-rgb-light', label: 'Additive — it emits RGB light', isCorrect: true, explanation: 'A laptop screen controls red, green, and blue light emissions. More light means brighter color.' },
-        { stableId: 'subtractive-it-absorbs-wavelengths', label: 'Subtractive — it absorbs wavelengths', isCorrect: false, explanation: 'Absorption describes pigments and inks, not screens. Screens emit light.' },
-        { stableId: 'both-equally', label: 'Both equally', isCorrect: false, explanation: 'A laptop display uses only the additive model. It emits light rather than reflecting it.' },
-        { stableId: 'neither-screens-use-a-different-system', label: 'Neither — screens use a different system', isCorrect: false, explanation: 'Screens are a classic example of the additive model in action.' },
+        { stableId: 'additive-it-emits-rgb-light', label: 'Additive: it emits RGB light', isCorrect: true, explanation: 'A laptop display controls the intensity of red, green, and blue subpixels. Increasing a channel adds emitted light.' },
+        { stableId: 'subtractive-it-absorbs-wavelengths', label: 'Subtractive: it absorbs wavelengths', isCorrect: false, explanation: 'Subtractive mixing describes materials such as pigments and inks that absorb parts of incoming light.' },
+        { stableId: 'both-equally', label: 'Both equally', isCorrect: false, explanation: 'A laptop display forms pixel colors by adding emitted RGB light. Ambient light can reflect from its surface, but that reflection does not form the pixel colors.' },
+        { stableId: 'neither-screens-use-a-different-system', label: 'Neither: screens use a different system', isCorrect: false, explanation: 'The RGB light emitted by a screen uses additive mixing.' },
       ],
     },
     {
       id: 'q2',
       prompt: 'A painter mixes red, yellow, and blue paint together. What is the most likely result compared to mixing the same colors as light?',
       choices: [
-        { stableId: 'the-paint-result-will-be-brighter-and-closer-to-white', label: 'The paint result will be brighter and closer to white', isCorrect: false, explanation: 'Mixing pigments absorbs more light — the result gets darker, not brighter.' },
-        { stableId: 'both-will-produce-the-same-color', label: 'Both will produce the same color', isCorrect: false, explanation: 'Additive and subtractive mixing follow opposite rules and produce very different results.' },
-        { stableId: 'the-paint-result-will-be-darker-and-muddier', label: 'The paint result will be darker and muddier', isCorrect: true, explanation: 'Each additional pigment absorbs more wavelengths, making the mix darker. Light does the opposite — combining adds brightness.' },
+        { stableId: 'the-paint-result-will-be-brighter-and-closer-to-white', label: 'The paint result will be brighter and closer to white', isCorrect: false, explanation: 'Pigment mixtures usually absorb more wavelengths and become darker, not brighter.' },
+        { stableId: 'both-will-produce-the-same-color', label: 'Both will produce the same color', isCorrect: false, explanation: 'Colored light adds to the light reaching your eyes. Pigments absorb some incoming wavelengths and reflect others, so the mixtures do not produce the same result.' },
+        { stableId: 'the-paint-result-will-be-darker-and-muddier', label: 'The paint result will be darker and muddier', isCorrect: true, explanation: 'Mixed pigments usually absorb a wider range of wavelengths, so the result tends to be darker and less saturated. Combining colored light adds to the light reaching your eyes.' },
         { stableId: 'paint-mixing-always-produces-black', label: 'Paint mixing always produces black', isCorrect: false, explanation: 'Mixing many pigments tends toward a dark muddy brown or gray, not necessarily pure black.' },
       ],
     },
@@ -57,10 +57,10 @@ export const lesson2_1: LessonConfig = {
       id: 'q3',
       prompt: 'Which statement correctly describes the difference between additive and subtractive color?',
       choices: [
-        { stableId: 'they-are-different-names-for-the-same-visual-process', label: 'They are different names for the same visual process', isCorrect: false, explanation: 'They are fundamentally different: one adds light, the other subtracts it through absorption.' },
-        { stableId: 'additive-adds-light-and-gets-brighter-subtractive-absorbs-light-', label: 'Additive adds light and gets brighter; subtractive absorbs light and gets darker', isCorrect: true, explanation: 'This is the core distinction. Screens add light channels. Pigments remove light through absorption.' },
+        { stableId: 'they-are-different-names-for-the-same-visual-process', label: 'They are different names for the same visual process', isCorrect: false, explanation: 'They describe two processes. Additive mixing combines light, while subtractive mixing removes wavelengths through absorption.' },
+        { stableId: 'additive-adds-light-and-gets-brighter-subtractive-absorbs-light-', label: 'Additive combines emitted light; subtractive materials absorb parts of incoming light', isCorrect: true, explanation: 'Screens control emitted RGB light. Pigments and inks absorb parts of incoming light and reflect the rest.' },
         { stableId: 'additive-is-for-print-subtractive-is-for-screens', label: 'Additive is for print; subtractive is for screens', isCorrect: false, explanation: 'It is the other way around. Screens use additive color. Print and paint use subtractive color.' },
-        { stableId: 'subtractive-color-is-only-used-by-professional-printers', label: 'Subtractive color is only used by professional printers', isCorrect: false, explanation: 'Subtractive color includes everyday materials like watercolor, markers, and any printed page.' },
+        { stableId: 'subtractive-color-is-only-used-by-professional-printers', label: 'Subtractive color is only used by professional printers', isCorrect: false, explanation: 'Paint, markers, and printed inks all use subtractive mixing.' },
       ],
     },
   ],
