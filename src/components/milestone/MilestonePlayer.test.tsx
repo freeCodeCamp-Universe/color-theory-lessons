@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { MilestonePlayer } from './MilestonePlayer.tsx';
 import { AppProvider } from '../../state/app-provider.tsx';
@@ -186,6 +187,23 @@ describe('MilestonePlayer', () => {
       expect(redRadio).not.toBeChecked();
 
       fireEvent.click(redRadio);
+      expect(redRadio).toBeChecked();
+      expect(blueRadio).not.toBeChecked();
+    });
+
+    it('supports native radio focus and keyboard selection', async () => {
+      const user = userEvent.setup();
+      renderMilestone(singleQuestionMilestone);
+      const [blueRadio, redRadio] = screen.getAllByRole('radio');
+
+      await user.tab();
+      expect(blueRadio).toHaveFocus();
+
+      await user.keyboard(' ');
+      expect(blueRadio).toBeChecked();
+
+      await user.keyboard('{ArrowDown}');
+      expect(redRadio).toHaveFocus();
       expect(redRadio).toBeChecked();
       expect(blueRadio).not.toBeChecked();
     });
