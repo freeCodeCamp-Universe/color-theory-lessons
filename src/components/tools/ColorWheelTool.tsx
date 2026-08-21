@@ -85,6 +85,7 @@ function ColorWheel({ baseH, relatedH, interactive, onChange }: ColorWheelProps)
       aria-valuemin={0}
       aria-valuemax={359}
       aria-valuenow={baseH}
+      aria-disabled={!interactive}
       aria-label={`Color wheel hue selector: ${baseH}°`}
       style={{ cursor: interactive ? 'crosshair' : 'default', flexShrink: 0, outline: 'none' }}
     >
@@ -122,6 +123,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
   const [validationSubmitted, setValidationSubmitted] = useState(false);
 
   const relatedH = getRelatedHues(baseH, relationship);
+  const controlsInteractive = interactive && !palette;
 
   const baseColor = hslToHex(baseH, 70, 50);
   const relatedColors = relatedH.map((h) => hslToHex(h, 70, 50));
@@ -134,7 +136,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
 
   function buildPalette() {
     const accent = relatedH[0];
-    const support = relationship === 'analogous' ? relatedH[1] ?? (baseH + 30) % 360 : (baseH + 30) % 360;
+    const support = relationship === 'complementary' ? relatedH[0] : relatedH[1];
     setPalette({ dominant: baseH, support, accent });
   }
 
@@ -148,7 +150,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
       <span className={shellStyles.toolLabel}>color wheel explorer</span>
 
       <div style={{ display: 'flex', gap: 'var(--spacing-lg)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
-        <ColorWheel baseH={baseH} relatedH={relatedH} interactive={interactive} onChange={setBaseH} />
+        <ColorWheel baseH={baseH} relatedH={relatedH} interactive={controlsInteractive} onChange={setBaseH} />
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', flex: 1, minWidth: '180px' }}>
           {/* Base hue control */}
@@ -162,8 +164,8 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
               min={0}
               max={359}
               value={baseH}
-              onChange={(e) => interactive && setBaseH(Number(e.target.value))}
-              disabled={!interactive}
+              onChange={(e) => controlsInteractive && setBaseH(Number(e.target.value))}
+              disabled={!controlsInteractive}
               style={{
                 width: '100%',
                 background: `linear-gradient(to right, hsl(0,80%,55%), hsl(60,80%,55%), hsl(120,80%,55%), hsl(180,80%,55%), hsl(240,80%,55%), hsl(300,80%,55%), hsl(360,80%,55%))`,
@@ -171,7 +173,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
                 WebkitAppearance: 'none',
                 height: '6px',
                 borderRadius: '3px',
-                cursor: 'pointer',
+                cursor: controlsInteractive ? 'pointer' : 'not-allowed',
               }}
               aria-label={`Base hue: ${baseH}°`}
             />
@@ -183,8 +185,8 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
             {(['analogous', 'complementary', 'triadic'] as Relationship[]).map((r) => (
               <button
                 key={r}
-                onClick={() => interactive && setInternalRelationship(r)}
-                disabled={!interactive}
+                onClick={() => controlsInteractive && setInternalRelationship(r)}
+                disabled={!controlsInteractive}
                 style={{
                   padding: '0.4rem 0.75rem',
                   background: relationship === r ? 'var(--surface)' : 'transparent',
@@ -193,7 +195,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
                   color: relationship === r ? 'var(--yellow)' : 'var(--secondary-foreground)',
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.8rem',
-                  cursor: interactive ? 'pointer' : 'not-allowed',
+                  cursor: controlsInteractive ? 'pointer' : 'not-allowed',
                   textAlign: 'left',
                 }}
               >

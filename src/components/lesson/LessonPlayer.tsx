@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom';
 import type { LessonConfig } from '../../types/lesson.ts';
 import { useLessonCompletion, type QuizAnswer } from '../../hooks/useLessonCompletion.ts';
 import { units } from '../../data/units.ts';
+import {
+  getLessonChoiceLabel,
+  getLessonQuizSignature,
+  getQuizChoiceStableId,
+} from '../../lessons/quiz-utils.ts';
 import { ToolRenderer } from '../tools/ToolRenderer.tsx';
 import StepPanelRenderer from './StepPanelRenderer.tsx';
 import styles from './LessonPlayer.module.css';
@@ -14,7 +19,7 @@ interface LessonPlayerProps {
 type Phase = 'steps' | 'challenge' | 'quiz' | 'complete';
 
 interface LessonSessionState {
-  version: 1;
+  version: 2;
   phase: Phase;
   stepIndex: number;
   challengeDone: boolean;
@@ -22,6 +27,7 @@ interface LessonSessionState {
   answers: QuizAnswer[];
   selectedChoice: string | null;
   submitted: boolean;
+  quizSignature: string | null;
 }
 
 const LESSON_SESSION_PREFIX = 'color-theory-course-lesson-session:';
@@ -29,7 +35,7 @@ const LEGACY_STEP_STORAGE_PREFIX = 'color-theory-course-step:';
 
 function initialLessonSession(): LessonSessionState {
   return {
-    version: 1,
+    version: 2,
     phase: 'steps',
     stepIndex: 0,
     challengeDone: false,
@@ -37,6 +43,7 @@ function initialLessonSession(): LessonSessionState {
     answers: [],
     selectedChoice: null,
     submitted: false,
+    quizSignature: null,
   };
 }
 
@@ -45,8 +52,33 @@ function clampIndex(value: unknown, itemCount: number): number {
   return Math.min(Math.max(value as number, 0), itemCount - 1);
 }
 
+function hasSavedQuizProgress(saved: Partial<LessonSessionState>): boolean {
+  return (
+    saved.phase === 'quiz' ||
+    saved.phase === 'complete' ||
+    (typeof saved.quizIndex === 'number' && saved.quizIndex > 0) ||
+    (Array.isArray(saved.answers) && saved.answers.length > 0) ||
+    typeof saved.selectedChoice === 'string' ||
+    saved.submitted === true
+  );
+}
+
+function resetQuizState(state: LessonSessionState): LessonSessionState {
+  return {
+    ...state,
+    phase: state.challengeDone || state.phase === 'quiz' || state.phase === 'complete' ? 'quiz' : state.phase,
+    quizIndex: 0,
+    answers: [],
+    selectedChoice: null,
+    submitted: false,
+  };
+}
+
 function loadLessonSession(lesson: LessonConfig): LessonSessionState {
-  const fallback = initialLessonSession();
+  const fallback = {
+    ...initialLessonSession(),
+    quizSignature: getLessonQuizSignature(lesson),
+  };
 
   try {
     const stored = sessionStorage.getItem(`${LESSON_SESSION_PREFIX}${lesson.id}`);
@@ -70,7 +102,7 @@ function loadLessonSession(lesson: LessonConfig): LessonSessionState {
     const question = lesson.quizItems[quizIndex];
     const selectedChoice =
       typeof saved.selectedChoice === 'string' &&
-      question?.choices.some((choice) => choice.id === saved.selectedChoice)
+      question?.choices.some((choice) => getQuizChoiceStableId(choice) === saved.selectedChoice)
         ? saved.selectedChoice
         : null;
 
@@ -80,18 +112,18 @@ function loadLessonSession(lesson: LessonConfig): LessonSessionState {
         if (typeof savedAnswer !== 'object' || savedAnswer === null) continue;
         const answer = savedAnswer as Partial<QuizAnswer>;
         const answerQuestion = lesson.quizItems.find((item) => item.id === answer.questionId);
-        const choice = answerQuestion?.choices.find((item) => item.id === answer.choiceId);
+        const choice = answerQuestion?.choices.find((item) => getQuizChoiceStableId(item) === answer.choiceId);
         if (!answerQuestion || !choice || answers.some((item) => item.questionId === answerQuestion.id)) continue;
         answers.push({
           questionId: answerQuestion.id,
-          choiceId: choice.id,
+          choiceId: getQuizChoiceStableId(choice),
           isCorrect: choice.isCorrect,
         });
       }
     }
 
-    return {
-      version: 1,
+    const restored = {
+      version: 2,
       phase,
       stepIndex: clampIndex(saved.stepIndex, lesson.steps.length),
       challengeDone: saved.challengeDone === true || phase === 'quiz' || phase === 'complete',
@@ -99,7 +131,18 @@ function loadLessonSession(lesson: LessonConfig): LessonSessionState {
       answers,
       selectedChoice,
       submitted: saved.submitted === true && selectedChoice !== null,
-    };
+      quizSignature: fallback.quizSignature,
+    } satisfies LessonSessionState;
+
+    if (lesson.quizItems.length === 0) return restored;
+
+    if (saved.quizSignature === fallback.quizSignature) return restored;
+
+    if (typeof saved.quizSignature === 'undefined' && !hasSavedQuizProgress(saved)) {
+      return restored;
+    }
+
+    return resetQuizState(restored);
   } catch {
     return fallback;
   }
@@ -126,7 +169,8 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
 
   useEffect(() => {
     saveLessonSession(lesson.id, {
-      version: 1,
+      version: 2,
+      quizSignature: getLessonQuizSignature(lesson),
       phase,
       stepIndex,
       challengeDone,
@@ -135,7 +179,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
       selectedChoice,
       submitted,
     });
-  }, [answers, challengeDone, lesson.id, phase, quizIndex, selectedChoice, stepIndex, submitted]);
+  }, [answers, challengeDone, lesson, lesson.id, phase, quizIndex, selectedChoice, stepIndex, submitted]);
 
   function handleNextStep() {
     if (stepIndex < lesson.steps.length - 1) {
@@ -177,7 +221,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
   function handleSubmitAnswer() {
     if (!selectedChoice || submitted) return;
     const question = lesson.quizItems[quizIndex];
-    const choice = question.choices.find((c) => c.id === selectedChoice);
+    const choice = question.choices.find((c) => getQuizChoiceStableId(c) === selectedChoice);
     if (!choice) return;
     setSubmitted(true);
     setAnswers((prev) => [
@@ -200,6 +244,9 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
   const question = phase === 'quiz' ? lesson.quizItems[quizIndex] : null;
   const challenge = lesson.challenge;
   const currentStep = lesson.steps[stepIndex];
+  const selectedQuestionChoice = submitted && question
+    ? question.choices.find((choice) => getQuizChoiceStableId(choice) === selectedChoice)
+    : null;
 
   const hasRightPanel =
     phase !== 'quiz' && phase !== 'complete' && (
@@ -341,12 +388,13 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
               )}
               <p className={styles.quizPrompt}>{question.prompt}</p>
               <div className={styles.choices}>
-                {question.choices.map((choice) => {
-                  const isSelected = selectedChoice === choice.id;
+                {question.choices.map((choice, index) => {
+                  const choiceId = getQuizChoiceStableId(choice);
+                  const isSelected = selectedChoice === choiceId;
                   const showResult = submitted;
                   return (
                     <button
-                      key={choice.id}
+                      key={choiceId}
                       className={`${styles.choice} ${
                         showResult && choice.isCorrect
                           ? styles.correct
@@ -356,10 +404,10 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
                               ? styles.chosen
                               : ''
                       }`}
-                      onClick={() => handleChoiceSelect(choice.id)}
-                      disabled={submitted && !choice.isCorrect && selectedChoice !== choice.id}
+                      onClick={() => handleChoiceSelect(choiceId)}
+                      disabled={submitted && !choice.isCorrect && selectedChoice !== choiceId}
                     >
-                      <span className={styles.choiceKey}>{choice.id}.</span>
+                      <span className={styles.choiceKey}>{getLessonChoiceLabel(index)}.</span>
                       <span>{choice.label}</span>
                     </button>
                   );
@@ -367,9 +415,9 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
               </div>
 
               <div aria-live="polite" aria-atomic="true">
-                {submitted && question.choices.find((c) => c.id === selectedChoice)?.explanation && (
+                {selectedQuestionChoice?.explanation && (
                   <p className={styles.explanation}>
-                    {question.choices.find((c) => c.id === selectedChoice)?.explanation}
+                    {selectedQuestionChoice.explanation}
                   </p>
                 )}
               </div>

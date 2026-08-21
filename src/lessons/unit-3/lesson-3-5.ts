@@ -1,19 +1,11 @@
 import type { LessonConfig } from '../../types/lesson.ts';
+import { LESSON_TITLES } from '../lesson-titles.ts';
 
 export const lesson3_5: LessonConfig = {
   id: 'u3-l5',
   unitId: 'unit-3',
-  title: 'Gradients, CSS Color Usage, and Theme Building',
+  title: LESSON_TITLES['u3-l5'],
   interactionType: 'theme-sandbox',
-  glossaryTerms: [
-    'gradient',
-    'linear gradient',
-    'radial gradient',
-    'border color',
-    'text color',
-    'semantic color',
-    'theme',
-  ],
   reviewTags: ['formats', 'gradients', 'theme', 'semantic-color'],
   steps: [
     {
@@ -48,27 +40,27 @@ export const lesson3_5: LessonConfig = {
       prompt: 'What is the difference between a color value and a color role?',
       choices: [
         {
-          id: 'a',
+          stableId: 'a-value-is-a-specific-code-like-2563eb-a-role-describes-what-tha',
           label: 'A value is a specific code like #2563EB; a role describes what that color does in the interface, like "primary action"',
           isCorrect: true,
           explanation:
             'Values are raw numbers. Roles describe purpose. A system uses role names so the same logic can apply even when values change — for example, in a dark theme.',
         },
         {
-          id: 'b',
+          stableId: 'they-are-the-same-thing-just-different-terms-used-by-designers-a',
           label: 'They are the same thing — just different terms used by designers and developers',
           isCorrect: false,
           explanation:
             'They are genuinely different concepts. A value is a specific color code. A role is the function that code serves in the design system.',
         },
         {
-          id: 'c',
+          stableId: 'a-value-is-the-color-in-hex-a-role-is-the-same-color-in-hsl',
           label: 'A value is the color in HEX; a role is the same color in HSL',
           isCorrect: false,
           explanation: 'HEX and HSL are both formats for the same value. A role is about meaning and usage, not format.',
         },
         {
-          id: 'd',
+          stableId: 'roles-are-only-relevant-in-large-enterprise-design-systems',
           label: 'Roles are only relevant in large enterprise design systems',
           isCorrect: false,
           explanation:
@@ -81,28 +73,28 @@ export const lesson3_5: LessonConfig = {
       prompt: 'Are gradients always decorative?',
       choices: [
         {
-          id: 'a',
+          stableId: 'yes-gradients-are-purely-visual-style-and-never-affect-usability',
           label: 'Yes — gradients are purely visual style and never affect usability',
           isCorrect: false,
           explanation:
             'Gradients can serve functional purposes: adding depth to card surfaces, creating visual hierarchy in hero sections, or encoding data in heatmaps.',
         },
         {
-          id: 'b',
+          stableId: 'no-gradients-can-support-hierarchy-emphasis-or-data-encoding-whe',
           label: 'No — gradients can support hierarchy, emphasis, or data encoding when used deliberately',
           isCorrect: true,
           explanation:
             'A gradient can add intentional emphasis to a hero section, create surface depth, or represent data ranges. The key is deliberate usage, not decoration for its own sake.',
         },
         {
-          id: 'c',
+          stableId: 'no-gradients-are-required-for-accessible-contrast',
           label: 'No — gradients are required for accessible contrast',
           isCorrect: false,
           explanation:
             'Gradients are not required for accessibility. In fact, they can make contrast harder to verify because the background color varies.',
         },
         {
-          id: 'd',
+          stableId: 'only-radial-gradients-can-be-functional-linear-gradients-are-dec',
           label: 'Only radial gradients can be functional; linear gradients are decorative',
           isCorrect: false,
           explanation: 'Both types can be either functional or decorative. The distinction is about intent and usage, not gradient shape.',
@@ -114,28 +106,28 @@ export const lesson3_5: LessonConfig = {
       prompt: 'Which approach is more scalable for a growing product?',
       choices: [
         {
-          id: 'a',
+          stableId: 'storing-one-off-button-colors-on-every-screen-individually',
           label: 'Storing one-off button colors on every screen individually',
           isCorrect: false,
           explanation:
             'One-off values become inconsistent and unmaintainable as the product grows. Changing the brand accent would require finding and updating every instance.',
         },
         {
-          id: 'b',
+          stableId: 'defining-shared-theme-roles-that-all-components-reference',
           label: 'Defining shared theme roles that all components reference',
           isCorrect: true,
           explanation:
             'Shared roles mean one change — like updating the primary action color — propagates automatically to every button, link, and focus ring in the system.',
         },
         {
-          id: 'c',
+          stableId: 'using-only-css-named-colors-like-blue-and-red',
           label: 'Using only CSS named colors like "blue" and "red"',
           isCorrect: false,
           explanation:
             'CSS named colors are limited and imprecise. They do not support the semantic role-based approach that real products need.',
         },
         {
-          id: 'd',
+          stableId: 'using-gradients-instead-of-flat-colors-everywhere',
           label: 'Using gradients instead of flat colors everywhere',
           isCorrect: false,
           explanation: 'Gradients add visual complexity and have nothing to do with the scalability of a color system.',

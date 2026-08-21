@@ -14,49 +14,47 @@ export interface LessonConfig {
   steps: LessonStep[];
   challenge: Challenge;
   quizItems: QuizItem[];
-  glossaryTerms: string[];
   reviewTags: string[];
   keyPoints?: string[];
 }
 
-export type InteractionType =
-  | 'color-wheel'
-  | 'rgb-mixer'
-  | 'palette-builder'
-  | 'contrast-checker'
-  | 'before-after'
-  | 'slider-explore'
-  | 'additive-sort'
-  | 'logic-fixer'
-  | 'mismatch-explainer'
-  | 'background-shift'
-  | 'interface-tuner'
-  | 'format-reveal'
-  | 'hex-rgb-editor'
-  | 'hsl-playground'
-  | 'alpha-layer'
-  | 'theme-sandbox'
-  | 'token-map'
-  | 'color-space-lab'
-  | 'eye-diagram'
-  | 'vision-cards'
-  | 'interface-gallery'
-  | 'color-only-detector'
-  | 'state-workshop'
-  | 'inclusive-review'
-  | 'broken-usable-cards'
-  | 'text-contrast-lab'
-  | 'component-checker'
-  | 'color-alone-rebuild'
-  | 'audit-flow'
-  | 'pattern-repair'
-  | 'system-comparison'
-  | 'role-builder'
-  | 'brand-pressure'
-  | 'dark-translator'
-  | 'chart-tuner'
-  | 'system-stress'
-  | 'none';
+export const INTERACTION_TYPES = [
+  'color-wheel',
+  'rgb-mixer',
+  'temperature-sorter',
+  'contrast-checker',
+  'before-after',
+  'slider-explore',
+  'additive-sort',
+  'logic-fixer',
+  'mismatch-explainer',
+  'background-shift',
+  'format-reveal',
+  'hex-rgb-editor',
+  'hsl-playground',
+  'alpha-layer',
+  'theme-sandbox',
+  'token-map',
+  'color-space-lab',
+  'eye-diagram',
+  'vision-cards',
+  'interface-gallery',
+  'color-only-detector',
+  'state-workshop',
+  'inclusive-review',
+  'text-contrast-lab',
+  'component-checker',
+  'audit-flow',
+  'pattern-repair',
+  'system-comparison',
+  'role-builder',
+  'brand-pressure',
+  'dark-translator',
+  'chart-tuner',
+  'system-stress',
+] as const;
+
+export type InteractionType = (typeof INTERACTION_TYPES)[number];
 
 export type StepPanelConfig =
   | { type: 'color-wheel-preview'; relationship: 'analogous' | 'complementary' | 'triadic' }
@@ -77,11 +75,18 @@ export interface Challenge {
   hints: string[];
 }
 
+export interface QuizChoice {
+  stableId: string;
+  label: string;
+  isCorrect: boolean;
+  explanation?: string;
+}
+
 export interface QuizItem {
   id: string;
   prompt: string;
   colorSwatches?: { label: string; color: string }[];
-  choices: { id: string; label: string; isCorrect: boolean; explanation?: string }[];
+  choices: QuizChoice[];
 }
 
 export interface GlossaryTerm {
