@@ -51,6 +51,19 @@ describe('TemperatureSorterTool stages', () => {
     expect(screen.queryByText('Coral')).not.toBeInTheDocument();
   });
 
+  it('uses the lesson terminology without em dashes in both stages', () => {
+    render(<TemperatureSorterTool />);
+
+    expect(screen.getAllByRole('option', { name: 'choose temperature' })).toHaveLength(9);
+    expect(document.body).not.toHaveTextContent('—');
+
+    advanceToGoalStage();
+
+    expect(screen.getAllByRole('option', { name: 'neutral' })).toHaveLength(3);
+    expect(screen.queryByRole('option', { name: 'balanced' })).not.toBeInTheDocument();
+    expect(document.body).not.toHaveTextContent('—');
+  });
+
   it('requires the interface-goal stage to pass before completing', () => {
     const onComplete = vi.fn();
     render(<TemperatureSorterTool onComplete={onComplete} />);

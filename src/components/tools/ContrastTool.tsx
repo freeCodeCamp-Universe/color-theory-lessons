@@ -139,7 +139,7 @@ export const ContrastTool = memo(function ContrastTool({ interactive = true, onC
 
               {/* Ratio display */}
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: fixed ? 'var(--green)' : 'var(--yellow)' }}>
-                ratio: {ratio.toFixed(2)}:1 — need {area.threshold}:1 (WCAG AA)
+                ratio: {ratio.toFixed(2)}:1. WCAG AA requires {area.threshold}:1.
               </div>
 
               {/* Preview */}

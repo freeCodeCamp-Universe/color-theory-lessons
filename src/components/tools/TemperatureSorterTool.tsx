@@ -145,14 +145,14 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({ inter
                     }}
                     aria-label={`Temperature for ${s.label}`}
                   >
-                    <option value="">— ?</option>
+                    <option value="">choose temperature</option>
                     <option value="warm">warm</option>
                     <option value="cool">cool</option>
                     <option value="neutral">neutral</option>
                   </select>
                   {swatchesChecked && (
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--muted)' }}>
-                      {isCorrect ? '✓' : isWrong ? `→ ${s.correct}` : '—'}
+                      {isCorrect ? '✓' : isWrong ? `→ ${s.correct}` : 'not answered'}
                     </span>
                   )}
                 </div>
@@ -267,14 +267,14 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({ inter
                   }}
                   aria-label={`Palette direction for ${g.label}`}
                 >
-                  <option value="">— choose</option>
+                  <option value="">choose palette direction</option>
                   <option value="warm">warm</option>
                   <option value="cool">cool</option>
-                  <option value="neutral">balanced</option>
+                  <option value="neutral">neutral</option>
                 </select>
                 {goalsChecked && (
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--muted)', width: '80px' }}>
-                    {isCorrect ? '✓ correct' : isWrong ? `→ ${g.correct === 'neutral' ? 'balanced' : g.correct}` : '—'}
+                    {isCorrect ? '✓ correct' : isWrong ? `→ ${g.correct}` : 'not answered'}
                   </span>
                 )}
               </div>
