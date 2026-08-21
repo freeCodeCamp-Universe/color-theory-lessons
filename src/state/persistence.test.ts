@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
+  CHANNEL_PREDICTION_SESSION_PREFIX,
   clearMilestoneSessions,
   loadState,
   MILESTONE_SESSION_PREFIX,
@@ -137,9 +138,10 @@ describe('round-trip', () => {
 });
 
 describe('clearMilestoneSessions', () => {
-  it('removes milestone player and Read Interface challenge sessions', () => {
+  it('removes milestone player and challenge sessions', () => {
     sessionStorage.setItem(`${MILESTONE_SESSION_PREFIX}milestone-1`, 'milestone state');
     sessionStorage.setItem(`${READ_INTERFACE_SESSION_PREFIX}milestone-1:1`, 'challenge state');
+    sessionStorage.setItem(`${CHANNEL_PREDICTION_SESSION_PREFIX}milestone-2:1`, 'challenge state');
     sessionStorage.setItem('color-theory-course-lesson-session:u1-l1', 'lesson state');
     sessionStorage.setItem('unrelated-key', 'unrelated state');
 
@@ -147,6 +149,7 @@ describe('clearMilestoneSessions', () => {
 
     expect(sessionStorage.getItem(`${MILESTONE_SESSION_PREFIX}milestone-1`)).toBeNull();
     expect(sessionStorage.getItem(`${READ_INTERFACE_SESSION_PREFIX}milestone-1:1`)).toBeNull();
+    expect(sessionStorage.getItem(`${CHANNEL_PREDICTION_SESSION_PREFIX}milestone-2:1`)).toBeNull();
     expect(sessionStorage.getItem('color-theory-course-lesson-session:u1-l1')).toBe('lesson state');
     expect(sessionStorage.getItem('unrelated-key')).toBe('unrelated state');
   });
