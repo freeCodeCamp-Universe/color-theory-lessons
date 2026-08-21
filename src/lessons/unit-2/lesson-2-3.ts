@@ -15,7 +15,7 @@ export const lesson2_3: LessonConfig = {
       text: 'Mixing pigments often increases the range of wavelengths absorbed, producing darker and less saturated results. On a screen, increasing RGB channel values increases emitted light. Raising all three values moves the color toward white.',
     },
     {
-      text: 'A dark screen color has low RGB channel values and emits little light. To brighten it, raise one or more channel values. This process differs from changing a paint mixture.',
+      text: 'Reducing a screen color\'s RGB channel values decreases emitted light and makes the color darker. To brighten it, raise one or more channel values. This process differs from changing a paint mixture.',
     },
     {
       text: 'A mixture of red and green paint can produce brown, while equal-intensity red and green light produces yellow. The same color names can produce different results in the two models. Identify the model before predicting the result.',
@@ -28,7 +28,7 @@ export const lesson2_3: LessonConfig = {
       prompt: 'Each statement applies paint logic to a screen problem. Pick the rewrite that uses correct screen-first reasoning.',
       hints: [
         'Ask whether the color comes from emitted light or from a material reflecting incoming light.',
-        'On screens, lower RGB channel values mean less emitted light and a darker color.',
+        'On screens, reducing RGB channel values means less emitted light and produces a darker color.',
         'Terms such as "muddy," "dilute," and "absorb" usually describe pigments rather than RGB light.',
       ],
   },
@@ -60,7 +60,7 @@ export const lesson2_3: LessonConfig = {
         { stableId: 'i-will-raise-the-blue-channel-to-make-this-cooler', label: '"I will raise the blue channel to make this cooler."', isCorrect: false, explanation: 'Raising the blue channel can shift a screen color toward a cooler appearance.' },
         { stableId: 'equal-rgb-values-will-give-me-a-neutral-gray', label: '"Equal RGB values will give me a neutral gray."', isCorrect: false, explanation: 'In RGB notation, equal channel values represent a neutral gray.' },
         { stableId: 'mixing-more-screen-colors-will-make-the-result-muddier', label: '"Raising all three RGB channel values will make the result muddier."', isCorrect: true, explanation: 'Raising all three RGB channel values adds emitted light and moves the color toward white.' },
-        { stableId: 'low-channel-values-produce-dark-colors-on-screen', label: '"Low channel values produce dark colors on screen."', isCorrect: false, explanation: 'Low RGB channel values represent little emitted light, producing a dark screen color.' },
+        { stableId: 'low-channel-values-produce-dark-colors-on-screen', label: '"Reducing RGB channel values makes a screen color darker."', isCorrect: false, explanation: 'Reducing RGB channel values decreases the emitted light and makes the screen color darker.' },
       ],
     },
   ],
