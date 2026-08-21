@@ -16,28 +16,28 @@ const SCENARIOS: Scenario[] = [
   {
     statement: '"I\'ll make this button darker by mixing in black, like I would with paint."',
     choices: [
-      { id: 'a', label: 'I\'ll lower the R, G, and B values — less light output, not mixed pigment.', isCorrect: true },
-      { id: 'b', label: 'I\'ll add a black overlay layer at 10% opacity.', isCorrect: false },
+      { id: 'a', label: 'I\'ll reduce the R, G, and B values so the display outputs less light for this color.', isCorrect: true },
+      { id: 'b', label: 'I\'ll raise the R, G, and B values until the color looks darker.', isCorrect: false },
       { id: 'c', label: 'Mixing black works the same way on screens as in paint.', isCorrect: false },
       { id: 'd', label: 'I\'ll reduce the saturation to make the color appear darker.', isCorrect: false },
     ],
   },
   {
-    statement: '"Red and green together will make a muddy brownish color."',
+    statement: '"Setting the red and green channels to full intensity while blue remains off will make a muddy brown."',
     choices: [
-      { id: 'a', label: 'That\'s only true for pigments — red and green paint do mix to brown.', isCorrect: false },
-      { id: 'b', label: 'Red and green light on a screen produce yellow, not brown.', isCorrect: true },
-      { id: 'c', label: 'The result depends on the specific hue values chosen.', isCorrect: false },
+      { id: 'a', label: 'Red and green light behave the same way as red and green paint.', isCorrect: false },
+      { id: 'b', label: 'With blue off, full-intensity red and green light produce yellow, not brown.', isCorrect: true },
+      { id: 'c', label: 'Adding blue light is what makes red and green produce yellow.', isCorrect: false },
       { id: 'd', label: 'Mixing red and green channels gives orange, not brown.', isCorrect: false },
     ],
   },
   {
-    statement: '"The more colors I layer into this design, the muddier and darker it will get."',
+    statement: '"Raising all three RGB channels will make the color muddier and darker."',
     choices: [
-      { id: 'a', label: 'That\'s true — too many colors always reduce visual clarity.', isCorrect: false },
-      { id: 'b', label: 'Muddiness is a pigment concept. More active screen channels add brightness, moving toward white.', isCorrect: true },
+      { id: 'a', label: 'That\'s true. Increasing channel values reduces the light from the screen.', isCorrect: false },
+      { id: 'b', label: 'Raising all three channel values adds light and moves the color toward white.', isCorrect: true },
       { id: 'c', label: 'Muddiness only happens when colors share the same hue family.', isCorrect: false },
-      { id: 'd', label: 'Layering more colors increases contrast, not darkness.', isCorrect: false },
+      { id: 'd', label: 'Raising all three channels increases contrast, not brightness.', isCorrect: false },
     ],
   },
 ];
@@ -103,8 +103,8 @@ export const LogicFixerTool = memo(function LogicFixerTool({ interactive = true,
           gap: '4px',
         }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', textTransform: 'uppercase', color: '#7a5000', letterSpacing: '0.05em' }}>paint logic</span>
-          <span style={{ fontSize: '0.8rem', color: '#4a3000' }}>more pigment → darker, muddier</span>
-          <span style={{ fontSize: '0.8rem', color: '#4a3000' }}>all primaries → black</span>
+          <span style={{ fontSize: '0.8rem', color: '#4a3000' }}>pigment mixtures often look darker and less saturated</span>
+          <span style={{ fontSize: '0.8rem', color: '#4a3000' }}>ideal subtractive primaries → black</span>
         </div>
         <div style={{
           flex: 1,
@@ -118,8 +118,8 @@ export const LogicFixerTool = memo(function LogicFixerTool({ interactive = true,
           border: '1px solid var(--border)',
         }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--yellow)', letterSpacing: '0.05em' }}>screen logic</span>
-          <span style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>more channels → brighter</span>
-          <span style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>all primaries → white</span>
+          <span style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>higher RGB values → more light</span>
+          <span style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>full RGB primaries → white</span>
         </div>
       </div>
 
@@ -215,7 +215,7 @@ export const LogicFixerTool = memo(function LogicFixerTool({ interactive = true,
 
           {checked && (
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: isCorrect ? 'var(--green)' : 'var(--red)', margin: 0 }}>
-              {isCorrect ? '✓ correct — screen logic applied.' : '✗ not quite — try again.'}
+              {isCorrect ? '✓ correct. Screen logic applied.' : '✗ not quite. Try again.'}
             </p>
           )}
 
