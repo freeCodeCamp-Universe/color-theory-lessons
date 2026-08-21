@@ -53,7 +53,7 @@ export interface MilestoneChallengePart {
   description: string;
   /** 
    * Maps to the specific component rendered by the milestone's 
-   * challenge renderer (e.g., 'interface-tuner'). 
+   * challenge renderer (e.g., 'read-interface').
    */
   challengeType: MilestoneChallengeType;
   /** Instructions shown in the left panel while the challenge is active. */

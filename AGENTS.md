@@ -11,7 +11,7 @@ Browser-based learning app teaching practical color theory for digital design. S
 ### Completed Units
 
 - **Unit 1**: Seeing and Describing Color (6 lessons, milestone, tools: before-after, slider-explore, contrast-checker, palette-builder, color-wheel, additive-sort)
-- **Unit 2**: How Screens Make Color (5 lessons, milestone, tools: additive-sort, rgb-mixer, mismatch-explainer, background-shift, interface-tuner)
+- **Unit 2**: How Screens Make Color (5 lessons, milestone, tools: additive-sort, rgb-mixer, logic-fixer, mismatch-explainer, background-shift)
 - **Unit 3**: Digital Color in Code (6 lessons, milestone, tools: format-reveal, hex-rgb-editor, hsl-playground, alpha-layer, theme-sandbox, token-map)
 - **Unit 4**: Human Vision and Color Perception (4 lessons, milestone, tools: eye-diagram, vision-cards, interface-gallery, color-only-detector)
 - **Unit 5**: Accessible Color in Practice (6 lessons, milestone, tools: text-contrast-lab, component-checker, state-workshop, pattern-repair, audit-flow, inclusive-review)
