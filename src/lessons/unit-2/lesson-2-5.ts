@@ -18,7 +18,7 @@ export const lesson2_5: LessonConfig = {
       text: 'A display forms its image by directing controlled light toward the viewer. Paint depends on ambient light and reflects only part of it. This difference can make a bright screen accent appear luminous in dim surroundings.',
     },
     {
-      text: 'Surrounding luminance affects how a color appears. An accent has greater luminance contrast against a dark background, so it can look brighter and more prominent. The same accent has less luminance contrast against a light background and can appear less prominent.',
+      text: 'Surrounding luminance affects how a color appears. The bright accents in this lesson have greater luminance contrast against a dark background, so they can look brighter and more prominent. The same accents have less luminance contrast against a light background and can appear less prominent.',
     },
     {
       text: 'Use the pixel explorer to see how subpixels combine into a perceived color. Then in the challenge, compare the same accent on a dark and light background and pick the explanation that best describes what you see.',
@@ -28,7 +28,7 @@ export const lesson2_5: LessonConfig = {
     prompt: 'The same accent color is shown on a dark background and a light background. Pick the answer that best explains why it appears more prominent in one context.',
     hints: [
       'Compare the luminance of the accent with the luminance of each background.',
-      'The contrast is greater when the surrounding area is near-black than when it is near-white.',
+      'For these accents, the contrast is greater when the surrounding area is near-black than when it is near-white.',
       'The accent\'s RGB values do not change. Only the background changes.',
     ],
   },

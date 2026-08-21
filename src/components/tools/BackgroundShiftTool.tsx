@@ -5,7 +5,7 @@ import shellStyles from './ToolShell.module.css';
 
 // Subpixel triplets for a 6×4 grid of "pixels" showing a vivid blue accent
 // Each "pixel" is 3 subpixels wide (R, G, B), contributing to the perceived color
-const ACCENT_RGB = { r: 37, g: 99, b: 235 }; // blue accent ~#2563eb
+const ACCENT_RGB = { r: 59, g: 130, b: 246 }; // blue accent ~#3b82f6
 
 const SUBPIXEL_COLORS = [
   `rgb(${ACCENT_RGB.r}, 0, 0)`,
@@ -141,7 +141,7 @@ interface Scenario {
 
 const SCENARIOS: Scenario[] = [
   {
-    accentHex: '#2563eb',
+    accentHex: '#3b82f6',
     accentLabel: 'vivid blue',
     choices: [
       {
