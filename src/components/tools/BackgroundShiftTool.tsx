@@ -154,7 +154,7 @@ const SCENARIOS: Scenario[] = [
         id: 'b',
         label: 'The light background amplifies the accent because white reflects it back toward the viewer.',
         isCorrect: false,
-        explanation: 'The displayed background does not reflect the accent back toward the viewer. Its luminance is closer to the accent\'s luminance, so the contrast is lower.',
+        explanation: 'The displayed background does not reflect the accent back toward the viewer. The light-background pairing has a lower luminance contrast ratio.',
       },
       {
         id: 'c',
@@ -226,7 +226,7 @@ const SCENARIOS: Scenario[] = [
         id: 'd',
         label: 'Light backgrounds amplify saturated greens because white boosts their perceived value.',
         isCorrect: false,
-        explanation: 'The light background has luminance closer to the green accent, which reduces their contrast.',
+        explanation: 'The light-background pairing has a lower luminance contrast ratio.',
       },
     ],
   },
