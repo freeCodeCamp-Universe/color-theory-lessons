@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { ColorWheelTool } from './ColorWheelTool.tsx';
 import { hslToHex } from '../../utils/color.ts';
@@ -136,5 +136,40 @@ describe('ColorWheelTool locked palette behavior', () => {
     expect(baseHueInput).toHaveValue('45');
     expect(screen.getByText(/Selected relationship:/i)).toHaveTextContent('Selected relationship: analogous.');
     expect(screen.getByText('Where are analogous hues positioned relative to the base hue?')).toBeInTheDocument();
+  });
+});
+
+describe('ColorWheelTool reflection completion gating', () => {
+  it('does not allow completion after an incorrect reflection answer', () => {
+    const onComplete = vi.fn();
+    render(<ColorWheelTool interactive={true} onComplete={onComplete} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /lock in this palette/i }));
+    fireEvent.click(screen.getByRole('button', { name: '30° from the base hue' }));
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+
+    expect(screen.queryByRole('button', { name: /done/i })).toBeNull();
+    expect(screen.getByRole('button', { name: /try again/i })).toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+
+  it('allows retry after an incorrect answer and then completes once after a correct answer', () => {
+    const onComplete = vi.fn();
+    render(<ColorWheelTool interactive={true} onComplete={onComplete} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /lock in this palette/i }));
+    fireEvent.click(screen.getByRole('button', { name: '30° from the base hue' }));
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+    fireEvent.click(screen.getByRole('button', { name: /try again/i }));
+
+    fireEvent.click(screen.getByRole('button', { name: '180° from the base hue' }));
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+
+    const doneButton = screen.getByRole('button', { name: /done/i });
+    fireEvent.click(doneButton);
+    fireEvent.click(doneButton);
+
+    expect(onComplete).toHaveBeenCalledTimes(1);
+    expect(screen.getByText(/palette built\. Moving on\./i)).toBeInTheDocument();
   });
 });
