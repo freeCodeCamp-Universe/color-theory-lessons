@@ -39,7 +39,7 @@ export const lesson2_5: LessonConfig = {
       choices: [
         { stableId: 'it-is-printed-with-luminescent-ink', label: 'It is printed with luminescent ink.', isCorrect: false, explanation: 'Screens do not use ink. They emit light directly.' },
         { stableId: 'the-display-emits-light-directly-to-the-viewer-s-eyes-something-', label: 'The display directs light toward the viewer\'s eyes, while paint and ink reflect ambient light.', isCorrect: true, explanation: 'A screen sends controlled light toward the viewer. Paint and ink depend on ambient light and reflect part of it.' },
-        { stableId: 'screens-use-special-high-brightness-pigments-inside-the-glass', label: 'Screens use special high-brightness pigments inside the glass.', isCorrect: false, explanation: 'Screens do not use pigments. They use light-emitting or light-controlling elements.' },
+        { stableId: 'screens-use-special-high-brightness-pigments-inside-the-glass', label: 'Screens use special high-brightness pigments inside the glass.', isCorrect: false, explanation: 'Screens do not form images by layering colored pigment. They use light-emitting or light-controlling elements.' },
         { stableId: 'screens-always-display-brighter-colors-than-any-physical-materia', label: 'Every screen color is brighter than every color on a physical surface.', isCorrect: false, explanation: 'Brightness depends on the display, its settings, and the ambient illumination. The consistent difference is how the image is produced: a screen controls light, while a physical surface reflects it.' },
       ],
     },

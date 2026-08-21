@@ -208,7 +208,7 @@ const SCENARIOS: Scenario[] = [
         id: 'a',
         label: 'The dark background absorbs some of the green wavelengths, concentrating the hue.',
         isCorrect: false,
-        explanation: 'Screens do not work by absorption. The background does not absorb the accent\'s light.',
+        explanation: 'The dark background does not absorb or modify light from the green accent. Each area of the display controls its own light output.',
       },
       {
         id: 'b',
