@@ -9,61 +9,61 @@ export const lesson2_2: LessonConfig = {
   reviewTags: ['additive', 'RGB', 'color-models', 'screens'],
   steps: [
     {
-      text: 'Every color on a screen is built from three light sources: red, green, and blue. Each is a channel, and you control its intensity from 0 (off) to 255 (full brightness). The color you see is the result of how those three channels combine.',
+      text: 'Screens typically create pixel colors by combining light from red, green, and blue subpixels. In common 8-bit RGB notation, each channel ranges from 0 to 255. A higher value represents more light from that channel, and the three values together define the encoded color.',
     },
     {
-      text: 'With all channels at zero, you get black — no light at all. With all three at full intensity, you get white. This is additive color: more light means brighter, and combining all three at maximum is the brightest possible result.',
+      text: 'In 8-bit RGB notation, R:0 G:0 B:0 represents black, while R:255 G:255 B:255 represents white. Raising all three channel values together increases the emitted light and moves the result from black through gray toward white.',
       panel: { type: 'rgb-mixer-preview', mode: 'extremes' },
     },
     {
-      text: 'Channel pairs create predictable results. Red and green together produce yellow. Green and blue together produce cyan. Red and blue together produce magenta. These are the additive secondaries — worth knowing by feel, not just memorization.',
+      text: 'At full intensity, each pair of RGB channels produces an additive secondary color. Red and green produce yellow, green and blue produce cyan, and red and blue produce magenta.',
       panel: { type: 'rgb-mixer-preview', mode: 'channel-pairs' },
     },
     {
-      text: 'Equal values across all three channels produce neutral grays. Low equal values make dark gray. High equal values make light gray. Even a small difference between channels gives the neutral a color cast — useful for warm or cool surfaces.',
+      text: 'In RGB notation, equal values across all three channels represent neutral grays. Lower equal values make darker grays, while higher equal values make lighter grays. When the values differ, the result gains a color cast. For example, raising red above the other two shifts a gray toward red.',
       panel: { type: 'rgb-mixer-preview', mode: 'neutral-grays' },
     },
     {
-      text: 'Use the RGB mixer to explore how channels combine. The challenge asks you to recreate five interface colors — think through which channels should be high, low, or equal before reaching for the slider.',
+      text: 'Use the RGB mixer to recreate five interface colors. Before moving a slider, predict which channels should be high, low, or close to equal.',
     },
   ],
   challenge: {
-      prompt: 'Recreate each target color using the R, G, and B sliders. Think about which channels should be high, low, or equal before reaching for the slider.',
+      prompt: 'Recreate each target color with the R, G, and B sliders. First predict which channels should be high, low, or close to equal.',
       hints: [
-        'For warm colors (reds, oranges, yellows), the red channel dominates. Yellow also needs high green.',
-        'For cool colors (blues, cyans), the blue channel leads. Cyan also needs high green.',
-        'Grays and neutrals come from roughly equal channels. Tilt one slightly to add warmth or coolness.',
+        'Warm pink needs the most red, some blue, and less green.',
+        'For pale sky blue, keep blue highest, green next, and red lowest. Use the same order at lower values for dark navy.',
+        'Keep the channels close together for soft gray. Warning yellow needs high red and green with little blue.',
       ],
   },
   quizItems: [
     {
       id: 'q1',
-      prompt: 'Which RGB combination is most likely to produce cyan?',
+      prompt: 'Which RGB channel pattern produces cyan?',
       choices: [
         { stableId: 'high-red-low-green-high-blue', label: 'High red, low green, high blue', isCorrect: false, explanation: 'High red and blue with low green produces magenta, not cyan.' },
-        { stableId: 'low-red-high-green-high-blue', label: 'Low red, high green, high blue', isCorrect: true, explanation: 'Cyan is green and blue light combined. Keeping red low prevents the mix from shifting toward white.' },
+        { stableId: 'low-red-high-green-high-blue', label: 'Low red, high green, high blue', isCorrect: true, explanation: 'Cyan combines green and blue light. Keeping red low prevents the mix from shifting toward white.' },
         { stableId: 'high-red-high-green-low-blue', label: 'High red, high green, low blue', isCorrect: false, explanation: 'High red and green with low blue produces yellow.' },
-        { stableId: 'equal-amounts-of-all-three', label: 'Equal amounts of all three', isCorrect: false, explanation: 'Equal channels produce a neutral gray or white, depending on the intensity level.' },
+        { stableId: 'equal-amounts-of-all-three', label: 'Equal amounts of all three', isCorrect: false, explanation: 'Equal channels represent a neutral value from black through gray to white.' },
       ],
     },
     {
       id: 'q2',
-      prompt: 'What does it mean on a screen when all three RGB channels are set to the same value — say, R:100 G:100 B:100?',
+      prompt: 'In 8-bit RGB notation, what does R:100 G:100 B:100 represent?',
       choices: [
-        { stableId: 'the-color-will-be-a-warm-neutral', label: 'The color will be a warm neutral', isCorrect: false, explanation: 'A warm neutral would require slightly more red than blue. Equal channels produce a pure neutral.' },
-        { stableId: 'the-result-is-always-white', label: 'The result is always white', isCorrect: false, explanation: 'White requires all three channels at full intensity (255). Equal values at lower levels produce grays.' },
-        { stableId: 'the-result-is-a-neutral-gray', label: 'The result is a neutral gray', isCorrect: true, explanation: 'Equal RGB channels always produce a neutral — no channel dominates, so no color cast appears. The lightness depends on how high the values are.' },
-        { stableId: 'the-result-is-black', label: 'The result is black', isCorrect: false, explanation: 'Black requires all channels at 0. Equal channels at 100 produce a mid-range gray.' },
+        { stableId: 'the-color-will-be-a-warm-neutral', label: 'A warm neutral', isCorrect: false, explanation: 'Equal channel values have no RGB color cast, so this mix is not a warm neutral.' },
+        { stableId: 'the-result-is-always-white', label: 'White', isCorrect: false, explanation: 'In 8-bit RGB notation, white is R:255 G:255 B:255. Lower equal values represent grays.' },
+        { stableId: 'the-result-is-a-neutral-gray', label: 'A neutral gray', isCorrect: true, explanation: 'Equal RGB channel values represent a neutral because no channel is higher than the others. The value determines how light or dark the gray is.' },
+        { stableId: 'the-result-is-black', label: 'Black', isCorrect: false, explanation: 'Black is R:0 G:0 B:0. Equal channel values of 100 represent a gray.' },
       ],
     },
     {
       id: 'q3',
       prompt: 'A designer wants a vivid purple accent. Which channels should be elevated?',
       choices: [
-        { stableId: 'red-and-green', label: 'Red and green', isCorrect: false, explanation: 'Red and green together produce yellow, not purple.' },
-        { stableId: 'green-and-blue', label: 'Green and blue', isCorrect: false, explanation: 'Green and blue produce cyan. Purple requires red and blue.' },
-        { stableId: 'red-and-blue', label: 'Red and blue', isCorrect: true, explanation: 'Purple and magenta come from combining red and blue light. Keeping green low keeps the hue away from white or gray.' },
-        { stableId: 'all-three-equally', label: 'All three equally', isCorrect: false, explanation: 'Equal channels neutralize each other into gray or white. A vivid hue requires imbalance between channels.' },
+        { stableId: 'red-and-green', label: 'Red and green', isCorrect: false, explanation: 'High red and green with low blue produces yellow, not purple.' },
+        { stableId: 'green-and-blue', label: 'Green and blue', isCorrect: false, explanation: 'High green and blue with low red produces cyan. Purple requires red and blue.' },
+        { stableId: 'red-and-blue', label: 'Red and blue', isCorrect: true, explanation: 'Purple uses red and blue light, usually with blue higher than red, while green stays low. Equal high values of red and blue produce magenta.' },
+        { stableId: 'all-three-equally', label: 'All three equally', isCorrect: false, explanation: 'Equal RGB channels represent a neutral gray or white. A purple hue requires more blue and red than green.' },
       ],
     },
   ],

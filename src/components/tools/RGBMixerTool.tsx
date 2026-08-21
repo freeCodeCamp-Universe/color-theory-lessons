@@ -84,8 +84,8 @@ export const RGBMixerTool = memo(function RGBMixerTool({ interactive = true, onC
     type Swatch = { label: string; rgb: RGB; caption: string };
     const PREVIEW_SWATCHES: Record<string, Swatch[]> = {
       extremes: [
-        { label: 'black', rgb: { r: 0, g: 0, b: 0 }, caption: 'rgb(0, 0, 0) — all channels off' },
-        { label: 'white', rgb: { r: 255, g: 255, b: 255 }, caption: 'rgb(255, 255, 255) — all channels full' },
+        { label: 'black', rgb: { r: 0, g: 0, b: 0 }, caption: 'rgb(0, 0, 0): all channels off' },
+        { label: 'white', rgb: { r: 255, g: 255, b: 255 }, caption: 'rgb(255, 255, 255): all channels full' },
       ],
       'channel-pairs': [
         { label: 'yellow', rgb: { r: 255, g: 255, b: 0 }, caption: 'red + green = yellow' },
@@ -124,7 +124,7 @@ export const RGBMixerTool = memo(function RGBMixerTool({ interactive = true, onC
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>target</span>
           <div style={{ height: '72px', borderRadius: 'var(--radius-sm)', backgroundColor: rgbString(target.value), border: '1px solid rgba(255,255,255,0.08)' }} />
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)' }}>
-            {interactive ? target.name : '—'}
+            {interactive ? target.name : 'preview'}
           </span>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: '120px' }}>
@@ -205,12 +205,12 @@ export const RGBMixerTool = memo(function RGBMixerTool({ interactive = true, onC
       {interactive && checked && !allDone && (
         close ? (
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--green)', margin: 0 }}>
-            ✓ match! advancing…
+            ✓ Match. Loading next target...
           </p>
         ) : (
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--red)', margin: 0 }}>
-              not quite — try again
+              Not quite. Try again.
             </p>
             <button
               onClick={handleRetry}
@@ -233,7 +233,7 @@ export const RGBMixerTool = memo(function RGBMixerTool({ interactive = true, onC
 
       {allDone && (
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--green)', margin: 0 }}>
-          ✓ all five targets matched. You are thinking in channels.
+          ✓ All five targets matched.
         </p>
       )}
     </div>
