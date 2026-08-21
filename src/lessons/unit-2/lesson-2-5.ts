@@ -9,28 +9,28 @@ export const lesson2_5: LessonConfig = {
   reviewTags: ['additive', 'display', 'perception', 'interface'],
   steps: [
     {
-      text: 'A display does not paint a flat surface. It controls many tiny light-producing elements arranged in a grid. Each element can emit red, green, or blue light at a specific intensity.',
+      text: 'A display forms an image with a grid of pixels. Each pixel typically combines red, green, and blue subpixels whose light output is controlled independently.',
     },
     {
-      text: 'From a normal viewing distance your eye blends all those tiny elements into a single unified color. You do not see the individual parts — only the combined result. Zoom into a screen photo and the subpixels become visible; step back and they vanish into a smooth swatch.',
+      text: 'At a normal viewing distance, the subpixels are too small to distinguish. Their light combines in your visual system, so you perceive one color per pixel. Magnifying a screen reveals the individual red, green, and blue subpixels.',
     },
     {
-      text: 'Because screen color is made from emitted light rather than reflected pigment, it can appear luminous in a way paint cannot match. The display is literally sending light straight to your eyes — not bouncing ambient light off an inert surface.',
+      text: 'A display forms its image by directing controlled light toward the viewer. Paint depends on ambient light and reflects only part of it. This difference can make a bright screen accent appear luminous in dim surroundings.',
     },
     {
-      text: 'This luminous quality changes depending on surrounding color. On a dark background, a vivid accent has high contrast with its surroundings and appears to stand out — almost to glow. On a light background, the same accent competes with brightness already present and reads as less intense.',
+      text: 'Surrounding luminance affects how a color appears. The bright accents in this lesson have greater luminance contrast against a dark background, so they can look brighter and more prominent. The same accents have less luminance contrast against a light background and can appear less prominent.',
     },
     {
       text: 'Use the pixel explorer to see how subpixels combine into a perceived color. Then in the challenge, compare the same accent on a dark and light background and pick the explanation that best describes what you see.',
     },
   ],
   challenge: {
-      prompt: 'The same accent color is shown on a dark background and a light background. Pick the answer that best explains why one context makes it appear more vivid.',
-      hints: [
-        'Ask: is the display adding brightness here, or is something reducing it?',
-        'Think about what "contrast" means when the surrounding area is near-black versus near-white.',
-        'The accent\'s RGB values do not change — only the context does.',
-      ],
+    prompt: 'The same accent color is shown on a dark background and a light background. Pick the answer that best explains why it appears more prominent in one context.',
+    hints: [
+      'Compare the luminance of the accent with the luminance of each background.',
+      'For these accents, the contrast is greater when the surrounding area is near-black than when it is near-white.',
+      'The accent\'s RGB values do not change. Only the background changes.',
+    ],
   },
   quizItems: [
     {
@@ -38,9 +38,9 @@ export const lesson2_5: LessonConfig = {
       prompt: 'What is the practical reason a screen color can appear to glow?',
       choices: [
         { stableId: 'it-is-printed-with-luminescent-ink', label: 'It is printed with luminescent ink.', isCorrect: false, explanation: 'Screens do not use ink. They emit light directly.' },
-        { stableId: 'the-display-emits-light-directly-to-the-viewer-s-eyes-something-', label: 'The display emits light directly to the viewer\'s eyes — something paint and ink cannot do.', isCorrect: true, explanation: 'Emitted light reaches the eye directly. Paint only reflects ambient light — an indirect, weaker signal.' },
-        { stableId: 'screens-use-special-high-brightness-pigments-inside-the-glass', label: 'Screens use special high-brightness pigments inside the glass.', isCorrect: false, explanation: 'Screens do not use pigments. They use light-emitting or light-controlling elements.' },
-        { stableId: 'screens-always-display-brighter-colors-than-any-physical-materia', label: 'Screens always display brighter colors than any physical material.', isCorrect: false, explanation: 'Not always — a printed color in direct sunlight can rival screen brightness. The difference is the mechanism: emission vs reflection.' },
+        { stableId: 'the-display-emits-light-directly-to-the-viewer-s-eyes-something-', label: 'The display directs light toward the viewer\'s eyes, while paint and ink reflect ambient light.', isCorrect: true, explanation: 'A screen sends controlled light toward the viewer. Paint and ink depend on ambient light and reflect part of it.' },
+        { stableId: 'screens-use-special-high-brightness-pigments-inside-the-glass', label: 'Screens use special high-brightness pigments inside the glass.', isCorrect: false, explanation: 'Screens do not form images by layering colored pigment. They use light-emitting or light-controlling elements.' },
+        { stableId: 'screens-always-display-brighter-colors-than-any-physical-materia', label: 'Every screen color is brighter than every color on a physical surface.', isCorrect: false, explanation: 'Brightness depends on the display, its settings, and the ambient illumination. The consistent difference is how the image is produced: a screen controls light, while a physical surface reflects it.' },
       ],
     },
     {
@@ -48,19 +48,19 @@ export const lesson2_5: LessonConfig = {
       prompt: 'Why can the same accent color feel stronger on a dark background than on a light one?',
       choices: [
         { stableId: 'dark-backgrounds-make-all-colors-appear-warmer', label: 'Dark backgrounds make all colors appear warmer.', isCorrect: false, explanation: 'Background darkness affects perceived contrast and vividness, not warmth specifically.' },
-        { stableId: 'the-contrast-between-the-bright-accent-and-the-dark-surroundings', label: 'The contrast between the bright accent and the dark surroundings increases perceived vividness.', isCorrect: true, explanation: 'The accent\'s actual values do not change. The dark surround raises relative contrast, making the emitted color stand out more sharply.' },
-        { stableId: 'a-dark-background-reduces-the-saturation-of-neighboring-colors-a', label: 'A dark background reduces the saturation of neighboring colors and leaves only the accent.', isCorrect: false, explanation: 'Saturation values are not altered by the surrounding color. The effect is one of perceived contrast, not actual value change.' },
+        { stableId: 'the-contrast-between-the-bright-accent-and-the-dark-surroundings', label: 'The bright accent has greater luminance contrast with the dark background.', isCorrect: true, explanation: 'The accent\'s RGB values remain fixed. Its greater luminance contrast with the dark background makes it more prominent.' },
+        { stableId: 'a-dark-background-reduces-the-saturation-of-neighboring-colors-a', label: 'A dark background reduces the accent\'s encoded saturation.', isCorrect: false, explanation: 'The accent\'s RGB values and encoded saturation do not change. Its appearance changes because the background changes the surrounding luminance.' },
         { stableId: 'the-accent-s-rgb-values-increase-automatically-when-placed-on-a-', label: 'The accent\'s RGB values increase automatically when placed on a dark background.', isCorrect: false, explanation: 'RGB values are fixed. The perception changes because of contrast with surroundings, not because the values change.' },
       ],
     },
     {
       id: 'q3',
-      prompt: 'A screen creates color by behaving like a painted surface. True or false?',
+      prompt: 'A screen and a painted surface produce color through the same physical process. True or false?',
       choices: [
-        { stableId: 'true-screens-layer-digital-paint-in-the-rgb-color-space', label: 'True — screens layer digital paint in the RGB color space.', isCorrect: false, explanation: 'Screens emit light. "Layering paint" is a metaphor borrowed from pigment, not how displays physically work.' },
-        { stableId: 'false-screens-emit-light-a-painted-surface-reflects-ambient-ligh', label: 'False — screens emit light. A painted surface reflects ambient light. They produce color through different physical mechanisms.', isCorrect: true, explanation: 'This is the key distinction of the unit. Understanding it helps avoid paint-logic errors in screen design.' },
-        { stableId: 'true-both-screens-and-paint-are-creating-color-for-the-viewer-s-', label: 'True — both screens and paint are creating color for the viewer\'s eye in the same way.', isCorrect: false, explanation: 'The end result is perceived color in both cases, but the underlying mechanism is completely different.' },
-        { stableId: 'it-depends-on-the-type-of-screen-technology-used', label: 'It depends on the type of screen technology used.', isCorrect: false, explanation: 'Whether LCD, OLED, or LED, all modern display technologies emit controlled light rather than reflecting pigment.' },
+        { stableId: 'true-screens-layer-digital-paint-in-the-rgb-color-space', label: 'True. Screens layer digital paint in the RGB color space.', isCorrect: false, explanation: 'Screens control light rather than layering pigment.' },
+        { stableId: 'false-screens-emit-light-a-painted-surface-reflects-ambient-ligh', label: 'False. Screens control light, while painted surfaces reflect ambient light.', isCorrect: true, explanation: 'Displays form images with controlled light. Paint absorbs some wavelengths from ambient light and reflects others.' },
+        { stableId: 'true-both-screens-and-paint-are-creating-color-for-the-viewer-s-', label: 'True. Both produce color for the viewer through the same process.', isCorrect: false, explanation: 'Both result in perceived color, but they send light to the eye through different physical processes.' },
+        { stableId: 'it-depends-on-the-type-of-screen-technology-used', label: 'It depends on the type of screen technology used.', isCorrect: false, explanation: 'LCD pixels modulate light from a backlight, while emissive displays generate light at their pixels. Both form images with controlled light rather than reflected pigment.' },
       ],
     },
   ],

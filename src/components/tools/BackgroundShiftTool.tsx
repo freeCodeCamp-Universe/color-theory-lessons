@@ -5,7 +5,7 @@ import shellStyles from './ToolShell.module.css';
 
 // Subpixel triplets for a 6×4 grid of "pixels" showing a vivid blue accent
 // Each "pixel" is 3 subpixels wide (R, G, B), contributing to the perceived color
-const ACCENT_RGB = { r: 37, g: 99, b: 235 }; // blue accent ~#2563eb
+const ACCENT_RGB = { r: 59, g: 130, b: 246 }; // blue accent ~#3b82f6
 
 const SUBPIXEL_COLORS = [
   `rgb(${ACCENT_RGB.r}, 0, 0)`,
@@ -100,7 +100,7 @@ function PixelZoomExplorer({ interactive }: { interactive: boolean }) {
               textAlign: 'center',
             }}
           >
-            R · G · B subpixels — zoomed in
+            R · G · B subpixels, zoomed in
           </p>
         </div>
       ) : (
@@ -123,7 +123,7 @@ function PixelZoomExplorer({ interactive }: { interactive: boolean }) {
               textAlign: 'center',
             }}
           >
-            perceived color — zoomed out
+            perceived color, zoomed out
           </p>
         </div>
       )}
@@ -141,26 +141,26 @@ interface Scenario {
 
 const SCENARIOS: Scenario[] = [
   {
-    accentHex: '#2563eb',
+    accentHex: '#3b82f6',
     accentLabel: 'vivid blue',
     choices: [
       {
         id: 'a',
-        label: 'The dark background emits low light, creating high contrast that makes the accent\'s emitted light stand out sharply.',
+        label: 'The accent has greater luminance contrast against the dark background, so it appears more prominent.',
         isCorrect: true,
-        explanation: 'Correct. The accent values do not change — only the surrounding context does. Dark surroundings raise relative contrast and make emitted color appear more vivid.',
+        explanation: 'Correct. The accent\'s RGB values do not change. The dark background creates greater luminance contrast than the light background.',
       },
       {
         id: 'b',
         label: 'The light background amplifies the accent because white reflects it back toward the viewer.',
         isCorrect: false,
-        explanation: 'Screens emit light — they do not reflect. The light background competes with the accent\'s brightness rather than amplifying it.',
+        explanation: 'The displayed background does not reflect the accent back toward the viewer. The light-background pairing has a lower luminance contrast ratio.',
       },
       {
         id: 'c',
         label: 'The accents appear identical on both backgrounds.',
         isCorrect: false,
-        explanation: 'They are visually different. The dark-background version appears more vivid due to the contrast difference.',
+        explanation: 'The RGB values are identical, but the background changes the accent\'s luminance contrast and perceived prominence.',
       },
       {
         id: 'd',
@@ -178,25 +178,25 @@ const SCENARIOS: Scenario[] = [
         id: 'a',
         label: 'The dark background makes the orange warmer in hue.',
         isCorrect: false,
-        explanation: 'Background darkness does not change the hue of the accent. It changes perceived contrast and vividness only.',
+        explanation: 'The dark background does not change the accent\'s encoded hue or RGB values. This comparison changes the accent\'s luminance contrast.',
       },
       {
         id: 'b',
-        label: 'The orange is surrounded by low light, so even its moderate brightness reads as intense relative to the near-black context.',
+        label: 'The orange has greater luminance contrast against the near-black background than against the light background.',
         isCorrect: true,
-        explanation: 'Correct. Perceived intensity is relative. Against a near-black field, the same emitted color feels stronger because the contrast gap is wider.',
+        explanation: 'Correct. The orange has the same RGB values in both examples, but the near-black background creates greater luminance contrast.',
       },
       {
         id: 'c',
         label: 'Light backgrounds are better for warm colors because they enhance saturation.',
         isCorrect: false,
-        explanation: 'Saturation is an intrinsic value of the color, not something backgrounds enhance. Light backgrounds tend to reduce the perceived pop of warm accents by adding competing brightness.',
+        explanation: 'The background does not change the accent\'s RGB values or encoded saturation. It changes the surrounding luminance and therefore the contrast.',
       },
       {
         id: 'd',
-        label: 'Both backgrounds show the orange the same way — context does not affect screen color.',
+        label: 'Both backgrounds make the orange appear equally prominent because its RGB values are unchanged.',
         isCorrect: false,
-        explanation: 'Context strongly affects perception. The same color can read differently depending on what surrounds it.',
+        explanation: 'Matching RGB values do not guarantee matching appearance. The dark background gives the orange greater luminance contrast.',
       },
     ],
   },
@@ -208,25 +208,25 @@ const SCENARIOS: Scenario[] = [
         id: 'a',
         label: 'The dark background absorbs some of the green wavelengths, concentrating the hue.',
         isCorrect: false,
-        explanation: 'Screens do not work by absorption. The background does not absorb the accent\'s light.',
+        explanation: 'The dark background does not absorb or modify light from the green accent. Each area of the display controls its own light output.',
       },
       {
         id: 'b',
-        label: 'Because the screen emits light, the green reads as an independent light source against the dark — which paint on a wall cannot achieve.',
+        label: 'The green has greater luminance contrast against the dark background, so it appears more prominent.',
         isCorrect: true,
-        explanation: 'Correct. Emitted light against a dark field evokes a luminous quality. Physical paint reflects ambient light and cannot produce this same isolated-light-source effect.',
+        explanation: 'Correct. The green uses the same RGB values in both examples. The dark background creates the greater luminance contrast.',
       },
       {
         id: 'c',
         label: 'The green appears identical on both backgrounds.',
         isCorrect: false,
-        explanation: 'This is visually noticeable. The dark-background version reads as more vivid and luminous.',
+        explanation: 'The green has the same RGB values in both examples, but its contrast with each background differs.',
       },
       {
         id: 'd',
         label: 'Light backgrounds amplify saturated greens because white boosts their perceived value.',
         isCorrect: false,
-        explanation: 'White surroundings compete with the accent\'s brightness rather than boosting it, making the accent feel less dominant.',
+        explanation: 'The light-background pairing has a lower luminance contrast ratio.',
       },
     ],
   },
@@ -309,7 +309,7 @@ export const BackgroundShiftTool = memo(function BackgroundShiftTool({ interacti
                 textTransform: 'uppercase',
               }}
             >
-              same accent — two backgrounds
+              same accent, two backgrounds
             </span>
           </div>
 
