@@ -3,6 +3,9 @@ import type { ProgressState } from '../types/progress.ts';
 const STORAGE_KEY = 'color-theory-course-state';
 const VERSION = 3;
 
+export const MILESTONE_SESSION_PREFIX = 'color-theory-course-milestone-session:';
+export const READ_INTERFACE_SESSION_PREFIX = 'color-theory-course-read-interface-session:';
+
 interface StoredState {
   version: number;
   progress: ProgressState;
@@ -59,5 +62,25 @@ export function saveState(
     localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
   } catch {
     // Storage full or unavailable — silently ignore
+  }
+}
+
+export function clearMilestoneSessions(): void {
+  try {
+    const keys = Array.from(
+      { length: sessionStorage.length },
+      (_, index) => sessionStorage.key(index),
+    );
+
+    for (const key of keys) {
+      if (
+        key?.startsWith(MILESTONE_SESSION_PREFIX)
+        || key?.startsWith(READ_INTERFACE_SESSION_PREFIX)
+      ) {
+        sessionStorage.removeItem(key);
+      }
+    }
+  } catch {
+    // Continue resetting persisted progress when session storage is unavailable.
   }
 }
