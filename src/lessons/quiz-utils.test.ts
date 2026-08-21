@@ -7,7 +7,7 @@ function makeLesson(overrides?: Partial<LessonConfig>): LessonConfig {
     id: 'test-lesson',
     unitId: 'unit-test',
     title: 'Test Lesson',
-    interactionType: 'none',
+    interactionType: 'color-wheel',
     steps: [{ text: 'Step one' }],
     challenge: { prompt: 'Do the thing', hints: [] },
     quizItems: [

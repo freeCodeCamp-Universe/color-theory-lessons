@@ -1,39 +1,8 @@
 import { useMemo } from 'react';
 import { lessonRegistry } from '../lessons/lesson-registry.ts';
 import { useAppState } from '../state/app-context.tsx';
+import { TAG_LABELS } from '../data/reviewTags.ts';
 import styles from './ReviewPage.module.css';
-
-// Human-readable labels for review tags
-const TAG_LABELS: Record<string, string> = {
-  'additive': 'Additive Color',
-  'color-function': 'Color Function in UI',
-  'color-models': 'Color Models',
-  'contrast': 'Contrast',
-  'display': 'Displays and Pixels',
-  'emphasis': 'Emphasis',
-  'formats': 'Color Formats',
-  'foundations': 'Foundations',
-  'harmony': 'Harmony and Relationships',
-  'hierarchy': 'Visual Hierarchy',
-  'hue': 'Hue',
-  'HSL': 'HSL',
-  'HEX': 'HEX',
-  'implementation': 'Implementation',
-  'interface': 'Interface Design',
-  'lightness': 'Lightness',
-  'mental-models': 'Mental Models',
-  'palette': 'Palette',
-  'perception': 'Color Perception',
-  'practical': 'Practical Application',
-  'print': 'Print and Physical Media',
-  'readability': 'Readability',
-  'RGB': 'RGB',
-  'saturation': 'Saturation',
-  'screens': 'Screens',
-  'subtractive': 'Subtractive Color',
-  'temperature': 'Color Temperature',
-  'visual-vocabulary': 'Visual Vocabulary',
-};
 
 interface ReviewEntry {
   lessonId: string;

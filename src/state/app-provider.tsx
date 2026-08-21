@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react';
+import { useCallback, useEffect, useReducer } from 'react';
 import type { ReactNode } from 'react';
 import type { ProgressState } from '../types/progress.ts';
 import {
@@ -7,10 +7,15 @@ import {
   appReducer,
   createInitialState,
 } from './app-context.tsx';
-import { saveState } from './persistence.ts';
+import type { Action } from './app-context.tsx';
+import { clearMilestoneSessions, saveState } from './persistence.ts';
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(appReducer, undefined, createInitialState);
+  const [state, reducerDispatch] = useReducer(appReducer, undefined, createInitialState);
+  const dispatch = useCallback((action: Action) => {
+    if (action.type === 'RESET_PROGRESS') clearMilestoneSessions();
+    reducerDispatch(action);
+  }, []);
 
   useEffect(() => {
     const progress: ProgressState = {

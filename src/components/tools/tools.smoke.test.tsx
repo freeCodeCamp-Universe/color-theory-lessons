@@ -21,7 +21,6 @@ import { HexRgbEditorTool } from './HexRgbEditorTool.tsx';
 import { HslPlaygroundTool } from './HslPlaygroundTool.tsx';
 import { InclusiveReviewTool } from './InclusiveReviewTool.tsx';
 import { InterfaceGalleryTool } from './InterfaceGalleryTool.tsx';
-import { InterfaceTunerTool } from './InterfaceTunerTool.tsx';
 import { LogicFixerTool } from './LogicFixerTool.tsx';
 import { MismatchExplainerTool } from './MismatchExplainerTool.tsx';
 import { PatternRepairTool } from './PatternRepairTool.tsx';
@@ -59,7 +58,6 @@ const TOOLS: [string, SmokeTestTool][] = [
   ['HslPlaygroundTool', HslPlaygroundTool as SmokeTestTool],
   ['InclusiveReviewTool', InclusiveReviewTool as SmokeTestTool],
   ['InterfaceGalleryTool', InterfaceGalleryTool as SmokeTestTool],
-  ['InterfaceTunerTool', InterfaceTunerTool as SmokeTestTool],
   ['LogicFixerTool', LogicFixerTool as SmokeTestTool],
   ['MismatchExplainerTool', MismatchExplainerTool as SmokeTestTool],
   ['PatternRepairTool', PatternRepairTool as SmokeTestTool],

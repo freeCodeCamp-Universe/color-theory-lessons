@@ -6,11 +6,11 @@ import styles from './InterfaceMockup.module.css';
  *
  * Intentional issues:
  * - Nav links: medium-gray (#9ca3af) on saturated blue (#1e40af) — low contrast
- * - Card accent labels: orange (#ea580c) competing with the green CTA for attention
+ * - Card accent labels: orange (#c2410c) competing with the green button for attention
  * - Footer text: dark gray (#4b5563) on near-black (#0a0a0a) — poor contrast
  *
  * Intentional strengths:
- * - Green CTA button: high contrast focal point on the blue hero
+ * - Green button: saturated focal point on the blue hero with readable dark text
  * - Hero headline: white on dark blue — clearly readable
  * - Cards: dark text on light surface — accessible
  */
@@ -35,7 +35,7 @@ export function InterfaceMockup() {
         <span className={styles.regionLabel}>hero</span>
         <h2 className={styles.heroTitle}>The design tool for developers.</h2>
         <p className={styles.heroSub}>Build interfaces that make sense.</p>
-        <button className={styles.cta}>Try it free →</button>
+        <span className={styles.cta}>Try it free →</span>
       </section>
 
       {/* Cards */}

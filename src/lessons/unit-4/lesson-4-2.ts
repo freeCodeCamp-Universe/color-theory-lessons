@@ -6,7 +6,7 @@ export const lesson4_2: LessonConfig = {
   unitId: 'unit-4',
   title: LESSON_TITLES['u4-l2'],
   interactionType: 'vision-cards',
-  reviewTags: ['CVD', 'perception', 'accessibility'],
+  reviewTags: ['cvd', 'perception', 'accessibility'],
   steps: [
     {
       text: 'Color vision deficiency (CVD) refers to differences in how certain color distinctions are perceived, due to variation in cone function. It is not a single condition — there are multiple types and a range of severities.',

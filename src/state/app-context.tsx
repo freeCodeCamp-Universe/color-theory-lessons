@@ -14,7 +14,7 @@ interface AppState extends ProgressState {
 }
 
 /** Actions that can be dispatched to update the global state. */
-type Action =
+export type Action =
   | { type: 'COMPLETE_LESSON'; lessonId: string }
   | { type: 'COMPLETE_QUIZ'; quizId: string; score: number }
   | { type: 'COMPLETE_MILESTONE'; milestoneId: string }

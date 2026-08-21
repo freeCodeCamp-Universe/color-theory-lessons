@@ -57,7 +57,8 @@ export function HomePage() {
           {units.map((unit, i) => {
             const total = unit.lessons.length;
             const done = unit.lessons.filter((id) => completedLessons.includes(id)).length;
-            const complete = total > 0 && done === total;
+            const milestoneDone = !unit.milestoneId || completedMilestones.includes(unit.milestoneId);
+            const complete = total > 0 && done === total && milestoneDone;
             const started = done > 0 && !complete;
             const firstLesson = unit.lessons[0];
 

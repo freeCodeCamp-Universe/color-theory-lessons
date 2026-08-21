@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { MilestoneConfig } from '../../types/milestone.ts';
 import { useMilestoneCompletion } from '../../hooks/useMilestoneCompletion.ts';
 import { units } from '../../data/units.ts';
+import { MILESTONE_SESSION_PREFIX } from '../../state/persistence.ts';
 import { ChallengeRenderer } from './ChallengeRenderer.tsx';
 import { InterfaceMockup } from './InterfaceMockup.tsx';
 import styles from './MilestonePlayer.module.css';
@@ -15,22 +16,145 @@ type Phase = 'question' | 'challenge' | 'part-summary' | 'complete';
 
 interface Answer {
   questionId: string;
+  choiceId: string;
   isCorrect: boolean;
+}
+
+interface MilestoneSessionState {
+  version: 1;
+  phase: Phase;
+  partIndex: number;
+  questionIndex: number;
+  selectedChoice: string | null;
+  submitted: boolean;
+  answers: Answer[];
+  completedChallenges: string[];
+  attemptId: number;
 }
 
 function phaseForPart(milestone: MilestoneConfig, index: number): Extract<Phase, 'question' | 'challenge'> {
   return milestone.parts[index]?.kind === 'challenge' ? 'challenge' : 'question';
 }
 
+function initialMilestoneSession(milestone: MilestoneConfig): MilestoneSessionState {
+  return {
+    version: 1,
+    phase: phaseForPart(milestone, 0),
+    partIndex: 0,
+    questionIndex: 0,
+    selectedChoice: null,
+    submitted: false,
+    answers: [],
+    completedChallenges: [],
+    attemptId: 1,
+  };
+}
+
+function loadMilestoneSession(milestone: MilestoneConfig): MilestoneSessionState {
+  const fallback = initialMilestoneSession(milestone);
+
+  try {
+    const stored = sessionStorage.getItem(`${MILESTONE_SESSION_PREFIX}${milestone.id}`);
+    if (stored === null) return fallback;
+
+    const parsed: unknown = JSON.parse(stored);
+    if (typeof parsed !== 'object' || parsed === null) return fallback;
+    const saved = parsed as Partial<MilestoneSessionState>;
+
+    const partIndex = Number.isInteger(saved.partIndex)
+      ? Math.min(Math.max(saved.partIndex as number, 0), milestone.parts.length - 1)
+      : 0;
+    const part = milestone.parts[partIndex];
+    const questionIndex = part.kind === 'quiz' && Number.isInteger(saved.questionIndex)
+      ? Math.min(Math.max(saved.questionIndex as number, 0), part.questions.length - 1)
+      : 0;
+    const currentQuestion = part.kind === 'quiz' ? part.questions[questionIndex] : undefined;
+
+    const answers: Answer[] = [];
+    if (Array.isArray(saved.answers)) {
+      for (const savedAnswer of saved.answers) {
+        if (typeof savedAnswer !== 'object' || savedAnswer === null) continue;
+        const answer = savedAnswer as Partial<Answer>;
+        const question = milestone.parts
+          .flatMap((item) => item.kind === 'quiz' ? item.questions : [])
+          .find((item) => item.id === answer.questionId);
+        const choice = question?.choices.find((item) => item.id === answer.choiceId);
+        if (!question || !choice || answers.some((item) => item.questionId === question.id)) continue;
+        answers.push({ questionId: question.id, choiceId: choice.id, isCorrect: choice.isCorrect });
+      }
+    }
+
+    const challengeIds = new Set(
+      milestone.parts.filter((item) => item.kind === 'challenge').map((item) => item.id),
+    );
+    const completedChallenges = Array.isArray(saved.completedChallenges)
+      ? saved.completedChallenges.filter((id): id is string => typeof id === 'string' && challengeIds.has(id))
+      : [];
+    const selectedChoice = typeof saved.selectedChoice === 'string'
+      && currentQuestion?.choices.some((choice) => choice.id === saved.selectedChoice)
+      ? saved.selectedChoice
+      : null;
+    const validPhases: Phase[] = ['question', 'challenge', 'part-summary', 'complete'];
+    let phase = validPhases.includes(saved.phase as Phase) ? saved.phase as Phase : phaseForPart(milestone, partIndex);
+    if (phase === 'question' && part.kind !== 'quiz') phase = phaseForPart(milestone, partIndex);
+    if (phase === 'challenge' && part.kind !== 'challenge') phase = phaseForPart(milestone, partIndex);
+
+    return {
+      version: 1,
+      phase,
+      partIndex,
+      questionIndex,
+      selectedChoice,
+      submitted: saved.submitted === true && selectedChoice !== null,
+      answers,
+      completedChallenges,
+      attemptId: Number.isInteger(saved.attemptId) && (saved.attemptId as number) > 0
+        ? saved.attemptId as number
+        : 1,
+    };
+  } catch {
+    return fallback;
+  }
+}
+
+function saveMilestoneSession(milestoneId: string, state: MilestoneSessionState) {
+  try {
+    sessionStorage.setItem(`${MILESTONE_SESSION_PREFIX}${milestoneId}`, JSON.stringify(state));
+  } catch {
+    // Continue without per-tab milestone persistence when storage is unavailable.
+  }
+}
+
 export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
   const { completeMilestone } = useMilestoneCompletion(milestone.id);
-  const [partIndex, setPartIndex] = useState(0);
-  const [questionIndex, setQuestionIndex] = useState(0);
-  const [selectedChoice, setSelectedChoice] = useState<string | null>(null);
-  const [submitted, setSubmitted] = useState(false);
-  const [answers, setAnswers] = useState<Answer[]>([]);
-  const [completedChallenges, setCompletedChallenges] = useState<string[]>([]);
-  const [phase, setPhase] = useState<Phase>(() => phaseForPart(milestone, 0));
+  const [initialSession] = useState(() => loadMilestoneSession(milestone));
+  const [partIndex, setPartIndex] = useState(initialSession.partIndex);
+  const [questionIndex, setQuestionIndex] = useState(initialSession.questionIndex);
+  const [selectedChoice, setSelectedChoice] = useState<string | null>(initialSession.selectedChoice);
+  const [submitted, setSubmitted] = useState(initialSession.submitted);
+  const [answers, setAnswers] = useState<Answer[]>(initialSession.answers);
+  const [completedChallenges, setCompletedChallenges] = useState<string[]>(initialSession.completedChallenges);
+  const [attemptId, setAttemptId] = useState(initialSession.attemptId);
+  const [phase, setPhase] = useState<Phase>(initialSession.phase);
+  const activeContentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    saveMilestoneSession(milestone.id, {
+      version: 1,
+      phase,
+      partIndex,
+      questionIndex,
+      selectedChoice,
+      submitted,
+      answers,
+      completedChallenges,
+      attemptId,
+    });
+  }, [answers, attemptId, completedChallenges, milestone.id, partIndex, phase, questionIndex, selectedChoice, submitted]);
+
+  useEffect(() => {
+    activeContentRef.current?.focus();
+  }, [partIndex, phase, questionIndex]);
 
   const currentPart = milestone.parts[partIndex];
   const currentQuestion = phase === 'question' && currentPart.kind === 'quiz'
@@ -82,7 +206,7 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
     setSubmitted(true);
     setAnswers((prev) => [
       ...prev,
-      { questionId: currentQuestion.id, isCorrect: choice.isCorrect },
+      { questionId: currentQuestion.id, choiceId: choice.id, isCorrect: choice.isCorrect },
     ]);
   }
 
@@ -99,8 +223,7 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
     } else if (!isLastPart) {
       setPhase('part-summary');
     } else {
-      // Last question of last part — complete the milestone
-      completeMilestone();
+      if (passed) completeMilestone();
       setPhase('complete');
     }
   }
@@ -121,7 +244,9 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
 
     const isLastPart = partIndex >= milestone.parts.length - 1;
     if (isLastPart) {
-      completeMilestone();
+      const alreadyCompleted = completedChallenges.includes(currentPart.id);
+      const finalScore = totalScore + (alreadyCompleted ? 0 : currentPart.pointValue);
+      if (finalScore >= milestone.passThreshold) completeMilestone();
       setPhase('complete');
       return;
     }
@@ -136,6 +261,7 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
     setSubmitted(false);
     setAnswers([]);
     setCompletedChallenges([]);
+    setAttemptId((id) => id + 1);
     setPhase(phaseForPart(milestone, 0));
   }
 
@@ -156,13 +282,23 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
             Unit {milestone.unitId.split('-')[1]} · Milestone
           </span>
           <h1 className={styles.milestoneTitle}>{milestone.title}</h1>
+          <p className={styles.milestoneDescription}>{milestone.description}</p>
+          <span className={styles.estimatedTime}>About {milestone.estimatedMinutes} minutes</span>
         </div>
 
         {/* Part progress dots */}
-        <div className={styles.progress} aria-label="Milestone progress">
+        <div
+          className={styles.progress}
+          role="progressbar"
+          aria-label={`Milestone progress: part ${phase === 'complete' ? milestone.parts.length : partIndex + 1} of ${milestone.parts.length}`}
+          aria-valuemin={1}
+          aria-valuemax={milestone.parts.length}
+          aria-valuenow={phase === 'complete' ? milestone.parts.length : partIndex + 1}
+        >
           {milestone.parts.map((p, i) => (
             <span
               key={p.id}
+              aria-hidden="true"
               className={`${styles.progressDot} ${
                 i < partIndex
                   ? styles.done
@@ -178,10 +314,10 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
 
         {/* ── Question phase ── */}
         {phase === 'question' && currentQuestion && (
-          <div className={styles.stepContent}>
+          <div className={styles.stepContent} ref={activeContentRef} tabIndex={-1}>
             <div className={styles.questionMeta}>
               <span className={styles.partLabel}>
-                Part {partIndex + 1} of {milestone.parts.length} — {currentPart.title}
+                Part {partIndex + 1} of {milestone.parts.length}: {currentPart.title}
               </span>
               <span className={styles.questionCounter}>
                 {globalQuestionNumber} / {totalQuestions}
@@ -223,13 +359,18 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
                     />
                     <span className={styles.choiceKey}>{choice.id}.</span>
                     <span>{choice.label}</span>
+                    {showResult && choice.isCorrect && <span className={styles.srOnly}> Correct answer.</span>}
+                    {showResult && isSelected && !choice.isCorrect && <span className={styles.srOnly}> Incorrect answer.</span>}
                   </label>
                 );
               })}
             </fieldset>
 
             {submitted && currentQuestion.choices.find((c) => c.id === selectedChoice)?.explanation && (
-              <p className={styles.explanation}>
+              <p className={styles.explanation} role="status" aria-live="polite">
+                <strong>
+                  {currentQuestion.choices.find((c) => c.id === selectedChoice)!.isCorrect ? 'Correct. ' : 'Not quite. '}
+                </strong>
                 {currentQuestion.choices.find((c) => c.id === selectedChoice)!.explanation}
               </p>
             )}
@@ -257,10 +398,10 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
         )}
 
         {phase === 'challenge' && currentPart.kind === 'challenge' && (
-          <div className={styles.stepContent}>
+          <div className={styles.stepContent} ref={activeContentRef} tabIndex={-1}>
             <div className={styles.questionMeta}>
               <span className={styles.partLabel}>
-                Part {partIndex + 1} of {milestone.parts.length} — {currentPart.title}
+                Part {partIndex + 1} of {milestone.parts.length}: {currentPart.title}
               </span>
               <span className={styles.questionCounter}>Challenge · {currentPart.pointValue} point{currentPart.pointValue === 1 ? '' : 's'}</span>
             </div>
@@ -271,7 +412,7 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
 
         {/* ── Part summary phase ── */}
         {phase === 'part-summary' && (
-          <div className={styles.partSummary}>
+          <div className={styles.partSummary} ref={activeContentRef} tabIndex={-1}>
             <span className={styles.partSummaryBadge}>
               Part {partIndex + 1} complete
             </span>
@@ -294,21 +435,23 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
 
         {/* ── Complete phase ── */}
         {phase === 'complete' && (
-          <div className={styles.complete}>
-            <span
-              className={`${styles.completeBadge} ${passed ? styles.completeBadgePassed : styles.completeBadgeFailed}`}
-            >
-              {passed ? 'milestone passed' : 'milestone complete'}
-            </span>
-            <p className={styles.completeTitle}>{milestone.title}</p>
-            <p className={styles.completeScore}>
-              {totalScore} / {totalPossiblePoints} points
-              {passed
-                ? ` — you passed (needed ${milestone.passThreshold})`
-                : ` — needed ${milestone.passThreshold} to pass`}
-            </p>
+          <div className={styles.complete} ref={activeContentRef} tabIndex={-1}>
+            <div className={styles.completeResult} role="status" aria-live="polite">
+              <span
+                className={`${styles.completeBadge} ${passed ? styles.completeBadgePassed : styles.completeBadgeFailed}`}
+              >
+                {passed ? 'milestone passed' : 'milestone not passed'}
+              </span>
+              <p className={styles.completeTitle}>{milestone.title}</p>
+              <p className={styles.completeScore}>
+                {totalScore} of {totalPossiblePoints} points.
+                {passed
+                  ? ` You needed ${milestone.passThreshold} to pass.`
+                  : ` You need ${milestone.passThreshold} to pass.`}
+              </p>
+            </div>
             <div className={styles.completeActions}>
-              {nextUnitFirstLesson && (
+              {passed && nextUnitFirstLesson && (
                 <Link
                   to={`/lesson/${nextUnitFirstLesson}`}
                   className={styles.btnPrimary}
@@ -333,6 +476,7 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
           <ChallengeRenderer
             challengeType={currentPart.challengeType}
             onComplete={handleCompleteChallenge}
+            sessionKey={`${milestone.id}:${attemptId}`}
           />
         ) : swatchColor ? (
           <div className={styles.swatchPanel}>

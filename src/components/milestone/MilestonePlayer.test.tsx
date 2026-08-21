@@ -6,7 +6,11 @@ import { AppProvider } from '../../state/app-provider.tsx';
 import { useAppState } from '../../state/app-context.tsx';
 import type { MilestoneConfig } from '../../types/milestone.ts';
 
-vi.mock('./ChallengeRenderer.tsx', () => ({ ChallengeRenderer: () => null }));
+vi.mock('./ChallengeRenderer.tsx', () => ({
+  ChallengeRenderer: ({ onComplete }: { onComplete: () => void }) => (
+    <button onClick={onComplete}>complete test challenge</button>
+  ),
+}));
 vi.mock('./InterfaceMockup.tsx', () => ({ InterfaceMockup: () => null }));
 
 function StateReader() {
@@ -16,7 +20,10 @@ function StateReader() {
   );
 }
 
-beforeEach(() => localStorage.clear());
+beforeEach(() => {
+  localStorage.clear();
+  sessionStorage.clear();
+});
 afterEach(() => cleanup());
 
 function renderMilestone(milestone: MilestoneConfig) {
@@ -99,6 +106,57 @@ const twoPartMilestone: MilestoneConfig = {
     },
   ],
 };
+
+const scoredMilestone: MilestoneConfig = {
+  id: 'milestone-1',
+  unitId: 'unit-1',
+  title: 'Scored Milestone',
+  description: 'Test the complete scored flow.',
+  estimatedMinutes: 10,
+  passThreshold: 4,
+  parts: [
+    {
+      kind: 'challenge',
+      id: 'challenge-1',
+      title: 'Challenge',
+      description: 'Complete the challenge.',
+      challengeType: 'read-interface',
+      briefing: 'Complete the test challenge.',
+      successMessage: 'Challenge complete.',
+      pointValue: 3,
+    },
+    {
+      kind: 'quiz',
+      id: 'quiz-1',
+      title: 'Quiz',
+      description: 'Answer three questions.',
+      questions: [1, 2, 3].map((number) => ({
+        id: `question-${number}`,
+        prompt: `Question ${number}?`,
+        choices: [
+          { id: 'a', label: `Correct ${number}`, isCorrect: true, explanation: 'Correct explanation.' },
+          { id: 'b', label: `Wrong ${number}`, isCorrect: false, explanation: 'Wrong explanation.' },
+        ],
+      })),
+    },
+  ],
+};
+
+function completeChallengePart() {
+  fireEvent.click(screen.getByRole('button', { name: 'complete test challenge' }));
+  fireEvent.click(screen.getByRole('button', { name: 'next part →' }));
+}
+
+function completeQuiz(correctAnswers: number) {
+  for (let index = 1; index <= 3; index += 1) {
+    const label = index <= correctAnswers ? `Correct ${index}` : `Wrong ${index}`;
+    fireEvent.click(screen.getByRole('radio', { name: new RegExp(label) }));
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+    fireEvent.click(screen.getByRole('button', {
+      name: index < 3 ? 'next →' : 'finish milestone →',
+    }));
+  }
+}
 
 describe('MilestonePlayer', () => {
   describe('accessible radio roles', () => {
@@ -233,6 +291,119 @@ describe('MilestonePlayer', () => {
       await waitFor(() => {
         expect(screen.getByTestId('completed-milestones').textContent).toContain('two-part-milestone');
       });
+    });
+  });
+
+  describe('scoring and unlock behavior', () => {
+    it.each([
+      { correctAnswers: 0, score: 3, passed: false },
+      { correctAnswers: 1, score: 4, passed: true },
+      { correctAnswers: 2, score: 5, passed: true },
+    ])('handles a score of $score at the pass boundary', async ({ correctAnswers, score, passed }) => {
+      renderMilestone(scoredMilestone);
+      completeChallengePart();
+      completeQuiz(correctAnswers);
+
+      expect(screen.getByText(`${score} of 6 points.`, { exact: false })).toBeInTheDocument();
+      expect(screen.getByText(passed ? 'milestone passed' : 'milestone not passed')).toBeInTheDocument();
+      expect(screen.queryByRole('link', { name: 'continue to Unit 2 →' })).toBe(
+        passed ? screen.getByRole('link', { name: 'continue to Unit 2 →' }) : null
+      );
+
+      await waitFor(() => {
+        const completed = screen.getByTestId('completed-milestones').textContent ?? '';
+        expect(completed.includes('milestone-1')).toBe(passed);
+      });
+    });
+
+    it('shows the configured description, time, part progress, and score', () => {
+      renderMilestone(scoredMilestone);
+
+      expect(screen.getByText('Test the complete scored flow.')).toBeInTheDocument();
+      expect(screen.getByText('About 10 minutes')).toBeInTheDocument();
+      expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1');
+
+      fireEvent.click(screen.getByRole('button', { name: 'complete test challenge' }));
+      expect(screen.getByText('3 of 3 points earned')).toBeInTheDocument();
+      expect(screen.getByTestId('completed-milestones')).toHaveTextContent('');
+    });
+
+    it('moves focus when the learner advances to a new phase or question', () => {
+      renderMilestone(scoredMilestone);
+      fireEvent.click(screen.getByRole('button', { name: 'complete test challenge' }));
+
+      expect(document.activeElement).toHaveTextContent('Part 1 complete');
+      fireEvent.click(screen.getByRole('button', { name: 'next part →' }));
+      expect(document.activeElement).toHaveTextContent('Question 1?');
+
+      fireEvent.click(screen.getByRole('radio', { name: /Correct 1/ }));
+      fireEvent.click(screen.getByRole('button', { name: 'check' }));
+      fireEvent.click(screen.getByRole('button', { name: 'next →' }));
+      expect(document.activeElement).toHaveTextContent('Question 2?');
+    });
+
+    it('returns to a clean first part after retrying', () => {
+      renderMilestone(scoredMilestone);
+      completeChallengePart();
+      completeQuiz(0);
+      fireEvent.click(screen.getByRole('button', { name: 'retry milestone' }));
+
+      expect(screen.getByText('Part 1 of 2: Challenge')).toBeInTheDocument();
+      expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1');
+      expect(screen.queryByText(/of 6 points/)).not.toBeInTheDocument();
+      expect(screen.getByTestId('completed-milestones')).toHaveTextContent('');
+
+      completeChallengePart();
+      expect(screen.getByRole('group', { name: 'Question 1?' })).toBeInTheDocument();
+      expect(screen.queryByRole('status')).not.toBeInTheDocument();
+      for (const choice of screen.getAllByRole('radio', { name: /Correct 1|Wrong 1/ })) {
+        expect(choice).not.toBeChecked();
+      }
+    });
+  });
+
+  describe('reload behavior', () => {
+    it('resumes an unfinished attempt with its selected answer', async () => {
+      const first = renderMilestone(scoredMilestone);
+      completeChallengePart();
+      fireEvent.click(screen.getByRole('radio', { name: /Correct 1/ }));
+
+      await waitFor(() => expect(sessionStorage.length).toBeGreaterThan(0));
+      first.unmount();
+      renderMilestone(scoredMilestone);
+
+      expect(screen.getByRole('group', { name: 'Question 1?' })).toBeInTheDocument();
+      expect(screen.getByRole('radio', { name: /Correct 1/ })).toBeChecked();
+      expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '2');
+    });
+
+    it('restores failed results without unlocking the next unit', async () => {
+      const first = renderMilestone(scoredMilestone);
+      completeChallengePart();
+      completeQuiz(0);
+      await waitFor(() => expect(sessionStorage.length).toBeGreaterThan(0));
+
+      first.unmount();
+      renderMilestone(scoredMilestone);
+
+      expect(screen.getByText('milestone not passed')).toBeInTheDocument();
+      expect(screen.queryByRole('link', { name: 'continue to Unit 2 →' })).not.toBeInTheDocument();
+      expect(screen.getByTestId('completed-milestones')).toHaveTextContent('');
+    });
+
+    it('restores passed results and persisted completion', async () => {
+      const first = renderMilestone(scoredMilestone);
+      completeChallengePart();
+      completeQuiz(1);
+      await waitFor(() => expect(screen.getByTestId('completed-milestones')).toHaveTextContent('milestone-1'));
+      await waitFor(() => expect(localStorage.getItem('color-theory-course-state')).toContain('milestone-1'));
+
+      first.unmount();
+      renderMilestone(scoredMilestone);
+
+      expect(screen.getByText('milestone passed')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'continue to Unit 2 →' })).toHaveAttribute('href', '/lesson/u2-l1');
+      expect(screen.getByTestId('completed-milestones')).toHaveTextContent('milestone-1');
     });
   });
 });

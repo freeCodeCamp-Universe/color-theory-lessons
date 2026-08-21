@@ -6,7 +6,7 @@ export const lesson3_5: LessonConfig = {
   unitId: 'unit-3',
   title: LESSON_TITLES['u3-l5'],
   interactionType: 'theme-sandbox',
-  reviewTags: ['formats', 'gradients', 'themes', 'semantic-color'],
+  reviewTags: ['formats', 'gradients', 'theme', 'semantic-color'],
   steps: [
     {
       text: 'In this lesson, treat colors as assignments in a UI: background, surface, text, border, accent, success, warning, and error. The task is practical: place each color where it belongs so the interface reads clearly and consistently.',

@@ -5,7 +5,7 @@ export const lesson1_4: LessonConfig = {
   id: 'u1-l4',
   unitId: 'unit-1',
   title: LESSON_TITLES['u1-l4'],
-  interactionType: 'palette-builder',
+  interactionType: 'temperature-sorter',
   reviewTags: ['temperature', 'foundations', 'visual-vocabulary'],
   steps: [
     {
