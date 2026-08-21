@@ -43,7 +43,7 @@ function MixingDiagram({ mode }: { mode: Model }) {
 
   const caption = isAdditive
     ? 'overlapping light → brighter, toward white'
-    : 'overlapping pigments → darker, toward black';
+    : 'ideal subtractive mixing → darker, toward black';
 
   const captionColor = isAdditive ? 'var(--muted)' : '#888';
 

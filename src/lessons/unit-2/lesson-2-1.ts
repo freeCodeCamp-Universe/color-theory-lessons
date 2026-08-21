@@ -21,7 +21,7 @@ export const lesson2_1: LessonConfig = {
       text: 'Paint-mixing intuition does not transfer directly to screen design. Increasing RGB channels adds emitted light. Mixing pigments changes which wavelengths are absorbed and reflected.',
     },
     {
-      text: 'Compare the two diagrams in the sorting tool. The dark diagram shows additive mixing: overlapping light moves toward white. The light diagram shows subtractive mixing: overlapping pigments move toward black. Then sort each example into the correct model.',
+      text: 'Compare the two diagrams in the sorting tool. The dark diagram shows additive mixing: overlapping light moves toward white. The light diagram shows an ideal subtractive model: overlapping pigments move toward black. Then sort each example into the correct model.',
     },
   ],
   challenge: {
