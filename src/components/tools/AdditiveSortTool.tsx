@@ -42,8 +42,8 @@ function MixingDiagram({ mode }: { mode: Model }) {
       ];
 
   const caption = isAdditive
-    ? 'light combines → brighter, toward white'
-    : 'pigment absorbs → darker, toward black';
+    ? 'overlapping light → brighter, toward white'
+    : 'ideal subtractive mixing → darker, toward black';
 
   const captionColor = isAdditive ? 'var(--muted)' : '#888';
 
@@ -205,7 +205,7 @@ export const AdditiveSortTool = memo(function AdditiveSortTool({ interactive = t
                     </div>
                     {checked && (
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--muted)' }}>
-                        {isCorrect ? '✓ correct' : isWrong ? `→ ${item.correct}` : '—'}
+                        {isCorrect ? '✓ correct' : isWrong ? `→ ${item.correct}` : 'not answered'}
                       </span>
                     )}
                   </div>
@@ -240,7 +240,7 @@ export const AdditiveSortTool = memo(function AdditiveSortTool({ interactive = t
             <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: passed ? 'var(--green)' : 'var(--yellow)', margin: 0 }}>
                 {correctCount} / {ITEMS.length} correct
-                {passed ? ' — well done!' : ' — review the incorrect ones.'}
+                {passed ? '. Well done!' : '. Review the incorrect ones.'}
               </p>
               {!passed && (
                 <button
