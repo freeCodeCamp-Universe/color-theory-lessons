@@ -59,7 +59,7 @@ export const lesson2_3: LessonConfig = {
       choices: [
         { stableId: 'i-will-raise-the-blue-channel-to-make-this-cooler', label: '"I will raise the blue channel to make this cooler."', isCorrect: false, explanation: 'Raising the blue channel can shift a screen color toward a cooler appearance.' },
         { stableId: 'equal-rgb-values-will-give-me-a-neutral-gray', label: '"Equal RGB values will give me a neutral gray."', isCorrect: false, explanation: 'In RGB notation, equal channel values represent a neutral gray.' },
-        { stableId: 'mixing-more-screen-colors-will-make-the-result-muddier', label: '"Mixing more screen colors will make the result muddier."', isCorrect: true, explanation: 'Muddiness describes pigment mixing. Increasing RGB channel values adds emitted light instead of pigment.' },
+        { stableId: 'mixing-more-screen-colors-will-make-the-result-muddier', label: '"Raising all three RGB channel values will make the result muddier."', isCorrect: true, explanation: 'Raising all three RGB channel values adds emitted light and moves the color toward white.' },
         { stableId: 'low-channel-values-produce-dark-colors-on-screen', label: '"Low channel values produce dark colors on screen."', isCorrect: false, explanation: 'Low RGB channel values represent little emitted light, producing a dark screen color.' },
       ],
     },
