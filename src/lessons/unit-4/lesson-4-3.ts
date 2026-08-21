@@ -6,7 +6,7 @@ export const lesson4_3: LessonConfig = {
   unitId: 'unit-4',
   title: LESSON_TITLES['u4-l3'],
   interactionType: 'interface-gallery',
-  reviewTags: ['CVD', 'simulation', 'interface-review'],
+  reviewTags: ['cvd', 'simulation', 'interface-review'],
   steps: [
     {
       text: 'Simulation tools apply a color transformation to show how an interface might appear under a particular CVD type. The result is an approximation — not an exact representation of any individual\'s experience — but it is a fast, practical first check for design problems.',

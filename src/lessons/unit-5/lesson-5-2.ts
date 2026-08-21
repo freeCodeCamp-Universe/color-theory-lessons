@@ -5,7 +5,7 @@ export const lesson5_2: LessonConfig = {
   id: 'u5-l2', unitId: 'unit-5',
   title: LESSON_TITLES['u5-l2'],
   interactionType: 'component-checker',
-  reviewTags: ['contrast', 'components', 'controls', 'WCAG'],
+  reviewTags: ['contrast', 'components', 'controls', 'wcag'],
   steps: [
     { text: 'Text contrast is the most discussed accessibility check, but it is not the only one. Many essential interface elements are not text: input borders, icon buttons, toggles, focus rings, chart marks, and status indicators all need clear visual distinction.' },
     { text: 'A control boundary tells users what is interactive. If the border of a text input is too close in lightness to the background, users cannot tell where they are supposed to click or type.' },

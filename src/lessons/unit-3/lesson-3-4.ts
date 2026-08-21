@@ -6,7 +6,7 @@ export const lesson3_4: LessonConfig = {
   unitId: 'unit-3',
   title: LESSON_TITLES['u3-l4'],
   interactionType: 'alpha-layer',
-  reviewTags: ['formats', 'alpha', 'transparency', 'layering'],
+  reviewTags: ['formats', 'alpha', 'layering'],
   steps: [
     {
       text: 'In the previous lesson you saw RGBA notation. Here you will apply it in context. A fully opaque color blocks everything behind it, while a semi-transparent color lets background values show through. Alpha controls this: 1 is fully opaque, 0 is fully transparent.',

@@ -6,7 +6,7 @@ export const lesson4_4: LessonConfig = {
   unitId: 'unit-4',
   title: LESSON_TITLES['u4-l4'],
   interactionType: 'color-only-detector',
-  reviewTags: ['color-alone', 'observation', 'accessibility', 'ui-patterns'],
+  reviewTags: ['color-only', 'observation', 'accessibility', 'ui-patterns'],
   steps: [
     {
       text: 'Now that you understand how CVD changes what people see, look at common interface patterns through that lens. Some designs survive color perception differences just fine. Others fall apart — and the reason is almost always the same: the meaning lives entirely in the hue.',
