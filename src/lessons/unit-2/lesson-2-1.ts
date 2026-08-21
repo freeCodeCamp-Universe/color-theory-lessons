@@ -12,7 +12,7 @@ export const lesson2_1: LessonConfig = {
       text: 'A screen and a painted wall can both show color, but they interact with light in different ways. A screen emits light, while paint changes which wavelengths of incoming light are reflected to your eyes.',
     },
     {
-      text: 'Additive mixing combines emitted light. Screens, projectors, and LED lights use red, green, and blue light. Increasing a channel adds light. Combining all three channels at full intensity produces white.',
+      text: 'Additive mixing combines emitted light. Screens, projectors, and LED signs use red, green, and blue light. Increasing a channel adds light. Combining all three channels at full intensity produces white.',
     },
     {
       text: 'Subtractive mixing begins with light striking a material. Pigments and inks absorb some wavelengths and reflect others. Mixing pigments often increases absorption, so the result tends to look darker and less saturated.',
