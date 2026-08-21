@@ -15,13 +15,13 @@ const ELEMENTS: ColorElement[] = [
     id: 'nav-bg',
     label: 'Nav background',
     hex: '#1e3a5f',
-    description: 'The navigation bar — a deep navy that carries the brand identity.',
+    description: 'The dark navy used for the navigation background.',
   },
   {
     id: 'nav-text',
     label: 'Nav text',
     hex: '#e2e8f0',
-    description: 'Light text on the dark nav — high contrast for readability.',
+    description: 'Light text that contrasts with the dark navigation background.',
   },
   {
     id: 'hero-bg',
@@ -33,25 +33,25 @@ const ELEMENTS: ColorElement[] = [
     id: 'cta',
     label: 'CTA button',
     hex: '#2563eb',
-    description: 'The primary call-to-action button — a saturated brand blue.',
+    description: 'The saturated blue used for the primary call-to-action button.',
   },
   {
     id: 'cta-text',
     label: 'Button text',
     hex: '#ffffff',
-    description: 'White text on the blue CTA — maximises contrast on interactive elements.',
+    description: 'White text that contrasts with the blue button background.',
   },
   {
     id: 'card-bg',
     label: 'Card background',
     hex: '#ffffff',
-    description: 'Pure white card surface — creates a clean layer on the hero.',
+    description: 'The white background used for the card.',
   },
   {
     id: 'card-border',
     label: 'Card border',
     hex: '#cbd5e1',
-    description: 'A subtle cool-gray border that separates the card without adding weight.',
+    description: 'The light blue-gray border that separates the card from its background.',
   },
   {
     id: 'accent',
@@ -98,7 +98,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({ interactive = t
           <p className={styles.instruction}>
             {done
               ? 'All elements explored.'
-              : `Click each colored element — ${remaining} remaining.`}
+              : `Select each colored element. ${remaining} remaining.`}
           </p>
 
           <div className={styles.mockup}>
@@ -217,28 +217,28 @@ export const FormatRevealTool = memo(function FormatRevealTool({ interactive = t
                 <div className={styles.formatBlock}>
                   <span className={styles.formatName}>HEX</span>
                   <code className={styles.formatValue}>{selected.hex.toUpperCase()}</code>
-                  <p className={styles.formatNote}>Compact hexadecimal — two digits per channel. Common in CSS and design tools.</p>
+                  <p className={styles.formatNote}>Compact hexadecimal with two digits per channel. Common in CSS and design tools.</p>
                 </div>
                 <div className={styles.formatBlock}>
                   <span className={styles.formatName}>RGB</span>
                   <code className={styles.formatValue}>rgb({rgb.r}, {rgb.g}, {rgb.b})</code>
-                  <p className={styles.formatNote}>Three channels: red, green, blue. Maps directly to how screens emit light.</p>
+                  <p className={styles.formatNote}>Lists the red, green, and blue channel values used for screen colors.</p>
                 </div>
                 <div className={styles.formatBlock}>
                   <span className={styles.formatName}>HSL</span>
                   <code className={styles.formatValue}>hsl({hsl.h}, {hsl.s}%, {hsl.l}%)</code>
-                  <p className={styles.formatNote}>Hue, saturation, lightness. Often easier for design-oriented adjustments.</p>
+                  <p className={styles.formatNote}>Organizes a color by hue, saturation, and lightness for color adjustments.</p>
                 </div>
               </div>
 
               <p className={styles.formatFooter}>
-                All three values above describe the exact same color.
+                The HSL value is rounded to whole numbers, so it may differ slightly from the HEX and RGB color.
               </p>
             </>
           ) : (
             <div className={styles.emptyPanel}>
               <span className={styles.emptyIcon}>←</span>
-              <p className={styles.emptyText}>Click any colored element in the mockup to reveal its formats here.</p>
+              <p className={styles.emptyText}>Select any colored element in the mockup to reveal its formats here.</p>
             </div>
           )}
         </div>
