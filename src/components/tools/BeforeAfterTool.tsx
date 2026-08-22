@@ -76,6 +76,13 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({ variant = 'color-
     setTriedAnswer(null);
   }
 
+  function handleRegionKeyDown(e: React.KeyboardEvent<HTMLElement>, id: string) {
+    if (!interactive) return;
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault();
+    handleRegionClick(id);
+  }
+
   function handleAnswer(regionId: string, job: ColorJob) {
     const region = REGIONS.find((r) => r.id === regionId)!;
     const correct = job === region.correctJob;
@@ -143,8 +150,9 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({ variant = 'color-
               onClick={() => interactive && handleRegionClick('nav')}
               role={interactive ? 'button' : undefined}
               tabIndex={interactive ? 0 : undefined}
-              onKeyDown={(e) => interactive && e.key === 'Enter' && handleRegionClick('nav')}
+              onKeyDown={(e) => handleRegionKeyDown(e, 'nav')}
               aria-label={interactive ? 'Click to identify what the nav bar color is doing' : undefined}
+              aria-disabled={interactive && results['nav'] === true ? true : undefined}
             >
               <span className={styles.navLogo}>color-theory-course$</span>
               <span className={styles.navLink}>settings</span>
@@ -158,8 +166,9 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({ variant = 'color-
                 onClick={() => interactive && handleRegionClick('cta')}
                 role={interactive ? 'button' : undefined}
                 tabIndex={interactive ? 0 : undefined}
-                onKeyDown={(e) => interactive && e.key === 'Enter' && handleRegionClick('cta')}
+                onKeyDown={(e) => handleRegionKeyDown(e, 'cta')}
                 aria-label={interactive ? 'Click to identify what the gold button color is doing' : undefined}
+                aria-disabled={interactive && results['cta'] === true ? true : undefined}
               >
                 start learning
                 {results['cta'] === true && <span className={styles.regionBadge}>✓</span>}
@@ -170,8 +179,9 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({ variant = 'color-
               onClick={() => interactive && handleRegionClick('success')}
               role={interactive ? 'button' : undefined}
               tabIndex={interactive ? 0 : undefined}
-              onKeyDown={(e) => interactive && e.key === 'Enter' && handleRegionClick('success')}
+              onKeyDown={(e) => handleRegionKeyDown(e, 'success')}
               aria-label={interactive ? 'Click to identify what the green text color is doing' : undefined}
+              aria-disabled={interactive && results['success'] === true ? true : undefined}
             >
               ✓ Unit 1 complete
               {results['success'] === true && <span className={styles.regionBadge} style={{ marginLeft: '4px' }}>✓</span>}
@@ -181,8 +191,9 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({ variant = 'color-
               onClick={() => interactive && handleRegionClick('card')}
               role={interactive ? 'button' : undefined}
               tabIndex={interactive ? 0 : undefined}
-              onKeyDown={(e) => interactive && e.key === 'Enter' && handleRegionClick('card')}
+              onKeyDown={(e) => handleRegionKeyDown(e, 'card')}
               aria-label={interactive ? 'Click to identify what the blue card border color is doing' : undefined}
+              aria-disabled={interactive && results['card'] === true ? true : undefined}
             >
               Lesson 2: Hue, saturation, and lightness →
               {results['card'] === true && <span className={styles.regionBadge}>✓</span>}
