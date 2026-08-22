@@ -27,19 +27,19 @@ function deriveColor(baseH: number, baseS: number, role: TokenRole): string {
 // Sort challenge items
 interface SortItem {
   label: string;
-  category: 'raw' | 'alias' | 'role';
+  category: 'raw' | 'palette' | 'role';
 }
 
 const SORT_ITEMS: SortItem[] = [
   { label: '#0B57D0',               category: 'raw' },
   { label: 'rgb(34, 34, 34)',       category: 'raw' },
-  { label: '--blue-600',            category: 'alias' },
-  { label: '--gray-900',            category: 'alias' },
+  { label: '--blue-600',            category: 'palette' },
+  { label: '--gray-900',            category: 'palette' },
   { label: '--color-text-primary',  category: 'role' },
   { label: '--color-success-bg',    category: 'role' },
   { label: '--color-action-primary', category: 'role' },
   { label: '#1a1a1a',               category: 'raw' },
-  { label: '--green-500',           category: 'alias' },
+  { label: '--green-500',           category: 'palette' },
 ];
 
 interface TokenMapToolProps {
@@ -105,7 +105,7 @@ export const TokenMapTool = memo(function TokenMapTool({ interactive = false, on
 
       {/* Derived token preview */}
       <div style={{ marginBottom: '0.75rem' }}>
-        <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.3rem' }}>Derived roles:</p>
+        <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.3rem' }}>Derived role colors:</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
           {derived.map((d) => (
             <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -165,7 +165,7 @@ export const TokenMapTool = memo(function TokenMapTool({ interactive = false, on
       {interactive && (
         <div style={{ borderTop: '1px solid var(--border)', paddingTop: '0.6rem' }}>
           <p style={{ fontSize: '0.82rem', color: 'var(--muted)', marginBottom: '0.4rem' }}>
-            Classify each item as raw value, alias token, or role token:
+            Classify each item as a raw value, palette token name, or role token name:
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', marginBottom: '0.5rem' }}>
             {SORT_ITEMS.map((item) => {
@@ -191,10 +191,10 @@ export const TokenMapTool = memo(function TokenMapTool({ interactive = false, on
                     }}
                     aria-label={`Category for ${item.label}`}
                   >
-                    <option value="">—</option>
+                    <option value="">choose category</option>
                     <option value="raw">raw value</option>
-                    <option value="alias">alias token</option>
-                    <option value="role">role token</option>
+                    <option value="palette">palette token name</option>
+                    <option value="role">role token name</option>
                   </select>
                 </div>
               );
@@ -222,7 +222,7 @@ export const TokenMapTool = memo(function TokenMapTool({ interactive = false, on
 
       {completed && (
         <p style={{ color: 'var(--green)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          Token map complete. One base change updated every derived role.
+          Token map complete. One base change updated every derived role color.
         </p>
       )}
     </div>
