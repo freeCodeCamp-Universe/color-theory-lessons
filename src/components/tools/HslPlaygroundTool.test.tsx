@@ -5,6 +5,13 @@ import { HslPlaygroundTool } from './HslPlaygroundTool.tsx';
 afterEach(() => cleanup());
 
 describe('HslPlaygroundTool hue controls', () => {
+  it('shows HSL and RGB values with modern space-separated syntax', () => {
+    render(<HslPlaygroundTool interactive={true} />);
+
+    expect(screen.getByText('hsl(200 50% 50%)')).toBeInTheDocument();
+    expect(screen.getByText('rgb(64 149 191)')).toBeInTheDocument();
+  });
+
   it('keeps the hue wheel and slider synchronized across the range boundary', () => {
     render(<HslPlaygroundTool interactive={true} />);
     const wheel = screen.getByRole('slider', { name: /Hue wheel/i });
