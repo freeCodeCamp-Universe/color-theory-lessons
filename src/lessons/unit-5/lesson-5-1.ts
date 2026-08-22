@@ -85,9 +85,9 @@ export const lesson5_1: LessonConfig = {
         },
         {
           stableId: 'contrast-ratio-depends-on-relative-luminance-not-hue-two-differe',
-          label: 'The orange did not increase the relative-luminance difference from the background',
+          label: 'Hue alone does not determine contrast; WCAG uses the relative luminance of both colors',
           isCorrect: true,
-          explanation: 'A hue change does not guarantee a higher ratio. The relative luminance of the text and background colors determines the result.',
+          explanation: 'Changing hue can raise, lower, or leave the ratio unchanged. WCAG calculates the ratio from the relative luminance of the text and background colors.',
         },
         {
           stableId: 'the-text-was-already-passing',
