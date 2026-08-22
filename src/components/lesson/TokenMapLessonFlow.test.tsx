@@ -15,13 +15,13 @@ afterEach(cleanup);
 const ANSWERS = {
   '#0B57D0': 'raw',
   'rgb(34, 34, 34)': 'raw',
-  '--blue-600': 'alias',
-  '--gray-900': 'alias',
+  '--blue-600': 'palette',
+  '--gray-900': 'palette',
   '--color-text-primary': 'role',
   '--color-success-bg': 'role',
   '--color-action-primary': 'role',
   '#1a1a1a': 'raw',
-  '--green-500': 'alias',
+  '--green-500': 'palette',
 };
 
 describe('Lesson 3.6 Token Map flow', () => {
