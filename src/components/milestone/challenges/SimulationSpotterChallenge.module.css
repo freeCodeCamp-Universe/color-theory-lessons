@@ -93,6 +93,11 @@
   padding: 0.3rem;
 }
 
+.select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .status {
   display: grid;
   gap: 2px;
