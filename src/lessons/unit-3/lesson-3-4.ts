@@ -9,7 +9,7 @@ export const lesson3_4: LessonConfig = {
   reviewTags: ['formats', 'alpha', 'layering'],
   steps: [
     {
-      text: 'In the previous lesson you saw RGBA notation. Here you will apply it in context. A fully opaque color blocks everything behind it, while a semi-transparent color lets background values show through. Alpha controls this: 1 is fully opaque, 0 is fully transparent.',
+      text: 'In the previous lesson you saw how CSS adds an alpha value after a slash. Here you will apply alpha in context. A fully opaque color blocks everything behind it, while a semi-transparent color lets background values show through. Alpha controls this: 1 is fully opaque, 0 is fully transparent.',
     },
     {
       text: 'Designers use transparency for hover states, modal backdrops (scrims), disabled states, image overlays, and subtle layered surfaces. A semi-transparent color produces a different result when the background changes.',
@@ -30,7 +30,7 @@ export const lesson3_4: LessonConfig = {
       hints: [
         'For the modal scrim, try a dark overlay between 40% and 60% opacity. It should dim the background while leaving it visible.',
         'For the hover state, try a light or dark overlay between 10% and 20% opacity.',
-        'For text over an image, adjust the overlay and text colors until their final composited contrast passes.',
+        'For text over the image, choose a dark overlay between 45% and 80% opacity.',
       ],
   },
   quizItems: [

@@ -65,7 +65,7 @@ function blend(fgR: number, fgG: number, fgB: number, alpha: number, bgHex: stri
   const r = blendChannel(fgR, bgR, alpha);
   const g = blendChannel(fgG, bgG, alpha);
   const b = blendChannel(fgB, bgB, alpha);
-  return `rgb(${r}, ${g}, ${b})`;
+  return `rgb(${r} ${g} ${b})`;
 }
 
 interface AlphaLayerToolProps {
