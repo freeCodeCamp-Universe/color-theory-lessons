@@ -9,75 +9,75 @@ export const lesson3_2: LessonConfig = {
   reviewTags: ['formats', 'HEX', 'RGB'],
   steps: [
     {
-      text: 'RGB describes a color by stating how much red, green, and blue light to mix. Each channel runs from 0 (none) to 255 (full). rgb(0, 0, 0) is no light at all — black. rgb(255, 255, 255) is all three channels at full — white.',
+      text: 'RGB describes a color by stating how much red, green, and blue light to mix. Each channel runs from 0 (none) to 255 (full). rgb(0 0 0) represents black, with all three channels at 0. rgb(255 255 255) represents white, with all three channels at 255.',
     },
     {
-      text: 'HEX is a compact way to encode the same three channels. A six-character HEX value like #1E40AF splits into three pairs: the first two are red, the next two are green, the last two are blue — each pair in base-16 notation.',
+      text: 'HEX is a compact way to encode the same three channels. A six-digit CSS HEX value like #1E40AF splits into three pairs. The pairs represent red, green, and blue, in that order. Each pair uses base-16 notation, which counts from 0 to 9 and then A to F.',
     },
     {
-      text: 'When all three RGB channels are equal — like rgb(120, 120, 120) — the result is always a neutral gray. No single channel dominates, so no hue appears. The same is true for #808080 or any HEX where both pairs in each channel match.',
+      text: 'In sRGB, equal red, green, and blue channel values produce a neutral color. For example, rgb(120 120 120) is gray. With no channel higher than the others, the color has no hue. #808080 follows the same pattern because each channel uses the value 80.',
     },
     {
       text: 'Shorthand HEX compresses a value where each pair repeats: #AABBCC can be written as #ABC. This only works when each pair has two identical digits. #1E40AF cannot be shortened because none of its pairs repeat.',
     },
     {
-      text: 'RGBA adds a fourth value — the alpha channel — to RGB. It controls opacity, from 0 (fully transparent) to 1 (fully opaque). When you see rgba(30, 64, 175, 0.5), the color is that same blue at 50% opacity.',
+      text: 'An rgb() value can include alpha after a slash. Alpha controls opacity from 0 (fully transparent) to 1 (fully opaque). rgb(30 64 175 / 0.5) uses the same red, green, and blue values as rgb(30 64 175), with 50% opacity.',
     },
   ],
   challenge: {
-      prompt:
-        'Use the editor to match three target UI colors. Adjust the sliders or type a HEX value. Load each preset to explore how values map to visible results.',
-      hints: [
-        'Start with the preset closest to the target, then fine-tune.',
-        'Watch which channel dominates in the target — that tells you which slider to push higher.',
-        'Equal channel values always produce a neutral. If the target has a clear hue, at least one channel must be different.',
-      ],
+    prompt:
+      'Use the HEX input to match three target UI colors. Enter a three-digit or six-digit value and compare the current color with each target.',
+    hints: [
+      'In a six-digit value, the first pair controls red, the second controls green, and the third controls blue.',
+      'HEX channel values run from 00 to FF. Raise a pair to add more of that channel.',
+      'In a six-digit value, repeat the same pair three times for a neutral color.',
+    ],
   },
   quizItems: [
     {
       id: 'q1',
-      prompt: 'What do equal RGB channel values always produce?',
+      prompt: 'In sRGB, what does a color with equal red, green, and blue channel values produce?',
       choices: [
         {
           stableId: 'a-neutral-gray-or-white-or-black',
           label: 'A neutral gray (or white or black)',
           isCorrect: true,
           explanation:
-            'When R, G, and B are equal, no single channel dominates and no hue appears. The result is a neutral — ranging from black at 0,0,0 to white at 255,255,255.',
+            'Equal red, green, and blue values produce a neutral color. The range runs from black at rgb(0 0 0) through grays to white at rgb(255 255 255).',
         },
         {
           stableId: 'a-saturated-color-with-medium-brightness',
           label: 'A saturated color with medium brightness',
           isCorrect: false,
           explanation:
-            'Equal channel values suppress all hue. Only when channels differ does a color appear.',
+            'Equal channel values produce a neutral color, not a saturated hue.',
         },
         {
           stableId: 'a-very-dark-color',
-          label: 'A very dark color',
+          label: 'A dark color',
           isCorrect: false,
           explanation:
-            'Low equal values give a dark neutral, but equal values at higher settings produce lighter neutrals. The key result is always neutral, not always dark.',
+            'Low equal values produce a dark neutral, while higher equal values produce lighter neutrals. Equal values make the color neutral; the shared value determines its lightness.',
         },
         {
           stableId: 'an-error-rgb-must-have-at-least-one-dominant-channel',
-          label: 'An error — RGB must have at least one dominant channel',
+          label: 'An error because RGB needs one dominant channel',
           isCorrect: false,
           explanation:
-            'There is no such rule. Equal channel values are perfectly valid and produce neutrals.',
+            'CSS accepts equal RGB channel values. They represent neutral colors such as black, gray, and white.',
         },
       ],
     },
     {
       id: 'q2',
-      prompt: 'Which value is likely closer to white: #F4F4F4 or #1A1A1A?',
+      prompt: 'Which value is closer to white: #F4F4F4 or #1A1A1A?',
       choices: [
         {
           stableId: 'f4f4f4',
           label: '#F4F4F4',
           isCorrect: true,
           explanation:
-            'F4 in hex is 244 in decimal — close to the maximum of 255. High equal channel values produce a very light neutral. #1A1A1A has channels of only 26, producing a very dark neutral.',
+            'F4 in hex is 244 in decimal, 11 below the maximum of 255. #F4F4F4 is therefore a light neutral. #1A1A1A uses 26 for each channel and is a dark neutral.',
         },
         {
           stableId: '1a1a1a',
@@ -91,48 +91,48 @@ export const lesson3_2: LessonConfig = {
           label: 'They would appear identical',
           isCorrect: false,
           explanation:
-            'F4 is 244 and 1A is 26. These are very different channel values producing very different brightness levels.',
+            'F4 is 244 and 1A is 26. The higher equal channel values make #F4F4F4 closer to white.',
         },
         {
           stableId: 'you-cannot-tell-without-knowing-which-channel-is-r-g-or-b',
           label: 'You cannot tell without knowing which channel is R, G, or B',
           isCorrect: false,
           explanation:
-            'When all three pairs are the same, the channel order does not matter — the result is neutral and brightness is all that varies. #F4F4F4 is clearly the lighter one.',
+            'Each color repeats one channel value three times, so both colors are neutral. F4 is 244, while 1A is 26, which makes #F4F4F4 closer to white.',
         },
       ],
     },
     {
       id: 'q3',
-      prompt: 'Which format is generally easier to reason about when you want to increase only the blue in a color?',
+      prompt: 'In the HEX value #1E40AF, which pair would you change to adjust only the blue channel?',
       choices: [
         {
-          stableId: 'hex-because-the-pair-positions-are-fixed',
-          label: 'HEX, because the pair positions are fixed',
+          stableId: '1e-the-first-pair',
+          label: '1E, the first pair',
           isCorrect: false,
           explanation:
-            'While HEX does have fixed positions, you would need to calculate base-16 values mentally. RGB sliders are more direct for intentional single-channel adjustments.',
+            'The first pair controls the red channel, so changing 1E would adjust red.',
         },
         {
-          stableId: 'rgb-because-each-channel-is-a-separate-decimal-number-you-can-ad',
-          label: 'RGB, because each channel is a separate decimal number you can adjust directly',
+          stableId: '40-the-middle-pair',
+          label: '40, the middle pair',
+          isCorrect: false,
+          explanation:
+            'The middle pair controls the green channel, so changing 40 would adjust green.',
+        },
+        {
+          stableId: 'af-the-last-pair',
+          label: 'AF, the last pair',
           isCorrect: true,
           explanation:
-            'RGB gives you three independent decimal values. Increasing the blue value directly raises blue light. HEX encodes the same data but requires converting from base-16 mentally.',
+            'In a six-digit HEX value, the pairs represent red, green, and blue in that order. The last pair controls blue.',
         },
         {
-          stableId: 'both-are-equally-easy',
-          label: 'Both are equally easy',
+          stableId: 'all-three-pairs',
+          label: 'All three pairs',
           isCorrect: false,
           explanation:
-            'They encode the same information, but RGB is more readable for direct single-channel adjustments because you work in decimal, not base-16.',
-        },
-        {
-          stableId: 'neither-you-should-use-hsl-for-any-channel-change',
-          label: 'Neither — you should use HSL for any channel change',
-          isCorrect: false,
-          explanation:
-            'HSL is useful for hue, saturation, and lightness adjustments, but when you specifically want to change one light channel, RGB is the more direct choice.',
+            'Each pair controls one channel. Changing all three pairs would adjust red and green as well as blue.',
         },
       ],
     },
@@ -142,40 +142,40 @@ export const lesson3_2: LessonConfig = {
       choices: [
         {
           stableId: 'no-hex-values-must-always-be-six-characters',
-          label: 'No — HEX values must always be six characters',
+          label: 'No; HEX values must have six digits',
           isCorrect: false,
           explanation:
-            'Shorthand HEX with three characters is perfectly valid in CSS. #ABC expands to #AABBCC, where each single digit is simply doubled.',
+            'CSS supports three-digit HEX notation. #ABC expands to #AABBCC by repeating each digit.',
         },
         {
           stableId: 'yes-it-is-shorthand-for-aabbcc',
-          label: 'Yes — it is shorthand for #AABBCC',
+          label: 'Yes; it is shorthand for #AABBCC',
           isCorrect: true,
           explanation:
-            'Shorthand HEX works when each channel digit in the six-character form is repeated. #ABC expands to #AABBCC — A→AA, B→BB, C→CC.',
+            'Three-digit HEX notation repeats each digit to form a pair. #ABC expands to #AABBCC: A becomes AA, B becomes BB, and C becomes CC.',
         },
         {
           stableId: 'only-in-older-css-versions',
           label: 'Only in older CSS versions',
           isCorrect: false,
           explanation:
-            'Three-character HEX has been valid in CSS since CSS1 and remains fully supported today.',
+            'Three-digit HEX notation is part of the current CSS Color specification.',
         },
         {
           stableId: 'yes-but-only-if-a-b-and-c-are-valid-hex-digits',
-          label: 'Yes — but only if A, B, and C are valid hex digits',
+          label: 'Yes, because any three letters form a HEX value',
           isCorrect: false,
           explanation:
-            'A, B, and C happen to be valid hex digits (10, 11, 12), but the answer misses the key rule: shorthand is valid for any three-character hex value, not just those using A, B, C specifically.',
+            'HEX notation accepts the digits 0 through 9 and the letters A through F. #ABC is valid because A, B, and C are within that range, not because any three letters work.',
         },
       ],
     },
   ],
   keyPoints: [
-    'RGB describes color as three channel values — red, green, blue — each from 0 (none) to 255 (full).',
-    'Equal channel values always produce a neutral: rgb(0,0,0) is black, rgb(255,255,255) is white, anything in between with equal values is a gray.',
-    'HEX encodes the same three channels as base-16 pairs: the first two digits are red, next two green, last two blue.',
-    'Shorthand HEX (#ABC) is valid only when each pair in the full six-character form is a repeated digit — #ABC expands to #AABBCC.',
-    'RGBA adds a fourth value (0–1) for opacity; rgba(30, 64, 175, 0.5) is that same blue at 50% transparency.',
+    'RGB describes a color with red, green, and blue channel values. Each channel runs from 0 (none) to 255 (full).',
+    'In sRGB, equal red, green, and blue values produce a neutral color, from black through grays to white.',
+    'Six-digit HEX encodes the red, green, and blue channels as three base-16 pairs, in that order.',
+    'Three-digit HEX repeats each digit to form a pair, so #ABC expands to #AABBCC.',
+    'CSS rgb() can include an alpha value after a slash. Alpha runs from 0 (fully transparent) to 1 (fully opaque).',
   ],
 };
