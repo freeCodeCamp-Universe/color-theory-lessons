@@ -70,7 +70,7 @@ export const lesson3_2: LessonConfig = {
     },
     {
       id: 'q2',
-      prompt: 'Which value is likely closer to white: #F4F4F4 or #1A1A1A?',
+      prompt: 'Which value is closer to white: #F4F4F4 or #1A1A1A?',
       choices: [
         {
           stableId: 'f4f4f4',
