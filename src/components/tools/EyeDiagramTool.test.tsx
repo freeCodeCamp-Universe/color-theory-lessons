@@ -16,7 +16,7 @@ describe('EyeDiagramTool completion flow', () => {
     fireEvent.click(screen.getByRole('button', { name: /next step/i }));
 
     expect(onComplete).toHaveBeenCalledTimes(1);
-    expect(screen.getByText(/full visual pathway explored/i)).toBeInTheDocument();
+    expect(screen.getByText(/You explored the full visual pathway from the screen to the brain/i)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /next step/i })).toBeNull();
   });
 
@@ -25,15 +25,15 @@ describe('EyeDiagramTool completion flow', () => {
 
     render(<EyeDiagramTool interactive={true} />);
 
-    const availableStep = screen.getByRole('button', { name: 'Eye Receives Light' });
+    const availableStep = screen.getByRole('button', { name: 'The eye receives light' });
     await user.tab();
 
     expect(availableStep).toHaveFocus();
 
     await user.keyboard('{Enter}');
 
-    expect(screen.getByRole('button', { name: /Eye Receives Light/ })).toHaveAttribute('aria-current', 'step');
-    expect(screen.getByText(/Light passes through the cornea and lens/)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /The eye receives light/ })).toHaveAttribute('aria-current', 'step');
+    expect(screen.getByText(/The cornea and lens focus incoming light onto the retina/)).toBeInTheDocument();
   });
 
   it('activates the available pathway card with Space', async () => {
@@ -44,7 +44,7 @@ describe('EyeDiagramTool completion flow', () => {
     await user.tab();
     await user.keyboard(' ');
 
-    expect(screen.getByRole('button', { name: /Eye Receives Light/ })).toHaveAttribute('aria-current', 'step');
+    expect(screen.getByRole('button', { name: /The eye receives light/ })).toHaveAttribute('aria-current', 'step');
   });
 
   it('keeps current, completed, and locked pathway cards noninteractive', async () => {
@@ -52,12 +52,12 @@ describe('EyeDiagramTool completion flow', () => {
 
     render(<EyeDiagramTool interactive={true} />);
 
-    expect(screen.getByRole('button', { name: /Light from Screen, current step/ })).toBeDisabled();
-    expect(screen.getByRole('button', { name: /Retina Processes Signal, locked/ })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /Light from the screen, current step/ })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /The retina processes signals, locked/ })).toBeDisabled();
 
-    await user.click(screen.getByRole('button', { name: 'Eye Receives Light' }));
+    await user.click(screen.getByRole('button', { name: 'The eye receives light' }));
 
-    expect(screen.getByRole('button', { name: /Light from Screen, completed/ })).toBeDisabled();
-    expect(screen.getByRole('button', { name: /Eye Receives Light, current step/ })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /Light from the screen, completed/ })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /The eye receives light, current step/ })).toBeDisabled();
   });
 });
