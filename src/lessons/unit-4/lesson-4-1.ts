@@ -9,19 +9,19 @@ export const lesson4_1: LessonConfig = {
   reviewTags: ['perception', 'vision', 'biology-basics'],
   steps: [
     {
-      text: 'You have learned to describe color, mix it on screen, and express it in code. But there is another side to every color decision: the person looking at the screen. A digital screen emits light. But when you see a color, you are not seeing the screen itself — you are seeing the result of your eye and brain interpreting that light. Color is a perceptual experience, not a physical property of the display.',
+      text: 'You have learned to describe color, mix it on screen, and express it in code. Every color decision also involves the person looking at the screen. A display emits light, and your visual system turns that light into the color you perceive. Perceived color depends on the display, the viewing conditions, and processing by the eyes and brain.',
     },
     {
-      text: 'Light enters the eye and lands on the retina at the back of the eye. The retina contains two types of photoreceptor cells: rods and cones. Rods respond to low-light conditions and do not contribute much to color vision. Cones are responsible for color.',
+      text: 'Light entering the eye is focused onto the retina at the back of the eye. The retina contains two types of photoreceptor cells: rods and cones. Rods support vision in dim light and contribute little to color vision under typical daylight conditions. Cones support color vision.',
     },
     {
-      text: 'Humans typically have three cone types, each most sensitive to a different range of wavelengths — broadly corresponding to long (red), medium (green), and short (blue). The brain compares the signals from these three cone types to construct the experience of color.',
+      text: 'Most people have three types of cones, named S, M, and L for the ranges of wavelengths to which they are most sensitive. These ranges overlap, and each cone signals how much light it absorbs. The visual system compares the activity of the three cone types as part of color perception.',
     },
     {
-      text: 'The retina sends signals along the optic nerve to the visual cortex in the brain, where the final experience of color is assembled. Context, memory, and surrounding colors all influence the result. Simultaneous contrast — where a color looks different depending on its neighbors — is one example.',
+      text: 'Photoreceptors convert light into electrical signals. Other retinal cells process those signals, which then travel through the optic nerve to areas of the brain involved in vision. The brain also uses surrounding colors and other visual context when producing color appearance. In simultaneous contrast, the same color can look different against different surrounding colors.',
     },
     {
-      text: 'Because color perception depends on each individual\'s visual system, two people looking at the same interface may not perceive it identically. Good design accounts for this variation rather than assuming all viewers share the same experience.',
+      text: 'People can differ in cone sensitivity, lens transmission, and neural processing. As a result, two people viewing the same interface under the same conditions may perceive its colors differently. Designers should not assume that a color will appear identical to every viewer.',
     },
   ],
   challenge: {
@@ -29,7 +29,7 @@ export const lesson4_1: LessonConfig = {
         'Click through each part of the visual pathway to reveal how it contributes to color perception.',
       hints: [
         'Start with the light source and follow the path into the eye.',
-        'Each step has a short design implication — read it before moving on.',
+        'Read the design implication for each step before moving on.',
       ],
   },
   quizItems: [
@@ -49,21 +49,21 @@ export const lesson4_1: LessonConfig = {
           label: 'Cones',
           isCorrect: true,
           explanation:
-            'Cones are the photoreceptor cells responsible for color vision. Humans typically have three types, each sensitive to a different range of wavelengths.',
+            'Cones are the photoreceptor cells that support color vision. Most people have three types, named S, M, and L for their wavelength sensitivity ranges.',
         },
         {
           stableId: 'the-optic-nerve',
           label: 'The optic nerve',
           isCorrect: false,
           explanation:
-            'The optic nerve carries signals from the retina to the brain, but it does not process color itself.',
+            'The optic nerve carries signals from the retina toward the brain. It is not a photoreceptor cell.',
         },
         {
           stableId: 'the-cornea',
           label: 'The cornea',
           isCorrect: false,
           explanation:
-            'The cornea focuses light onto the retina but does not play a role in color processing.',
+            'The cornea helps focus incoming light. It is not one of the retina\'s photoreceptor cells.',
         },
       ],
     },
@@ -76,28 +76,28 @@ export const lesson4_1: LessonConfig = {
           label: 'It converts light into electrical signals',
           isCorrect: false,
           explanation:
-            'That conversion happens in the photoreceptor cells — rods and cones — in the retina.',
+            'Photoreceptor cells called rods and cones convert light into electrical signals in the retina.',
         },
         {
           stableId: 'it-carries-visual-signals-from-the-retina-to-the-brain',
           label: 'It carries visual signals from the retina to the brain',
           isCorrect: true,
           explanation:
-            'The optic nerve transmits electrical signals generated by the retina to the visual cortex in the brain, where they are processed into the experience of vision.',
+            'The optic nerve carries electrical signals from the retina toward the brain. Other parts of the visual pathway relay those signals to brain areas involved in vision.',
         },
         {
           stableId: 'it-adjusts-the-amount-of-light-entering-the-eye',
           label: 'It adjusts the amount of light entering the eye',
           isCorrect: false,
           explanation:
-            'That is the role of the iris and pupil, not the optic nerve.',
+            'The iris changes the size of the pupil to control how much light enters the eye. The optic nerve carries signals from the retina toward the brain.',
         },
         {
           stableId: 'it-filters-out-ultraviolet-light',
           label: 'It filters out ultraviolet light',
           isCorrect: false,
           explanation:
-            'The lens of the eye filters UV light. The optic nerve carries signals from retina to brain.',
+            'The cornea and lens absorb most ultraviolet light. The optic nerve carries signals from the retina toward the brain.',
         },
       ],
     },
@@ -108,10 +108,10 @@ export const lesson4_1: LessonConfig = {
       choices: [
         {
           stableId: 'because-screen-calibration-always-differs-between-devices',
-          label: 'Because screen calibration always differs between devices',
+          label: 'Only because display calibration can differ between devices',
           isCorrect: false,
           explanation:
-            'Display differences can contribute, but the more fundamental reason is that each person\'s visual system constructs color perception differently.',
+            'Display calibration can affect the light a screen emits, but people can perceive the same light differently because their visual systems vary.',
         },
         {
           stableId: 'because-color-perception-is-constructed-by-each-person-s-visual-',
@@ -119,21 +119,21 @@ export const lesson4_1: LessonConfig = {
             'Because color perception is constructed by each person\'s visual system, which varies',
           isCorrect: true,
           explanation:
-            'Each viewer\'s visual system — including cone sensitivity, optical lens characteristics, and neural processing — produces a slightly different perceptual experience from the same physical input.',
+            'Cone sensitivity, light transmission through the eye, and neural processing can vary between viewers. These differences can change how each person perceives the same light from a display.',
         },
         {
           stableId: 'because-css-renders-colors-differently-in-each-browser',
           label: 'Because CSS renders colors differently in each browser',
           isCorrect: false,
           explanation:
-            'Modern browsers render standard colors consistently. The variation is perceptual, not technical.',
+            'Browser rendering does not explain why two people can perceive the same displayed color differently. Variation in their visual systems can change the color they perceive.',
         },
         {
           stableId: 'because-colors-change-over-time-due-to-phosphor-decay',
           label: 'Because colors change over time due to phosphor decay',
           isCorrect: false,
           explanation:
-            'That applies to older CRT displays. The main reason for perceptual differences is variation in the human visual system.',
+            'Phosphor aging can alter the output of a CRT display, but it does not explain why two viewers can perceive the same displayed color differently.',
         },
       ],
     },
