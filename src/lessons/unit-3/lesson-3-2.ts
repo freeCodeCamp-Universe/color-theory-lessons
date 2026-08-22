@@ -57,7 +57,7 @@ export const lesson3_2: LessonConfig = {
           label: 'A dark color',
           isCorrect: false,
           explanation:
-            'Low equal values produce a dark neutral, while higher equal values produce lighter neutrals. Equal values determine the neutral hue, not one fixed lightness.',
+            'Low equal values produce a dark neutral, while higher equal values produce lighter neutrals. Equal values make the color neutral; the shared value determines its lightness.',
         },
         {
           stableId: 'an-error-rgb-must-have-at-least-one-dominant-channel',
