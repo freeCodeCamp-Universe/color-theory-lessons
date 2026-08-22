@@ -21,7 +21,7 @@ const SCENARIOS: Scenario[] = [
     screenColor: '#1a5fe8',
     reasons: [
       { id: 'a', label: 'The screen emits light, while the printed ink reflects light from the surroundings.', isCorrect: true },
-      { id: 'b', label: 'A color gamut that does not include the blue used on screen.', isCorrect: true },
+      { id: 'b', label: 'The brochure\'s printer, inks, and paper may have a gamut that does not include the screen blue.', isCorrect: true },
       { id: 'c', label: 'A duller print proves that the designer chose the wrong blue.', isCorrect: false },
       { id: 'd', label: 'Printed colors always look the same as screen colors under good lighting.', isCorrect: false },
     ],
