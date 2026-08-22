@@ -15,7 +15,7 @@ export const lesson3_1: LessonConfig = {
       text: 'Designers encounter color values in CSS files, design tool inspectors, browser developer tools, component libraries, and design token files. Each place records colors in a specific numeric format.',
     },
     {
-      text: 'Three common formats are HEX, RGB, and HSL. Each can represent sRGB colors with different notation. HEX is compact and common in CSS. RGB lists the red, green, and blue channels. HSL organizes a color by hue, saturation, and lightness.',
+      text: 'Three common formats are HEX, RGB, and HSL. In CSS, these formats describe colors in sRGB, the standard color space for most web content. sRGB defines how numeric values map to colors. HEX is compact and common in CSS. RGB lists the red, green, and blue channels. HSL organizes a color by hue, saturation, and lightness.',
     },
     {
       text: 'A single color can be expressed in multiple valid formats. HEX #1E40AF and rgb(30, 64, 175) encode the same sRGB channel values. HSL can represent the same color, although rounding HSL values can produce a slightly different result.',
