@@ -125,7 +125,7 @@ export const lesson3_1: LessonConfig = {
           label: '#E05252',
           isCorrect: true,
           explanation:
-            'This HEX value gives browsers and design tools a specific sRGB color to use.',
+            'In CSS, this HEX value specifies a particular sRGB color for the browser to render.',
         },
         {
           stableId: 'use-the-error-red-from-the-style-guide',
