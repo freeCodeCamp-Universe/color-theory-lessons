@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { hexToRgb, contrastRatio } from '../../utils/color.ts';
+import { hexToRgb, contrastRatioWcag } from '../../utils/color.ts';
 import shellStyles from './ToolShell.module.css';
 
 interface RoleDef {
@@ -41,17 +41,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({ interactive = f
 
   function checkTheme() {
     if (!interactive || completed) return;
-    const bgRgb = hexToRgb(colors.bg);
-    const surfRgb = hexToRgb(colors.surface);
-    const textPriRgb = hexToRgb(colors.textPri);
-    const textSecRgb = hexToRgb(colors.textSec);
-
-    const priOnBg = contrastRatio(textPriRgb, bgRgb);
-    const priOnSurf = contrastRatio(textPriRgb, surfRgb);
-    const secOnSurf = contrastRatio(textSecRgb, surfRgb);
-
-    const passes = priOnBg >= 4.5 && priOnSurf >= 4.5 && secOnSurf >= 3;
-    if (passes) {
+    if (allPass) {
       setCompleted(true);
       onComplete?.();
     }
@@ -61,9 +51,9 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({ interactive = f
   const surfRgb = hexToRgb(colors.surface);
   const textPriRgb = hexToRgb(colors.textPri);
   const textSecRgb = hexToRgb(colors.textSec);
-  const priOnBg = contrastRatio(textPriRgb, bgRgb);
-  const priOnSurf = contrastRatio(textPriRgb, surfRgb);
-  const secOnSurf = contrastRatio(textSecRgb, surfRgb);
+  const priOnBg = contrastRatioWcag(textPriRgb, bgRgb);
+  const priOnSurf = contrastRatioWcag(textPriRgb, surfRgb);
+  const secOnSurf = contrastRatioWcag(textSecRgb, surfRgb);
   const allPass = priOnBg >= 4.5 && priOnSurf >= 4.5 && secOnSurf >= 3;
 
   return (
