@@ -9,75 +9,77 @@ export const lesson4_4: LessonConfig = {
   reviewTags: ['color-only', 'observation', 'accessibility', 'ui-patterns'],
   steps: [
     {
-      text: 'Now that you understand how CVD changes what people see, look at common interface patterns through that lens. Some designs survive color perception differences just fine. Others fall apart — and the reason is almost always the same: the meaning lives entirely in the hue.',
+      text: 'You have seen how CVD can change color distinctions. Now examine common interface patterns. Some designs pair hue with labels, icons, shapes, or patterns. Others use hue as the only cue, so information can become ambiguous when a viewer cannot distinguish the hues.',
     },
     {
-      text: 'Status indicators are a classic example. A red dot for error and a green dot for success may look distinct to most people, but under deuteranopia simulation those two hues converge. Without any other visual signal, the dots become indistinguishable.',
+      text: 'Consider status indicators that use a red dot for an error and a green dot for success. Protan or deutan CVD can make those hues difficult to tell apart. Without labels, icons, or other cues, a viewer may not know which status each dot represents.',
     },
     {
-      text: 'Form fields that signal errors with only a red border face the same problem. The color shift may be invisible or subtle under certain CVD types. Diagnose the failure first: error meaning is present, but encoded in a single fragile channel.',
+      text: 'A form field with only a red border also uses hue as its only error cue. A viewer who does not notice the color change may miss the error state. First identify where the hue carries information and what becomes unclear when that cue is lost.',
     },
     {
-      text: 'Charts and data visualizations are especially vulnerable. When series are distinguished only by hue, a CVD simulation can make two or three series look identical. This is not just a theoretical concern — it directly blocks comprehension.',
+      text: 'A chart may use hue as the only way to distinguish its data series. Under a CVD simulation, two or more series can appear alike, which makes their values harder to identify.',
     },
     {
-      text: 'Notice the pattern: designs that rely on a single visual channel (hue) to carry meaning are fragile. Your outcome here is diagnostic: name where meaning depends on hue alone and why that creates ambiguity. In the next unit, you will learn the repair techniques and guidelines for building robust alternatives.',
+      text: 'Each example has the same problem: hue is the only visual cue carrying information. Your task is to identify where a hue difference communicates meaning and explain what becomes ambiguous when that difference is hard to perceive. Unit 5 covers how to add labels, icons, patterns, and other cues.',
     },
   ],
   challenge: {
       prompt:
-        'Review the six UI examples. Click the ones where meaning would become ambiguous if the viewer could not distinguish the hues used.',
+        'Review the six interface examples. Select the three that use hue as the only visual cue carrying meaning.',
       hints: [
-        'Imagine the colors shift so that reds and greens look the same. Which elements lose their meaning?',
-        'Three of the six examples rely on hue alone. The others have a backup signal.',
+        'If the hues were hard to distinguish, which examples would lose the information they communicate?',
+        'The other three examples pair hue with a label, icon, underline, border, or font weight.',
       ],
   },
   quizItems: [
     {
       id: 'q1',
-      prompt: 'Why do status dots with only red and green hues break down under CVD?',
+      prompt:
+        'Why can red and green status dots become ambiguous for viewers with protan or deutan CVD?',
       choices: [
         {
           stableId: 'red-and-green-are-ugly-together',
           label: 'Red and green are ugly together',
           isCorrect: false,
           explanation:
-            'Aesthetics are not the issue. The problem is that deuteranopia and protanopia make red and green look very similar, removing the only distinction.',
+            'The appearance of the color pair does not determine whether the statuses are distinguishable. Each dot needs a cue that does not depend on hue.',
         },
         {
           stableId: 'under-protan-and-deutan-cvd-those-hues-converge-and-the-dots-bec',
           label:
-            'Under protan and deutan CVD, those hues converge and the dots become indistinguishable',
+            'Protan and deutan CVD can reduce the hue difference, and the dots have no other identifying cue',
           isCorrect: true,
           explanation:
-            'When the sole distinguishing feature is a red-green hue difference, CVD that affects red-green perception removes that distinction entirely.',
+            'When a red-green hue difference is the only identifying feature, viewers who cannot distinguish the hues have no other way to identify each status.',
         },
         {
           stableId: 'screens-cannot-display-red-and-green-at-the-same-time',
           label: 'Screens cannot display red and green at the same time',
           isCorrect: false,
           explanation:
-            'Screens display both fine. The issue is how certain visual systems perceive them, not how the display produces them.',
+            'A screen can display red and green at the same time. Protan and deutan CVD affect how a viewer distinguishes those hues.',
         },
         {
           stableId: 'the-dots-are-too-small-to-see-color-clearly',
-          label: 'The dots are too small to see color clearly',
+          label: 'The dots need to be larger',
           isCorrect: false,
           explanation:
-            'Size can affect perception, but the core issue is that hue is the only differentiator and that hue difference disappears under certain CVD types.',
+            'Larger dots would still use hue as the only way to identify each status. A label, icon, or shape would add another cue.',
         },
       ],
     },
     {
       id: 'q2',
-      prompt: 'What makes a chart series robust against color perception differences?',
+      prompt:
+        'Which design lets viewers identify chart series when hue differences are hard to perceive?',
       choices: [
         {
           stableId: 'using-only-blue-and-orange-since-those-are-safe-for-everyone',
           label: 'Using only blue and orange, since those are safe for everyone',
           isCorrect: false,
           explanation:
-            'No two-color pair is universally safe across all CVD types. Robustness comes from pairing color with other visual cues.',
+            'Blue and orange still use hue as the only cue. Labels, patterns, or line styles provide another way to identify each series.',
         },
         {
           stableId: 'pairing-hue-with-other-visual-signals-like-labels-patterns-or-li',
@@ -92,14 +94,14 @@ export const lesson4_4: LessonConfig = {
           label: 'Using maximum saturation for every series',
           isCorrect: false,
           explanation:
-            'High saturation does not solve the problem — two saturated colors can still look the same under CVD.',
+            'Two saturated colors can still appear alike under CVD. Saturation does not add a second identifying cue.',
         },
         {
           stableId: 'avoiding-color-entirely-and-using-only-gray-shades',
           label: 'Avoiding color entirely and using only gray shades',
           isCorrect: false,
           explanation:
-            'Removing color entirely is unnecessarily restrictive. The goal is pairing color with other cues, not eliminating it.',
+            'A chart can use color when labels, patterns, line styles, or other cues also identify each series.',
         },
       ],
     },
@@ -112,7 +114,7 @@ export const lesson4_4: LessonConfig = {
           label: 'They use too many colors',
           isCorrect: false,
           explanation:
-            'The number of colors is not the issue. Even two colors can fail if hue is the only distinguishing signal.',
+            'Two colors are enough to create ambiguity when viewers must distinguish their hues to understand the information.',
         },
         {
           stableId: 'they-rely-on-hue-difference-as-the-only-visual-signal-carrying-m',
@@ -120,7 +122,7 @@ export const lesson4_4: LessonConfig = {
             'They rely on hue difference as the only visual signal carrying meaning',
           isCorrect: true,
           explanation:
-            'When meaning lives entirely in hue and that hue distinction is lost, nothing else communicates the information.',
+            'If a viewer cannot distinguish the hues, no second cue communicates the information.',
         },
         {
           stableId: 'they-do-not-use-enough-contrast',
@@ -134,7 +136,7 @@ export const lesson4_4: LessonConfig = {
           label: 'They use old-fashioned color choices',
           isCorrect: false,
           explanation:
-            'The failure is structural, not aesthetic. Modern and traditional palettes alike can carry meaning only through hue.',
+            'A palette\'s style does not determine whether the information is accessible. Ambiguity occurs when hue is the only cue.',
         },
       ],
     },
