@@ -9,29 +9,29 @@ export const lesson3_1: LessonConfig = {
   reviewTags: ['foundations', 'formats', 'HEX', 'RGB', 'HSL', 'implementation'],
   steps: [
     {
-      text: 'In digital products, the computer needs exact instructions. A vague description like "nice soft blue" cannot be reproduced reliably. Anywhere a color appears — a button, a background, a border — it needs a precise value that means the same thing to every tool and every browser.',
+      text: 'Digital interfaces need precise color values. A description like "nice soft blue" cannot be reproduced reliably. Buttons, backgrounds, borders, and text use coded values that browsers and design tools can interpret consistently.',
     },
     {
-      text: 'Designers encounter color values in many places: CSS files, design tool inspectors, browser dev tools, component libraries, and design token files. In all of them, the color is expressed as a specific format — not a feeling, but a number.',
+      text: 'Designers encounter color values and references in CSS files, design tool inspectors, browser developer tools, component libraries, and design token files. A color may appear as a raw value or as a named reference to a design token.',
     },
     {
-      text: 'Three formats are especially common: HEX, RGB, and HSL. They all describe the same visible colors — just in different ways. HEX is compact and common in CSS. RGB maps directly to screen light channels. HSL matches how designers often describe adjustments.',
+      text: 'Three common formats are HEX, RGB, and HSL. In CSS, these formats describe colors in sRGB, the standard color space for most web content. sRGB defines how numeric values map to colors. HEX is compact and common in CSS. RGB lists the red, green, and blue channels. HSL organizes a color by hue, saturation, and lightness.',
     },
     {
-      text: 'One important thing: a single visible color can be expressed in multiple valid formats. The swatch does not change — only the representation does. HEX #1E40AF, rgb(30, 64, 175), and hsl(225.9, 70.7%, 40.2%) can all describe the same blue.',
+      text: 'A single color can be expressed in multiple valid formats. HEX #1E40AF, rgb(30, 64, 175), and hsl(225.9, 70.7%, 40.2%) encode the same sRGB color with different notation.',
     },
     {
-      text: 'Click each colored element in the UI mockup. A panel will reveal the same color in all three formats. Notice how the visible result stays exactly the same while the representation changes.',
+      text: 'Select each colored element in the UI mockup. The panel will show its HEX, RGB, and HSL values so you can compare the structure of each format.',
     },
   ],
   challenge: {
-      prompt:
-        'Click every colored element in the mockup to reveal its formats. Explore all of them before moving on.',
-      hints: [
-        'Click directly on any colored region — background, button, text, border.',
-        'Each element reveals HEX, RGB, and HSL for the same color.',
-        'You do not need to memorize the values — focus on the structure of each format.',
-      ],
+    prompt:
+      'Select every colored element in the mockup to reveal its formats. Explore all of them before moving on.',
+    hints: [
+      'Select a colored region such as the background, button, text, or border.',
+      'Each selection shows HEX, RGB, and HSL values.',
+      'Compare how each format organizes its values. You do not need to memorize them.',
+    ],
   },
   quizItems: [
     {
@@ -43,62 +43,62 @@ export const lesson3_1: LessonConfig = {
           label: 'Because developers prefer reading numbers over words',
           isCorrect: false,
           explanation:
-            'The reason is not about preference — it is about reproducibility. A vague description cannot be reliably implemented across tools, screens, and contributors.',
+            'Developer preference does not make a color reproducible. A coded value gives collaborators a shared specification.',
         },
         {
           stableId: 'because-a-precise-value-can-be-reproduced-exactly-across-every-t',
-          label: 'Because a precise value can be reproduced exactly across every tool, browser, and screen',
+          label: 'Because a precise value gives tools and collaborators a reproducible color specification',
           isCorrect: true,
           explanation:
-            'A specific format like #1E40AF means the same blue everywhere — in CSS, design tools, and browsers — with no guesswork.',
+            'A coded value such as #1E40AF specifies the intended sRGB color without relying on a subjective description. Physical screens can still display that color differently.',
         },
         {
           stableId: 'because-color-formats-are-required-by-accessibility-standards',
           label: 'Because color formats are required by accessibility standards',
           isCorrect: false,
           explanation:
-            'Accessibility standards require sufficient contrast, not a specific format. Formats are about precision and reproducibility, not compliance.',
+            'Accessibility standards set requirements such as contrast ratios. They do not require HEX, RGB, or HSL notation.',
         },
         {
           stableId: 'because-vague-descriptions-are-only-acceptable-for-prototypes',
           label: 'Because vague descriptions are only acceptable for prototypes',
           isCorrect: false,
           explanation:
-            'Even in early stages, imprecise descriptions create inconsistency. The core reason for formats is reproducibility, not project phase.',
+            'Project phase does not determine whether a color description is reproducible. A coded value provides a specific color at any stage.',
         },
       ],
     },
     {
       id: 'q2',
-      prompt: 'Can one visible color be correctly described by more than one format?',
+      prompt: 'Can one sRGB color be correctly described by more than one format?',
       choices: [
         {
           stableId: 'no-each-visible-color-has-exactly-one-correct-format',
-          label: 'No — each visible color has exactly one correct format',
+          label: 'No. Each sRGB color has exactly one correct format',
           isCorrect: false,
           explanation:
-            'HEX, RGB, and HSL can all describe the exact same visible color. The format is the representation, not the color itself.',
+            'Equivalent HEX, RGB, and HSL values can represent one sRGB color. The format is the representation, not the color itself.',
         },
         {
           stableId: 'yes-hex-rgb-and-hsl-can-all-describe-the-same-visible-color',
-          label: 'Yes — HEX, RGB, and HSL can all describe the same visible color',
+          label: 'Yes. HEX, RGB, and HSL can all describe the same sRGB color',
           isCorrect: true,
           explanation:
-            'For example, #1E40AF, rgb(30, 64, 175), and hsl(225.9, 70.7%, 40.2%) are all valid descriptions of the same blue. The swatch stays the same; only the notation changes.',
+            'For example, #1E40AF, rgb(30, 64, 175), and hsl(225.9, 70.7%, 40.2%) represent one sRGB color with different notation.',
         },
         {
           stableId: 'only-if-the-color-is-a-standard-web-safe-color',
           label: 'Only if the color is a standard web-safe color',
           isCorrect: false,
           explanation:
-            'Any color can be expressed in multiple formats. The concept of "web-safe colors" is an outdated limitation from early displays and has no bearing on format equivalence.',
+            'Modern CSS color formats are not limited to the web-safe palette created for early computer displays.',
         },
         {
           stableId: 'yes-but-only-hex-and-rgb-hsl-is-a-different-color-system',
-          label: 'Yes, but only HEX and RGB — HSL is a different color system',
+          label: 'Yes, but only HEX and RGB. HSL represents a different set of colors',
           isCorrect: false,
           explanation:
-            'HSL describes the same visible colors as HEX and RGB. All three are interconvertible representations of the same color space.',
+            'CSS HSL represents sRGB colors and can be converted to and from RGB or HEX.',
         },
       ],
     },
@@ -111,28 +111,28 @@ export const lesson3_1: LessonConfig = {
           label: '"A warm coral sort of red"',
           isCorrect: false,
           explanation:
-            'This is subjective. Two designers would produce different results from this description.',
+            'This description is subjective. Different people could choose different color values.',
         },
         {
           stableId: 'something-between-orange-and-red-not-too-bright',
           label: '"Something between orange and red, not too bright"',
           isCorrect: false,
           explanation:
-            'Still subjective and vague. It cannot be reliably turned into a specific color across tools.',
+            'Terms such as "not too bright" do not identify a specific color value.',
         },
         {
           stableId: 'e05252',
           label: '#E05252',
           isCorrect: true,
           explanation:
-            'A HEX value is implementation-ready — it produces the same color in every browser, design tool, and handoff document with no interpretation required.',
+            'In CSS, this HEX value specifies a particular sRGB color for the browser to render.',
         },
         {
           stableId: 'use-the-error-red-from-the-style-guide',
           label: '"Use the error red from the style guide"',
           isCorrect: false,
           explanation:
-            'This references a named token, which is useful if the token is defined — but without knowing the actual value, it cannot be implemented.',
+            'A documented design token can be implementation-ready, but this phrase provides neither a token name nor a color value.',
         },
       ],
     },
