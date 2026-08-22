@@ -133,11 +133,11 @@ export const lesson3_4: LessonConfig = {
     },
   ],
   keyPoints: [
-    'RGBA notation becomes useful only in context: this lesson focuses on how alpha behaves in layered interfaces.',
-    'Alpha (0-1) controls how transparent a color is — 0 is invisible, 1 is fully opaque.',
-    'The perceived result of a semi-transparent color depends on the background underneath — you cannot judge it in isolation.',
+    'Alpha controls opacity from 0 (fully transparent) to 1 (fully opaque).',
+    'A semi-transparent foreground combines with the background beneath it to produce the composited color.',
     'Designers use alpha for hover states, modal scrims, disabled states, image overlays, and subtle layered surfaces.',
-    'Semi-transparent text over variable backgrounds (like photos) is especially risky for readability.',
-    'Always test overlays on realistic backgrounds, not just on a blank canvas.',
+    'A semi-transparent overlay can look different when the background changes, even when its color and alpha stay the same.',
+    'Semi-transparent text over a variable background may pass a contrast requirement in one area and fail it in another.',
+    'Test the final composited colors across the range of backgrounds an overlay will cover.',
   ],
 };

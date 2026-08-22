@@ -172,10 +172,10 @@ export const lesson3_2: LessonConfig = {
     },
   ],
   keyPoints: [
-    'RGB describes color as three channel values — red, green, blue — each from 0 (none) to 255 (full).',
-    'Equal channel values always produce a neutral: rgb(0,0,0) is black, rgb(255,255,255) is white, anything in between with equal values is a gray.',
-    'HEX encodes the same three channels as base-16 pairs: the first two digits are red, next two green, last two blue.',
-    'Shorthand HEX (#ABC) is valid only when each pair in the full six-character form is a repeated digit — #ABC expands to #AABBCC.',
-    'RGBA adds a fourth value (0–1) for opacity; rgba(30, 64, 175, 0.5) is that same blue at 50% transparency.',
+    'RGB describes a color with red, green, and blue channel values. Each channel runs from 0 (none) to 255 (full).',
+    'In sRGB, equal red, green, and blue values produce a neutral color, from black through grays to white.',
+    'Six-digit HEX encodes the red, green, and blue channels as three base-16 pairs, in that order.',
+    'Three-digit HEX repeats each digit to form a pair, so #ABC expands to #AABBCC.',
+    'CSS rgb() can include an alpha value after a slash. Alpha runs from 0 (fully transparent) to 1 (fully opaque).',
   ],
 };

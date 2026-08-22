@@ -138,10 +138,10 @@ export const lesson3_1: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Digital products need exact color values — a description like "soft blue" cannot be reliably reproduced across tools, browsers, or contributors.',
-    'HEX, RGB, and HSL are three common formats that can describe the exact same color; the visible swatch does not change between them.',
-    'Color values appear in CSS, design tool inspectors, browser dev tools, component libraries, and token files.',
-    'Tokens are named variables that separate color meaning (e.g. brand-primary) from raw value (e.g. #2563eb), making updates easier.',
-    'Choosing a format is not a design decision — it is a representation choice; different tools and workflows favor different formats.',
+    'Digital interfaces need precise color values because a description like "soft blue" does not identify one reproducible color.',
+    'In CSS, HEX, RGB, and HSL can encode the same sRGB color using different notation.',
+    'Color values appear in CSS files, design tool inspectors, browser developer tools, component libraries, and design token files.',
+    'A color can appear as a raw value or as a named reference to a design token.',
+    'Changing the format changes how a color value is written, not the sRGB color it represents. Different tools and workflows may favor different formats.',
   ],
 };
