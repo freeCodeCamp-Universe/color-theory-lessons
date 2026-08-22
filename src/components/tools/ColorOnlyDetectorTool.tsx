@@ -42,7 +42,7 @@ const EXAMPLES: Example[] = [
     visual: (
       <input
         readOnly
-        value="bad-input"
+        value="Sample input"
         style={{
           padding: '0.25rem 0.4rem', fontSize: '0.78rem',
           border: '2px solid #ef4444', borderRadius: 3, background: '#fff', color: '#111',
@@ -58,20 +58,39 @@ const EXAMPLES: Example[] = [
     name: 'Chart series',
     isColorOnly: true,
     visual: (
-      <div style={{ display: 'flex', gap: '0.3rem', alignItems: 'flex-end', height: 44 }}>
-        {[
-          { h: 80, color: '#22c55e' },
-          { h: 55, color: '#ef4444' },
-          { h: 70, color: '#f59e0b' },
-        ].map((bar) => (
-          <div
-            key={bar.color}
-            style={{
-              flex: 1, height: `${bar.h}%`, background: bar.color,
-              borderRadius: '3px 3px 0 0',
-            }}
-          />
-        ))}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+        <div style={{ display: 'flex', gap: '0.3rem', alignItems: 'flex-end', height: 44 }}>
+          {[
+            { h: 80, color: '#22c55e' },
+            { h: 55, color: '#ef4444' },
+            { h: 70, color: '#f59e0b' },
+          ].map((bar) => (
+            <div
+              key={bar.color}
+              style={{
+                flex: 1, height: `${bar.h}%`, background: bar.color,
+                borderRadius: '3px 3px 0 0',
+              }}
+            />
+          ))}
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', fontSize: '0.68rem' }}>
+          {[
+            { label: 'Series A', color: '#22c55e' },
+            { label: 'Series B', color: '#ef4444' },
+            { label: 'Series C', color: '#f59e0b' },
+          ].map((series) => (
+            <span key={series.label} style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+              <span
+                style={{
+                  width: 10, height: 10, background: series.color,
+                  display: 'inline-block',
+                }}
+              />
+              {series.label}
+            </span>
+          ))}
+        </div>
       </div>
     ),
     correctFeedback: 'Correct — color-only. Direct labels or patterns on each bar would fix this.',
