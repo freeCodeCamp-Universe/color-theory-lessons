@@ -92,7 +92,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
 
       {interactive && (
         <p style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>
-          Fix all three pairs so they pass their threshold. ({passedCount}/{PAIRS.length} passing)
+          Fix all three pairs so their normal text reaches 4.5:1. ({passedCount}/{PAIRS.length} passing)
         </p>
       )}
 
@@ -130,7 +130,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
         }}
       >
         <p style={{ color: isValidHex(textColor) ? textColor : '#000', fontSize: '1rem', margin: '0 0 0.5rem' }}>
-          Sample text — normal size (16px)
+          Sample normal text (16px)
         </p>
         <p style={{ color: isValidHex(textColor) ? textColor : '#000', fontSize: '1.5rem', fontWeight: 700, margin: 0 }}>
           Large heading (24px bold)
@@ -155,7 +155,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
           border: `1px solid ${normalPass ? 'var(--accent-success)' : 'var(--accent-danger)'}`,
           color: normalPass ? 'var(--accent-success)' : 'var(--accent-danger)',
         }}>
-          Normal text (≥4.5:1) — {normalPass ? 'PASS' : 'FAIL'}
+          Normal text (≥4.5:1): {normalPass ? 'PASS' : 'FAIL'}
         </div>
         <div style={{
           fontSize: '0.75rem', padding: '0.3rem 0.65rem',
@@ -166,7 +166,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
           border: `1px solid ${largePass ? 'var(--accent-success)' : 'var(--accent-danger)'}`,
           color: largePass ? 'var(--accent-success)' : 'var(--accent-danger)',
         }}>
-          Large text (≥3:1) — {largePass ? 'PASS' : 'FAIL'}
+          Large text (≥3:1): {largePass ? 'PASS' : 'FAIL'}
         </div>
       </div>
 
@@ -214,7 +214,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          ✓ All three pairs now pass. Lightness difference, not hue, is the key to contrast.
+          ✓ All three pairs now meet the 4.5:1 threshold for normal text.
         </p>
       )}
     </div>
