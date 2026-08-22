@@ -68,6 +68,10 @@ React 19 + TypeScript + Vite. No backend. Deployed via freeCodeCamp Universe (`p
 npm run build   # tsc + vite build
 ```
 
+## Pull Requests
+
+- Use conventional commit format for pull request titles.
+
 ## Pull Request Reviews
 
 - When asked to review a GitHub pull request, check out that pull request in the primary worktree before inspecting or testing it.
