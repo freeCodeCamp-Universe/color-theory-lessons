@@ -135,10 +135,10 @@ export const lesson3_6: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Design tokens are named variables that store color values and separate meaning from raw codes.',
-    'Alias tokens point to base palette values (--blue-600). Role tokens assign meaning (--color-action-primary).',
-    'Changing a base value propagates automatically to every component that references the token — this is theme propagation.',
-    'Good token names describe function (--color-text-primary), not appearance (--dark-gray).',
-    'Token systems make dark mode, brand changes, and scaling easier because the same role names work across themes.',
+    'A design token pairs a name with a value. In CSS, custom properties can implement color tokens.',
+    'Palette token names describe a color family and step, while role token names describe how a color is used.',
+    'A token whose value references another token is an alias. For example, a role token can reference a palette token.',
+    'When a palette value changes, role tokens that reference it resolve to the new value, and components using those roles render the new color.',
+    'Light and dark themes can keep the same role names while assigning different palette values to them.',
   ],
 };

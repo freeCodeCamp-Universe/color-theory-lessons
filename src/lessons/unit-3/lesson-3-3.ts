@@ -138,10 +138,10 @@ export const lesson3_3: LessonConfig = {
     },
   ],
   keyPoints: [
-    'HSL describes color as hue (0-360°), saturation (0-100%), and lightness (0-100%) — mapping directly to how designers describe visible changes.',
-    'HSL is often easier than RGB for design tasks: shift hue for a new color family, lower saturation to mute, raise lightness to brighten.',
-    'RGB is more direct when you need to control individual light channels; neither format is universally better.',
-    'HSLA adds alpha (0-1) for transparency, working exactly like the alpha in RGBA.',
-    'The same color can be viewed in HSL, HEX, and RGB simultaneously — they are interconvertible representations of the same visual result.',
+    'HSL describes a color with a hue angle from 0 to 360 degrees and saturation and lightness percentages.',
+    'HSL separates common design adjustments: shift hue to change the color family, lower saturation to mute a color, or raise lightness to make it lighter.',
+    'RGB gives direct control over the red, green, and blue channels, while HSL gives direct control over hue, saturation, and lightness.',
+    'CSS hsl() can include an alpha value after a slash, such as hsl(220 60% 50% / 0.5).',
+    'HSL, HEX, and RGB can encode the same sRGB color using different notation.',
   ],
 };
