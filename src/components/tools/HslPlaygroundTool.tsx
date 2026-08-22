@@ -137,7 +137,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({ interactive =
               border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer',
               fontFamily: 'var(--font-mono)', fontSize: '0.82rem',
             }}>
-              check
+              check match
             </button>
           </div>
           <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.5rem' }}>
@@ -154,7 +154,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({ interactive =
 
       {allDone && (
         <p style={{ color: 'var(--green)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          All targets matched. You can see how HSL changes translate to HEX and RGB.
+          All three targets matched. The HSL, HEX, and RGB readouts describe the same final color.
         </p>
       )}
     </div>
