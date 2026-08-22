@@ -51,7 +51,7 @@ export const lesson3_5: LessonConfig = {
           label: 'They are two terms for the same thing',
           isCorrect: false,
           explanation:
-            'They are genuinely different concepts. A value is a specific color code. A role is the function that code serves in the design system.',
+            'They are different concepts. A value is a specific color code. A role is the function that code serves in the design system.',
         },
         {
           stableId: 'a-value-is-the-color-in-hex-a-role-is-the-same-color-in-hsl',
