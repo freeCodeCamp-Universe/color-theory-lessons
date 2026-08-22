@@ -1,20 +1,60 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { contrastRatio, contrastRatioWcag, hexToRgb } from '../../utils/color.ts';
 import { ThemeSandboxTool } from './ThemeSandboxTool.tsx';
 
 afterEach(cleanup);
+
+const BLACK = '#000000';
+const DARK_GRAY = '#2d2d2d';
 
 function setColor(name: string, value: string) {
   fireEvent.change(screen.getByLabelText(name), { target: { value } });
 }
 
+function setRegressionColors() {
+  setColor('Background', DARK_GRAY);
+  setColor('Surface', DARK_GRAY);
+  setColor('Primary text', BLACK);
+  setColor('Secondary text', BLACK);
+}
+
 describe('ThemeSandboxTool contrast requirements', () => {
+  it('shows WCAG ratios for all three text pairs', () => {
+    const black = hexToRgb(BLACK);
+    const darkGray = hexToRgb(DARK_GRAY);
+
+    expect(contrastRatio(black, darkGray)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatioWcag(black, darkGray)).toBeLessThan(4.5);
+
+    render(<ThemeSandboxTool interactive />);
+    setRegressionColors();
+
+    expect(screen.getByText('✗ Primary text on bg: 1.5:1 (target: 4.5:1)')).toBeInTheDocument();
+    expect(screen.getByText('✗ Primary text on surface: 1.5:1 (target: 4.5:1)')).toBeInTheDocument();
+    expect(screen.getByText('✗ Secondary text on surface: 1.5:1 (target: 4.5:1)')).toBeInTheDocument();
+  });
+
+  it('keeps submission disabled when only the simplified ratios pass', () => {
+    const onComplete = vi.fn();
+    render(<ThemeSandboxTool interactive onComplete={onComplete} />);
+    setRegressionColors();
+
+    const submitButton = screen.getByRole('button', {
+      name: 'fix contrast to submit',
+    });
+    expect(submitButton).toBeDisabled();
+
+    fireEvent.click(submitButton);
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+
   it('rejects secondary text below 4.5:1 and displays the target', () => {
     render(<ThemeSandboxTool interactive />);
 
-    setColor('Secondary text', '#999999');
+    setColor('Secondary text', '#777777');
 
-    expect(screen.getByText(/Secondary text on surface: 3\.2:1 \(target: 4\.5:1\)/))
+    expect(screen.getByText(/Secondary text on surface: 3\.3:1 \(target: 4\.5:1\)/))
       .toHaveTextContent('✗');
     expect(screen.getByRole('button', { name: 'fix contrast to submit' })).toBeDisabled();
   });
@@ -23,7 +63,7 @@ describe('ThemeSandboxTool contrast requirements', () => {
     const onComplete = vi.fn();
     render(<ThemeSandboxTool interactive onComplete={onComplete} />);
 
-    setColor('Secondary text', '#ffffff');
+    setColor('Secondary text', '#999999');
 
     expect(screen.getByText(/Secondary text on surface: 5\.2:1 \(target: 4\.5:1\)/))
       .toHaveTextContent('✓');
