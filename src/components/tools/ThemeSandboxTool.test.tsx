@@ -30,7 +30,7 @@ describe('ThemeSandboxTool contrast requirements', () => {
     render(<ThemeSandboxTool interactive />);
     setRegressionColors();
 
-    expect(screen.getByText('✗ Primary text on bg: 1.5:1 (target: 4.5:1)')).toBeInTheDocument();
+    expect(screen.getByText('✗ Primary text on background: 1.5:1 (target: 4.5:1)')).toBeInTheDocument();
     expect(screen.getByText('✗ Primary text on surface: 1.5:1 (target: 4.5:1)')).toBeInTheDocument();
     expect(screen.getByText('✗ Secondary text on surface: 1.5:1 (target: 4.5:1)')).toBeInTheDocument();
   });
@@ -41,7 +41,7 @@ describe('ThemeSandboxTool contrast requirements', () => {
     setRegressionColors();
 
     const submitButton = screen.getByRole('button', {
-      name: 'fix contrast to submit',
+      name: 'meet contrast targets to submit',
     });
     expect(submitButton).toBeDisabled();
 
@@ -56,7 +56,7 @@ describe('ThemeSandboxTool contrast requirements', () => {
 
     expect(screen.getByText(/Secondary text on surface: 3\.3:1 \(target: 4\.5:1\)/))
       .toHaveTextContent('✗');
-    expect(screen.getByRole('button', { name: 'fix contrast to submit' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'meet contrast targets to submit' })).toBeDisabled();
   });
 
   it('accepts secondary text at or above 4.5:1', () => {
@@ -78,12 +78,12 @@ describe('ThemeSandboxTool contrast requirements', () => {
     setColor('Surface', '#000000');
     setColor('Primary text', '#ffffff');
     setColor('Secondary text', '#ffffff');
-    expect(screen.getByRole('button', { name: 'fix contrast to submit' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'meet contrast targets to submit' })).toBeDisabled();
 
     setColor('Background', '#000000');
     setColor('Surface', '#777777');
     setColor('Secondary text', '#000000');
-    expect(screen.getByRole('button', { name: 'fix contrast to submit' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'meet contrast targets to submit' })).toBeDisabled();
 
     setColor('Surface', '#000000');
     setColor('Secondary text', '#ffffff');
