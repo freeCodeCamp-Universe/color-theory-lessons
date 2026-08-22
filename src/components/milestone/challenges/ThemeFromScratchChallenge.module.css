@@ -39,12 +39,16 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
+  margin: 0;
+  min-width: 0;
 }
 
 .roleTop {
   display: flex;
   justify-content: space-between;
   font-size: 0.8rem;
+  width: 100%;
+  padding: 0;
 }
 
 .roleTop code {
@@ -54,11 +58,15 @@
 
 .sliderRow {
   display: grid;
-  grid-template-columns: 20px 1fr 40px;
+  grid-template-columns: 80px minmax(80px, 1fr) 44px;
   align-items: center;
   gap: var(--spacing-xs);
   font-family: var(--font-mono);
   font-size: 0.72rem;
+}
+
+.sliderValue {
+  text-align: right;
 }
 
 .sliderRow input {
@@ -68,6 +76,12 @@
 .preview {
   border-radius: var(--radius-sm);
   padding: var(--spacing-md);
+}
+
+.backgroundText {
+  margin: 0 0 var(--spacing-sm);
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
 }
 
 .previewCard {
@@ -103,6 +117,13 @@
   display: grid;
   gap: 4px;
   font-size: 0.78rem;
+}
+
+.result {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--secondary-foreground);
 }
 
 .good {
