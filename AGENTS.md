@@ -75,8 +75,6 @@ npm run build   # tsc + vite build
 
 ## Pull Request Reviews
 
-- When asked to review a GitHub pull request, check out that pull request in the primary worktree before inspecting or testing it.
-- If uncommitted changes make checkout unsafe, stop and ask the user how to proceed. Do not substitute a remote ref or temporary worktree unless the user authorizes it.
 - Review the full scope of the pull request's issue, not only the changed files and lines. Check whether the pull request missed any part of the issue.
 - For problems found outside the issue's scope, search the existing issues first. If an existing issue covers the problem, add a note to that issue. Otherwise, create a new issue.
 
