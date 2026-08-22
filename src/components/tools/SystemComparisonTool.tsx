@@ -7,10 +7,10 @@ interface SystemComparisonToolProps {
 }
 
 const INCONSISTENCIES = [
-  { id: 'btn-color', label: 'Button color', explanation: 'The action button uses #3b82f6 but the header uses #2563EB — two different blues for the same "primary" role. Fix: assign one action-primary color and use it consistently.' },
-  { id: 'success-color', label: 'Success badge color', explanation: 'The success badge uses teal (#14b8a6) instead of green (#16a34a). Fix: assign a single success role and apply it everywhere a positive outcome is shown.' },
-  { id: 'surface-color', label: 'Card surface color', explanation: 'The second card uses pure white (#ffffff) while the first uses off-white (#f9fafb). Fix: assign one surface-card color and use it for all card backgrounds.' },
-  { id: 'text-weight', label: 'Secondary text lightness', explanation: 'Secondary text in the first card is #9ca3af (very light) while muted text in the second card is #6b7280. Fix: assign one secondary-text role with a single value used across all components.' },
+  { id: 'btn-color', label: 'Button color', explanation: 'The action button uses #3b82f6 instead of the system\'s #1e40af primary-action color. Assign the button background to the action-primary role.' },
+  { id: 'success-color', label: 'Success badge color', explanation: 'The success badge uses #14b8a6 instead of the system\'s #16a34a success color. Assign the badge background to the success role.' },
+  { id: 'surface-color', label: 'Card surface color', explanation: 'The second card uses #ffffff instead of the system\'s #f3f4f6 card-surface color. Assign both card backgrounds to the surface-card role.' },
+  { id: 'text-weight', label: 'Secondary text lightness', explanation: 'The first card uses #9ca3af instead of the system\'s #6b7280 secondary-text color. Assign secondary text in both cards to the same role.' },
 ];
 
 export const SystemComparisonTool = memo(function SystemComparisonTool({ interactive = false, onComplete }: SystemComparisonToolProps) {
@@ -127,7 +127,7 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({ interac
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          All inconsistencies found. A role-based system eliminates each of these problems.
+          All inconsistencies found. The consistent version assigns each highlighted element to its defined color role.
         </p>
       )}
     </div>
