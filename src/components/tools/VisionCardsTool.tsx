@@ -38,7 +38,7 @@ const CARDS: CardData[] = [
     name: 'Deuteranomaly',
     tint: '#99d9a0',
     description:
-      'Altered M-cone photopigment sensitivity. It is the most common inherited type of CVD and makes some red-green distinctions harder.',
+      'Altered M-cone photopigment sensitivity. It is the most common inherited type of color vision deficiency and makes some red-green distinctions harder.',
     risk: 'Maps and charts using red/green with no direct labels.',
     colorEffect: 'Some green shades can appear more red.',
   },

@@ -9,14 +9,14 @@ export const lesson4_2: LessonConfig = {
   reviewTags: ['cvd', 'perception', 'accessibility'],
   steps: [
     {
-      text: 'Color vision deficiency (CVD) is an umbrella term for differences in how people distinguish colors. Cone cells contain light-sensitive molecules called photopigments. This lesson focuses on CVD types that involve differences in these photopigments or in cone function.',
+      text: 'Color vision deficiency is an umbrella term for differences in how people distinguish colors. Cone cells contain light-sensitive molecules called photopigments. This lesson focuses on types that involve differences in these photopigments or in cone function.',
     },
     {
-      text: 'Protan, deutan, and tritan categories describe which cone photopigment is affected. Protan types involve the long-wavelength-sensitive (L) cones; deutan types involve the medium-wavelength-sensitive (M) cones; tritan types involve the short-wavelength-sensitive (S) cones. In inherited red-green CVD, "-anomaly" describes altered photopigment sensitivity, while "-anopia" describes loss of function from one cone photopigment.',
+      text: 'Protan, deutan, and tritan categories describe which cone photopigment is affected. Protan types involve the long-wavelength-sensitive (L) cones; deutan types involve the medium-wavelength-sensitive (M) cones; tritan types involve the short-wavelength-sensitive (S) cones. In inherited red-green color vision deficiency, "-anomaly" describes altered photopigment sensitivity, while "-anopia" describes loss of function from one cone photopigment.',
       panel: { type: 'vision-cards-preview', expandedNames: ['Protanopia', 'Deuteranopia', 'Tritanopia'] },
     },
     {
-      text: 'Deuteranomaly is the most common inherited type of CVD. Red-green CVD as a group occurs in about 1 in 12 males with Northern European ancestry and is less common in many other populations. Inherited tritan types occur in fewer than 1 in 10,000 people.',
+      text: 'Deuteranomaly is the most common inherited type of color vision deficiency. Red-green color vision deficiency as a group occurs in about 1 in 12 males with Northern European ancestry and is less common in many other populations. Inherited tritan types occur in fewer than 1 in 10,000 people.',
       panel: { type: 'vision-cards-preview', expandedNames: ['Deuteranomaly', 'Protanomaly'] },
     },
     {
@@ -24,7 +24,7 @@ export const lesson4_2: LessonConfig = {
       panel: { type: 'vision-cards-preview', expandedNames: ['Achromatopsia'] },
     },
     {
-      text: 'Design for differences in color vision rather than trying to diagnose viewers. You do not know how each user perceives color, so check whether information remains available without a particular color distinction. CVD simulations can reveal risks, but they only approximate users\' experiences.',
+      text: 'Design for differences in color vision rather than trying to diagnose viewers. You do not know how each user perceives color, so check whether information remains available without a particular color distinction. Color vision deficiency simulations can reveal risks, but they only approximate users\' experiences.',
     },
   ],
   challenge: {
@@ -42,10 +42,10 @@ export const lesson4_2: LessonConfig = {
       choices: [
         {
           stableId: 'yes-all-cvd-is-red-green-color-blindness',
-          label: 'Yes, all CVD is red-green color blindness',
+          label: 'Yes, all color vision deficiency is red-green color blindness',
           isCorrect: false,
           explanation:
-            '"Red-green color blindness" describes protan and deutan types. CVD also includes tritan types and achromatopsia.',
+            '"Red-green color blindness" describes protan and deutan types. Color vision deficiency also includes tritan types and achromatopsia.',
         },
         {
           stableId: 'no-there-are-multiple-types-and-severities-each-affecting-differ',
@@ -53,14 +53,14 @@ export const lesson4_2: LessonConfig = {
             'No, there are multiple types and severities that affect different color distinctions',
           isCorrect: true,
           explanation:
-            'CVD includes protan, deutan, tritan, and achromatic types. Within some categories, people can have altered photopigment sensitivity or a loss of function.',
+            'Color vision deficiency includes protan, deutan, tritan, and achromatic types. Within some categories, people can have altered photopigment sensitivity or a loss of function.',
         },
         {
           stableId: 'yes-all-cvd-causes-complete-inability-to-see-any-color',
-          label: 'Yes, all CVD causes a complete inability to see any color',
+          label: 'Yes, all color vision deficiency causes a complete inability to see any color',
           isCorrect: false,
           explanation:
-            'Complete achromatopsia causes a lack of color discrimination. Most CVD types make specific colors harder to distinguish instead of removing all color perception.',
+            'Complete achromatopsia causes a lack of color discrimination. Most color vision deficiency types make specific colors harder to distinguish instead of removing all color perception.',
         },
         {
           stableId: 'no-but-all-types-affect-only-the-blue-yellow-axis',
@@ -73,7 +73,7 @@ export const lesson4_2: LessonConfig = {
     },
     {
       id: 'q2',
-      prompt: 'Which CVD category specifically affects blue-yellow distinctions?',
+      prompt: 'Which color vision deficiency category specifically affects blue-yellow distinctions?',
       choices: [
         {
           stableId: 'protan-types-protanopia-protanomaly',
@@ -119,10 +119,10 @@ export const lesson4_2: LessonConfig = {
         {
           stableId: 'because-your-vision-may-not-represent-other-users-experience-cvd',
           label:
-            'Because users may perceive colors differently, and CVD is common enough to design for',
+            'Because users may perceive colors differently, and color vision deficiency is common enough to design for',
           isCorrect: true,
           explanation:
-            'Red-green CVD alone affects about 1 in 12 males with Northern European ancestry. You cannot determine a user\'s color perception by looking at them, so information should not depend on everyone distinguishing the same colors.',
+            'Red-green color vision deficiency alone affects about 1 in 12 males with Northern European ancestry. You cannot determine a user\'s color perception by looking at them, so information should not depend on everyone distinguishing the same colors.',
         },
         {
           stableId: 'because-design-tools-do-not-show-accurate-colors',
@@ -136,7 +136,7 @@ export const lesson4_2: LessonConfig = {
           label: 'Because color perception degrades with age for everyone',
           isCorrect: false,
           explanation:
-            'Changes in the eye with age can affect color perception, but people of any age can have CVD. A design should work when users distinguish colors differently.',
+            'Changes in the eye with age can affect color perception, but people of any age can have color vision deficiency. A design should work when users distinguish colors differently.',
         },
       ],
     },
