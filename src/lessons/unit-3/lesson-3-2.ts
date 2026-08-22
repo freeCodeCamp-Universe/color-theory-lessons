@@ -104,35 +104,35 @@ export const lesson3_2: LessonConfig = {
     },
     {
       id: 'q3',
-      prompt: 'Which format is generally easier to reason about when you want to increase only the blue in a color?',
+      prompt: 'In the HEX value #1E40AF, which pair would you change to adjust only the blue channel?',
       choices: [
         {
-          stableId: 'hex-because-the-pair-positions-are-fixed',
-          label: 'HEX, because the pair positions are fixed',
+          stableId: '1e-the-first-pair',
+          label: '1E, the first pair',
           isCorrect: false,
           explanation:
-            'While HEX does have fixed positions, you would need to calculate base-16 values mentally. RGB sliders are more direct for intentional single-channel adjustments.',
+            'The first pair controls the red channel, so changing 1E would adjust red.',
         },
         {
-          stableId: 'rgb-because-each-channel-is-a-separate-decimal-number-you-can-ad',
-          label: 'RGB, because each channel is a separate decimal number you can adjust directly',
+          stableId: '40-the-middle-pair',
+          label: '40, the middle pair',
+          isCorrect: false,
+          explanation:
+            'The middle pair controls the green channel, so changing 40 would adjust green.',
+        },
+        {
+          stableId: 'af-the-last-pair',
+          label: 'AF, the last pair',
           isCorrect: true,
           explanation:
-            'RGB gives you three independent decimal values. Increasing the blue value directly raises blue light. HEX encodes the same data but requires converting from base-16 mentally.',
+            'In a six-digit HEX value, the pairs represent red, green, and blue in that order. The last pair controls blue.',
         },
         {
-          stableId: 'both-are-equally-easy',
-          label: 'Both are equally easy',
+          stableId: 'all-three-pairs',
+          label: 'All three pairs',
           isCorrect: false,
           explanation:
-            'They encode the same information, but RGB is more readable for direct single-channel adjustments because you work in decimal, not base-16.',
-        },
-        {
-          stableId: 'neither-you-should-use-hsl-for-any-channel-change',
-          label: 'Neither; you should use HSL for any channel change',
-          isCorrect: false,
-          explanation:
-            'HSL is useful for hue, saturation, and lightness adjustments, but when you specifically want to change one light channel, RGB is the more direct choice.',
+            'Each pair controls one channel. Changing all three pairs would adjust red and green as well as blue.',
         },
       ],
     },
