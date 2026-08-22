@@ -45,7 +45,7 @@ interface EyeDiagramToolProps {
 
 export const EyeDiagramTool = memo(function EyeDiagramTool({ interactive = false, onComplete }: EyeDiagramToolProps) {
   const [activeStep, setActiveStep] = useState(0);
-  const [explored, setExplored] = useState<boolean[]>(STEPS.map(() => false));
+  const [explored, setExplored] = useState<boolean[]>(() => STEPS.map((_, idx) => idx === 0));
   const [completed, setCompleted] = useState(false);
 
   function handleStepClick(idx: number) {
