@@ -12,7 +12,7 @@ export const lesson3_2: LessonConfig = {
       text: 'RGB describes a color by stating how much red, green, and blue light to mix. Each channel runs from 0 (none) to 255 (full). rgb(0 0 0) represents black, with all three channels at 0. rgb(255 255 255) represents white, with all three channels at 255.',
     },
     {
-      text: 'HEX is a compact way to encode the same three channels. A six-digit CSS HEX value like #1E40AF splits into three pairs. The pairs represent red, green, and blue, in that order. Each pair uses base-16 notation.',
+      text: 'HEX is a compact way to encode the same three channels. A six-digit CSS HEX value like #1E40AF splits into three pairs. The pairs represent red, green, and blue, in that order. Each pair uses base-16 notation, which counts from 0 to 9 and then A to F.',
     },
     {
       text: 'In sRGB, equal red, green, and blue channel values produce a neutral color. For example, rgb(120 120 120) is gray. With no channel higher than the others, the color has no hue. #808080 follows the same pattern because each channel uses the value 80.',
