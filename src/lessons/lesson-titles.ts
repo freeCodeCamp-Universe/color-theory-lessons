@@ -14,7 +14,7 @@ export const LESSON_TITLES: Record<string, string> = {
   'u2-l5': 'Seeing Pixels as Light, Not Paint',
   'u3-l1': 'Why Digital Design Needs Color Formats',
   'u3-l2': 'HEX and RGB',
-  'u3-l3': 'HSL and HSLA',
+  'u3-l3': 'HSL and Alpha',
   'u3-l4': 'Alpha, Transparency, and Layered Color',
   'u3-l5': 'Gradients, CSS Color Usage, and Theme Building',
   'u3-l6': 'Design Tokens and Role-Based Color Systems',
