@@ -12,7 +12,7 @@ export const lesson3_1: LessonConfig = {
       text: 'Digital interfaces need precise color values. A description like "nice soft blue" cannot be reproduced reliably. Buttons, backgrounds, borders, and text use coded values that browsers and design tools can interpret consistently.',
     },
     {
-      text: 'Designers encounter color values in CSS files, design tool inspectors, browser developer tools, component libraries, and design token files. Each place records colors in a specific numeric format.',
+      text: 'Designers encounter color values and references in CSS files, design tool inspectors, browser developer tools, component libraries, and design token files. A color may appear as a raw value or as a named reference to a design token.',
     },
     {
       text: 'Three common formats are HEX, RGB, and HSL. In CSS, these formats describe colors in sRGB, the standard color space for most web content. sRGB defines how numeric values map to colors. HEX is compact and common in CSS. RGB lists the red, green, and blue channels. HSL organizes a color by hue, saturation, and lightness.',
