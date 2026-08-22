@@ -21,6 +21,7 @@ const ROLES: RoleDef[] = [
 ];
 
 const GRADIENT_DEFAULTS = { start: '#4f46e5', end: '#7c3aed' };
+const TEXT_CONTRAST_TARGET = 4.5;
 
 interface ThemeSandboxToolProps {
   interactive?: boolean;
@@ -54,7 +55,9 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({ interactive = f
   const priOnBg = contrastRatioWcag(textPriRgb, bgRgb);
   const priOnSurf = contrastRatioWcag(textPriRgb, surfRgb);
   const secOnSurf = contrastRatioWcag(textSecRgb, surfRgb);
-  const allPass = priOnBg >= 4.5 && priOnSurf >= 4.5 && secOnSurf >= 3;
+  const allPass = priOnBg >= TEXT_CONTRAST_TARGET
+    && priOnSurf >= TEXT_CONTRAST_TARGET
+    && secOnSurf >= TEXT_CONTRAST_TARGET;
 
   return (
     <div className={shellStyles.shell}>
@@ -144,14 +147,14 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({ interactive = f
 
       {/* Contrast readout */}
       <div style={{ fontSize: '0.78rem', fontFamily: 'var(--font-mono)', marginBottom: '0.5rem' }}>
-        <div style={{ color: priOnBg >= 4.5 ? 'var(--green)' : 'var(--red)' }}>
-          {priOnBg >= 4.5 ? '✓' : '✗'} Primary text on bg: {priOnBg.toFixed(1)}:1
+        <div style={{ color: priOnBg >= TEXT_CONTRAST_TARGET ? 'var(--green)' : 'var(--red)' }}>
+          {priOnBg >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Primary text on bg: {priOnBg.toFixed(1)}:1 (target: 4.5:1)
         </div>
-        <div style={{ color: priOnSurf >= 4.5 ? 'var(--green)' : 'var(--red)' }}>
-          {priOnSurf >= 4.5 ? '✓' : '✗'} Primary text on surface: {priOnSurf.toFixed(1)}:1
+        <div style={{ color: priOnSurf >= TEXT_CONTRAST_TARGET ? 'var(--green)' : 'var(--red)' }}>
+          {priOnSurf >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Primary text on surface: {priOnSurf.toFixed(1)}:1 (target: 4.5:1)
         </div>
-        <div style={{ color: secOnSurf >= 3 ? 'var(--green)' : 'var(--red)' }}>
-          {secOnSurf >= 3 ? '✓' : '✗'} Secondary text on surface: {secOnSurf.toFixed(1)}:1
+        <div style={{ color: secOnSurf >= TEXT_CONTRAST_TARGET ? 'var(--green)' : 'var(--red)' }}>
+          {secOnSurf >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Secondary text on surface: {secOnSurf.toFixed(1)}:1 (target: 4.5:1)
         </div>
       </div>
 
