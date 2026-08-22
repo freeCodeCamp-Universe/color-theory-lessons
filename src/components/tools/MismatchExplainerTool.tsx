@@ -117,7 +117,7 @@ export const MismatchExplainerTool = memo(function MismatchExplainerTool({ inter
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)' }}>emits light</span>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: '110px' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>print simulation</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>material simulation</span>
           <div style={{ height: '60px', borderRadius: 'var(--radius-sm)', backgroundColor: scenario.screenColor, filter: printFilter(), border: '1px solid rgba(0,0,0,0.08)' }} />
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)' }}>reflects light</span>
         </div>

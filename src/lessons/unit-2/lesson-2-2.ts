@@ -68,10 +68,10 @@ export const lesson2_2: LessonConfig = {
     },
   ],
   keyPoints: [
-    'RGB has three channels — red, green, and blue — each ranging from 0 (off) to 255 (full).',
-    'A channel value of 0 contributes none of that primary; 255 contributes the maximum.',
-    'Unequal channel values produce a hue; the dominant channel determines which direction the color leans.',
-    'Channel intensity is independent — changing one channel changes the color without forcing changes to the others.',
-    'High values in all three channels approach white; low values in all three approach black.',
+    'In common 8-bit RGB notation, the red, green, and blue channels each range from 0 to 255.',
+    'A channel value of 0 contributes none of that light component, while 255 contributes the maximum.',
+    'Equal RGB channel values represent neutral grays; unequal values introduce a color cast.',
+    'Each channel is independent, so changing one does not force the other two to change.',
+    'Raising all three channel values together moves the color toward white; lowering them together moves it toward black.',
   ],
 };
