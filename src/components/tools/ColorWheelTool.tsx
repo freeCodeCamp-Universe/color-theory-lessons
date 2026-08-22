@@ -1,4 +1,4 @@
-import { memo, useState, useMemo } from 'react';
+import { memo, useState, useMemo, useRef } from 'react';
 import type { Relationship } from '../../utils/color.ts';
 import { hslToHex, getRelatedHues } from '../../utils/color.ts';
 import shellStyles from './ToolShell.module.css';
@@ -121,6 +121,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
   const [paletteDone, setPaletteDone] = useState(false);
   const [validationAnswer, setValidationAnswer] = useState<string | null>(null);
   const [validationSubmitted, setValidationSubmitted] = useState(false);
+  const completionFiredRef = useRef(false);
 
   const relatedH = getRelatedHues(baseH, relationship);
   const controlsInteractive = interactive && !palette;
@@ -141,6 +142,8 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
   }
 
   function handleFinish() {
+    if (completionFiredRef.current) return;
+    completionFiredRef.current = true;
     setPaletteDone(true);
     onComplete?.();
   }
@@ -286,6 +289,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
               const v = VALIDATION[relationship];
               const selected = validationAnswer;
               const correct = v.choices.find((c) => c.isCorrect);
+              const isCorrect = validationAnswer === correct?.id;
               return (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)', borderTop: '1px solid var(--border)', paddingTop: 'var(--spacing-sm)' }}>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>reflect</span>
@@ -293,7 +297,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                     {v.choices.map((choice) => {
                       const isSelected = selected === choice.id;
-                      const showResult = validationSubmitted;
+                      const showResult = validationSubmitted && (isCorrect || isSelected);
                       const borderColor = showResult
                         ? choice.isCorrect ? 'var(--green)' : isSelected ? 'var(--red)' : 'var(--border)'
                         : isSelected ? 'var(--yellow)' : 'var(--border)';
@@ -303,9 +307,13 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
                       return (
                         <button
                           key={choice.id}
-                          disabled={validationSubmitted}
-                          onClick={() => !validationSubmitted && setValidationAnswer(choice.id)}
-                          style={{ padding: '0.45rem 0.75rem', background: bg, border: `1px solid ${borderColor}`, borderRadius: 'var(--radius-sm)', color: 'var(--primary-foreground)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem', textAlign: 'left', cursor: validationSubmitted ? 'default' : 'pointer', transition: 'border-color 0.15s, background 0.15s' }}
+                          disabled={validationSubmitted && isCorrect}
+                          onClick={() => {
+                            if (validationSubmitted && isCorrect) return;
+                            setValidationAnswer(choice.id);
+                            if (validationSubmitted && !isCorrect) setValidationSubmitted(false);
+                          }}
+                          style={{ padding: '0.45rem 0.75rem', background: bg, border: `1px solid ${borderColor}`, borderRadius: 'var(--radius-sm)', color: 'var(--primary-foreground)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem', textAlign: 'left', cursor: validationSubmitted && isCorrect ? 'default' : 'pointer', transition: 'border-color 0.15s, background 0.15s' }}
                         >
                           {choice.label}
                         </button>
@@ -323,15 +331,24 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
                   )}
                   {validationSubmitted && (
                     <>
-                      <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: validationAnswer === correct?.id ? 'var(--green)' : 'var(--yellow)', margin: 0 }}>
-                        {validationAnswer === correct?.id ? '✓ ' : '→ '}{v.feedback}
+                      <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: isCorrect ? 'var(--green)' : 'var(--yellow)', margin: 0 }}>
+                        {isCorrect ? '✓ ' : '→ '}{v.feedback}
                       </p>
-                      <button
-                        onClick={handleFinish}
-                        style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'var(--yellow)', color: 'var(--gray-90)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.85rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: 'pointer' }}
-                      >
-                        done →
-                      </button>
+                      {isCorrect ? (
+                        <button
+                          onClick={handleFinish}
+                          style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'var(--yellow)', color: 'var(--gray-90)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.85rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: 'pointer' }}
+                        >
+                          done →
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => setValidationSubmitted(false)}
+                          style={{ alignSelf: 'flex-start', padding: '0.4rem 1rem', background: 'var(--surface)', color: 'var(--primary-foreground)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.8rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', cursor: 'pointer' }}
+                        >
+                          try again
+                        </button>
+                      )}
                     </>
                   )}
                 </div>
