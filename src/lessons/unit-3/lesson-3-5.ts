@@ -88,10 +88,10 @@ export const lesson3_5: LessonConfig = {
         },
         {
           stableId: 'no-gradients-are-required-for-accessible-contrast',
-          label: 'Placing white text over a gradient without checking each part of the background',
+          label: 'Placing white text over a gradient without checking the colors directly behind the text',
           isCorrect: false,
           explanation:
-            'A gradient can make contrast harder to verify because the background changes behind the text. Each part of the background must provide enough contrast.',
+            'A gradient can make contrast harder to verify because the background changes behind the text. Each color directly behind the text must provide enough contrast.',
         },
         {
           stableId: 'only-radial-gradients-can-be-functional-linear-gradients-are-dec',
