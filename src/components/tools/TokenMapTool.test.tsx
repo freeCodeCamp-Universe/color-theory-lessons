@@ -4,7 +4,7 @@ import { TokenMapTool } from './TokenMapTool.tsx';
 
 const CATEGORY_ANSWERS = {
   '#0B57D0': 'raw',
-  'rgb(34, 34, 34)': 'raw',
+  'rgb(34 34 34)': 'raw',
   '--blue-600': 'palette',
   '--gray-900': 'palette',
   '--color-text-primary': 'role',

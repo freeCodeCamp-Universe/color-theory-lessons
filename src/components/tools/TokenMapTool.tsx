@@ -32,7 +32,7 @@ interface SortItem {
 
 const SORT_ITEMS: SortItem[] = [
   { label: '#0B57D0',               category: 'raw' },
-  { label: 'rgb(34, 34, 34)',       category: 'raw' },
+  { label: 'rgb(34 34 34)',         category: 'raw' },
   { label: '--blue-600',            category: 'palette' },
   { label: '--gray-900',            category: 'palette' },
   { label: '--color-text-primary',  category: 'role' },

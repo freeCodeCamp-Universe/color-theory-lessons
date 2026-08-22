@@ -17,13 +17,13 @@ const ELEMENT_LABELS = [
 ];
 
 function parseRgbString(value: string) {
-  const match = value.match(/^rgb\((\d+), (\d+), (\d+)\)$/);
+  const match = value.match(/^rgb\((\d+) (\d+) (\d+)\)$/);
   if (!match) throw new Error(`Invalid RGB string: ${value}`);
   return { r: Number(match[1]), g: Number(match[2]), b: Number(match[3]) };
 }
 
 function parseHslString(value: string) {
-  const match = value.match(/^hsl\(([\d.]+), ([\d.]+)%, ([\d.]+)%\)$/);
+  const match = value.match(/^hsl\(([\d.]+) ([\d.]+)% ([\d.]+)%\)$/);
   if (!match) throw new Error(`Invalid HSL string: ${value}`);
   return { h: Number(match[1]), s: Number(match[2]), l: Number(match[3]) };
 }
