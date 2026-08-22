@@ -140,7 +140,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({ interactive = f
             style={{ width: 24, height: 24, border: 'none', padding: 0 }}
             aria-label="Gradient start"
           />
-          <span style={{ color: 'var(--muted)' }}>Grad start</span>
+          <span style={{ color: 'var(--muted)' }}>Gradient start</span>
         </label>
         <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.78rem' }}>
           <input type="color" value={gradEnd} disabled={!interactive || completed}
@@ -148,14 +148,14 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({ interactive = f
             style={{ width: 24, height: 24, border: 'none', padding: 0 }}
             aria-label="Gradient end"
           />
-          <span style={{ color: 'var(--muted)' }}>Grad end</span>
+          <span style={{ color: 'var(--muted)' }}>Gradient end</span>
         </label>
       </div>
 
       {/* Contrast readout */}
       <div style={{ fontSize: '0.78rem', fontFamily: 'var(--font-mono)', marginBottom: '0.5rem' }}>
         <div style={{ color: priOnBg >= 4.5 ? 'var(--green)' : 'var(--red)' }}>
-          {priOnBg >= 4.5 ? '✓' : '✗'} Primary text on bg: {priOnBg.toFixed(1)}:1
+          {priOnBg >= 4.5 ? '✓' : '✗'} Primary text on background: {priOnBg.toFixed(1)}:1
         </div>
         <div style={{ color: priOnSurf >= 4.5 ? 'var(--green)' : 'var(--red)' }}>
           {priOnSurf >= 4.5 ? '✓' : '✗'} Primary text on surface: {priOnSurf.toFixed(1)}:1
@@ -173,13 +173,13 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({ interactive = f
           cursor: allPass ? 'pointer' : 'not-allowed',
           fontFamily: 'var(--font-mono)', fontSize: '0.82rem',
         }}>
-          {allPass ? 'submit theme' : 'fix contrast to submit'}
+          {allPass ? 'submit theme' : 'meet contrast targets to submit'}
         </button>
       )}
 
       {completed && (
         <p style={{ color: 'var(--green)', fontSize: '0.85rem' }}>
-          Theme complete. Your roles are coherent and text is readable.
+          Theme complete. The checked text pairs meet their contrast targets.
         </p>
       )}
     </div>
