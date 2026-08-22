@@ -18,7 +18,7 @@ export const lesson3_1: LessonConfig = {
       text: 'Three common formats are HEX, RGB, and HSL. In CSS, these formats describe colors in sRGB, the standard color space for most web content. sRGB defines how numeric values map to colors. HEX is compact and common in CSS. RGB lists the red, green, and blue channels. HSL organizes a color by hue, saturation, and lightness.',
     },
     {
-      text: 'A single color can be expressed in multiple valid formats. HEX #1E40AF, rgb(30, 64, 175), and hsl(225.9, 70.7%, 40.2%) encode the same sRGB color with different notation.',
+      text: 'A single color can be expressed in multiple valid formats. HEX #1E40AF, rgb(30 64 175), and hsl(225.9 70.7% 40.2%) encode the same sRGB color with different notation.',
     },
     {
       text: 'Select each colored element in the UI mockup. The panel will show its HEX, RGB, and HSL values so you can compare the structure of each format.',
@@ -84,7 +84,7 @@ export const lesson3_1: LessonConfig = {
           label: 'Yes. HEX, RGB, and HSL can all describe the same sRGB color',
           isCorrect: true,
           explanation:
-            'For example, #1E40AF, rgb(30, 64, 175), and hsl(225.9, 70.7%, 40.2%) represent one sRGB color with different notation.',
+            'For example, #1E40AF, rgb(30 64 175), and hsl(225.9 70.7% 40.2%) represent one sRGB color with different notation.',
         },
         {
           stableId: 'only-if-the-color-is-a-standard-web-safe-color',
@@ -138,10 +138,10 @@ export const lesson3_1: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Digital products need exact color values — a description like "soft blue" cannot be reliably reproduced across tools, browsers, or contributors.',
-    'HEX, RGB, and HSL are three common formats that can describe the exact same color; the visible swatch does not change between them.',
-    'Color values appear in CSS, design tool inspectors, browser dev tools, component libraries, and token files.',
-    'Tokens are named variables that separate color meaning (e.g. brand-primary) from raw value (e.g. #2563eb), making updates easier.',
-    'Choosing a format is not a design decision — it is a representation choice; different tools and workflows favor different formats.',
+    'Digital interfaces need precise color values because a description like "soft blue" does not identify one reproducible color.',
+    'In CSS, HEX, RGB, and HSL can encode the same sRGB color using different notation.',
+    'Color values appear in CSS files, design tool inspectors, browser developer tools, component libraries, and design token files.',
+    'A color can appear as a raw value or as a named reference to a design token.',
+    'Changing the format changes how a color value is written, not the sRGB color it represents. Different tools and workflows may favor different formats.',
   ],
 };

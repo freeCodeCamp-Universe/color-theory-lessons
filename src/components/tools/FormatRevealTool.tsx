@@ -290,13 +290,13 @@ export const FormatRevealTool = memo(function FormatRevealTool({ interactive = t
                 </div>
                 <div className={styles.formatBlock}>
                   <span className={styles.formatName}>RGB</span>
-                  <code className={styles.formatValue}>rgb({rgb.r}, {rgb.g}, {rgb.b})</code>
+                  <code className={styles.formatValue}>rgb({rgb.r} {rgb.g} {rgb.b})</code>
                   <p className={styles.formatNote}>Lists the red, green, and blue channel values used for screen colors.</p>
                 </div>
                 <div className={styles.formatBlock}>
                   <span className={styles.formatName}>HSL</span>
                   <code className={styles.formatValue}>
-                    hsl({formatHslValue(hsl.h)}, {formatHslValue(hsl.s)}%, {formatHslValue(hsl.l)}%)
+                    hsl({formatHslValue(hsl.h)} {formatHslValue(hsl.s)}% {formatHslValue(hsl.l)}%)
                   </code>
                   <p className={styles.formatNote}>Organizes a color by hue, saturation, and lightness for color adjustments.</p>
                 </div>

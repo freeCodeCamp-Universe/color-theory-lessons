@@ -9,32 +9,32 @@ interface Step {
 
 const STEPS: Step[] = [
   {
-    name: 'Light from Screen',
+    name: 'Light from the screen',
     description:
-      'Screens emit light by activating red, green, and blue sub-pixels at different intensities.',
+      'Screens produce colors by controlling the light from red, green, and blue subpixels.',
     implication:
-      'The physical signal reaching the eye depends on display brightness, ambient light, and screen calibration.',
+      'The spectrum and intensity of the light reaching the eye depend on the display, its settings, and the viewing environment.',
   },
   {
-    name: 'Eye Receives Light',
+    name: 'The eye receives light',
     description:
-      'Light passes through the cornea and lens, focusing on the retina at the back of the eye.',
+      'The cornea and lens focus incoming light onto the retina at the back of the eye.',
     implication:
-      'Physical differences in the eye, including optical lens yellowing with age, alter what signal reaches the retina.',
+      'As the lens yellows with age, it transmits less short-wavelength light. This changes the light that reaches the retina.',
   },
   {
-    name: 'Retina Processes Signal',
+    name: 'The retina processes signals',
     description:
-      'The retina contains cones (color-sensitive, concentrated at center) and rods (low-light, at edges). Cones come in three types sensitive to different wavelength ranges.',
+      'Cones support color vision and are most densely packed in the fovea, at the center of the retina. Rods support vision in dim light and are more numerous away from the fovea. Most people have three types of cones with different wavelength sensitivity ranges.',
     implication:
-      'If some cone types are missing or less responsive, certain color distinctions become harder to perceive.',
+      'Differences in cone types or their sensitivity can make some colors harder to distinguish.',
   },
   {
-    name: 'Brain Interprets Signal',
+    name: 'The brain interprets signals',
     description:
-      'The brain converts retinal signals into the experience of color through complex visual processing.',
+      'Neural pathways carry processed retinal signals to the brain, which uses them to produce the experience of color.',
     implication:
-      'Context, memory, and surrounding colors all influence final perception. Color is not just a pixel value — it is a constructed experience.',
+      'Surrounding colors and other visual context can change how a color appears even when its pixel value stays the same.',
   },
 ];
 
@@ -45,7 +45,7 @@ interface EyeDiagramToolProps {
 
 export const EyeDiagramTool = memo(function EyeDiagramTool({ interactive = false, onComplete }: EyeDiagramToolProps) {
   const [activeStep, setActiveStep] = useState(0);
-  const [explored, setExplored] = useState<boolean[]>(STEPS.map(() => false));
+  const [explored, setExplored] = useState<boolean[]>(() => STEPS.map((_, idx) => idx === 0));
   const [completed, setCompleted] = useState(false);
 
   function handleStepClick(idx: number) {
@@ -86,11 +86,20 @@ export const EyeDiagramTool = memo(function EyeDiagramTool({ interactive = false
           const isActive = idx === activeStep;
           const isDone = explored[idx] && !isActive;
           const isLocked = !interactive || (idx > activeStep + 1);
+          const canActivate = interactive && !completed && idx === activeStep + 1;
+          const descriptionId = `eye-pathway-step-${idx}-description`;
+          const implicationId = `eye-pathway-step-${idx}-implication`;
           return (
-            <div
+            <button
+              type="button"
               key={step.name}
               onClick={() => handleStepClick(idx)}
+              disabled={!canActivate}
+              aria-current={isActive ? 'step' : undefined}
+              aria-describedby={isActive ? `${descriptionId} ${implicationId}` : undefined}
+              aria-label={`${step.name}${isDone ? ', completed' : isLocked ? ', locked' : isActive ? ', current step' : ''}`}
               style={{
+                width: '100%',
                 padding: '0.75rem',
                 borderRadius: 'var(--radius-md)',
                 border: `1px solid ${isActive ? 'var(--accent-cta)' : 'var(--border)'}`,
@@ -99,12 +108,15 @@ export const EyeDiagramTool = memo(function EyeDiagramTool({ interactive = false
                   : isDone
                   ? 'color-mix(in srgb, var(--accent-success) 6%, transparent)'
                   : 'transparent',
-                cursor: interactive && !isLocked && !completed ? 'pointer' : 'default',
+                color: 'inherit',
+                cursor: canActivate ? 'pointer' : 'default',
+                font: 'inherit',
                 opacity: isLocked ? 0.45 : 1,
+                textAlign: 'left',
                 transition: 'all 0.15s',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: isActive ? '0.5rem' : 0 }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: isActive ? '0.5rem' : 0 }}>
                 <span style={{
                   width: 22, height: 22, borderRadius: '50%',
                   background: isActive ? 'var(--accent-cta)' : isDone ? 'var(--accent-success)' : 'var(--border)',
@@ -117,18 +129,18 @@ export const EyeDiagramTool = memo(function EyeDiagramTool({ interactive = false
                 <strong style={{ fontSize: '0.88rem', color: isActive ? 'var(--accent-cta)' : isDone ? 'var(--accent-success)' : 'var(--primary-foreground)' }}>
                   {step.name}
                 </strong>
-              </div>
+              </span>
               {isActive && (
-                <div style={{ paddingLeft: '1.875rem' }}>
-                  <p style={{ fontSize: '0.82rem', lineHeight: 1.6, marginBottom: '0.4rem' }}>
+                <span style={{ display: 'block', paddingLeft: '1.875rem' }}>
+                  <span id={descriptionId} style={{ display: 'block', fontSize: '0.82rem', lineHeight: 1.6, marginBottom: '0.4rem' }}>
                     {step.description}
-                  </p>
-                  <p style={{ fontSize: '0.78rem', color: 'var(--muted)', lineHeight: 1.5, margin: 0 }}>
+                  </span>
+                  <span id={implicationId} style={{ display: 'block', fontSize: '0.78rem', color: 'var(--muted)', lineHeight: 1.5 }}>
                     <em>Design implication:</em> {step.implication}
-                  </p>
-                </div>
+                  </span>
+                </span>
               )}
-            </div>
+            </button>
           );
         })}
       </div>
@@ -153,7 +165,7 @@ export const EyeDiagramTool = memo(function EyeDiagramTool({ interactive = false
 
       {allDone && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.25rem' }}>
-          Full visual pathway explored. Color is a constructed experience, not a pixel value.
+          You explored the full visual pathway from the screen to the brain.
         </p>
       )}
     </div>
