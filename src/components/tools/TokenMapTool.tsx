@@ -15,7 +15,7 @@ const ROLES: TokenRole[] = [
   { name: '--color-border',         hueOffset: 0,   satMult: 0.2,  lightness: 30 },
   { name: '--color-action-primary', hueOffset: 0,   satMult: 1.0,  lightness: 55 },
   { name: '--color-success-bg',     hueOffset: 120, satMult: 0.7,  lightness: 40 },
-  { name: '--color-error-bg',       hueOffset: 0,   satMult: 0.8,  lightness: 45 },
+  { name: '--color-error-bg',       hueOffset: 240, satMult: 0.8,  lightness: 45 },
 ];
 
 function deriveColor(baseH: number, baseS: number, role: TokenRole): string {
