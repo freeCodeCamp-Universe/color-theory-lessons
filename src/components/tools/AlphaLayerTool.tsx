@@ -26,7 +26,7 @@ const CONTEXTS: OverlayContext[] = [
   {
     id: 'hover',
     label: 'Card hover',
-    description: 'Subtle highlight on mouse-over.',
+    description: 'Add a subtle highlight when the pointer is over the card.',
     bgColor: '#1e293b',
     bgLabel: 'Dark card',
     targetAlphaMin: 0.05,
@@ -36,7 +36,7 @@ const CONTEXTS: OverlayContext[] = [
   {
     id: 'image',
     label: 'Image text overlay',
-    description: 'Ensure text readability over a photo.',
+    description: 'Darken the photo region before placing light text over it.',
     bgColor: '#7ca582',
     bgLabel: 'Photo region',
     targetAlphaMin: 0.45,
@@ -214,7 +214,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({ interactive = false
 
       {allDone && (
         <p style={{ color: 'var(--green)', fontSize: '0.85rem', marginTop: '0.75rem' }}>
-          All overlay contexts completed. You can see how the same alpha value feels different on each background.
+          All overlay contexts completed. The foreground color, alpha, and background combine to produce each result.
         </p>
       )}
     </div>

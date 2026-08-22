@@ -12,13 +12,13 @@ export const lesson3_4: LessonConfig = {
       text: 'In the previous lesson you saw RGBA notation. Here you will apply it in context. A fully opaque color blocks everything behind it, while a semi-transparent color lets background values show through. Alpha controls this: 1 is fully opaque, 0 is fully transparent.',
     },
     {
-      text: 'Designers use transparency for hover states, modal backdrops (scrims), disabled states, image overlays, and subtle layered surfaces. A single semi-transparent value can feel completely different depending on the background underneath.',
+      text: 'Designers use transparency for hover states, modal backdrops (scrims), disabled states, image overlays, and subtle layered surfaces. A semi-transparent color produces a different result when the background changes.',
     },
     {
-      text: 'This is important: the perceived result is relational. A dark overlay at 50% opacity looks subtle on a dark background but heavy on a light background. You cannot judge a transparent color in isolation — the background always matters.',
+      text: 'A semi-transparent layer combines with the background beneath it. For example, a black overlay at 50% opacity changes a dark background less than it changes a light background. Evaluate the composited result, not the overlay color alone.',
     },
     {
-      text: 'Transparency can also create accessibility problems. Semi-transparent text over a textured or variable background may become unreadable in some areas. Always test overlays in realistic contexts, not just on a blank page.',
+      text: 'Transparency can reduce contrast. Semi-transparent text over a textured or variable background may meet the required contrast ratio in one area and fall below it in another. Test the final text and background colors across the full range of the background.',
     },
     {
       text: 'Use the layer stack simulator. Choose a foreground color, adjust its alpha, and place it over different backgrounds to see how the perceived result changes.',
@@ -28,9 +28,9 @@ export const lesson3_4: LessonConfig = {
       prompt:
         'Create four useful overlays: a modal scrim, a card hover state, an image text overlay, and a disabled button state. Adjust the foreground color and alpha for each context.',
       hints: [
-        'A modal scrim is usually a dark color at around 40-60% opacity — enough to dim the background without hiding it completely.',
-        'Hover states are typically subtle — try a light or dark overlay at low opacity (10-20%).',
-        'For text readability over images, you need enough overlay opacity that the text contrast passes.',
+        'For the modal scrim, try a dark overlay between 40% and 60% opacity. It should dim the background while leaving it visible.',
+        'For the hover state, try a light or dark overlay between 10% and 20% opacity.',
+        'For text over an image, adjust the overlay and text colors until their final composited contrast passes.',
       ],
   },
   quizItems: [
@@ -64,7 +64,7 @@ export const lesson3_4: LessonConfig = {
           label: 'Because transparent colors lose their hue over dark backgrounds',
           isCorrect: false,
           explanation:
-            'The hue does not disappear. The perceived result is a mix of both layers — the hue is still present, but the final appearance depends on what is underneath.',
+            'The hue does not disappear. A semi-transparent foreground still contributes its color, and the background contributes to the final composited color.',
         },
       ],
     },
@@ -108,7 +108,7 @@ export const lesson3_4: LessonConfig = {
           stableId: 'opaque-black-text-on-a-white-background',
           label: 'Opaque black text on a white background',
           isCorrect: false,
-          explanation: 'This is the highest possible contrast pairing — very safe for readability.',
+          explanation: 'Opaque black text on a white background has a 21:1 contrast ratio, the maximum possible ratio.',
         },
         {
           stableId: 'semi-transparent-white-text-over-a-variable-photo-background',
