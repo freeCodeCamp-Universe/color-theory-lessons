@@ -146,7 +146,7 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({ interactive = t
               style={{ backgroundColor: interactive ? rgbString(target.rgb) : 'transparent' }}
             />
             <span className={styles.swatchValue}>
-              {interactive && !allDone ? target.name : (allDone ? 'all matched ✓' : '—')}
+              {interactive && !allDone ? target.name : (allDone ? 'all matched ✓' : 'no target')}
             </span>
           </div>
         </div>
@@ -172,7 +172,7 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({ interactive = t
         {/* ─ RGB sliders ─ */}
         {slidersLocked && (
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)' }}>
-            sliders locked — type a HEX value to match
+            sliders locked; type a HEX value to match
           </span>
         )}
         <div className={styles.sliders}>
@@ -230,7 +230,7 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({ interactive = t
             ) : (
               <div className={styles.matchRow}>
                 {isClose ? (
-                  <span className={styles.matchPass}>✓ matched — loading next target…</span>
+                  <span className={styles.matchPass}>✓ matched; loading next target…</span>
                 ) : (
                   <>
                     <span className={styles.matchFail}>not close enough yet</span>
