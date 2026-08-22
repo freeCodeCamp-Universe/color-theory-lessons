@@ -15,7 +15,7 @@ export const lesson3_2: LessonConfig = {
       text: 'HEX is a compact way to encode the same three channels. A six-digit CSS HEX value like #1E40AF splits into three pairs. The pairs represent red, green, and blue, in that order. Each pair uses base-16 notation.',
     },
     {
-      text: 'In sRGB, equal red, green, and blue channel values produce an achromatic neutral. For example, rgb(120, 120, 120) is gray. With no channel higher than the others, the color has no hue. #808080 follows the same pattern because each channel uses the value 80.',
+      text: 'In sRGB, equal red, green, and blue channel values produce a neutral color. For example, rgb(120, 120, 120) is gray. With no channel higher than the others, the color has no hue. #808080 follows the same pattern because each channel uses the value 80.',
     },
     {
       text: 'Shorthand HEX compresses a value where each pair repeats: #AABBCC can be written as #ABC. This only works when each pair has two identical digits. #1E40AF cannot be shortened because none of its pairs repeat.',
@@ -30,7 +30,7 @@ export const lesson3_2: LessonConfig = {
     hints: [
       'In a six-digit value, the first pair controls red, the second controls green, and the third controls blue.',
       'HEX channel values run from 00 to FF. Raise a pair to add more of that channel.',
-      'In a six-digit value, repeat the same pair three times for an achromatic neutral.',
+      'In a six-digit value, repeat the same pair three times for a neutral color.',
     ],
   },
   quizItems: [
@@ -43,14 +43,14 @@ export const lesson3_2: LessonConfig = {
           label: 'A neutral gray (or white or black)',
           isCorrect: true,
           explanation:
-            'Equal red, green, and blue values produce an achromatic neutral. The range runs from black at rgb(0, 0, 0) through grays to white at rgb(255, 255, 255).',
+            'Equal red, green, and blue values produce a neutral color. The range runs from black at rgb(0, 0, 0) through grays to white at rgb(255, 255, 255).',
         },
         {
           stableId: 'a-saturated-color-with-medium-brightness',
           label: 'A saturated color with medium brightness',
           isCorrect: false,
           explanation:
-            'Equal channel values produce an achromatic neutral, not a saturated hue.',
+            'Equal channel values produce a neutral color, not a saturated hue.',
         },
         {
           stableId: 'a-very-dark-color',
@@ -64,7 +64,7 @@ export const lesson3_2: LessonConfig = {
           label: 'An error because RGB needs one dominant channel',
           isCorrect: false,
           explanation:
-            'CSS accepts equal RGB channel values. They represent achromatic neutrals such as black, gray, and white.',
+            'CSS accepts equal RGB channel values. They represent neutral colors such as black, gray, and white.',
         },
       ],
     },
