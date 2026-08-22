@@ -45,7 +45,7 @@ interface EyeDiagramToolProps {
 
 export const EyeDiagramTool = memo(function EyeDiagramTool({ interactive = false, onComplete }: EyeDiagramToolProps) {
   const [activeStep, setActiveStep] = useState(0);
-  const [explored, setExplored] = useState<boolean[]>(STEPS.map(() => false));
+  const [explored, setExplored] = useState<boolean[]>(() => STEPS.map((_, idx) => idx === 0));
   const [completed, setCompleted] = useState(false);
 
   function handleStepClick(idx: number) {
@@ -86,11 +86,20 @@ export const EyeDiagramTool = memo(function EyeDiagramTool({ interactive = false
           const isActive = idx === activeStep;
           const isDone = explored[idx] && !isActive;
           const isLocked = !interactive || (idx > activeStep + 1);
+          const canActivate = interactive && !completed && idx === activeStep + 1;
+          const descriptionId = `eye-pathway-step-${idx}-description`;
+          const implicationId = `eye-pathway-step-${idx}-implication`;
           return (
-            <div
+            <button
+              type="button"
               key={step.name}
               onClick={() => handleStepClick(idx)}
+              disabled={!canActivate}
+              aria-current={isActive ? 'step' : undefined}
+              aria-describedby={isActive ? `${descriptionId} ${implicationId}` : undefined}
+              aria-label={`${step.name}${isDone ? ', completed' : isLocked ? ', locked' : isActive ? ', current step' : ''}`}
               style={{
+                width: '100%',
                 padding: '0.75rem',
                 borderRadius: 'var(--radius-md)',
                 border: `1px solid ${isActive ? 'var(--accent-cta)' : 'var(--border)'}`,
@@ -99,12 +108,15 @@ export const EyeDiagramTool = memo(function EyeDiagramTool({ interactive = false
                   : isDone
                   ? 'color-mix(in srgb, var(--accent-success) 6%, transparent)'
                   : 'transparent',
-                cursor: interactive && !isLocked && !completed ? 'pointer' : 'default',
+                color: 'inherit',
+                cursor: canActivate ? 'pointer' : 'default',
+                font: 'inherit',
                 opacity: isLocked ? 0.45 : 1,
+                textAlign: 'left',
                 transition: 'all 0.15s',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: isActive ? '0.5rem' : 0 }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: isActive ? '0.5rem' : 0 }}>
                 <span style={{
                   width: 22, height: 22, borderRadius: '50%',
                   background: isActive ? 'var(--accent-cta)' : isDone ? 'var(--accent-success)' : 'var(--border)',
@@ -117,18 +129,18 @@ export const EyeDiagramTool = memo(function EyeDiagramTool({ interactive = false
                 <strong style={{ fontSize: '0.88rem', color: isActive ? 'var(--accent-cta)' : isDone ? 'var(--accent-success)' : 'var(--primary-foreground)' }}>
                   {step.name}
                 </strong>
-              </div>
+              </span>
               {isActive && (
-                <div style={{ paddingLeft: '1.875rem' }}>
-                  <p style={{ fontSize: '0.82rem', lineHeight: 1.6, marginBottom: '0.4rem' }}>
+                <span style={{ display: 'block', paddingLeft: '1.875rem' }}>
+                  <span id={descriptionId} style={{ display: 'block', fontSize: '0.82rem', lineHeight: 1.6, marginBottom: '0.4rem' }}>
                     {step.description}
-                  </p>
-                  <p style={{ fontSize: '0.78rem', color: 'var(--muted)', lineHeight: 1.5, margin: 0 }}>
+                  </span>
+                  <span id={implicationId} style={{ display: 'block', fontSize: '0.78rem', color: 'var(--muted)', lineHeight: 1.5 }}>
                     <em>Design implication:</em> {step.implication}
-                  </p>
-                </div>
+                  </span>
+                </span>
               )}
-            </div>
+            </button>
           );
         })}
       </div>
