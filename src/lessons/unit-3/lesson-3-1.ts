@@ -18,7 +18,7 @@ export const lesson3_1: LessonConfig = {
       text: 'Three common formats are HEX, RGB, and HSL. In CSS, these formats describe colors in sRGB, the standard color space for most web content. sRGB defines how numeric values map to colors. HEX is compact and common in CSS. RGB lists the red, green, and blue channels. HSL organizes a color by hue, saturation, and lightness.',
     },
     {
-      text: 'A single color can be expressed in multiple valid formats. HEX #1E40AF, rgb(30, 64, 175), and hsl(225.9, 70.7%, 40.2%) encode the same sRGB color with different notation.',
+      text: 'A single color can be expressed in multiple valid formats. HEX #1E40AF, rgb(30 64 175), and hsl(225.9 70.7% 40.2%) encode the same sRGB color with different notation.',
     },
     {
       text: 'Select each colored element in the UI mockup. The panel will show its HEX, RGB, and HSL values so you can compare the structure of each format.',
@@ -84,7 +84,7 @@ export const lesson3_1: LessonConfig = {
           label: 'Yes. HEX, RGB, and HSL can all describe the same sRGB color',
           isCorrect: true,
           explanation:
-            'For example, #1E40AF, rgb(30, 64, 175), and hsl(225.9, 70.7%, 40.2%) represent one sRGB color with different notation.',
+            'For example, #1E40AF, rgb(30 64 175), and hsl(225.9 70.7% 40.2%) represent one sRGB color with different notation.',
         },
         {
           stableId: 'only-if-the-color-is-a-standard-web-safe-color',

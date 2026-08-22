@@ -127,7 +127,7 @@ export const lesson3_6: LessonConfig = {
         },
         {
           stableId: 'rgb-34-34-34',
-          label: 'rgb(34, 34, 34)',
+          label: 'rgb(34 34 34)',
           isCorrect: false,
           explanation: 'This is a raw RGB value, not a token.',
         },
