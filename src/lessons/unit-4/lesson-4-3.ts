@@ -9,30 +9,30 @@ export const lesson4_3: LessonConfig = {
   reviewTags: ['cvd', 'simulation', 'interface-review'],
   steps: [
     {
-      text: 'Simulation tools apply a color transformation to show how an interface might appear under a particular CVD type. The result is an approximation — not an exact representation of any individual\'s experience — but it is a fast, practical first check for design problems.',
+      text: 'Simulation tools apply a color transformation to approximate how an interface may appear to someone with a particular type of CVD. A simulation cannot represent every individual\'s vision, but it can reveal design problems caused by relying on color distinctions.',
     },
     {
-      text: 'Under protan and deutan simulation, red and green hues converge — becoming hard to tell apart. A traffic-light status system (red = error, green = success) becomes ambiguous. The colors that relied on the red-green axis to carry meaning lose their distinction.',
+      text: 'Under protan and deutan simulation, some red and green hues become hard to tell apart. A status system that uses only red for errors and green for success can become ambiguous because its meaning depends on the red-green distinction.',
       panel: { type: 'interface-gallery-preview', simulation: 'protanopia' },
     },
     {
-      text: 'Under tritan simulation, blue and yellow converge. A yellow warning badge on a blue interface may become hard to distinguish. Blue links on certain backgrounds can lose their visual contrast.',
+      text: 'Under tritan simulation, some blue and green hues become hard to tell apart. Some yellow hues can also look similar to reds or pinks. Interface elements that rely only on those hue differences can become ambiguous.',
       panel: { type: 'interface-gallery-preview', simulation: 'tritanopia' },
     },
     {
-      text: 'Charts and maps are especially at risk. When a bar chart uses only green and red to distinguish series, protan or deutan simulation may make both bars look the same. Text paragraphs are usually less affected because they rely on lightness contrast, not hue distinction.',
+      text: 'Charts and maps can rely on hue to distinguish data. If a bar chart uses only green and red to identify two series, a protan or deutan simulation may make the series hard to tell apart. Body text can remain readable when it has enough lightness contrast with its background and does not use hue alone to convey meaning.',
       panel: { type: 'interface-gallery-preview', simulation: 'deuteranopia' },
     },
     {
-      text: 'The solution is not to avoid color — it is to add backup cues: icons, labels, patterns, or shapes that carry the same meaning. Redundancy means meaning survives even when color distinction is reduced.',
+      text: 'Keep color, but add cues such as icons, labels, patterns, or shapes that carry the same information. These cues preserve the information when a viewer cannot distinguish the colors.',
     },
   ],
   challenge: {
       prompt:
         'Switch the interface gallery through all four simulation modes. Explore each one and identify which elements become hard to distinguish.',
       hints: [
-        'Switch to Deuteranopia first — it is the most common type. Notice which status indicators look similar.',
-        'Under Achromatopsia, only lightness differences remain. Which elements still have meaning?',
+        'Start with Deuteranopia and compare the status indicators. Which ones look similar?',
+        'The Achromatopsia simulation removes hue differences. Which elements still communicate their meaning?',
       ],
   },
   quizItems: [
@@ -45,15 +45,14 @@ export const lesson4_3: LessonConfig = {
           label: 'Diagnosing which users have CVD',
           isCorrect: false,
           explanation:
-            'Simulation is for designers to review their interfaces — it does not identify which users have CVD.',
+            'Simulation helps designers review an interface. It does not identify whether a user has CVD.',
         },
         {
           stableId: 'revealing-which-interface-areas-have-color-only-meaning-under-cv',
-          label:
-            'Revealing which interface areas have color-only meaning under CVD conditions',
+          label: 'Revealing which interface areas rely on color alone',
           isCorrect: true,
           explanation:
-            'Simulation helps you see which elements lose their meaning when color distinctions are reduced — making it easier to spot where backup cues are needed.',
+            'Simulation shows which elements become ambiguous when color distinctions are reduced. Those elements need another cue, such as a label, icon, pattern, or shape.',
         },
         {
           stableId: 'checking-whether-colors-are-within-the-srgb-gamut',
@@ -67,7 +66,7 @@ export const lesson4_3: LessonConfig = {
           label: 'Automatically fixing all color-accessibility problems',
           isCorrect: false,
           explanation:
-            'Simulation is a diagnostic tool — it shows problems, but does not fix them automatically.',
+            'Simulation can expose a color-dependent design problem, but it does not change the design.',
         },
       ],
     },
@@ -87,14 +86,14 @@ export const lesson4_3: LessonConfig = {
           label: 'Protan and deutan types',
           isCorrect: true,
           explanation:
-            'Protan types affect red-sensitive cones and deutan types affect green-sensitive cones — both weaken the ability to distinguish red from green.',
+            'Protan and deutan types affect different cone responses, but both can make red and green harder to distinguish.',
         },
         {
           stableId: 'achromatopsia-only',
           label: 'Achromatopsia only',
           isCorrect: false,
           explanation:
-            'Achromatopsia affects all hues, but protan and deutan types specifically target the red-green axis.',
+            'Achromatopsia causes very limited or no color perception. Protan and deutan types specifically affect red-green distinctions.',
         },
         {
           stableId: 'all-cvd-types-equally',
@@ -113,7 +112,7 @@ export const lesson4_3: LessonConfig = {
         {
           stableId: 'charts-use-more-colors-than-paragraphs-so-they-are-always-harder',
           label:
-            'Charts use more colors than paragraphs, so they are always harder to read',
+            'Charts usually contain more colors than text, so the number of colors is the main risk',
           isCorrect: false,
           explanation:
             'Using more colors is only a problem if those colors are the sole differentiating signal.',
@@ -121,7 +120,7 @@ export const lesson4_3: LessonConfig = {
         {
           stableId: 'charts-use-color-as-the-primary-channel-for-data-distinction-whi',
           label:
-            'Charts use color as the primary channel for data distinction, while paragraphs rely on lightness contrast for readability',
+            'A chart may use hue as the only way to distinguish data, while body text can remain readable through lightness contrast',
           isCorrect: true,
           explanation:
             'Chart series are often differentiated only by hue. Under CVD simulation, those hues may converge. Text paragraphs primarily use lightness contrast, which simulation does not eliminate.',
@@ -129,17 +128,17 @@ export const lesson4_3: LessonConfig = {
         {
           stableId: 'text-paragraphs-are-automatically-accessible-so-charts-are-alway',
           label:
-            'Text paragraphs are automatically accessible, so charts are always worse',
+            'Paragraphs use fewer colors than charts, so their accessibility does not need to be checked',
           isCorrect: false,
           explanation:
             'Text can also have color-only meaning problems (e.g., colored error text). The specific issue with charts is their reliance on hue alone for series identity.',
         },
         {
           stableId: 'charts-always-have-bad-contrast-ratios',
-          label: 'Charts always have bad contrast ratios',
+          label: 'Chart colors only need contrast with the background, not with one another',
           isCorrect: false,
           explanation:
-            'Charts can have perfectly acceptable contrast ratios, yet still fail under CVD simulation if series are distinguished by hue alone.',
+            'Background contrast can make each series visible, but the series can still be confused with one another. Labels, patterns, or shapes distinguish the series without relying on color.',
         },
       ],
     },
