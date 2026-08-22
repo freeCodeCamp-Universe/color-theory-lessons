@@ -73,7 +73,7 @@ export const lesson4_2: LessonConfig = {
     },
     {
       id: 'q2',
-      prompt: 'Which CVD type involves difficulty with blue-yellow distinctions?',
+      prompt: 'Which CVD category specifically affects blue-yellow distinctions?',
       choices: [
         {
           stableId: 'protan-types-protanopia-protanomaly',
