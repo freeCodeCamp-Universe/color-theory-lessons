@@ -132,7 +132,7 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({ interactive = t
               style={{ backgroundColor: rgbString(current) }}
             />
             <span className={styles.swatchValue}>
-              {rgbToHex(current)} · {rgbString(current)}
+              {rgbToHex(current)} · rgb({current.r} {current.g} {current.b})
             </span>
           </div>
 

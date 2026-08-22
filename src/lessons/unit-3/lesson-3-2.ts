@@ -9,19 +9,19 @@ export const lesson3_2: LessonConfig = {
   reviewTags: ['formats', 'HEX', 'RGB'],
   steps: [
     {
-      text: 'RGB describes a color by stating how much red, green, and blue light to mix. Each channel runs from 0 (none) to 255 (full). rgb(0, 0, 0) represents black, with all three channels at 0. rgb(255, 255, 255) represents white, with all three channels at 255.',
+      text: 'RGB describes a color by stating how much red, green, and blue light to mix. Each channel runs from 0 (none) to 255 (full). rgb(0 0 0) represents black, with all three channels at 0. rgb(255 255 255) represents white, with all three channels at 255.',
     },
     {
       text: 'HEX is a compact way to encode the same three channels. A six-digit CSS HEX value like #1E40AF splits into three pairs. The pairs represent red, green, and blue, in that order. Each pair uses base-16 notation.',
     },
     {
-      text: 'In sRGB, equal red, green, and blue channel values produce a neutral color. For example, rgb(120, 120, 120) is gray. With no channel higher than the others, the color has no hue. #808080 follows the same pattern because each channel uses the value 80.',
+      text: 'In sRGB, equal red, green, and blue channel values produce a neutral color. For example, rgb(120 120 120) is gray. With no channel higher than the others, the color has no hue. #808080 follows the same pattern because each channel uses the value 80.',
     },
     {
       text: 'Shorthand HEX compresses a value where each pair repeats: #AABBCC can be written as #ABC. This only works when each pair has two identical digits. #1E40AF cannot be shortened because none of its pairs repeat.',
     },
     {
-      text: 'RGBA adds an alpha value to RGB. Alpha controls opacity from 0 (fully transparent) to 1 (fully opaque). rgba(30, 64, 175, 0.5) uses the same RGB channels as rgb(30, 64, 175), with 50% opacity.',
+      text: 'An rgb() value can include alpha after a slash. Alpha controls opacity from 0 (fully transparent) to 1 (fully opaque). rgb(30 64 175 / 0.5) uses the same red, green, and blue values as rgb(30 64 175), with 50% opacity.',
     },
   ],
   challenge: {
@@ -43,7 +43,7 @@ export const lesson3_2: LessonConfig = {
           label: 'A neutral gray (or white or black)',
           isCorrect: true,
           explanation:
-            'Equal red, green, and blue values produce a neutral color. The range runs from black at rgb(0, 0, 0) through grays to white at rgb(255, 255, 255).',
+            'Equal red, green, and blue values produce a neutral color. The range runs from black at rgb(0 0 0) through grays to white at rgb(255 255 255).',
         },
         {
           stableId: 'a-saturated-color-with-medium-brightness',
