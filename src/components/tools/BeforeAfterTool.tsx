@@ -278,9 +278,9 @@ function HierarchyDemo({ interactive = true, onComplete }: { interactive?: boole
   const [checked, setChecked] = useState(false);
 
   const btnStyle = (role: BtnRole): React.CSSProperties => {
-    if (role === 'primary') return { background: 'var(--yellow)', color: 'var(--gray-90)', border: 'none', padding: '0.5rem 1.2rem', borderRadius: '3px', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' };
-    if (role === 'secondary') return { background: 'transparent', color: 'var(--secondary-foreground)', border: '1px solid var(--border)', padding: '0.5rem 1.2rem', borderRadius: '3px', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', cursor: 'pointer' };
-    return { background: 'transparent', color: 'var(--muted)', border: 'none', padding: '0.5rem 0.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', textDecoration: 'underline', cursor: 'pointer' };
+    if (role === 'primary') return { background: 'var(--yellow)', color: 'var(--gray-90)', border: 'none', padding: '0.5rem 1.2rem', borderRadius: '3px', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 700 };
+    if (role === 'secondary') return { background: 'transparent', color: 'var(--secondary-foreground)', border: '1px solid var(--border)', padding: '0.5rem 1.2rem', borderRadius: '3px', fontFamily: 'var(--font-mono)', fontSize: '0.85rem' };
+    return { background: 'transparent', color: 'var(--muted)', border: 'none', padding: '0.5rem 0.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', textDecoration: 'underline' };
   };
 
   const isCorrect = roles.submit === 'primary' && roles.draft === 'secondary' && roles.cancel === 'tertiary';
@@ -294,15 +294,16 @@ function HierarchyDemo({ interactive = true, onComplete }: { interactive?: boole
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '6px', padding: 'var(--spacing-lg)', display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
         {HIERARCHY_ITEMS.map((item) => (
-          <button key={item.id} style={btnStyle(roles[item.id])}>{item.label}</button>
+          <span key={item.id} style={btnStyle(roles[item.id])}>{item.label}</span>
         ))}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>assign roles</span>
         {HIERARCHY_ITEMS.map((item) => (
           <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', width: '90px' }}>{item.label}</span>
+            <label htmlFor={`hierarchy-role-${item.id}`} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', width: '90px' }}>{item.label}</label>
             <select
+              id={`hierarchy-role-${item.id}`}
               value={roles[item.id]}
               onChange={(e) => setRoles((r) => ({ ...r, [item.id]: e.target.value as BtnRole }))}
               disabled={checked || !interactive}
