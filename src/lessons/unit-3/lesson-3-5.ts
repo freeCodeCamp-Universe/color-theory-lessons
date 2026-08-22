@@ -137,9 +137,9 @@ export const lesson3_5: LessonConfig = {
   ],
   keyPoints: [
     'Products apply colors by role: background, surface, text, border, accent, success, warning, and error.',
-    'Gradients are controlled transitions between colors — useful for hierarchy, depth, or energy, but they should serve a function.',
-    'CSS role variables let you apply one assignment across many components without repeating raw values.',
-    'A theme is a coordinated set of role assignments; changing assignments changes interface behavior immediately.',
-    'This lesson emphasizes implementation: build, evaluate, and refine role assignments in a live UI.',
+    'A gradient transitions between two or more colors and can direct attention, suggest depth, or represent a range of values.',
+    'CSS custom properties connect color roles to reusable values, so one change updates every rule that references the property.',
+    'A theme assigns a coordinated set of colors to interface roles. Light and dark themes can use the same role names with different values.',
+    'Text over a gradient needs enough contrast against each color directly behind it.',
   ],
 };
