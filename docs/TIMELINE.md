@@ -34,7 +34,7 @@ This timeline outlines the progression of topics, lessons, and hands-on mileston
 
 - **Lesson 3.1: Why Digital Design Needs Color Formats** — Understanding the bridge between design tools and code.
 - **Lesson 3.2: HEX and RGB** — Reading and writing base-16 and decimal color values, with RGBA introduced as notation preview.
-- **Lesson 3.3: HSL and HSLA** — Why HSL is often the preferred format for designers who code.
+- **Lesson 3.3: HSL and Alpha** — Why HSL is often the preferred format for designers who code.
 - **Lesson 3.4: Alpha, Transparency, and Layered Color** — Deep alpha behavior in layered interfaces and context-dependent blending.
 - **Lesson 3.5: Gradients, CSS Color Usage, and Theme Building** — Applying gradients and role assignments in implementation-focused theme building.
 - **Lesson 3.6: Design Tokens and Role-Based Color Systems** — Moving from hardcoded values to semantic variables.
