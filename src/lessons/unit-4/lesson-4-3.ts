@@ -16,7 +16,7 @@ export const lesson4_3: LessonConfig = {
       panel: { type: 'interface-gallery-preview', simulation: 'protanopia' },
     },
     {
-      text: 'Under tritan simulation, some blue and yellow hues become hard to tell apart. A yellow warning badge on a blue interface may become less distinct. Some blue links can also lose contrast with their backgrounds.',
+      text: 'Under tritan simulation, some blue and green hues become hard to tell apart. Some yellow hues can also look similar to reds or pinks. Interface elements that rely only on those hue differences can become ambiguous.',
       panel: { type: 'interface-gallery-preview', simulation: 'tritanopia' },
     },
     {
@@ -135,10 +135,10 @@ export const lesson4_3: LessonConfig = {
         },
         {
           stableId: 'charts-always-have-bad-contrast-ratios',
-          label: 'The main risk is that chart colors have low contrast with the background',
+          label: 'Chart colors only need contrast with the background, not with one another',
           isCorrect: false,
           explanation:
-            'Charts can have perfectly acceptable contrast ratios, yet still fail under CVD simulation if series are distinguished by hue alone.',
+            'Background contrast can make each series visible, but the series can still be confused with one another. Labels, patterns, or shapes distinguish the series without relying on color.',
         },
       ],
     },
