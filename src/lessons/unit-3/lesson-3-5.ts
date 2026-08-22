@@ -15,7 +15,7 @@ export const lesson3_5: LessonConfig = {
       text: 'A gradient is a transition between two or more colors. CSS provides linear-gradient() for a transition along a line and radial-gradient() for a transition that spreads from an origin. A gradient can direct attention, suggest depth, or represent a range of values.',
     },
     {
-      text: 'CSS custom properties can connect a color role to a reusable value. For example, define a property for the primary action color, then reference it in the rules for buttons, links, and focus rings. Changing the property updates every rule that references it.',
+      text: 'CSS custom properties can connect a color role to a reusable value. For example, define a property for the primary action color, then reference it in the rules for buttons that perform the primary action. Changing the property updates every rule that references it.',
     },
     {
       text: 'A theme is a coordinated set of colors assigned to interface roles. Light and dark themes can keep the same role names while assigning different values to them. This lets components keep their purpose when the theme changes.',
@@ -117,7 +117,7 @@ export const lesson3_5: LessonConfig = {
           label: 'Defining shared theme roles that all components reference',
           isCorrect: true,
           explanation:
-            'Changing a shared role updates every button, link, and focus ring that references that role.',
+            'Changing a shared role updates every component that references that role.',
         },
         {
           stableId: 'using-only-css-named-colors-like-blue-and-red',
