@@ -9,7 +9,7 @@ export const lesson3_3: LessonConfig = {
   reviewTags: ['formats', 'HSL', 'design-adjustment'],
   steps: [
     {
-      text: 'Unit 1 introduced hue, saturation, and lightness as visible properties. HSL turns those same properties into a practical color format you can use in code: hsl(hue, saturation%, lightness%).',
+      text: 'Unit 1 introduced hue, saturation, and lightness as visible properties. HSL turns those same properties into a practical color format you can use in code: hsl(hue saturation% lightness%).',
     },
     {
       text: 'Hue is an angle around the color wheel from 0 to 360 degrees. Saturation and lightness are percentages. At 0% saturation, the result is gray; at 100%, it is fully saturated. At 0% lightness, the result is black; at 100%, it is white.',
@@ -20,7 +20,7 @@ export const lesson3_3: LessonConfig = {
       panel: { type: 'hsl-playground-preview' },
     },
     {
-      text: 'CSS can add an alpha value to an HSL color to control transparency. For example, hsl(220 60% 50% / 0.5) represents that blue at 50% opacity. The older hsla() name is an alias for hsl(); its A stands for alpha.',
+      text: 'CSS can add an alpha value after a slash to control transparency. For example, hsl(220 60% 50% / 0.5) represents that blue at 50% opacity. An alpha value of 0 is transparent, and 1 is opaque.',
     },
     {
       text: 'The playground shows the same color in HSL, HEX, and RGB at the same time. Adjust the sliders and compare how each format updates. Then match three target colors using the HSL controls.',
@@ -106,33 +106,33 @@ export const lesson3_3: LessonConfig = {
     },
     {
       id: 'q3',
-      prompt: 'What does the A in HSLA represent?',
+      prompt: 'In hsl(220 60% 50% / 0.5), what does 0.5 control?',
       choices: [
         {
           stableId: 'accent-the-emphasis-level-of-the-color',
-          label: 'Accent: the emphasis level of the color',
+          label: 'The color\'s emphasis level',
           isCorrect: false,
-          explanation: 'The A stands for alpha, which controls opacity/transparency.',
+          explanation: 'The value after the slash controls opacity, not emphasis.',
         },
         {
           stableId: 'alpha-the-opacity-of-the-color-from-0-transparent-to-1-opaque',
-          label: 'Alpha: the opacity of the color from 0 (transparent) to 1 (opaque)',
+          label: 'The color\'s opacity',
           isCorrect: true,
           explanation:
-            'Alpha controls how transparent or opaque the color is. It works the same way with HSL and RGB colors.',
+            'The value after the slash is alpha. A value of 0.5 makes the color 50% opaque.',
         },
         {
           stableId: 'angle-the-rotation-of-hue-on-the-color-wheel',
-          label: 'Angle: the rotation of hue on the color wheel',
+          label: 'The hue\'s angle',
           isCorrect: false,
           explanation:
-            'Hue is already expressed as an angle. In the HSLA name, A refers to the alpha value.',
+            'The first value, 220, sets the hue angle. The value after the slash sets alpha.',
         },
         {
           stableId: 'amplitude-how-strong-the-color-signal-is',
-          label: 'Amplitude: how strong the color signal is',
+          label: 'The saturation percentage',
           isCorrect: false,
-          explanation: 'The A stands for alpha. There is no amplitude property in CSS color formats.',
+          explanation: 'The second value, 60%, sets saturation. The value after the slash sets alpha.',
         },
       ],
     },

@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { hslToHex, hexToRgb, hslString } from '../../utils/color.ts';
+import { hslToHex, hexToRgb } from '../../utils/color.ts';
 import { HUE_MAX, HueWheel } from './HueWheel.tsx';
 import shellStyles from './ToolShell.module.css';
 
@@ -42,6 +42,8 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({ interactive =
 
   const hex = hslToHex(h, s, l);
   const rgb = hexToRgb(hex);
+  const hslValue = `hsl(${h} ${s}% ${l}%)`;
+  const rgbValue = `rgb(${rgb.r} ${rgb.g} ${rgb.b})`;
   const target = TARGETS[targetIdx];
   const targetHex = hslToHex(target.h, target.s, target.l);
 
@@ -85,9 +87,9 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({ interactive =
               background: hex, border: '2px solid var(--border)',
             }} />
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', lineHeight: 1.7 }}>
-              <div><span style={{ color: 'var(--muted)' }}>HSL</span> {hslString({ h, s, l })}</div>
+              <div><span style={{ color: 'var(--muted)' }}>HSL</span> {hslValue}</div>
               <div><span style={{ color: 'var(--muted)' }}>HEX</span> {hex}</div>
-              <div><span style={{ color: 'var(--muted)' }}>RGB</span> rgb({rgb.r}, {rgb.g}, {rgb.b})</div>
+              <div><span style={{ color: 'var(--muted)' }}>RGB</span> {rgbValue}</div>
             </div>
           </div>
 
