@@ -9,10 +9,10 @@ export const lesson4_2: LessonConfig = {
   reviewTags: ['cvd', 'perception', 'accessibility'],
   steps: [
     {
-      text: 'Color vision deficiency (CVD) is an umbrella term for differences in how people distinguish colors. Cone cells contain light-sensitive molecules called photopigments. CVD includes multiple types and severities caused by differences in these photopigments or in cone function.',
+      text: 'Color vision deficiency (CVD) is an umbrella term for differences in how people distinguish colors. Cone cells contain light-sensitive molecules called photopigments. This lesson focuses on CVD types that involve differences in these photopigments or in cone function.',
     },
     {
-      text: 'CVD categories describe which cone photopigment is affected. Protan types involve the long-wavelength-sensitive (L) cones; deutan types involve the medium-wavelength-sensitive (M) cones; tritan types involve the short-wavelength-sensitive (S) cones. In inherited red-green CVD, "-anomaly" describes altered photopigment sensitivity, while "-anopia" describes loss of function from one cone photopigment.',
+      text: 'Protan, deutan, and tritan categories describe which cone photopigment is affected. Protan types involve the long-wavelength-sensitive (L) cones; deutan types involve the medium-wavelength-sensitive (M) cones; tritan types involve the short-wavelength-sensitive (S) cones. In inherited red-green CVD, "-anomaly" describes altered photopigment sensitivity, while "-anopia" describes loss of function from one cone photopigment.',
       panel: { type: 'vision-cards-preview', expandedNames: ['Protanopia', 'Deuteranopia', 'Tritanopia'] },
     },
     {
