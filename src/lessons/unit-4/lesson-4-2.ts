@@ -9,30 +9,30 @@ export const lesson4_2: LessonConfig = {
   reviewTags: ['cvd', 'perception', 'accessibility'],
   steps: [
     {
-      text: 'Color vision deficiency (CVD) refers to differences in how certain color distinctions are perceived, due to variation in cone function. It is not a single condition — there are multiple types and a range of severities.',
+      text: 'Color vision deficiency (CVD) is an umbrella term for differences in how people distinguish colors. Cone cells contain light-sensitive molecules called photopigments. This lesson focuses on CVD types that involve differences in these photopigments or in cone function.',
     },
     {
-      text: 'CVD is grouped by which cone type is affected. Protan types involve the red-sensitive cone; deutan types involve the green-sensitive cone; tritan types involve the blue-sensitive cone. The suffix "-opia" indicates absence or very low function; "-anomaly" indicates reduced sensitivity.',
+      text: 'Protan, deutan, and tritan categories describe which cone photopigment is affected. Protan types involve the long-wavelength-sensitive (L) cones; deutan types involve the medium-wavelength-sensitive (M) cones; tritan types involve the short-wavelength-sensitive (S) cones. In inherited red-green CVD, "-anomaly" describes altered photopigment sensitivity, while "-anopia" describes loss of function from one cone photopigment.',
       panel: { type: 'vision-cards-preview', expandedNames: ['Protanopia', 'Deuteranopia', 'Tritanopia'] },
     },
     {
-      text: 'Deuteranomaly — reduced green cone sensitivity — is the most common form of CVD, affecting roughly 5–8% of males with Northern European ancestry. Deuteranopia (absent green cones) and protanopia (absent red cones) are less common. Tritan types are rare.',
+      text: 'Deuteranomaly is the most common inherited type of CVD. Red-green CVD as a group occurs in about 1 in 12 males with Northern European ancestry and is less common in many other populations. Inherited tritan types occur in fewer than 1 in 10,000 people.',
       panel: { type: 'vision-cards-preview', expandedNames: ['Deuteranomaly', 'Protanomaly'] },
     },
     {
-      text: 'Achromatopsia is a rare condition (affecting roughly 1 in 30,000 people) where very limited or no cone function is present. Individuals with achromatopsia perceive only brightness — all hues appear as shades of gray. This is distinct from the partial cone differences that characterize most CVD types.',
+      text: 'Achromatopsia affects fewer than 1 in 30,000 people. Complete achromatopsia causes a lack of color discrimination because all three cone types lack function. In incomplete achromatopsia, some cone function remains and color discrimination varies. Both forms can also reduce visual acuity and cause sensitivity to light.',
       panel: { type: 'vision-cards-preview', expandedNames: ['Achromatopsia'] },
     },
     {
-      text: 'As a designer, your goal is robustness, not diagnosis. You cannot know which viewers have CVD or which type — and the percentages are significant enough that assuming all viewers share your color experience is risky. Simulation tools help you see how your interface looks under various CVD conditions.',
+      text: 'Design for differences in color vision rather than trying to diagnose viewers. You do not know how each user perceives color, so check whether information remains available without a particular color distinction. CVD simulations can reveal risks, but they only approximate users\' experiences.',
     },
   ],
   challenge: {
       prompt:
-        'Expand each vision type card to learn about the condition, the common design risk, and which colors are most affected.',
+        'Expand each vision type card to learn about its color effects and a common design risk.',
       hints: [
-        'Click a card header to expand it. Each card shows a description, a design risk, and the affected colors.',
-        'There are six card types — protan, deutan, tritan, and achromatopsia variants. Expand all of them.',
+        'Click a card header to expand it. Each card describes the type, its color effects, and a design risk.',
+        'There are six cards: two protan types, two deutan types, tritanopia, and achromatopsia. Expand all of them.',
       ],
   },
   quizItems: [
@@ -42,29 +42,29 @@ export const lesson4_2: LessonConfig = {
       choices: [
         {
           stableId: 'yes-all-cvd-is-red-green-color-blindness',
-          label: 'Yes — all CVD is red-green color blindness',
+          label: 'Yes, all CVD is red-green color blindness',
           isCorrect: false,
           explanation:
-            '"Red-green color blindness" is a common simplification, but CVD includes multiple types affecting different cone types, plus tritan types affecting blue-yellow, and achromatopsia affecting all hues.',
+            '"Red-green color blindness" describes protan and deutan types. CVD also includes tritan types and achromatopsia.',
         },
         {
           stableId: 'no-there-are-multiple-types-and-severities-each-affecting-differ',
           label:
-            'No — there are multiple types and severities, each affecting different color distinctions',
+            'No, there are multiple types and severities that affect different color distinctions',
           isCorrect: true,
           explanation:
-            'CVD includes protan, deutan, tritan, and achromatic types, each with absent (-opia) and reduced (-anomaly) severity variants.',
+            'CVD includes protan, deutan, tritan, and achromatic types. Within some categories, people can have altered photopigment sensitivity or a loss of function.',
         },
         {
           stableId: 'yes-all-cvd-causes-complete-inability-to-see-any-color',
-          label: 'Yes — all CVD causes complete inability to see any color',
+          label: 'Yes, all CVD causes a complete inability to see any color',
           isCorrect: false,
           explanation:
-            'Only achromatopsia involves very limited hue perception. Most CVD types reduce or shift specific color distinctions, not all color perception.',
+            'Complete achromatopsia causes a lack of color discrimination. Most CVD types make specific colors harder to distinguish instead of removing all color perception.',
         },
         {
           stableId: 'no-but-all-types-affect-only-the-blue-yellow-axis',
-          label: 'No — but all types affect only the blue-yellow axis',
+          label: 'No, but all types affect only blue-yellow distinctions',
           isCorrect: false,
           explanation:
             'Tritan types affect blue-yellow, but protan and deutan types affect red-green distinctions. Multiple axes are involved across the different types.',
@@ -80,28 +80,28 @@ export const lesson4_2: LessonConfig = {
           label: 'Protan types (protanopia/protanomaly)',
           isCorrect: false,
           explanation:
-            'Protan types affect the red-sensitive cone, weakening red-green distinctions.',
+            'Protan types involve the L-cone photopigment and affect red-green distinctions.',
         },
         {
           stableId: 'deutan-types-deuteranopia-deuteranomaly',
           label: 'Deutan types (deuteranopia/deuteranomaly)',
           isCorrect: false,
           explanation:
-            'Deutan types affect the green-sensitive cone, also weakening red-green distinctions.',
+            'Deutan types involve the M-cone photopigment and affect red-green distinctions.',
         },
         {
           stableId: 'tritan-types-tritanopia-tritanomaly',
           label: 'Tritan types (tritanopia/tritanomaly)',
           isCorrect: true,
           explanation:
-            'Tritan types affect the blue-sensitive cone. Blue and yellow become harder to distinguish.',
+            'Tritan types involve the S-cone photopigment and make several blue-yellow color distinctions harder.',
         },
         {
           stableId: 'achromatopsia',
           label: 'Achromatopsia',
           isCorrect: false,
           explanation:
-            'Achromatopsia involves very limited cone function overall, not specifically blue-yellow.',
+            'Achromatopsia can reduce or eliminate color discrimination across the spectrum, not only blue-yellow distinctions.',
         },
       ],
     },
@@ -114,29 +114,29 @@ export const lesson4_2: LessonConfig = {
           label: 'Because your monitor may not be calibrated correctly',
           isCorrect: false,
           explanation:
-            'Display calibration is a factor, but the core issue is that your visual system may not represent other users\' experience.',
+            'Display calibration can change a screen\'s output, but two people viewing the same display can still perceive its colors differently.',
         },
         {
           stableId: 'because-your-vision-may-not-represent-other-users-experience-cvd',
           label:
-            'Because your vision may not represent other users\' experience — CVD is common enough to design for',
+            'Because users may perceive colors differently, and CVD is common enough to design for',
           isCorrect: true,
           explanation:
-            'CVD affects a significant percentage of users. Designing only for your own perception excludes users whose experience differs — and you cannot tell which users they are.',
+            'Red-green CVD alone affects about 1 in 12 males with Northern European ancestry. You cannot determine a user\'s color perception by looking at them, so information should not depend on everyone distinguishing the same colors.',
         },
         {
           stableId: 'because-design-tools-do-not-show-accurate-colors',
           label: 'Because design tools do not show accurate colors',
           isCorrect: false,
           explanation:
-            'Modern design tools generally show accurate colors. The issue is perceptual variation across users.',
+            'A design tool can display the requested color values accurately while users still perceive those colors differently.',
         },
         {
           stableId: 'because-color-perception-degrades-with-age-for-everyone',
           label: 'Because color perception degrades with age for everyone',
           isCorrect: false,
           explanation:
-            'While optical properties do change with age, the main reason is that CVD is a significant population-level variation in color experience.',
+            'Changes in the eye with age can affect color perception, but people of any age can have CVD. A design should work when users distinguish colors differently.',
         },
       ],
     },
