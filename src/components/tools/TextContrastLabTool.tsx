@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { contrastRatioWcag, hexToRgb } from '../../utils/color.ts';
 import shellStyles from './ToolShell.module.css';
 
@@ -42,8 +42,21 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
   const [bgColors, setBgColors] = useState<Record<string, string>>(
     Object.fromEntries(PAIRS.map((p) => [p.id, p.defaultBg])),
   );
-  const [passed, setPassed] = useState<Record<string, boolean>>({});
-  const [completed, setCompleted] = useState(false);
+  const passed = Object.fromEntries(PAIRS.map((p) => [
+    p.id,
+    isValidHex(textColors[p.id])
+      && isValidHex(bgColors[p.id])
+      && calcRatio(textColors[p.id], bgColors[p.id]) >= p.threshold,
+  ]));
+  const completed = PAIRS.every((p) => passed[p.id]);
+  const wasCompleted = useRef(false);
+
+  useEffect(() => {
+    if (completed && !wasCompleted.current) {
+      onComplete?.();
+    }
+    wasCompleted.current = completed;
+  }, [completed, onComplete]);
 
   const pair = PAIRS[activePair];
   const textColor = textColors[pair.id];
@@ -55,33 +68,11 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
   function handleTextChange(val: string) {
     if (!interactive) return;
     setTextColors((prev) => ({ ...prev, [pair.id]: val }));
-    if (isValidHex(val)) {
-      checkPair(pair.id, val, bgColor);
-    }
   }
 
   function handleBgChange(val: string) {
     if (!interactive) return;
     setBgColors((prev) => ({ ...prev, [pair.id]: val }));
-    if (isValidHex(val)) {
-      checkPair(pair.id, textColor, val);
-    }
-  }
-
-  function checkPair(id: string, txt: string, bg: string) {
-    const r = calcRatio(txt, bg);
-    const thresh = PAIRS.find((p) => p.id === id)!.threshold;
-    if (r >= thresh) {
-      setPassed((prev) => {
-        const next = { ...prev, [id]: true };
-        const allPassed = PAIRS.every((p) => next[p.id]);
-        if (allPassed && !completed) {
-          setCompleted(true);
-          onComplete?.();
-        }
-        return next;
-      });
-    }
   }
 
   const passedCount = Object.values(passed).filter(Boolean).length;
