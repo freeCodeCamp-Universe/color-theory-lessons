@@ -18,7 +18,7 @@ const COMPONENTS: Component[] = [
     id: 'input-border',
     label: 'Input border',
     defaultColor: '#e5e7eb',
-    description: 'Border of a text input field against white background.',
+    description: 'Input border against white.',
     renderPreview: (color) => (
       <input
         readOnly
@@ -36,7 +36,7 @@ const COMPONENTS: Component[] = [
     id: 'icon-button',
     label: 'Icon button',
     defaultColor: '#9ca3af',
-    description: 'Gear icon color against white background.',
+    description: 'Gear icon against white.',
     renderPreview: (color) => (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#ffffff', borderRadius: 4, width: 40, height: 40, border: '1px solid #f3f4f6' }}>
         <span style={{ fontSize: '1.2rem', color }}>⚙</span>
@@ -47,7 +47,7 @@ const COMPONENTS: Component[] = [
     id: 'focus-ring',
     label: 'Focus ring',
     defaultColor: '#bfdbfe',
-    description: 'Focus outline around a button against white background.',
+    description: 'Focus outline against white.',
     renderPreview: (color) => (
       <button
         style={{
@@ -66,7 +66,7 @@ const COMPONENTS: Component[] = [
     id: 'toggle',
     label: 'Toggle track',
     defaultColor: '#e5e7eb',
-    description: 'Off-state toggle track color against white background.',
+    description: 'Off-state toggle track against white.',
     renderPreview: (color) => (
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         <div style={{ width: 36, height: 20, borderRadius: 10, background: color, position: 'relative', border: '1px solid rgba(0,0,0,0.1)' }}>
@@ -131,7 +131,7 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({ interac
 
       {interactive && (
         <p style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>
-          Adjust each component's color until it passes the 3:1 visibility threshold against white. ({passedCount}/{COMPONENTS.length} passing)
+          Adjust each component's color until it has at least 3:1 contrast against white. ({passedCount}/{COMPONENTS.length} passing)
         </p>
       )}
 
@@ -156,7 +156,7 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({ interac
                   {comp.label}
                 </span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: pass ? 'var(--accent-success)' : 'var(--accent-danger)' }}>
-                  {ratio.toFixed(2)}:1 — {pass ? 'PASS' : 'FAIL'}
+                  {ratio.toFixed(2)}:1, {pass ? 'PASS' : 'FAIL'}
                 </span>
               </div>
 
@@ -190,7 +190,7 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({ interac
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          ✓ All components now pass 3:1 — they are clearly visible against their backgrounds.
+          ✓ All four components have at least 3:1 contrast against white.
         </p>
       )}
     </div>
