@@ -138,7 +138,7 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({ interactive =
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          All states reinforced. Each now communicates through multiple channels.
+          Each state now has a selected non-color cue.
         </p>
       )}
     </div>

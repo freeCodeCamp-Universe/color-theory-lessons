@@ -8,23 +8,23 @@ export const lesson5_3: LessonConfig = {
   reviewTags: ['color-only', 'wcag', 'redundancy', 'states', 'charts', 'backup-cues'],
   steps: [
     {
-      text: 'In Unit 4 you observed that designs relying on hue alone break when color perception varies. WCAG 1.4.1 "Use of Color" formalizes this observation: color must not be the only visual means of conveying information. The goal is not to remove color but to ensure it is not the sole carrier of meaning.',
+      text: 'In Unit 4, you saw that information conveyed by hue alone can become unclear when people perceive colors differently. WCAG 1.4.1, "Use of Color," requires another visual way to convey that information. Color can support the message, but it cannot be the only visual cue.',
     },
     {
-      text: 'Semantic states — success, warning, error, info — are a fundamental UI pattern. Most start with color alone: a green badge, a yellow badge, a red badge. Each state should communicate through at least two channels: a success state can use green color + a checkmark icon + the label "Success."',
+      text: 'Interfaces often use color to identify semantic states such as success, warning, error, and information. A green badge alone requires the user to recognize its hue. Pairing the color with a checkmark icon and the word "Success" gives the state two non-color cues.',
     },
     {
-      text: 'Form validation is a specific case. A red border alone is weak. The strongest form error combines: a colored border or outline, an error icon, and a clear text message beneath the field. Validation feedback should answer "what went wrong and how to fix it."',
+      text: 'Form validation is one example. A red border alone does not explain what happened. Add an error icon and a text message that identifies the error and tells the user how to correct it.',
     },
     {
-      text: 'Charts with multiple series are especially vulnerable. Two strong fixes: direct labels placed adjacent to each line or bar (eliminating the need for a color-only legend) and pattern fills — hatching or textures — that make series distinguishable without relying on hue.',
+      text: 'A chart that identifies each series only by hue has the same problem. Place a text label beside each line or bar, or use patterns such as hatching and textures. These cues let users match data to a series without relying on a color-only legend.',
     },
     {
-      text: 'The principle is redundancy: meaning carried by two or more signals. If color fades under CVD simulation, the icon or label still communicates. A good test: if you removed all color and every element\'s meaning was still clear, the design is robust.',
+      text: 'Redundancy means communicating the same information with more than one visual cue. To check a color-coded state, ignore its hue and identify it from its icon, label, shape, or pattern. If the second cue conveys the state, the design does not rely on color alone.',
     },
   ],
   challenge: {
-      prompt: 'Add at least one non-color cue to each of the four semantic states. Toggle icon, label, and border style to build a more robust state system.',
+      prompt: 'Add at least one non-color cue to each of the four semantic states. Turn on an icon, label, or border style for every state.',
       hints: [
         'Toggle at least one of the three cues (icon, label, border) for each state card.',
         'All four states need at least one cue enabled before the challenge is complete.',
@@ -40,13 +40,13 @@ export const lesson5_3: LessonConfig = {
           stableId: 'that-interfaces-use-no-more-than-five-colors',
           label: 'That interfaces use no more than five colors',
           isCorrect: false,
-          explanation: 'WCAG does not limit the number of colors — it requires that color is not the sole means of conveying information.',
+          explanation: 'WCAG 1.4.1 does not set a limit on the number of colors. It requires another visual cue when color conveys information.',
         },
         {
           stableId: 'that-color-is-not-the-only-visual-means-of-conveying-information',
           label: 'That color is not the only visual means of conveying information',
           isCorrect: true,
-          explanation: 'If removing the color difference removes all meaning, the design has a color-alone problem. A second channel (icon, label, pattern) must also carry the meaning.',
+          explanation: 'When color conveys information, a label, icon, shape, pattern, or another visual distinction must convey that information too.',
         },
         {
           stableId: 'that-all-colors-must-pass-contrast-ratio-thresholds',
@@ -58,7 +58,7 @@ export const lesson5_3: LessonConfig = {
           stableId: 'that-color-must-be-removed-from-interactive-elements',
           label: 'That color must be removed from interactive elements',
           isCorrect: false,
-          explanation: 'Color is encouraged — it just cannot be the only signal. The goal is redundancy, not removal.',
+          explanation: 'WCAG permits color coding when another visual cue conveys the same information.',
         },
       ],
     },
@@ -70,25 +70,25 @@ export const lesson5_3: LessonConfig = {
           stableId: 'because-green-is-not-a-good-success-color',
           label: 'Because green is not a good success color',
           isCorrect: false,
-          explanation: 'Green is conventionally associated with success. The weakness is not the color choice — it is relying on color alone.',
+          explanation: 'The problem is not the choice of green. A color-only border requires the user to recognize its hue.',
         },
         {
           stableId: 'because-it-conveys-meaning-only-through-hue-which-may-not-be-dis',
-          label: 'Because it conveys meaning only through hue, which may not be distinguishable under CVD or low-color conditions',
+          label: 'Because it conveys success only through hue, which some users or displays may not distinguish',
           isCorrect: true,
-          explanation: 'A green border is invisible as a "success" signal to someone who cannot perceive that hue. Adding an icon and text makes the success state robust.',
+          explanation: 'Some users and displays cannot distinguish green from other colors. An icon and text identify the success state without requiring the user to recognize green.',
         },
         {
           stableId: 'because-borders-should-not-be-used-in-accessible-designs',
           label: 'Because borders should not be used in accessible designs',
           isCorrect: false,
-          explanation: 'Borders are a perfectly valid UI element. The issue is using color as the only channel.',
+          explanation: 'A border can show a component\'s boundary. A green border alone still requires the user to recognize its hue as the success cue.',
         },
         {
           stableId: 'because-success-messages-must-always-use-a-modal-dialog',
-          label: 'Because success messages must always use a modal dialog',
+          label: 'Because success feedback belongs in a modal dialog',
           isCorrect: false,
-          explanation: 'Inline success feedback is a common and appropriate pattern. The form of feedback is not the issue — the lack of backup cues is.',
+          explanation: 'Success feedback can appear inline. Its location does not provide a second visual cue for the success state.',
         },
       ],
     },
@@ -104,9 +104,9 @@ export const lesson5_3: LessonConfig = {
         },
         {
           stableId: 'conveying-meaning-through-more-than-one-visual-channel-so-that-l',
-          label: 'Conveying meaning through more than one visual channel so that losing any one does not break the design',
+          label: 'Conveying the same meaning through more than one visual cue so it does not depend on color',
           isCorrect: true,
-          explanation: 'Redundant cues make designs robust — if color is lost, icons and labels still communicate.',
+          explanation: 'If a user cannot distinguish the state colors, the icons and labels still identify the states.',
         },
         {
           stableId: 'using-the-same-color-for-all-states-to-reduce-confusion',
