@@ -29,6 +29,11 @@ function isValidHex(hex: string): boolean {
   return /^#[0-9a-fA-F]{6}$/.test(hex);
 }
 
+function formatRatio(ratio: number, digits: number): string {
+  const factor = 10 ** digits;
+  return (Math.floor(ratio * factor) / factor).toFixed(digits);
+}
+
 interface TextContrastLabToolProps {
   interactive?: boolean;
   onComplete?: () => void;
@@ -135,7 +140,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
           padding: '0.3rem 0.65rem', borderRadius: 'var(--radius-sm)',
           background: 'var(--surface)', border: '1px solid var(--border)',
         }}>
-          ratio: <strong>{ratio.toFixed(2)}:1</strong>
+          ratio: <strong>{formatRatio(ratio, 2)}:1</strong>
         </div>
         <div style={{
           fontSize: '0.75rem', padding: '0.3rem 0.65rem',
