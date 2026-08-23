@@ -24,10 +24,10 @@ export const lesson5_3: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'Add at least one non-color cue to each of the four semantic states. Turn on an icon, label, or border style for every state.',
+      prompt: 'Give each semantic state a different non-color treatment. Turn on an icon, label, or border style for every state, and make sure no two treatments match.',
       hints: [
         'Toggle at least one of the three cues (icon, label, border) for each state card.',
-        'All four states need at least one cue enabled before the challenge is complete.',
+        'If two states use the same border style, add an icon or label to distinguish them.',
         'Start by asking: if I removed hue, what would still communicate meaning?',
       ],
   },
