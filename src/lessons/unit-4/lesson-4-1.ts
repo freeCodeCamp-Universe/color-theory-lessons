@@ -139,10 +139,10 @@ export const lesson4_1: LessonConfig = {
     },
   ],
   keyPoints: [
-    'A screen emits light, but color is constructed by the eye and brain — it is a perceptual experience, not a physical screen property.',
-    'The retina contains cones (responsible for color, concentrated at the center) and rods (sensitive to low light, at the edges).',
-    'Three cone types — sensitive to different wavelength ranges — allow the brain to distinguish colors by comparing their relative signals.',
-    'The optic nerve carries retinal signals to the brain, where context, memory, and surrounding colors all shape the final perception.',
-    'Because each person\'s visual system is slightly different, two viewers may not perceive the same interface color identically — good design accounts for this variation.',
+    'A display emits light, and the visual system turns that light into perceived color. The display, viewing conditions, eyes, and brain all contribute to color perception.',
+    'Cones support color vision. Rods support vision in dim light and contribute little to color vision under typical daylight conditions.',
+    'Most people have S, M, and L cone types with overlapping wavelength sensitivity ranges. The visual system compares their activity as part of color perception.',
+    'Photoreceptors convert light into electrical signals. The optic nerve carries processed retinal signals toward brain areas involved in vision.',
+    'Cone sensitivity, lens transmission, and neural processing can vary between people, so two viewers may perceive the same interface colors differently.',
   ],
 };

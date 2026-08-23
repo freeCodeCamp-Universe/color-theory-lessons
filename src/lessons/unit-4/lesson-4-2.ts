@@ -142,10 +142,10 @@ export const lesson4_2: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Color vision deficiency is not one condition — it includes protan, deutan, and tritan types, each with absent and reduced-sensitivity variants.',
-    'Protan types affect red-sensitive cones; deutan types affect green-sensitive cones; tritan types affect blue-sensitive cones.',
-    'Deuteranomaly (reduced green sensitivity) is the most common form of CVD.',
-    'Achromatopsia is rare and involves very limited cone function — hues appear as shades of gray.',
-    'Your goal as a designer is robustness, not diagnosis: make interfaces that work for a range of color experiences, not just your own.',
+    'Color vision deficiency includes protan, deutan, tritan, and achromatic types, which affect color discrimination in different ways.',
+    'Protan types involve the L-cone photopigment, deutan types involve the M-cone photopigment, and tritan types involve the S-cone photopigment.',
+    'Deuteranomaly is the most common inherited type of color vision deficiency.',
+    'Complete achromatopsia causes a lack of color discrimination. In incomplete achromatopsia, some cone function remains and color discrimination varies.',
+    'Design for differences in color vision by checking whether information remains available without a particular color distinction.',
   ],
 };

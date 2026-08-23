@@ -145,9 +145,9 @@ export const lesson4_3: LessonConfig = {
   ],
   keyPoints: [
     'CVD simulation is an approximation that helps designers see which interface areas become ambiguous under reduced color distinction.',
-    'Protan and deutan simulations collapse red-green distinctions; tritan simulations collapse blue-yellow distinctions.',
-    'Charts, maps, and status indicators that rely only on hue to separate meaning are most at risk under simulation.',
-    'Adding backup cues — icons, labels, patterns, or shapes — ensures meaning survives even when color distinction is reduced.',
-    'Simulation is a fast first-pass check, not a replacement for testing with real users who have CVD.',
+    'Protan and deutan simulations can make some red and green hues hard to tell apart. Tritan simulation can make some blue and green hues hard to tell apart.',
+    'Charts, maps, and status indicators can become ambiguous when hue is the only way to distinguish their meaning.',
+    'Icons, labels, patterns, and shapes preserve information when a viewer cannot distinguish the colors.',
+    'Simulation can expose a color-dependent design problem, but it does not change the design.',
   ],
 };
