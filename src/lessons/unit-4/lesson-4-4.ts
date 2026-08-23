@@ -142,10 +142,10 @@ export const lesson4_4: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Designs that rely on hue alone to carry meaning are fragile — they break when color perception varies.',
-    'Status indicators, form validation, and chart series are the most common patterns that depend on hue difference.',
-    'Under protan and deutan simulation, red-green distinctions collapse; under tritan, blue-yellow distinctions collapse.',
-    'This lesson is about diagnosis: identify where meaning is hue-only and where ambiguity appears.',
-    'Noticing where color carries meaning is the first step; the next unit covers concrete repair methods.',
+    'Information can become ambiguous when hue is the only cue carrying meaning and a viewer cannot distinguish the hues.',
+    'Status indicators, form validation, and chart series are interface patterns that can depend on hue differences.',
+    'An element can have enough lightness contrast with its background and still rely on hue alone for its meaning.',
+    'Identify where a hue difference communicates meaning and what becomes unclear when that difference is hard to perceive.',
+    'Unit 5 covers how to add labels, icons, patterns, and other cues so hue is not the only cue carrying meaning.',
   ],
 };
