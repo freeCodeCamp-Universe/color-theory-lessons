@@ -193,7 +193,7 @@ const milestone4: MilestoneConfig = {
       description: 'Find three elements that use color as their only cue and choose a second cue for each one.',
       challengeType: 'simulation-spotter',
       briefing: 'Review the six interface examples. Flag the three that rely on color alone, then choose a valid non-color cue for each flagged example.',
-      successMessage: 'You found all three color-only designs and added a label, icon, or pattern to each one.',
+      successMessage: 'You found all three color-only designs and selected a label, icon, or pattern for each one.',
       pointValue: 4,
     },
     {
