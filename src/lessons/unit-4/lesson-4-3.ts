@@ -12,7 +12,7 @@ export const lesson4_3: LessonConfig = {
       text: 'Simulation tools apply a color transformation to approximate how an interface may appear to someone with a particular type of CVD. A simulation cannot represent every individual\'s vision, but it can reveal design problems caused by relying on color distinctions.',
     },
     {
-      text: 'Under protan and deutan simulation, some red and green hues become hard to tell apart. A status system that uses only red for errors and green for success can become ambiguous because its meaning depends on the red-green distinction.',
+      text: 'Under protan and deutan simulation, some red and green hues become hard to tell apart. In the gallery, the Active and Error badge backgrounds may look alike, but their text labels identify each status. A status system without those labels or another cue can become ambiguous.',
       panel: { type: 'interface-gallery-preview', simulation: 'protanopia' },
     },
     {
@@ -32,7 +32,7 @@ export const lesson4_3: LessonConfig = {
         'Switch the interface gallery through all four simulation modes. Explore each one and identify which elements become hard to distinguish.',
       hints: [
         'Start with Deuteranopia and compare the status indicators. Which ones look similar?',
-        'The Achromatopsia simulation removes hue differences. Which elements still communicate their meaning?',
+        'The complete achromatopsia simulation removes hue differences. Which elements still communicate their meaning?',
       ],
   },
   quizItems: [
