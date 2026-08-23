@@ -47,6 +47,15 @@ describe('SimulationSpotterChallenge', () => {
       name: `Flag ${STATUS_LABEL} as relying on color alone`,
     })).toHaveAttribute('aria-pressed', 'false');
     expect(screen.getByRole('combobox', { name: `Fix for ${STATUS_LABEL}` })).toBeDisabled();
+    expect(screen.getByRole('combobox', { name: `Fix for ${STATUS_LABEL}` })).toHaveTextContent(
+      'Add success and error icons',
+    );
+    expect(screen.getByRole('combobox', { name: `Fix for ${BARS_LABEL}` })).toHaveTextContent(
+      'Use distinct patterns identified in the legend',
+    );
+    expect(screen.getByRole('combobox', { name: `Fix for ${FORM_LABEL}` })).toHaveTextContent(
+      'Add an inline error message',
+    );
   });
 
   it('supports keyboard operation for the simulation, flags, and fix controls', async () => {
@@ -92,7 +101,10 @@ describe('SimulationSpotterChallenge', () => {
     flag('Link: blue text with an underline');
     chooseFix(FORM_LABEL, 'contrast');
     expect(screen.getByRole('status')).toHaveTextContent(
-      'Not passed: Add a valid non-color cue to each fragile example.',
+      'Not passed: Review the repair choices below.',
+    );
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Form error: red label text: Higher text contrast makes the label easier to read, but still uses color alone to communicate the error.',
     );
     expect(finishButton).toBeDisabled();
 
@@ -101,13 +113,24 @@ describe('SimulationSpotterChallenge', () => {
       'Passed: Flag exactly the three examples that rely on color alone.',
     );
     expect(screen.getByRole('status')).toHaveTextContent(
-      'Passed: Add a valid non-color cue to each fragile example.',
+      'Passed: Each color-only example has a cue that communicates the same information without color.',
     );
     expect(finishButton).toBeEnabled();
 
     fireEvent.click(finishButton);
     fireEvent.click(finishButton);
     expect(onComplete).toHaveBeenCalledOnce();
+  });
+
+  it('explains why a pattern alone does not communicate status meaning', () => {
+    render(<SimulationSpotterChallenge onComplete={vi.fn()} />);
+
+    flag(STATUS_LABEL);
+    chooseFix(STATUS_LABEL, 'pattern');
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Status badges: green and red backgrounds: Patterns distinguish the badges, but do not identify which badge means success or error without labels or a key.',
+    );
   });
 
   it('clears a selected fix when its row is unflagged', () => {

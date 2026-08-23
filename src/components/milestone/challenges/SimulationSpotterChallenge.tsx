@@ -16,6 +16,8 @@ interface Item {
   colors: string[];
   fragile: boolean;
   validFixes: Fix[];
+  fixLabels: Record<Fix, string>;
+  invalidFixFeedback: Partial<Record<Fix, string>>;
 }
 
 interface SimulationSpotterSession {
@@ -26,23 +28,103 @@ interface SimulationSpotterSession {
 }
 
 const ITEMS: Item[] = [
-  { id: 'status', label: 'Status badges: green and red backgrounds', colors: ['#22c55e', '#ef4444'], fragile: true, validFixes: ['icon', 'label'] },
-  { id: 'bars', label: 'Chart bars: red and green series', colors: ['#ef4444', '#22c55e'], fragile: true, validFixes: ['pattern', 'label'] },
-  { id: 'form', label: 'Form error: red label text', colors: ['#f97316'], fragile: true, validFixes: ['icon', 'label'] },
-  { id: 'link', label: 'Link: blue text with an underline', colors: ['#3b82f6'], fragile: false, validFixes: ['label'] },
-  { id: 'toggle', label: 'Toggle: purple switch with On/Off text', colors: ['#8b5cf6'], fragile: false, validFixes: ['label'] },
-  { id: 'alert', label: 'Alert: yellow background with an icon and heading', colors: ['#eab308'], fragile: false, validFixes: ['icon'] },
+  {
+    id: 'status',
+    label: 'Status badges: green and red backgrounds',
+    colors: ['#22c55e', '#ef4444'],
+    fragile: true,
+    validFixes: ['icon', 'label'],
+    fixLabels: {
+      icon: 'Add success and error icons',
+      pattern: 'Use different fill patterns only',
+      label: 'Add labels naming each status',
+      contrast: 'Increase background contrast only',
+    },
+    invalidFixFeedback: {
+      pattern: 'Patterns distinguish the badges, but do not identify which badge means success or error without labels or a key.',
+      contrast: 'Higher contrast makes the badges easier to see, but does not identify what each badge means.',
+    },
+  },
+  {
+    id: 'bars',
+    label: 'Chart bars: red and green series',
+    colors: ['#ef4444', '#22c55e'],
+    fragile: true,
+    validFixes: ['pattern', 'label'],
+    fixLabels: {
+      icon: 'Add the same icon to every series',
+      pattern: 'Use distinct patterns identified in the legend',
+      label: 'Label each series directly',
+      contrast: 'Increase contrast with the background only',
+    },
+    invalidFixFeedback: {
+      icon: 'The same icon on every series does not distinguish one series from another.',
+      contrast: 'Background contrast makes the bars visible, but does not identify which series each bar belongs to.',
+    },
+  },
+  {
+    id: 'form',
+    label: 'Form error: red label text',
+    colors: ['#f97316'],
+    fragile: true,
+    validFixes: ['icon', 'label'],
+    fixLabels: {
+      icon: 'Add an error icon beside the field',
+      pattern: 'Add a background pattern only',
+      label: 'Add an inline error message',
+      contrast: 'Increase the red text contrast only',
+    },
+    invalidFixFeedback: {
+      pattern: 'A background pattern does not identify the field as having an error or explain what needs attention.',
+      contrast: 'Higher text contrast makes the label easier to read, but still uses color alone to communicate the error.',
+    },
+  },
+  {
+    id: 'link',
+    label: 'Link: blue text with an underline',
+    colors: ['#3b82f6'],
+    fragile: false,
+    validFixes: ['label'],
+    fixLabels: {
+      icon: 'Add an icon beside the link',
+      pattern: 'Add a pattern behind the link',
+      label: 'Add another text label',
+      contrast: 'Increase the link contrast',
+    },
+    invalidFixFeedback: {},
+  },
+  {
+    id: 'toggle',
+    label: 'Toggle: purple switch with On/Off text',
+    colors: ['#8b5cf6'],
+    fragile: false,
+    validFixes: ['label'],
+    fixLabels: {
+      icon: 'Add an icon to the toggle',
+      pattern: 'Add a pattern to the switch',
+      label: 'Add another On/Off label',
+      contrast: 'Increase the toggle contrast',
+    },
+    invalidFixFeedback: {},
+  },
+  {
+    id: 'alert',
+    label: 'Alert: yellow background with an icon and heading',
+    colors: ['#eab308'],
+    fragile: false,
+    validFixes: ['icon'],
+    fixLabels: {
+      icon: 'Add another alert icon',
+      pattern: 'Add a pattern to the alert background',
+      label: 'Add another alert heading',
+      contrast: 'Increase the alert contrast',
+    },
+    invalidFixFeedback: {},
+  },
 ];
 
 const ITEM_IDS = new Set(ITEMS.map((item) => item.id));
 const FIXES: Fix[] = ['icon', 'pattern', 'label', 'contrast'];
-
-const FIX_LABELS: Record<Fix, string> = {
-  icon: 'Add icon',
-  pattern: 'Add pattern',
-  label: 'Add label',
-  contrast: 'Increase contrast',
-};
 
 function loadSession(sessionKey?: string): SimulationSpotterSession {
   const fallback: SimulationSpotterSession = {
@@ -125,9 +207,21 @@ export function SimulationSpotterChallenge({ onComplete, sessionKey }: Simulatio
       return item ? item.validFixes.includes(fix) : false;
     });
 
+    const invalidFixes = ITEMS.flatMap((item) => {
+      const fix = fixes[item.id];
+      if (!item.fragile || !fix || item.validFixes.includes(fix)) return [];
+      return [{
+        id: item.id,
+        label: item.label,
+        feedback: item.invalidFixFeedback[fix]
+          ?? 'The selected repair does not communicate the same information without color.',
+      }];
+    });
+
     return {
       flagsGood,
       fixesGood,
+      invalidFixes,
       passed: flagsGood && fixesGood,
     };
   }, [flagged, fixes]);
@@ -198,7 +292,7 @@ export function SimulationSpotterChallenge({ onComplete, sessionKey }: Simulatio
               >
                 <option value="">Choose a fix</option>
                 {FIXES.map((fix) => (
-                  <option key={fix} value={fix}>{FIX_LABELS[fix]}</option>
+                  <option key={fix} value={fix}>{item.fixLabels[fix]}</option>
                 ))}
               </select>
             </div>
@@ -215,8 +309,17 @@ export function SimulationSpotterChallenge({ onComplete, sessionKey }: Simulatio
           {scored.flagsGood ? 'Passed' : 'Not passed'}: Flag exactly the three examples that rely on color alone.
         </p>
         <p className={scored.fixesGood ? styles.good : styles.bad}>
-          {scored.fixesGood ? 'Passed' : 'Not passed'}: Add a valid non-color cue to each fragile example.
+          {scored.fixesGood
+            ? 'Passed: Each color-only example has a cue that communicates the same information without color.'
+            : scored.invalidFixes.length > 0
+              ? 'Not passed: Review the repair choices below.'
+              : 'Not passed: Each color-only example needs a cue that communicates the same information without color.'}
         </p>
+        {scored.invalidFixes.map((invalidFix) => (
+          <p key={invalidFix.id} className={styles.bad}>
+            <strong>{invalidFix.label}:</strong> {invalidFix.feedback}
+          </p>
+        ))}
       </div>
 
       <div className={styles.actions}>
