@@ -65,7 +65,7 @@ const ITEMS: Item[] = [
   {
     id: 'form',
     label: 'Form error: red label text',
-    colors: ['#f97316'],
+    colors: ['#ef4444'],
     fragile: true,
     validFixes: ['icon', 'label'],
     fixLabels: {
