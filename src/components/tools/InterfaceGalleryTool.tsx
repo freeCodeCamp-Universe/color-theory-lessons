@@ -26,7 +26,7 @@ const MODES: { id: SimMode; label: string; filter: string }[] = [
   { id: 'deuteranopia', label: 'Deuteranopia', filter: 'url(#ig-deuteranopia)' },
   { id: 'protanopia', label: 'Protanopia', filter: 'url(#ig-protanopia)' },
   { id: 'tritanopia', label: 'Tritanopia', filter: 'url(#ig-tritanopia)' },
-  { id: 'achromatopsia', label: 'Achromatopsia', filter: 'url(#ig-achromatopsia)' },
+  { id: 'achromatopsia', label: 'Complete achromatopsia', filter: 'url(#ig-achromatopsia)' },
 ];
 
 interface InterfaceGalleryToolProps {
