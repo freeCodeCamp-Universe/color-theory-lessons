@@ -5,7 +5,8 @@ interface Module {
   id: string;
   name: string;
   repairOptions: string[];
-  minRepairs: number;
+  repairRequirement: string;
+  isValidRepair: (checked: string[]) => boolean;
   brokenPreview: React.ReactNode;
   repairedPreview: (checked: string[]) => React.ReactNode;
 }
@@ -15,7 +16,8 @@ const MODULES: Module[] = [
     id: 'form-validation',
     name: 'Form validation',
     repairOptions: ['Add error icon ✕', 'Add error message text', 'Change label to bold+red'],
-    minRepairs: 2,
+    repairRequirement: 'needs error text + 1 option',
+    isValidRepair: (checked) => checked.length >= 2 && checked.includes('Add error message text'),
     brokenPreview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
         <label style={{ fontSize: '0.72rem', color: '#374151' }}>Email address</label>
@@ -39,7 +41,8 @@ const MODULES: Module[] = [
     id: 'link-paragraph',
     name: 'Link paragraph',
     repairOptions: ['Add underline to links', 'Add bold weight to links', 'Add › arrow indicator'],
-    minRepairs: 1,
+    repairRequirement: 'needs ≥1 option',
+    isValidRepair: (checked) => checked.length >= 1,
     brokenPreview: (
       <p style={{ fontSize: '0.75rem', color: '#374151', lineHeight: 1.6, margin: 0 }}>
         For more information, read our{' '}
@@ -72,7 +75,8 @@ const MODULES: Module[] = [
     id: 'alert-stack',
     name: 'Alert stack',
     repairOptions: ['Add icons (✓/⚠/✕)', 'Add structured heading', 'Add border-left accent'],
-    minRepairs: 2,
+    repairRequirement: 'needs ≥2 options',
+    isValidRepair: (checked) => checked.length >= 2,
     brokenPreview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
         {[{ bg: '#dcfce7', text: '#166534', msg: 'Changes saved.' }, { bg: '#fef9c3', text: '#854d0e', msg: 'Unsaved changes.' }, { bg: '#fee2e2', text: '#991b1b', msg: 'Upload failed.' }].map((alert) => (
@@ -116,7 +120,8 @@ const MODULES: Module[] = [
     id: 'chart-series',
     name: 'Chart series',
     repairOptions: ['Add direct labels', 'Add pattern fills', 'Add value labels at top'],
-    minRepairs: 1,
+    repairRequirement: 'needs direct labels or patterns',
+    isValidRepair: (checked) => checked.includes('Add direct labels') || checked.includes('Add pattern fills'),
     brokenPreview: (
       <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-end', height: 60 }}>
         {[{ h: 75, color: '#22c55e' }, { h: 50, color: '#ef4444' }].map((bar) => (
@@ -169,7 +174,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
       const current = prev[moduleId];
       const next = current.includes(option) ? current.filter((o) => o !== option) : [...current, option];
       const mod = MODULES.find((m) => m.id === moduleId)!;
-      const isRepaired = next.length >= mod.minRepairs;
+      const isRepaired = mod.isValidRepair(next);
       setRepaired((prevR) => {
         const nextR = { ...prevR, [moduleId]: isRepaired };
         const allRepaired = MODULES.every((m) => nextR[m.id]);
@@ -215,7 +220,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
                 <span style={{ fontSize: '0.68rem', color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
                   {isRepaired
                     ? <span style={{ color: 'var(--accent-success)' }}>✓ repaired</span>
-                    : `needs ≥${mod.minRepairs} option${mod.minRepairs > 1 ? 's' : ''}`}
+                    : mod.repairRequirement}
                 </span>
               </div>
 
