@@ -38,12 +38,12 @@ describe('TextContrastLabTool', () => {
     setTextColor('#000000');
 
     expect(screen.getByText(/3\/3 passing/)).toBeInTheDocument();
-    expect(screen.getByText(/All three pairs now pass/)).toBeInTheDocument();
+    expect(screen.getByText(/All three pairs now meet the 4.5:1 threshold for normal text/)).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
 
     setTextColor('#999999');
 
     expect(screen.getByText(/2\/3 passing/)).toBeInTheDocument();
-    expect(screen.queryByText(/All three pairs now pass/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/All three pairs now meet the 4.5:1 threshold for normal text/)).not.toBeInTheDocument();
   });
 });
