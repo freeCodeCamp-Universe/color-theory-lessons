@@ -16,56 +16,56 @@ const STAGES: AuditStage[] = [
   {
     id: 'priority',
     title: 'Stage 1: Priority Elements',
-    instruction: 'Which elements are priority elements that need contrast checking? Select all that apply.',
+    instruction: 'Which elements convey information or identify controls and need a contrast check? Select all that apply.',
     type: 'multi-select',
-    options: ['Text content', 'Decorative background pattern', 'Status indicators', 'Chart series marks', 'Button border', 'Page margin'],
-    correctOptions: ['Text content', 'Status indicators', 'Chart series marks', 'Button border'],
-    explanation: 'Priority elements are those users depend on to complete tasks. Decorative backgrounds and page margins are lower priority.',
+    options: ['Text content', 'Decorative background pattern', 'Status indicators', 'Chart series marks', 'Border that identifies a button', 'Page margin'],
+    correctOptions: ['Text content', 'Status indicators', 'Chart series marks', 'Border that identifies a button'],
+    explanation: 'Text and visual cues needed to identify controls, states, and graphics require contrast checks. The decorative pattern and page margin do not convey information.',
   },
   {
     id: 'contrast-check',
     title: 'Stage 2: Contrast Check',
-    instruction: 'The secondary text (#aaaaaa on white) has a contrast ratio of 2.3:1. What is your verdict?',
+    instruction: 'The normal-size secondary text (#aaaaaa on white) has a contrast ratio of 2.3:1. What is your verdict?',
     type: 'single-choice',
     options: [
-      'Pass — it looks fine',
-      'Fail — 2.3:1 is below the 4.5:1 threshold for normal text',
-      'Pass — the text is large',
+      'Pass because it looks readable',
+      'Fail because 2.3:1 is below the 4.5:1 threshold for normal text',
+      'Pass because the text is large',
       'Cannot determine without testing',
     ],
     correctOptions: [],
-    correctSingle: 'Fail — 2.3:1 is below the 4.5:1 threshold for normal text',
-    explanation: '2.3:1 fails the 4.5:1 threshold for normal text. How it looks is not the criterion — the ratio is.',
+    correctSingle: 'Fail because 2.3:1 is below the 4.5:1 threshold for normal text',
+    explanation: 'A ratio of 2.3:1 is below the 4.5:1 threshold for normal text.',
   },
   {
     id: 'cvd-sim',
     title: 'Stage 3: CVD Simulation',
-    instruction: 'After simulating deuteranopia, the green/red status dots look similar. What should you do?',
+    instruction: 'After simulating deuteranopia, the green and red status dots look similar. What should you do?',
     type: 'single-choice',
     options: [
-      'Nothing — the dots have text labels',
+      'Nothing because both dot colors are still visible',
       'Add a text label or icon to each dot so meaning does not depend on color alone',
       'Make the green brighter',
       'Remove one of the status colors',
     ],
     correctOptions: [],
     correctSingle: 'Add a text label or icon to each dot so meaning does not depend on color alone',
-    explanation: 'If dots already had text labels, this would not be an issue. Add backup cues so meaning does not rely on distinguishing hues.',
+    explanation: 'Add a text label or icon so users do not have to distinguish the dot colors to identify each status.',
   },
   {
     id: 'task-verify',
     title: 'Stage 4: Task Verification',
-    instruction: 'The chart has no direct labels and no patterns. What is the impact?',
+    instruction: 'A chart identifies its series only with colored lines and a color-only legend. What is the impact?',
     type: 'single-choice',
     options: [
-      'No impact — charts are decorative',
-      'Users who cannot distinguish the hues (CVD or poor screen) cannot tell the series apart',
+      'No impact because charts are decorative',
+      'Users who cannot distinguish the hues cannot tell the series apart',
       'The legend solves this',
       'Chart contrast is not part of accessibility',
     ],
     correctOptions: [],
-    correctSingle: 'Users who cannot distinguish the hues (CVD or poor screen) cannot tell the series apart',
-    explanation: 'A color-only legend still relies on hue to identify series. Direct labels or patterns are needed.',
+    correctSingle: 'Users who cannot distinguish the hues cannot tell the series apart',
+    explanation: 'A color-only legend still requires users to match hues. Direct labels or patterns identify each series without relying on color alone.',
   },
 ];
 
@@ -207,7 +207,7 @@ export const AuditFlowTool = memo(function AuditFlowTool({ interactive = false, 
 
         {stageResult === 'incorrect' && (
           <p style={{ fontSize: '0.75rem', color: 'var(--accent-danger)', marginTop: '0.4rem' }}>
-            Not quite — review your selection and try again.
+            Not quite. Review your selection and try again.
           </p>
         )}
 
@@ -235,7 +235,7 @@ export const AuditFlowTool = memo(function AuditFlowTool({ interactive = false, 
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          ✓ Full audit workflow complete. You can now apply this four-stage approach to any interface.
+          ✓ Audit activity complete. Use these four stages to structure another interface audit.
         </p>
       )}
     </div>
