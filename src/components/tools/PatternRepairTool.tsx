@@ -14,7 +14,7 @@ const MODULES: Module[] = [
   {
     id: 'form-validation',
     name: 'Form validation',
-    repairOptions: ['Add error icon ✕', 'Add error message text', 'Change label to bold+red'],
+    repairOptions: ['Add error icon ✕', 'Add error message text', 'Make label bold and red'],
     minRepairs: 2,
     brokenPreview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
@@ -24,7 +24,7 @@ const MODULES: Module[] = [
     ),
     repairedPreview: (checked) => (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-        <label style={{ fontSize: '0.72rem', color: checked.includes('Change label to bold+red') ? '#ef4444' : '#374151', fontWeight: checked.includes('Change label to bold+red') ? 700 : 400 }}>Email address</label>
+        <label style={{ fontSize: '0.72rem', color: checked.includes('Make label bold and red') ? '#ef4444' : '#374151', fontWeight: checked.includes('Make label bold and red') ? 700 : 400 }}>Email address</label>
         <input readOnly value="not-valid" style={{ padding: '0.3rem 0.4rem', fontSize: '0.75rem', border: '2px solid #ef4444', borderRadius: 3, width: '100%', boxSizing: 'border-box', background: '#fff' }} />
         {(checked.includes('Add error icon ✕') || checked.includes('Add error message text')) && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -191,7 +191,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
 
       {interactive && (
         <p style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>
-          Repair each interface pattern by checking the options below. ({repairedCount}/{MODULES.length} repaired)
+          Select cues for each interface pattern. Repaired patterns: {repairedCount} of {MODULES.length}.
         </p>
       )}
 
@@ -215,7 +215,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
                 <span style={{ fontSize: '0.68rem', color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
                   {isRepaired
                     ? <span style={{ color: 'var(--accent-success)' }}>✓ repaired</span>
-                    : `needs ≥${mod.minRepairs} option${mod.minRepairs > 1 ? 's' : ''}`}
+                    : `select at least ${mod.minRepairs} option${mod.minRepairs > 1 ? 's' : ''}`}
                 </span>
               </div>
 
@@ -257,7 +257,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          ✓ All patterns repaired. These same fixes, applied as reusable patterns, scale across an entire product.
+          ✓ All patterns repaired. Components that use these patterns receive the same cues.
         </p>
       )}
     </div>
