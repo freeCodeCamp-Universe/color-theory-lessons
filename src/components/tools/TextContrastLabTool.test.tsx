@@ -11,6 +11,20 @@ function setTextColor(value: string) {
 }
 
 describe('TextContrastLabTool', () => {
+  it.each([
+    ['just below 4.5:1', '#9a6c5a', '4.49:1', 'Normal text (≥4.5:1) — FAIL'],
+    ['just above 4.5:1', '#7c7290', '4.50:1', 'Normal text (≥4.5:1) — PASS'],
+    ['just below 3:1', '#989a30', '2.99:1', 'Large text (≥3:1) — FAIL'],
+    ['just above 3:1', '#e969a1', '3.00:1', 'Large text (≥3:1) — PASS'],
+  ])('displays a ratio %s consistently with its threshold result', (_boundary, color, displayedRatio, result) => {
+    render(<TextContrastLabTool interactive />);
+
+    setTextColor(color);
+
+    expect(screen.getByText(displayedRatio)).toBeInTheDocument();
+    expect(screen.getByText(result)).toBeInTheDocument();
+  });
+
   it('updates a pair from failing to passing and back to failing', () => {
     render(<TextContrastLabTool interactive />);
 

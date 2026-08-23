@@ -24,6 +24,7 @@ npm run dev
 - **Component Design**: Favor functional components and React hooks over class components.
 - **Type Safety**: Avoid using `any`. Define clear interfaces for all component props and state shapes.
 - **Styling**: Maintain the "Command-line Chic" aesthetic. Avoid adding new color hex codes; instead, use the variables defined in `src/index.css`.
+- **Contrast Ratios**: Compare calculated ratios at full precision. For display, round down to the chosen number of decimal places so a value below a threshold is not shown as equal to that threshold.
 - **Linting**: Run `npm run lint` before committing to ensure adherence to ESLint rules.
 
 ### Building & Deployment
