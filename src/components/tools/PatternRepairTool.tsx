@@ -252,15 +252,8 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
                 background: isRepaired ? 'color-mix(in srgb, var(--accent-success) 6%, transparent)' : 'transparent',
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+              <div style={{ marginBottom: '0.4rem' }}>
                 <p style={{ fontWeight: 600, fontSize: '0.8rem', margin: 0, color: 'var(--primary-foreground)' }}>{mod.name}</p>
-                <span aria-live="polite" style={{ fontSize: '0.68rem', color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
-                  {submitted && (
-                    isRepaired
-                      ? <span style={{ color: 'var(--accent-success)' }}>✓ repaired</span>
-                      : <span style={{ color: 'var(--accent-danger)' }}>{mod.invalidFeedback(modChecked)}</span>
-                  )}
-                </span>
               </div>
 
               {/* Before / After */}
@@ -294,6 +287,16 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
                     </label>
                   ))}
                 </div>
+              )}
+
+              {submitted && (
+                <p
+                  aria-live="polite"
+                  data-testid={`feedback-${mod.id}`}
+                  style={{ margin: '0.45rem 0 0', fontSize: '0.68rem', fontFamily: 'var(--font-mono)', color: isRepaired ? 'var(--accent-success)' : 'var(--accent-danger)' }}
+                >
+                  {isRepaired ? '✓ repaired' : mod.invalidFeedback(modChecked)}
+                </p>
               )}
             </div>
           );

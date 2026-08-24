@@ -26,6 +26,8 @@ describe('PatternRepairTool', () => {
 
     expect(screen.getByText(/0\/4 repaired/)).toBeInTheDocument();
     expect(screen.getByText('The form does not explain what is wrong. A visible error description is still missing.')).toBeInTheDocument();
+    const feedback = screen.getByTestId('feedback-form-validation');
+    expect(feedback.parentElement?.lastElementChild).toBe(feedback);
   });
 
   it('repairs form validation when error message text is paired with another cue', () => {
