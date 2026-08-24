@@ -7,7 +7,7 @@ interface SystemComparisonToolProps {
 }
 
 const INCONSISTENCIES = [
-  { id: 'btn-color', label: 'Button color', explanation: 'The action button uses #3b82f6 instead of the system\'s #1e40af primary-action color. Assign the button background to the action-primary role.' },
+  { id: 'btn-color', label: 'Button color', explanation: 'The action button uses #3b82f6 instead of the system\'s #1e40af action-primary color. Assign the button background to the action-primary role.' },
   { id: 'success-color', label: 'Success badge color', explanation: 'The success badge uses #14b8a6 instead of the system\'s #16a34a success color. Assign the badge background to the success role.' },
   { id: 'surface-color', label: 'Card surface color', explanation: 'The second card uses #ffffff instead of the system\'s #f3f4f6 card-surface color. Assign both card backgrounds to the surface-card role.' },
   { id: 'text-weight', label: 'Secondary text lightness', explanation: 'The first card uses #9ca3af instead of the system\'s #6b7280 secondary-text color. Assign secondary text in both cards to the same role.' },
