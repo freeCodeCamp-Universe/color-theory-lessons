@@ -1,5 +1,6 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { contrastRatioWcag, hexToRgb } from '../../utils/color.ts';
 import { SystemStressTestTool } from './SystemStressTestTool.tsx';
 
 afterEach(() => cleanup());
@@ -27,7 +28,7 @@ describe('SystemStressTestTool', () => {
   it('provides observable previews for all five contexts', () => {
     render(<SystemStressTestTool interactive />);
 
-    expect(screen.getByPlaceholderText('Search by name')).toBeInTheDocument();
+    expect(screen.getByText('Search by name')).toBeInTheDocument();
     expect(screen.getByText('Placeholder color: #aaa')).toHaveStyle({ color: '#aaa' });
 
     fireEvent.click(screen.getByRole('button', { name: 'Dark mode' }));
@@ -42,6 +43,23 @@ describe('SystemStressTestTool', () => {
     fireEvent.click(screen.getByRole('button', { name: 'CVD simulation' }));
     expect(screen.getByLabelText('Chart under deuteranopia simulation')).toBeInTheDocument();
     expect(screen.getByLabelText('Alerts under deuteranopia simulation')).toBeInTheDocument();
+  });
+
+  it('presents the required contrast evidence without interactive controls', () => {
+    render(<SystemStressTestTool interactive />);
+
+    expect(screen.getByText('Search by name')).toBeInTheDocument();
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+    expect(contrastRatioWcag(hexToRgb('#aaaaaa'), hexToRgb('#ffffff'))).toBeLessThan(4.5);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Dark mode' }));
+    const action = screen.getByRole('img', { name: 'Save changes action preview' });
+    expect(screen.queryByRole('button', { name: 'Save changes' })).not.toBeInTheDocument();
+    expect(action).toHaveStyle({ background: 'transparent', color: '#1e40af' });
+    expect(action).toHaveTextContent('');
+    expect(action.querySelector('svg[aria-hidden="true"]')).toBeInTheDocument();
+    expect(action.parentElement).toHaveStyle({ background: '#1e293b' });
+    expect(contrastRatioWcag(hexToRgb('#1e40af'), hexToRgb('#1e293b'))).toBeLessThan(3);
   });
 
   it('reports incomplete findings without completing', () => {
