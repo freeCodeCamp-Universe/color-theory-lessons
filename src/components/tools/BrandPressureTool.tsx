@@ -12,6 +12,13 @@ const SECONDARY_ACTION = '#a78bfa';
 
 type RoleKey = 'page-bg' | 'surface' | 'primary-text' | 'neutral-divider';
 
+const ROLE_LABELS: Record<RoleKey, string> = {
+  'page-bg': 'Page background',
+  'surface': 'Card surface',
+  'primary-text': 'Primary text',
+  'neutral-divider': 'Divider',
+};
+
 const NON_INTERACTIVE_DEFAULTS: Record<RoleKey, string> = {
   'page-bg': '#7c3aed',
   'surface': '#6d28d9',
@@ -100,7 +107,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>ROLES</p>
 
           {/* Read-only brand roles */}
-          {[['action', BRAND], ['secondary-action', SECONDARY_ACTION]].map(([label, val]) => (
+          {[['Primary action', BRAND], ['Secondary action', SECONDARY_ACTION]].map(([label, val]) => (
             <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem', opacity: 0.7 }}>
               <div style={{ width: 18, height: 18, borderRadius: 3, background: val, border: '1px solid var(--border)', flexShrink: 0 }} />
               <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{label} (fixed)</span>
@@ -115,7 +122,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
             return (
               <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
                 <div style={{ width: 18, height: 18, borderRadius: 3, background: isValidHex(val) ? val : '#888', border: '1px solid var(--border)', flexShrink: 0 }} />
-                <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{key}</span>
+                <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{ROLE_LABELS[key]}</span>
                 <input
                   type="text"
                   value={val}
@@ -159,7 +166,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>CHECKS</p>
           {[
             { label: 'Text contrast (4.5:1)', pass: textOk, ratio: textContrast },
-            { label: 'Page/surface separation', pass: surfaceOk, ratio: surfaceContrast },
+            { label: 'Page / surface (target 1.2:1)', pass: surfaceOk, ratio: surfaceContrast },
           ].map(({ label, pass, ratio }) => (
             <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', padding: '0.2rem 0' }}>
               <span style={{ color: 'var(--primary-foreground)' }}>{label}</span>
@@ -176,14 +183,14 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
             <div style={{ background: 'var(--border)', borderRadius: 99, height: 6, marginTop: '0.25rem', overflow: 'hidden' }}>
               <div style={{ height: '100%', width: `${Math.min(pressure, 100)}%`, background: meterColor, borderRadius: 99, transition: 'width 0.3s' }} />
             </div>
-            <div style={{ fontSize: '0.7rem', color: 'var(--muted)', marginTop: '0.2rem' }}>Target: &lt; 40%</div>
+            <div style={{ fontSize: '0.7rem', color: 'var(--muted)', marginTop: '0.2rem' }}>Activity target: under 40%</div>
           </div>
         </div>
       </div>
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          Brand is present but not overwhelming. Neutrals carry the structural weight.
+          The two brand actions remain prominent while neutral supporting roles define the page structure.
         </p>
       )}
     </div>
