@@ -27,9 +27,9 @@ function setPassingBaseRoles() {
 }
 
 function setPassingRoles() {
+  setPassingBaseRoles();
   setRole('success', '#14532d');
   setRole('error', '#dc2626');
-  setPassingBaseRoles();
 }
 
 describe('DarkTranslatorTool', () => {
@@ -93,12 +93,48 @@ describe('DarkTranslatorTool', () => {
     expect(onComplete).not.toHaveBeenCalled();
   });
 
+  it('rejects primary text that passes against the page but fails against the surface', () => {
+    const onComplete = vi.fn();
+    render(<DarkTranslatorTool interactive onComplete={onComplete} />);
+
+    setRole('page-bg', '#000000');
+    setRole('surface', '#333333');
+    setRole('primary-text', '#777777');
+    setRole('secondary-text', '#ffffff');
+    setRole('action', '#1d4ed8');
+    setRole('success', '#14532d');
+    setRole('error', '#dc2626');
+
+    expect(screen.getByText('Primary text / surface (4.5:1)').parentElement).toHaveTextContent('✗ 2.8:1');
+    expect(screen.queryByText(/Both themes show readable hierarchy/)).not.toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+
+  it('rejects secondary text below 4.5:1 against the surface', () => {
+    const onComplete = vi.fn();
+    render(<DarkTranslatorTool interactive onComplete={onComplete} />);
+
+    setRole('page-bg', '#0f172a');
+    setRole('surface', '#1e293b');
+    setRole('primary-text', '#f8fafc');
+    setRole('secondary-text', '#64748b');
+    setRole('action', '#1d4ed8');
+    setRole('success', '#14532d');
+    setRole('error', '#dc2626');
+
+    expect(screen.getByText('Secondary text / surface (4.5:1)').parentElement).toHaveTextContent('✗ 3.1:1');
+    expect(screen.queryByText(/Both themes show readable hierarchy/)).not.toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+
   it('completes with valid, readable, and distinct semantic colors', () => {
     const onComplete = vi.fn();
     render(<DarkTranslatorTool interactive onComplete={onComplete} />);
 
     setPassingRoles();
 
+    expect(screen.getByText('Primary text / surface (4.5:1)').parentElement).toHaveTextContent('✓');
+    expect(screen.getByText('Secondary text / surface (4.5:1)').parentElement).toHaveTextContent('✓');
     expect(screen.getByText('White / success (4.5:1)').parentElement).toHaveTextContent('✓');
     expect(screen.getByText('White / error (4.5:1)').parentElement).toHaveTextContent('✓');
     expect(screen.getByText('Success / error luminance (1.5:1)').parentElement).toHaveTextContent('✓');
