@@ -26,7 +26,7 @@ export const lesson5_6: LessonConfig = {
   challenge: {
       prompt: 'Work through the inclusive review checklist for the sample interface. Mark each item as Pass or Needs Work based on what you observe.',
       hints: [
-        'Read each checklist item carefully. The sample interface has real problems — look for them.',
+        'Switch through the CVD simulation modes and compare each view with the original interface.',
         'For each item, ask: can a user complete the task without relying on hue alone?',
       ],
   },
