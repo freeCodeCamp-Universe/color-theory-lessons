@@ -8,56 +8,56 @@ export const lesson5_6: LessonConfig = {
   reviewTags: ['workflow', 'inclusive-design', 'testing', 'user-research'],
   steps: [
     {
-      text: 'CVD simulation is a useful approximation, but it is not a perfect substitute for user research. Different people with the same CVD type can have different experiences. Simulation gives you a fast first pass — it does not give you a complete picture.',
+      text: 'CVD simulations approximate how an interface may appear under a specific type of CVD. They cannot represent differences between individuals, so use them to find design risks rather than predict any person\'s experience.',
     },
     {
-      text: 'A repeatable inclusive workflow: (1) View in normal mode and identify all elements that use color to carry meaning. (2) Switch to each simulation mode. (3) Identify which elements become ambiguous. (4) Add backup cues. (5) Re-check in simulation mode.',
+      text: 'Use a repeatable review workflow. First, view the interface without a simulation and identify each element that uses color to carry meaning. Then check each CVD simulation, find elements that become ambiguous, add another visual cue, and check the simulations again.',
     },
     {
-      text: 'Inclusive checks should happen early in the design process, not only as a final compliance step. Structural changes — like adding a second column to a legend or switching from color-only dots to labeled badges — are much cheaper to make before designs are locked.',
+      text: 'Run inclusive checks before design decisions are fixed. In a design file, you can add a legend column or replace color-only dots with labeled badges before developers build those patterns throughout the interface.',
     },
     {
-      text: 'User testing with people who have CVD adds value that simulation cannot provide: real reactions, task completion rates, and the nuances of individual experience. Even occasional user testing significantly improves your understanding beyond what any filter can show.',
+      text: 'User testing with people who have CVD can reveal whether participants understand the interface and complete its tasks. A simulation cannot reproduce their individual perceptions, strategies, or reactions.',
     },
     {
-      text: 'Accessible color design is not a separate phase — it is a quality lens applied throughout regular design work. Check early, simulate often, and validate with real users when possible. The goal is to make accessibility a habit, not a last-minute task.',
+      text: 'Include accessible color checks throughout the design process. Check early, use simulations to find risks, and test with people who have CVD when possible. Repeat the checks when the design changes.',
     },
   ],
   challenge: {
       prompt: 'Work through the inclusive review checklist for the sample interface. Mark each item as Pass or Needs Work based on what you observe.',
       hints: [
-        'Read each checklist item carefully. The sample interface has real problems — look for them.',
-        'For each item, ask: can a user complete the task without relying on hue alone?',
+        'Compare each checklist item with the visible evidence in the sample interface.',
+        'Check whether labels, icons, patterns, or text communicate the information carried by each color.',
       ],
   },
   quizItems: [
     {
       id: 'q1',
-      prompt: "Is simulation a perfect representation of a CVD user's experience?",
+      prompt: 'Does a CVD simulation show exactly how every person with that CVD type sees an interface?',
       choices: [
         {
           stableId: 'yes-simulation-shows-exactly-what-every-cvd-user-sees',
-          label: 'Yes — simulation shows exactly what every CVD user sees',
+          label: 'Yes. It shows exactly what every person with CVD sees',
           isCorrect: false,
-          explanation: 'Simulation is a mathematical approximation. Real users with the same CVD type can still vary.',
+          explanation: 'A simulation applies a model to the interface. People with the same CVD type can still have different experiences.',
         },
         {
           stableId: 'no-it-is-a-useful-approximation-and-real-user-testing-still-adds',
-          label: 'No — it is a useful approximation, and real user testing still adds value',
+          label: 'No. It is an approximation, and user testing can reveal individual experiences',
           isCorrect: true,
-          explanation: 'Simulation gives a fast first-pass check. User testing provides real task completion data and individual nuance.',
+          explanation: 'Simulation can reveal design risks. User testing shows how individual participants interpret the interface and complete its tasks.',
         },
         {
           stableId: 'yes-all-protan-users-see-the-same-filtered-result',
-          label: 'Yes — all protan users see the same filtered result',
+          label: 'Yes. Everyone with a protan CVD type sees the same result',
           isCorrect: false,
-          explanation: 'Even within the same CVD category, individuals vary. Simulation is an average approximation.',
+          explanation: 'People within the same CVD category can perceive an interface differently. A single simulation cannot represent those differences.',
         },
         {
           stableId: 'no-simulation-is-inaccurate-and-should-not-be-used',
-          label: 'No — simulation is inaccurate and should not be used',
+          label: 'No. CVD simulations are too inaccurate to be useful',
           isCorrect: false,
-          explanation: 'Simulation is a valuable first-pass tool despite being an approximation.',
+          explanation: 'A simulation can reveal places where reduced color distinctions may make an interface ambiguous.',
         },
       ],
     },
@@ -73,9 +73,9 @@ export const lesson5_6: LessonConfig = {
         },
         {
           stableId: 'because-structural-fixes-are-much-harder-after-the-design-is-loc',
-          label: 'Because structural fixes are much harder after the design is locked — catching problems early is cheaper',
+          label: 'Because changing the structure before implementation can avoid reworking built interface patterns',
           isCorrect: true,
-          explanation: 'Switching from color-only dots to labeled badges is trivial in a design file and very costly in a shipped product.',
+          explanation: 'An early design change can replace color-only dots with labeled badges before developers reuse the status pattern throughout the interface.',
         },
         {
           stableId: 'because-accessibility-problems-disappear-later-in-the-process',
@@ -97,27 +97,27 @@ export const lesson5_6: LessonConfig = {
       choices: [
         {
           stableId: 'nothing-simulation-is-sufficient-for-all-accessibility-checking',
-          label: 'Nothing — simulation is sufficient for all accessibility checking',
+          label: 'Nothing. Simulation provides all the information needed for accessibility checks',
           isCorrect: false,
-          explanation: 'Simulation is a mathematical approximation. Real users provide nuance, reactions, and task completion data that filters cannot capture.',
+          explanation: 'A simulation applies a model. It cannot show how individual participants interpret the interface or complete its tasks.',
         },
         {
           stableId: 'real-task-completion-data-individual-nuance-and-practical-reacti',
-          label: 'Real task completion data, individual nuance, and practical reactions to design choices',
+          label: 'How individual participants interpret the design and complete its tasks',
           isCorrect: true,
-          explanation: 'Even occasional user testing significantly improves understanding beyond what any filter can show.',
+          explanation: 'User testing provides observations of participants\' task results, strategies, and reactions. A simulation cannot provide those observations.',
         },
         {
           stableId: 'more-accurate-color-values-for-the-design-system',
           label: 'More accurate color values for the design system',
           isCorrect: false,
-          explanation: 'User testing is about usability and comprehension, not about calibrating color values.',
+          explanation: 'Color measurement tools report color values. User testing shows how participants understand and use the interface.',
         },
         {
           stableId: 'faster-audit-turnaround',
           label: 'Faster audit turnaround',
           isCorrect: false,
-          explanation: 'User testing is typically slower than simulation — its value is depth of insight, not speed.',
+          explanation: 'Applying a simulation filter is faster than recruiting participants and running a test. The test provides observations of how participants use the interface.',
         },
       ],
     },

@@ -145,7 +145,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({ interacti
               </div>
               {answer && !isCorrect && (
                 <p style={{ fontSize: '0.7rem', color: 'var(--accent-cta)', marginTop: '0.25rem', margin: '0.25rem 0 0' }}>
-                  This mockup has this problem — "Needs work" is the expected answer.
+                  This mockup does not meet this check. Choose "Needs work."
                 </p>
               )}
             </div>
@@ -161,7 +161,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({ interacti
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          Review complete. This mockup needs work on all five checks — a realistic starting point.
+          Review complete. This mockup needs work on all five checks. Its chart relies on color, and its input shows an error border without a message.
         </p>
       )}
     </div>
