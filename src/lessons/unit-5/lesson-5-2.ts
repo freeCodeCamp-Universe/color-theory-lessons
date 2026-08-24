@@ -124,9 +124,9 @@ export const lesson5_2: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Accessibility applies to all meaningful visual elements, not just text — controls, icons, focus rings, and graphics all need contrast.',
-    'Input boundaries tell users what is interactive; if they are too faint, the UI becomes confusing.',
-    'Focus indicators are essential for keyboard navigation and must be clearly visible against the background.',
-    'Meaningful icons that carry status or action information must have sufficient contrast to be reliably read.',
+    'Visual information needed to identify controls, states, and meaningful graphics needs at least 3:1 contrast with adjacent colors.',
+    'If an input border is the only visual cue that identifies the control, it needs at least 3:1 contrast with the adjacent background.',
+    'A visible focus indicator shows sighted keyboard users which element has focus. An author-styled indicator needs at least 3:1 contrast with adjacent colors.',
+    'The parts needed to understand an icon without an equivalent visible text label need at least 3:1 contrast with adjacent colors.',
   ],
 };

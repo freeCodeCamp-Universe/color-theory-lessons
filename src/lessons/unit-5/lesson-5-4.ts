@@ -20,10 +20,10 @@ export const lesson5_4: LessonConfig = {
     { id: 'q3', prompt: 'A dashboard chart uses five series with different hues and a color legend. Which change lets readers identify each series without hue?', choices: [{ stableId: 'use-brighter-hues-with-higher-saturation', label: 'Use brighter, more saturated hues', isCorrect: false, explanation: 'Changing the hues still requires readers to match each series color with the legend.' }, { stableId: 'add-direct-labels-to-each-series-and-ensure-high-contrast-betwee', label: 'Place the series name next to each line or bar', isCorrect: true, explanation: 'Direct labels connect each series to its name without requiring readers to match colors with a legend.' }, { stableId: 'reduce-the-number-of-colors-to-three', label: 'Reduce the number of colors to three', isCorrect: false, explanation: 'Using fewer colors does not identify which color represents each series.' }, { stableId: 'use-a-tooltip-only-label-system', label: 'Show each series name only in a tooltip', isCorrect: false, explanation: 'A tooltip is unavailable until a reader points to or focuses the corresponding chart element.' }] },
   ],
   keyPoints: [
-    'Accessible patterns scale better than one-off fixes — define the pattern once and every instance benefits.',
-    'Links in body text should have an underline or other non-color cue to confirm interactivity.',
-    'Alerts should combine color tint, an icon, and structured message text — not background tint alone.',
-    'Chart palettes need direct labels or patterns to remain readable under CVD conditions.',
-    'System-level accessibility thinking connects color, structure, icon, text, and redundancy into reliable, repeatable design decisions.',
+    'A reusable pattern applies the same structure wherever a component appears; a one-off fix changes only one instance.',
+    'An underline or another persistent visual difference can identify a link in body text without relying on hue.',
+    'A service-status indicator can pair each colored dot with an icon or text label that identifies the status.',
+    'Direct labels or patterns can identify chart series without hue. Meaningful graphical parts need at least 3:1 contrast with adjacent colors.',
+    'Apply accessible cues to the form, link, service-status, or chart pattern so every component that uses it receives the repair.',
   ],
 };
