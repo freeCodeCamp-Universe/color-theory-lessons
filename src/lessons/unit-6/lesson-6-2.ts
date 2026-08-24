@@ -11,14 +11,14 @@ export const lesson6_2: LessonConfig = {
     { text: 'Text usually needs at least two levels. Primary text is used for headings and important labels. Secondary text is used for supporting information, captions, and metadata. Separate roles let headings and important labels stand out from supporting text.' },
     { text: 'Surfaces also need levels: the page background, the card surface on top of it, and sometimes a raised panel on top of the card. Differences in color, borders, shadows, or spacing can show where one surface ends and another begins.' },
     { text: 'Interactive roles need more than a single action color. A button also has hover, focus, pressed, and disabled states. Each state needs a visual treatment that communicates the button\'s current interaction state.' },
-    { text: 'In the role builder, assign colors to each semantic role. The live preview applies your choices to a card, a button, and three status badges. The validation panel reports text contrast and the hue difference between the warning and error colors.' },
+    { text: 'In the role builder, assign colors to each semantic role. The live preview applies them to a card, an action, and three status badges. Text labels and icons keep each status identifiable without color, while the colors reinforce its semantic role.' },
   ],
   challenge: {
-      prompt: 'Assign colors to all required semantic roles so the live preview shows clear hierarchy, readable text, and distinguishable status states.',
+      prompt: 'Assign colors to every semantic role. Create visible surface hierarchy, readable text, and status colors that differ in both hue and luminance. Labels and icons remain as non-color status cues.',
       hints: [
-        'Start with the surface and text colors. Check their contrast before adding action and status colors.',
-        'Choose success, warning, and error colors that remain distinguishable from one another.',
-        'Check: can you tell what is interactive vs informational vs structural?',
+        'Start with the page and card surfaces. Their contrast must reach the exercise threshold of 1.5:1.',
+        'Action and status text must reach the WCAG AAA contrast ratio of 7:1. The preview chooses black or white text, whichever has more contrast.',
+        'Every status pair must differ by at least 30 degrees of hue and 1.5:1 in relative luminance. These are course thresholds for practicing semantic color roles, not WCAG requirements.',
       ],
   },
   quizItems: [
