@@ -6,14 +6,14 @@ interface StateConfig {
   color: string;
   icon: string;
   label: string;
-  borderStyle: string;
+  borderPattern: 'solid' | 'dashed' | 'dotted';
 }
 
 const STATES: StateConfig[] = [
-  { name: 'Success', color: '#22c55e', icon: '✓', label: 'Success', borderStyle: '2px solid #22c55e' },
-  { name: 'Warning', color: '#f59e0b', icon: '⚠', label: 'Warning', borderStyle: '2px dashed #f59e0b' },
-  { name: 'Error',   color: '#ef4444', icon: '✕', label: 'Error',   borderStyle: '2px solid #ef4444' },
-  { name: 'Info',    color: '#3b82f6', icon: 'ℹ', label: 'Info',    borderStyle: '2px dotted #3b82f6' },
+  { name: 'Success', color: '#22c55e', icon: '✓', label: 'Success', borderPattern: 'solid' },
+  { name: 'Warning', color: '#f59e0b', icon: '⚠', label: 'Warning', borderPattern: 'dashed' },
+  { name: 'Error',   color: '#ef4444', icon: '✕', label: 'Error',   borderPattern: 'solid' },
+  { name: 'Info',    color: '#3b82f6', icon: 'ℹ', label: 'Info',    borderPattern: 'dotted' },
 ];
 
 type CueKey = 'icon' | 'label' | 'border';
@@ -21,6 +21,19 @@ type CueKey = 'icon' | 'label' | 'border';
 interface StateWorkshopToolProps {
   interactive?: boolean;
   onComplete?: () => void;
+}
+
+function hasDistinctNonColorTreatments(cues: Record<string, Record<CueKey, boolean>>) {
+  const treatments = STATES.map((state) => {
+    const stateCues = cues[state.name];
+    return [
+      stateCues.icon ? `icon:${state.icon}` : '',
+      stateCues.label ? `label:${state.label}` : '',
+      stateCues.border ? `border:${state.borderPattern}` : '',
+    ].filter(Boolean).join('|');
+  });
+
+  return treatments.every(Boolean) && new Set(treatments).size === STATES.length;
 }
 
 export const StateWorkshopTool = memo(function StateWorkshopTool({ interactive = false, onComplete }: StateWorkshopToolProps) {
@@ -36,10 +49,7 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({ interactive =
         ...prev,
         [stateName]: { ...prev[stateName], [cue]: !prev[stateName][cue] },
       };
-      const allHaveOneCue = STATES.every((s) =>
-        Object.values(next[s.name]).some(Boolean),
-      );
-      if (allHaveOneCue && !completed) {
+      if (hasDistinctNonColorTreatments(next) && !completed) {
         setCompleted(true);
         onComplete?.();
       }
@@ -53,7 +63,7 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({ interactive =
 
       {interactive && (
         <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.6rem' }}>
-          Add at least one non-color cue to each state: icon, label, or border style.
+          Give each state a different non-color treatment using an icon, label, or border style.
         </p>
       )}
 
@@ -81,7 +91,7 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({ interactive =
                 padding: '0.35rem 0.5rem',
                 borderRadius: 'var(--radius-sm)',
                 background: `color-mix(in srgb, ${state.color} 15%, transparent)`,
-                border: stateCues.border ? state.borderStyle : `1px solid ${state.color}`,
+                border: stateCues.border ? `2px ${state.borderPattern} ${state.color}` : `1px solid ${state.color}`,
                 marginBottom: '0.5rem',
                 minHeight: 32,
               }}>
@@ -138,7 +148,7 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({ interactive =
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          Each state now has a selected non-color cue.
+          Each state now has a distinct non-color treatment.
         </p>
       )}
     </div>
