@@ -124,10 +124,10 @@ export const lesson5_3: LessonConfig = {
     },
   ],
   keyPoints: [
-    'WCAG 1.4.1 requires that color is not the only means of conveying information — color should support meaning, not carry it alone.',
-    'Semantic states (success, warning, error, info) should use at least two channels: color plus icon, label, or border style.',
-    'The strongest form validation combines a colored border, an error icon, and a descriptive text message.',
-    'Direct labels on chart series eliminate the need for color-coded legends. Pattern fills make bars or areas distinguishable without hue.',
-    'Redundancy means carrying meaning through two or more signals — a robust design remains clear even if color is removed.',
+    'WCAG 1.4.1 requires another visual way to convey information that color communicates.',
+    'Pair color-coded semantic states with a non-color cue such as an icon, label, shape, or pattern.',
+    'Form validation can combine a colored border with an error icon and text that explains how to correct the error.',
+    'Direct labels and patterns can identify chart series without requiring users to match hues with a legend.',
+    'Redundancy means communicating the same information with more than one visual cue.',
   ],
 };
