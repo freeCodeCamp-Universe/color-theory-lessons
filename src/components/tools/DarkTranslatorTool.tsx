@@ -1,5 +1,5 @@
-import { memo, useState } from 'react';
-import { hexToRgb, contrastRatioWcag } from '../../utils/color.ts';
+import { memo, useEffect, useRef, useState } from 'react';
+import { hexToHsl, hexToRgb, contrastRatioWcag } from '../../utils/color.ts';
 import shellStyles from './ToolShell.module.css';
 
 interface DarkTranslatorToolProps {
@@ -8,6 +8,10 @@ interface DarkTranslatorToolProps {
 }
 
 type RoleKey = 'page-bg' | 'surface' | 'primary-text' | 'secondary-text' | 'action' | 'success' | 'error';
+
+const TEXT_CONTRAST_MINIMUM = 4.5;
+const STATUS_HUE_DIFFERENCE_MINIMUM = 30;
+const STATUS_LUMINANCE_CONTRAST_MINIMUM = 1.5;
 
 const LIGHT_THEME: Record<RoleKey, string> = {
   'page-bg': '#f9fafb',
@@ -30,18 +34,29 @@ const DARK_DEFAULTS: Record<RoleKey, string> = {
 };
 
 function getContrast(fg: string, bg: string): number {
+  if (!isValidHex(fg) || !isValidHex(bg)) return 1;
   try { return contrastRatioWcag(hexToRgb(fg), hexToRgb(bg)); } catch { return 1; }
 }
 
 function isValidHex(h: string) { return /^#[0-9a-fA-F]{6}$/.test(h); }
 
+function getHueDifference(first: string, second: string) {
+  const firstHsl = hexToHsl(first);
+  const secondHsl = hexToHsl(second);
+  if (firstHsl.s === 0 || secondHsl.s === 0) return null;
+
+  const difference = Math.abs(firstHsl.h - secondHsl.h);
+  return Math.min(difference, 360 - difference);
+}
+
 export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive = false, onComplete }: DarkTranslatorToolProps) {
   const [dark, setDark] = useState<Record<RoleKey, string>>(DARK_DEFAULTS);
   const [preview, setPreview] = useState<'light' | 'dark'>('light');
-  const [completed, setCompleted] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   function update(key: RoleKey, val: string) {
     if (!interactive) return;
+    setHasInteracted(true);
     setDark(prev => ({ ...prev, [key]: val }));
   }
 
@@ -50,17 +65,35 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive
   const secondaryContrast = getContrast(d['secondary-text'], d['surface']);
   const surfaceContrast = getContrast(d['surface'], d['page-bg']);
   const actionContrast = getContrast('#ffffff', d['action']);
+  const successContrast = getContrast('#ffffff', d.success);
+  const errorContrast = getContrast('#ffffff', d.error);
+  const semanticContrast = getContrast(d.success, d.error);
+  const successValid = isValidHex(d.success);
+  const errorValid = isValidHex(d.error);
+  const semanticRolesValid = successValid && errorValid;
+  const semanticHueDifference = semanticRolesValid ? getHueDifference(d.success, d.error) : null;
 
   const primaryOk = primaryContrast >= 4.5;
   const secondaryOk = secondaryContrast >= 3.0;
   const surfaceOk = surfaceContrast >= 1.1;
   const actionOk = actionContrast >= 4.5;
-  const allPass = primaryOk && secondaryOk && surfaceOk && actionOk;
+  const successOk = successValid && successContrast >= TEXT_CONTRAST_MINIMUM;
+  const errorOk = errorValid && errorContrast >= TEXT_CONTRAST_MINIMUM;
+  const semanticHueOk = semanticHueDifference !== null
+    && semanticHueDifference >= STATUS_HUE_DIFFERENCE_MINIMUM;
+  const semanticLuminanceOk = semanticRolesValid
+    && semanticContrast >= STATUS_LUMINANCE_CONTRAST_MINIMUM;
+  const allPass = primaryOk && secondaryOk && surfaceOk && actionOk
+    && semanticRolesValid && successOk && errorOk && semanticHueOk && semanticLuminanceOk;
+  const completed = interactive && hasInteracted && allPass;
+  const wasCompleted = useRef(false);
 
-  if (interactive && allPass && !completed) {
-    setCompleted(true);
-    onComplete?.();
-  }
+  useEffect(() => {
+    if (completed && !wasCompleted.current) {
+      onComplete?.();
+    }
+    wasCompleted.current = completed;
+  }, [completed, onComplete]);
 
   const roles = preview === 'light' ? LIGHT_THEME : dark;
   const bg = isValidHex(roles['page-bg']) ? roles['page-bg'] : '#1e293b';
@@ -72,6 +105,17 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive
   const err = isValidHex(roles['error']) ? roles['error'] : '#ef4444';
 
   const KEYS = Object.keys(DARK_DEFAULTS) as RoleKey[];
+  const checks: { label: string; pass: boolean; ratio?: number }[] = [
+    { label: 'Primary text / page-bg (4.5:1)', pass: primaryOk, ratio: primaryContrast },
+    { label: 'Secondary text / surface (3:1)', pass: secondaryOk, ratio: secondaryContrast },
+    { label: 'Surface ≠ page-bg (1.1:1)', pass: surfaceOk, ratio: surfaceContrast },
+    { label: 'White / action (4.5:1)', pass: actionOk, ratio: actionContrast },
+    { label: 'Valid success color', pass: successValid },
+    { label: 'Valid error color', pass: errorValid },
+    { label: 'White / success (4.5:1)', pass: successOk, ratio: successContrast },
+    { label: 'White / error (4.5:1)', pass: errorOk, ratio: errorContrast },
+    { label: 'Success / error luminance (1.5:1)', pass: semanticLuminanceOk, ratio: semanticContrast },
+  ];
 
   return (
     <div className={shellStyles.shell}>
@@ -152,19 +196,20 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive
 
           {/* Dark mode validation */}
           <p style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.25rem' }}>DARK CHECKS</p>
-          {[
-            { label: 'Primary text / page-bg (4.5:1)', pass: primaryOk, ratio: primaryContrast },
-            { label: 'Secondary text / surface (3:1)', pass: secondaryOk, ratio: secondaryContrast },
-            { label: 'Surface ≠ page-bg (1.1:1)', pass: surfaceOk, ratio: surfaceContrast },
-            { label: 'White / action (4.5:1)', pass: actionOk, ratio: actionContrast },
-          ].map(({ label, pass, ratio }) => (
+          {checks.map(({ label, pass, ratio }) => (
             <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', padding: '0.15rem 0' }}>
               <span style={{ color: 'var(--primary-foreground)' }}>{label}</span>
               <span style={{ color: pass ? '#22c55e' : '#ef4444', fontFamily: 'var(--font-mono)' }}>
-                {pass ? '✓' : '✗'} {ratio.toFixed(1)}:1
+                {pass ? '✓' : '✗'} {ratio === undefined ? '' : `${ratio.toFixed(1)}:1`}
               </span>
             </div>
           ))}
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', padding: '0.15rem 0' }}>
+            <span style={{ color: 'var(--primary-foreground)' }}>Success / error hues (30°)</span>
+            <span style={{ color: semanticHueOk ? '#22c55e' : '#ef4444', fontFamily: 'var(--font-mono)' }}>
+              {semanticHueOk ? '✓' : '✗'} {semanticHueDifference === null ? 'invalid' : `${semanticHueDifference}°`}
+            </span>
+          </div>
         </div>
       </div>
 
