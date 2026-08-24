@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
+  ACCESSIBILITY_RESCUE_SESSION_PREFIX,
   CHANNEL_PREDICTION_SESSION_PREFIX,
   clearMilestoneSessions,
   loadState,
@@ -146,6 +147,7 @@ describe('clearMilestoneSessions', () => {
     sessionStorage.setItem(`${CHANNEL_PREDICTION_SESSION_PREFIX}milestone-2:1`, 'challenge state');
     sessionStorage.setItem(`${THEME_FROM_SCRATCH_SESSION_PREFIX}milestone-3:1`, 'challenge state');
     sessionStorage.setItem(`${SIMULATION_SPOTTER_SESSION_PREFIX}milestone-4:1`, 'challenge state');
+    sessionStorage.setItem(`${ACCESSIBILITY_RESCUE_SESSION_PREFIX}milestone-5:1`, 'challenge state');
     sessionStorage.setItem('color-theory-course-lesson-session:u1-l1', 'lesson state');
     sessionStorage.setItem('unrelated-key', 'unrelated state');
 
@@ -156,6 +158,7 @@ describe('clearMilestoneSessions', () => {
     expect(sessionStorage.getItem(`${CHANNEL_PREDICTION_SESSION_PREFIX}milestone-2:1`)).toBeNull();
     expect(sessionStorage.getItem(`${THEME_FROM_SCRATCH_SESSION_PREFIX}milestone-3:1`)).toBeNull();
     expect(sessionStorage.getItem(`${SIMULATION_SPOTTER_SESSION_PREFIX}milestone-4:1`)).toBeNull();
+    expect(sessionStorage.getItem(`${ACCESSIBILITY_RESCUE_SESSION_PREFIX}milestone-5:1`)).toBeNull();
     expect(sessionStorage.getItem('color-theory-course-lesson-session:u1-l1')).toBe('lesson state');
     expect(sessionStorage.getItem('unrelated-key')).toBe('unrelated state');
   });
