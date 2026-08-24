@@ -1,3 +1,4 @@
+import { StrictMode } from 'react';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { InclusiveReviewTool } from './InclusiveReviewTool.tsx';
@@ -40,7 +41,11 @@ describe('InclusiveReviewTool', () => {
 
   it('completes only after every incorrect assessment is revised', () => {
     const onComplete = vi.fn();
-    render(<InclusiveReviewTool interactive onComplete={onComplete} />);
+    render(
+      <StrictMode>
+        <InclusiveReviewTool interactive onComplete={onComplete} />
+      </StrictMode>,
+    );
 
     screen.getAllByRole('button', { name: 'Pass' }).forEach((button) => fireEvent.click(button));
 
