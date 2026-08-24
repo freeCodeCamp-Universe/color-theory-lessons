@@ -41,7 +41,7 @@ function palettePasses(colors: string[]) {
     getWeakPairs(colors.map(simulateDeuteranopia)).length === 0;
 }
 
-function ChartBars({ colors, simulated, showLabels }: { colors: string[]; simulated: boolean; showLabels: boolean }) {
+function ChartBars({ colors, simulated }: { colors: string[]; simulated: boolean }) {
   const displayColors = simulated ? colors.map(simulateDeuteranopia) : colors;
   const maxVal = 100;
   return (
@@ -60,30 +60,58 @@ function ChartBars({ colors, simulated, showLabels }: { colors: string[]; simula
               );
             })}
           </div>
-          {showLabels && (
-            <div style={{ display: 'flex', gap: 1, alignItems: 'flex-start', height: 48 }}>
-              {SERIES.map((name) => (
-                <span
-                  key={name}
-                  data-testid={`direct-label-${month}-${name}`}
-                  style={{
-                    width: 8,
-                    color: 'var(--primary-foreground)',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.5rem',
-                    lineHeight: 1,
-                    writingMode: 'vertical-rl',
-                    transform: 'rotate(180deg)',
-                  }}
-                >
-                  {name}
-                </span>
-              ))}
-            </div>
-          )}
           <span style={{ fontSize: '0.6rem', color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>{month}</span>
         </div>
       ))}
+    </div>
+  );
+}
+
+function ChartDataTable({ colors, simulated }: { colors: string[]; simulated: boolean }) {
+  const displayColors = simulated ? colors.map(simulateDeuteranopia) : colors;
+  const viewName = simulated ? 'Deuteranopia simulation' : 'Normal view';
+
+  return (
+    <div style={{ overflowX: 'auto', marginTop: '0.75rem' }}>
+      <table
+        aria-label={`Chart data in ${viewName.toLowerCase()}`}
+        style={{ width: '100%', minWidth: 400, borderCollapse: 'collapse', fontFamily: 'var(--font-mono)', fontSize: '0.72rem' }}
+      >
+        <caption style={{ textAlign: 'left', color: 'var(--primary-foreground)', fontWeight: 700, marginBottom: '0.4rem' }}>
+          Chart data · {viewName}
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col" style={{ textAlign: 'left', padding: '0.35rem', borderBottom: '1px solid var(--border)' }}>Month</th>
+            {SERIES.map((name, index) => (
+              <th key={name} scope="col" style={{ textAlign: 'center', padding: '0.35rem', borderBottom: '1px solid var(--border)' }}>
+                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', whiteSpace: 'nowrap' }}>
+                  <span
+                    aria-hidden="true"
+                    style={{ width: 10, height: 10, background: displayColors[index], borderRadius: 2, flexShrink: 0 }}
+                  />
+                  {name}
+                </span>
+                <span style={{ display: 'block', marginTop: 2, color: 'var(--muted)', fontSize: '0.65rem' }}>
+                  {displayColors[index].toUpperCase()}
+                </span>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {MONTHS.map((month, monthIndex) => (
+            <tr key={month}>
+              <th scope="row" style={{ textAlign: 'left', padding: '0.35rem', borderBottom: '1px solid var(--border)' }}>{month}</th>
+              {SERIES.map((name, seriesIndex) => (
+                <td key={name} style={{ textAlign: 'center', padding: '0.35rem', borderBottom: '1px solid var(--border)' }}>
+                  {CHART_DATA[monthIndex][seriesIndex]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -98,11 +126,11 @@ function isValidHex(h: string) { return /^#[0-9a-fA-F]{6}$/.test(h); }
 export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false, onComplete }: ChartTunerToolProps) {
   const [colors, setColors] = useState<string[]>(DEFAULTS);
   const [simulated, setSimulated] = useState(false);
-  const [showLabels, setShowLabels] = useState(false);
+  const [showDataTable, setShowDataTable] = useState(false);
   const [completed, setCompleted] = useState(false);
 
-  function completeIfReady(nextColors: string[], nextShowLabels: boolean) {
-    if (!completed && nextShowLabels && palettePasses(nextColors)) {
+  function completeIfReady(nextColors: string[], nextShowDataTable: boolean) {
+    if (!completed && nextShowDataTable && palettePasses(nextColors)) {
       setCompleted(true);
       onComplete?.();
     }
@@ -113,12 +141,12 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
     const next = [...colors];
     next[i] = val;
     setColors(next);
-    completeIfReady(next, showLabels);
+    completeIfReady(next, showDataTable);
   }
 
-  function toggleLabels(checked: boolean) {
+  function toggleDataTable(checked: boolean) {
     if (!interactive || completed) return;
-    setShowLabels(checked);
+    setShowDataTable(checked);
     completeIfReady(colors, checked);
   }
 
@@ -156,24 +184,28 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
         </button>
       </div>
 
-      <ChartBars colors={colors} simulated={simulated} showLabels={showLabels} />
+      <ChartBars colors={colors} simulated={simulated} />
 
-      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginTop: '0.75rem' }}>
+      <div role="group" aria-label="Series color controls" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '0.5rem', marginTop: '0.75rem' }}>
         {SERIES.map((name, i) => (
-          <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem' }}>
-            <div style={{ width: 12, height: 12, background: simulated ? simColors[i] : colors[i], borderRadius: 2, flexShrink: 0 }} />
-            <span style={{ color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>{name}</span>
+          <label
+            key={name}
+            style={{ display: 'grid', gridTemplateColumns: '32px 1fr', gap: '0.15rem 0.5rem', alignItems: 'center', padding: '0.5rem', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', cursor: interactive ? 'pointer' : 'default' }}
+          >
             {interactive && (
               <input
                 type="color"
                 value={isValidHex(colors[i]) ? colors[i] : '#000000'}
                 onChange={e => update(i, e.target.value)}
-                style={{ width: 22, height: 22, padding: 0, border: 'none', cursor: 'pointer', background: 'transparent' }}
-                title={`Pick color for ${name}`}
-                aria-label={`Pick color for ${name}`}
+                style={{ gridRow: '1 / span 2', width: 32, height: 32, padding: 0, border: '1px solid var(--border)', borderRadius: 4, cursor: 'pointer', background: 'transparent' }}
+                aria-label={`Change ${name} color`}
               />
             )}
-          </div>
+            <span style={{ color: 'var(--primary-foreground)', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700 }}>{name}</span>
+            <span style={{ color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: '0.68rem' }}>
+              {interactive ? `Change color · ${colors[i].toUpperCase()}` : (simulated ? simColors[i] : colors[i]).toUpperCase()}
+            </span>
+          </label>
         ))}
       </div>
 
@@ -181,13 +213,15 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
         <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.75rem', fontSize: '0.78rem', color: 'var(--primary-foreground)' }}>
           <input
             type="checkbox"
-            checked={showLabels}
+            checked={showDataTable}
             disabled={completed}
-            onChange={(event) => toggleLabels(event.target.checked)}
+            onChange={(event) => toggleDataTable(event.target.checked)}
           />
-          Add direct labels to every bar
+          Show the chart data table
         </label>
       )}
+
+      {showDataTable && <ChartDataTable colors={colors} simulated={simulated} />}
 
       {interactive && (
         <div style={{ marginTop: '0.5rem', fontSize: '0.78rem', color: 'var(--muted)' }}>
@@ -198,17 +232,17 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
                 ...weakSimulated.map(([a, b]) => `${SERIES[a]}/${SERIES[b]} under simulation`),
               ].join('; ')}
             </span>
-          ) : showLabels ? (
-            <span style={{ color: 'var(--accent-success)' }}>✓ Palette passes both views and direct labels identify every series</span>
+          ) : showDataTable ? (
+            <span style={{ color: 'var(--accent-success)' }}>✓ Palette passes both views and the data table identifies every bar</span>
           ) : (
-            <span style={{ color: 'var(--accent-cta)' }}>Palette passes both views. Add direct labels so the bars do not rely on color alone.</span>
+            <span style={{ color: 'var(--accent-cta)' }}>Palette passes both views. Show the data table so the bars do not rely on color alone.</span>
           )}
         </div>
       )}
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          The palette passes normal and CVD views, and direct labels identify every series.
+          The palette passes normal and CVD views, and the data table identifies every bar.
         </p>
       )}
     </div>
