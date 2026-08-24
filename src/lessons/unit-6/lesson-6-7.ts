@@ -48,7 +48,7 @@ export const lesson6_7: LessonConfig = {
       prompt: 'What does a consistency audit check?',
       choices: [
         { stableId: 'whether-all-hex-values-are-unique', label: 'Whether all hex values are unique', isCorrect: false, explanation: 'Roles can share a hex value when their meanings are compatible. The audit checks how roles and tokens are used.' },
-        { stableId: 'whether-roles-and-tokens-are-applied-consistently-one-role-per-m', label: 'Whether each role has one meaning and token changes propagate across contexts', isCorrect: true, explanation: 'Each role should have one meaning, components should reference shared tokens, and token changes should reach every component that uses them.' },
+        { stableId: 'whether-roles-and-tokens-are-applied-consistently-one-role-per-m', label: 'Whether each meaning has one role, each role has one meaning, and token changes propagate across contexts', isCorrect: true, explanation: 'Each meaning should map to one role, each role should keep one meaning, and token changes should reach every component that uses them.' },
         { stableId: 'whether-the-palette-uses-fewer-than-ten-colors', label: 'Whether the palette uses fewer than ten colors', isCorrect: false, explanation: 'Color count is not what a consistency audit measures.' },
         { stableId: 'whether-the-design-matches-a-trend-report', label: 'Whether the design matches a trend report', isCorrect: false, explanation: 'Trend alignment is not an aspect of consistency auditing.' },
       ],
