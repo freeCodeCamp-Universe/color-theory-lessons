@@ -31,9 +31,9 @@ export function ChallengeRenderer({ challengeType, onComplete, sessionKey }: Cha
     case 'channel-prediction':
       return <ChannelPredictionChallenge onComplete={onComplete} sessionKey={sessionKey} />;
     case 'theme-from-scratch':
-      return <ThemeFromScratchChallenge onComplete={onComplete} />;
+      return <ThemeFromScratchChallenge onComplete={onComplete} sessionKey={sessionKey} />;
     case 'simulation-spotter':
-      return <SimulationSpotterChallenge onComplete={onComplete} />;
+      return <SimulationSpotterChallenge onComplete={onComplete} sessionKey={sessionKey} />;
     case 'accessibility-rescue':
       return <AccessibilityRescueChallenge onComplete={onComplete} />;
     case 'semantic-audit':

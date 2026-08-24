@@ -32,7 +32,7 @@ const EXAMPLES: Example[] = [
         ))}
       </div>
     ),
-    correctFeedback: 'Correct — color-only. Adding a label (Error / Active / Warning) would fix this.',
+    correctFeedback: 'Correct. Color is the only status cue. Labels such as Error, Active, and Warning would identify each status.',
     incorrectFeedback: '',
   },
   {
@@ -42,7 +42,7 @@ const EXAMPLES: Example[] = [
     visual: (
       <input
         readOnly
-        value="bad-input"
+        value="Sample input"
         style={{
           padding: '0.25rem 0.4rem', fontSize: '0.78rem',
           border: '2px solid #ef4444', borderRadius: 3, background: '#fff', color: '#111',
@@ -50,7 +50,7 @@ const EXAMPLES: Example[] = [
         }}
       />
     ),
-    correctFeedback: 'Correct — color-only. An error icon and text message would fix this.',
+    correctFeedback: 'Correct. The red border is the only error cue. An error icon and message would identify the field and explain the problem.',
     incorrectFeedback: '',
   },
   {
@@ -58,23 +58,42 @@ const EXAMPLES: Example[] = [
     name: 'Chart series',
     isColorOnly: true,
     visual: (
-      <div style={{ display: 'flex', gap: '0.3rem', alignItems: 'flex-end', height: 44 }}>
-        {[
-          { h: 80, color: '#22c55e' },
-          { h: 55, color: '#ef4444' },
-          { h: 70, color: '#f59e0b' },
-        ].map((bar) => (
-          <div
-            key={bar.color}
-            style={{
-              flex: 1, height: `${bar.h}%`, background: bar.color,
-              borderRadius: '3px 3px 0 0',
-            }}
-          />
-        ))}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+        <div style={{ display: 'flex', gap: '0.3rem', alignItems: 'flex-end', height: 44 }}>
+          {[
+            { h: 80, color: '#22c55e' },
+            { h: 55, color: '#ef4444' },
+            { h: 70, color: '#f59e0b' },
+          ].map((bar) => (
+            <div
+              key={bar.color}
+              style={{
+                flex: 1, height: `${bar.h}%`, background: bar.color,
+                borderRadius: '3px 3px 0 0',
+              }}
+            />
+          ))}
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', fontSize: '0.68rem' }}>
+          {[
+            { label: 'Series A', color: '#22c55e' },
+            { label: 'Series B', color: '#ef4444' },
+            { label: 'Series C', color: '#f59e0b' },
+          ].map((series) => (
+            <span key={series.label} style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+              <span
+                style={{
+                  width: 10, height: 10, background: series.color,
+                  display: 'inline-block',
+                }}
+              />
+              {series.label}
+            </span>
+          ))}
+        </div>
       </div>
     ),
-    correctFeedback: 'Correct — color-only. Direct labels or patterns on each bar would fix this.',
+    correctFeedback: 'Correct. Color is the only series cue. Direct labels or patterns would distinguish the series.',
     incorrectFeedback: '',
   },
   {
@@ -91,7 +110,7 @@ const EXAMPLES: Example[] = [
       </p>
     ),
     correctFeedback: '',
-    incorrectFeedback: 'Not quite — this link has an underline as a backup cue, so it is not color-only.',
+    incorrectFeedback: 'This link also has an underline, so viewers do not need its blue hue to identify it as a link.',
   },
   {
     id: 'error-message',
@@ -114,7 +133,7 @@ const EXAMPLES: Example[] = [
       </div>
     ),
     correctFeedback: '',
-    incorrectFeedback: 'Not quite — this one has an error icon and text message backing up the color.',
+    incorrectFeedback: 'The icon and message identify the error even if the red hue is hard to perceive.',
   },
   {
     id: 'selected-tab',
@@ -140,7 +159,7 @@ const EXAMPLES: Example[] = [
       </div>
     ),
     correctFeedback: '',
-    incorrectFeedback: 'Not quite — the selected tab has bold text and a bottom border as backup cues.',
+    incorrectFeedback: 'Bold text and a bottom border identify the selected tab without color.',
   },
 ];
 
@@ -180,7 +199,7 @@ export const ColorOnlyDetectorTool = memo(function ColorOnlyDetectorTool({ inter
 
       {interactive && (
         <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.6rem' }}>
-          Click all examples where meaning depends <strong>only</strong> on color with no backup cue.
+          Select every example where hue is the <strong>only</strong> visual cue that communicates meaning.
           ({identified.size}/{PROBLEM_COUNT} found)
         </p>
       )}
@@ -227,7 +246,7 @@ export const ColorOnlyDetectorTool = memo(function ColorOnlyDetectorTool({ inter
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          All color-only problems identified. Every one of them needs a backup cue.
+          You found all three examples that rely on hue alone. Each one needs a label, icon, pattern, or another non-color cue.
         </p>
       )}
     </div>

@@ -32,23 +32,13 @@
 
 .row {
   display: grid;
-  grid-template-columns: 70px auto 1fr 160px;
+  grid-template-columns: 70px auto 1fr;
   gap: var(--spacing-xs);
   align-items: center;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 0.45rem;
-}
-
-@media (max-width: 860px) {
-  .row {
-    grid-template-columns: 70px auto 1fr;
-  }
-
-  .select {
-    grid-column: 1 / -1;
-  }
 }
 
 .flag {
@@ -84,6 +74,7 @@
 }
 
 .select {
+  grid-column: 1 / -1;
   width: 100%;
   background: var(--primary-background);
   color: var(--primary-foreground);
@@ -91,6 +82,11 @@
   border-radius: var(--radius-sm);
   font-size: 0.74rem;
   padding: 0.3rem;
+}
+
+.select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .status {

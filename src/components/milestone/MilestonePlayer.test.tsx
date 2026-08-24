@@ -372,6 +372,88 @@ describe('MilestonePlayer', () => {
       });
     });
 
+    it.each([
+      { correctAnswers: 0, score: 4, passed: false },
+      { correctAnswers: 1, score: 5, passed: true },
+      { correctAnswers: 2, score: 6, passed: true },
+    ])('handles Milestone 3 score $score at its pass boundary', async ({ correctAnswers, score, passed }) => {
+      const milestone = getMilestoneById('milestone-3');
+      if (!milestone) throw new Error('Milestone 3 configuration was not found');
+      renderMilestone(milestone);
+
+      fireEvent.click(screen.getByRole('button', { name: 'complete test challenge' }));
+      expect(screen.getByText('4 of 4 points earned')).toBeInTheDocument();
+      expect(screen.getByText('Your text, surface, and accent color pairs passed all six checks.')).toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: 'next part →' }));
+
+      for (let index = 0; index < 3; index += 1) {
+        const choices = screen.getAllByRole('radio');
+        fireEvent.click(choices[index < correctAnswers ? 0 : 1]);
+        fireEvent.click(screen.getByRole('button', { name: 'check' }));
+        fireEvent.click(screen.getByRole('button', {
+          name: index < 2 ? 'next →' : 'finish milestone →',
+        }));
+      }
+
+      expect(screen.getByText(`${score} of 7 points.`, { exact: false })).toBeInTheDocument();
+      expect(screen.getByText(passed ? 'milestone passed' : 'milestone not passed')).toBeInTheDocument();
+      expect(screen.queryByRole('link', { name: 'continue to Unit 4 →' })).toBe(
+        passed ? screen.getByRole('link', { name: 'continue to Unit 4 →' }) : null,
+      );
+      if (passed) {
+        expect(screen.getByRole('link', { name: 'continue to Unit 4 →' })).toHaveAttribute(
+          'href',
+          '/lesson/u4-l1',
+        );
+      }
+
+      await waitFor(() => {
+        const completed = screen.getByTestId('completed-milestones').textContent ?? '';
+        expect(completed.includes('milestone-3')).toBe(passed);
+      });
+    });
+
+    it.each([
+      { correctAnswers: 0, score: 4, passed: false },
+      { correctAnswers: 1, score: 5, passed: true },
+      { correctAnswers: 2, score: 6, passed: true },
+    ])('handles Milestone 4 score $score at its pass boundary', async ({ correctAnswers, score, passed }) => {
+      const milestone = getMilestoneById('milestone-4');
+      if (!milestone) throw new Error('Milestone 4 configuration was not found');
+      renderMilestone(milestone);
+
+      fireEvent.click(screen.getByRole('button', { name: 'complete test challenge' }));
+      expect(screen.getByText('4 of 4 points earned')).toBeInTheDocument();
+      expect(screen.getByText('You found all three color-only designs and selected a label, icon, or pattern for each one.')).toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: 'next part →' }));
+
+      for (let index = 0; index < 3; index += 1) {
+        const choices = screen.getAllByRole('radio');
+        fireEvent.click(choices[index < correctAnswers ? 0 : 1]);
+        fireEvent.click(screen.getByRole('button', { name: 'check' }));
+        fireEvent.click(screen.getByRole('button', {
+          name: index < 2 ? 'next →' : 'finish milestone →',
+        }));
+      }
+
+      expect(screen.getByText(`${score} of 7 points.`, { exact: false })).toBeInTheDocument();
+      expect(screen.getByText(passed ? 'milestone passed' : 'milestone not passed')).toBeInTheDocument();
+      expect(screen.queryByRole('link', { name: 'continue to Unit 5 →' })).toBe(
+        passed ? screen.getByRole('link', { name: 'continue to Unit 5 →' }) : null,
+      );
+      if (passed) {
+        expect(screen.getByRole('link', { name: 'continue to Unit 5 →' })).toHaveAttribute(
+          'href',
+          '/lesson/u5-l1',
+        );
+      }
+
+      await waitFor(() => {
+        const completed = screen.getByTestId('completed-milestones').textContent ?? '';
+        expect(completed.includes('milestone-4')).toBe(passed);
+      });
+    });
+
     it('moves focus when the learner advances to a new phase or question', () => {
       renderMilestone(scoredMilestone);
       fireEvent.click(screen.getByRole('button', { name: 'complete test challenge' }));

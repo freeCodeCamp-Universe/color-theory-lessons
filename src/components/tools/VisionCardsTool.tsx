@@ -6,7 +6,7 @@ interface CardData {
   tint: string;
   description: string;
   risk: string;
-  colors: string;
+  colorEffect: string;
 }
 
 const CARDS: CardData[] = [
@@ -14,49 +14,49 @@ const CARDS: CardData[] = [
     name: 'Protanopia',
     tint: '#ff6b6b',
     description:
-      'Reduced or absent red-sensitive cone response. Reds appear very dark or muted; red-green distinctions are weakest.',
+      'Loss of function from the L-cone photopigment. Red-green distinctions are harder to make, and reds can appear darker.',
     risk: 'Status systems using red/green chips with no labels.',
-    colors: 'Red, orange, some browns.',
+    colorEffect: 'Some red and green shades look alike, and red can appear darker.',
   },
   {
     name: 'Protanomaly',
     tint: '#ff9999',
     description:
-      'Reduced red cone sensitivity. Red-green distinctions are weakened but not absent.',
+      'Altered L-cone photopigment sensitivity. Some red-green distinctions are harder to make, and reds can appear greener and less bright.',
     risk: 'Subtle tonal differences in red-green areas, such as chart series.',
-    colors: 'Red and adjacent hues.',
+    colorEffect: 'Some red and green shades look alike, and red can appear greener and less bright.',
   },
   {
     name: 'Deuteranopia',
     tint: '#6bcb77',
     description:
-      'Absent green-sensitive cone response. Green and red become hard to tell apart; this is the most common severe type.',
+      'Loss of function from the M-cone photopigment. Red-green distinctions are harder to make.',
     risk: 'Red-green success/error states, traffic-light color systems.',
-    colors: 'Green, red, and orange.',
+    colorEffect: 'Red and green can be difficult or impossible to distinguish.',
   },
   {
     name: 'Deuteranomaly',
     tint: '#99d9a0',
     description:
-      'Reduced green cone sensitivity. The most common form of CVD. Red-green distinctions are weakened.',
+      'Altered M-cone photopigment sensitivity. It is the most common inherited type of color vision deficiency and makes some red-green distinctions harder.',
     risk: 'Maps and charts using red/green with no direct labels.',
-    colors: 'Green and red hues.',
+    colorEffect: 'Some green shades can appear more red.',
   },
   {
     name: 'Tritanopia',
     tint: '#4d9de0',
     description:
-      'Absent or reduced blue-sensitive cone response. Blue and yellow become hard to tell apart.',
-    risk: 'Blue-heavy UI with yellow warnings or highlights.',
-    colors: 'Blue and yellow.',
+      'Loss of function from the S-cone photopigment. Several blue-yellow color distinctions are harder to make.',
+    risk: 'Warnings that rely on yellow against blue or green without text or icons.',
+    colorEffect: 'Blue can be confused with green, purple with red, and yellow with pink.',
   },
   {
     name: 'Achromatopsia',
     tint: '#aaaaaa',
     description:
-      'Rare condition: very limited or absent cone function. Only luminance (lightness) is perceived.',
+      'Achromatopsia reduces color discrimination and also affects visual acuity and light sensitivity. In the complete form, all three cone types lack function.',
     risk: 'Any interface relying on hue for meaning without sufficient lightness contrast.',
-    colors: 'All hues appear as shades of gray.',
+    colorEffect: 'Complete achromatopsia removes color discrimination; incomplete forms retain some.',
   },
 ];
 
@@ -97,7 +97,7 @@ export const VisionCardsTool = memo(function VisionCardsTool({ interactive = fal
 
       {!interactive && (
         <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.75rem' }}>
-          Expand cards to learn about each type of color vision deficiency.
+          Review the expanded cards to learn about each type of color vision deficiency.
         </p>
       )}
 
@@ -158,7 +158,7 @@ export const VisionCardsTool = memo(function VisionCardsTool({ interactive = fal
                     <strong>Common risk:</strong> {card.risk}
                   </p>
                   <p style={{ fontSize: '0.78rem', color: 'var(--muted)', margin: 0 }}>
-                    <strong>Affected colors:</strong> {card.colors}
+                    <strong>Color effects:</strong> {card.colorEffect}
                   </p>
                 </div>
               )}
@@ -169,7 +169,7 @@ export const VisionCardsTool = memo(function VisionCardsTool({ interactive = fal
 
       {allExplored && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          All vision types explored. Design for the range, not just your own experience.
+          All six cards explored. Check that your designs do not rely on color alone.
         </p>
       )}
     </div>

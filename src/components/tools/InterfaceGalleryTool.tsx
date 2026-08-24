@@ -22,11 +22,11 @@ const SVG_FILTERS = `
 type SimMode = 'normal' | 'deuteranopia' | 'protanopia' | 'tritanopia' | 'achromatopsia';
 
 const MODES: { id: SimMode; label: string; filter: string }[] = [
-  { id: 'normal', label: 'Normal', filter: 'none' },
+  { id: 'normal', label: 'Original', filter: 'none' },
   { id: 'deuteranopia', label: 'Deuteranopia', filter: 'url(#ig-deuteranopia)' },
   { id: 'protanopia', label: 'Protanopia', filter: 'url(#ig-protanopia)' },
   { id: 'tritanopia', label: 'Tritanopia', filter: 'url(#ig-tritanopia)' },
-  { id: 'achromatopsia', label: 'Achromato.', filter: 'url(#ig-achromatopsia)' },
+  { id: 'achromatopsia', label: 'Complete achromatopsia', filter: 'url(#ig-achromatopsia)' },
 ];
 
 interface InterfaceGalleryToolProps {
@@ -141,7 +141,7 @@ export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({ interac
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.4rem' }}>
-          All simulation modes explored. Notice which status badges merge under CVD filters.
+          All simulation modes explored. Notice which elements became harder to distinguish in each simulation.
         </p>
       )}
     </div>

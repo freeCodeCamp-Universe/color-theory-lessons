@@ -6,6 +6,8 @@ import {
   MILESTONE_SESSION_PREFIX,
   READ_INTERFACE_SESSION_PREFIX,
   saveState,
+  SIMULATION_SPOTTER_SESSION_PREFIX,
+  THEME_FROM_SCRATCH_SESSION_PREFIX,
 } from './persistence.ts';
 import type { ProgressState } from '../types/progress.ts';
 
@@ -142,6 +144,8 @@ describe('clearMilestoneSessions', () => {
     sessionStorage.setItem(`${MILESTONE_SESSION_PREFIX}milestone-1`, 'milestone state');
     sessionStorage.setItem(`${READ_INTERFACE_SESSION_PREFIX}milestone-1:1`, 'challenge state');
     sessionStorage.setItem(`${CHANNEL_PREDICTION_SESSION_PREFIX}milestone-2:1`, 'challenge state');
+    sessionStorage.setItem(`${THEME_FROM_SCRATCH_SESSION_PREFIX}milestone-3:1`, 'challenge state');
+    sessionStorage.setItem(`${SIMULATION_SPOTTER_SESSION_PREFIX}milestone-4:1`, 'challenge state');
     sessionStorage.setItem('color-theory-course-lesson-session:u1-l1', 'lesson state');
     sessionStorage.setItem('unrelated-key', 'unrelated state');
 
@@ -150,6 +154,8 @@ describe('clearMilestoneSessions', () => {
     expect(sessionStorage.getItem(`${MILESTONE_SESSION_PREFIX}milestone-1`)).toBeNull();
     expect(sessionStorage.getItem(`${READ_INTERFACE_SESSION_PREFIX}milestone-1:1`)).toBeNull();
     expect(sessionStorage.getItem(`${CHANNEL_PREDICTION_SESSION_PREFIX}milestone-2:1`)).toBeNull();
+    expect(sessionStorage.getItem(`${THEME_FROM_SCRATCH_SESSION_PREFIX}milestone-3:1`)).toBeNull();
+    expect(sessionStorage.getItem(`${SIMULATION_SPOTTER_SESSION_PREFIX}milestone-4:1`)).toBeNull();
     expect(sessionStorage.getItem('color-theory-course-lesson-session:u1-l1')).toBe('lesson state');
     expect(sessionStorage.getItem('unrelated-key')).toBe('unrelated state');
   });

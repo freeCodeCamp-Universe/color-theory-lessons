@@ -8,27 +8,27 @@ export const lesson5_5: LessonConfig = {
   reviewTags: ['audit', 'workflow', 'process', 'inclusive-design'],
   steps: [
     {
-      text: 'A contrast checker calculates a ratio — it does not decide whether a design is accessible. Judgment still requires testing in context: at real sizes, with real content, in a realistic layout. A body text color that barely passes on a chip may fail in context on a colored card.',
+      text: 'A contrast checker calculates the ratio between a foreground color and a background color. It does not decide whether an entire design is accessible. Check the colors used in the rendered interface and compare each ratio with the threshold for that text or component. A text color that passes on white may fail when the same text appears on a colored card.',
     },
     {
-      text: 'A practical audit workflow has four stages: (1) Identify priority elements on the current screen or flow — text, controls, states, and graphics that carry meaning. (2) Check contrast ratios for text and non-text components. (3) Simulate CVD conditions and identify ambiguous elements. (4) Verify task completion — can users still accomplish their goals?',
+      text: 'A practical audit workflow has four stages. First, identify the text, controls, states, and graphics that users need. Second, check text and non-text contrast. Third, simulate CVD conditions, identify information conveyed by color alone, and add another visual cue. Fourth, verify whether users can still complete their tasks.',
     },
     {
-      text: 'Priority elements are the ones users depend on to complete tasks: headlines, body text, buttons, input fields, links, form feedback, alerts, and chart marks. Secondary or decorative elements are lower priority. Start your audit with the elements that matter most.',
+      text: 'Priority elements are the ones users depend on to complete tasks: headlines, body text, buttons, input fields, links, form feedback, alerts, and chart marks. Start with the elements needed for the current task, then check the remaining content and controls that convey information. Decorative elements do not convey information and do not need the same checks.',
     },
     {
-      text: 'After contrast checks, ask: does any element rely on color alone? A passing ratio does not fix a color-alone problem — both checks must be done separately. Then simulate at least two CVD types and walk through the core user flows.',
+      text: 'After the contrast checks, look for elements that rely on color alone. A passing contrast ratio does not show whether another visual cue conveys the same information. Check both requirements separately. Then use CVD simulations to check how reduced color distinctions affect the main user tasks.',
     },
     {
-      text: 'The most valuable question during simulated review is not "do the colors look different?" but "can the user complete the task?" Run through the core user flows for this interface slice — fill a form, read a chart, understand a status indicator — and flag anywhere meaning is lost.',
+      text: 'During a simulated review, check whether a user can complete each task, not only whether the colors look different. Follow the main tasks for the screen, such as filling in a form, reading a chart, or interpreting a status indicator. Record each place where the task becomes unclear.',
     },
   ],
   challenge: {
-      prompt: 'Work through the full audit checklist on the mock interface — identify priority elements, check contrast, flag color-only issues, and simulate CVD.',
+      prompt: 'Complete all four stages of the audit activity: identify priority elements, check contrast, choose a repair for a color-only status, and identify the impact on task completion.',
       hints: [
-        'Start with text elements before checking controls and graphics.',
-        'A passing ratio does not fix a color-only problem — check both separately.',
-        'Simulate at least two CVD modes before marking the simulation step complete.',
+        'Select every element that users need to read, identify a control, or understand information.',
+        'A passing contrast ratio does not provide a second visual cue. Check contrast and use of color separately.',
+        'For a color-only status, choose a repair that adds text or an icon.',
       ],
   },
   quizItems: [
@@ -40,19 +40,19 @@ export const lesson5_5: LessonConfig = {
           stableId: 'it-automatically-repairs-contrast-failures',
           label: 'It automatically repairs contrast failures',
           isCorrect: false,
-          explanation: 'A checker tells you the ratio and pass/fail status — you still need to decide how to fix it.',
+          explanation: 'A checker calculates the ratio. You still need to choose foreground and background colors that meet the applicable requirement.',
         },
         {
           stableId: 'it-calculates-the-contrast-ratio-between-two-colors-and-reports-',
-          label: 'It calculates the contrast ratio between two colors and reports pass/fail status',
+          label: 'It calculates the contrast ratio between two colors',
           isCorrect: true,
-          explanation: 'A checker is a calculation tool, not a repair tool. It gives you data; you apply judgment.',
+          explanation: 'Compare the calculated ratio with the threshold for the text or component being checked. The checker does not repair colors or evaluate other accessibility requirements.',
         },
         {
           stableId: 'it-converts-colors-to-accessible-versions-automatically',
           label: 'It converts colors to accessible versions automatically',
           isCorrect: false,
-          explanation: 'No standard checker auto-converts colors. It reports ratios so you can make informed adjustments.',
+          explanation: 'Calculating the ratio does not change either color. You must choose and test any replacement colors.',
         },
         {
           stableId: 'it-checks-animation-and-motion-accessibility',
@@ -70,19 +70,19 @@ export const lesson5_5: LessonConfig = {
           stableId: 'whether-the-colors-still-look-different-from-each-other',
           label: 'Whether the colors still look different from each other',
           isCorrect: false,
-          explanation: 'Colors may still be slightly different while being practically indistinguishable. The relevant question is whether tasks can be completed.',
+          explanation: 'Noticing a color difference does not show whether the difference still communicates the required information. Check whether the user can complete the task.',
         },
         {
           stableId: 'whether-the-user-can-still-complete-the-task-not-just-whether-co',
-          label: 'Whether the user can still complete the task, not just whether colors look different',
+          label: 'Whether the user can complete the task when colors are hard to distinguish',
           isCorrect: true,
-          explanation: 'Task completion is the meaningful measure. A status indicator that requires perfect hue discrimination to interpret is a design problem regardless of subtle color differences.',
+          explanation: 'If a status indicator is identified only by hue, users who cannot distinguish those hues may not know what the status means.',
         },
         {
           stableId: 'whether-the-interface-looks-visually-appealing-in-simulation-mod',
           label: 'Whether the interface looks visually appealing in simulation mode',
           isCorrect: false,
-          explanation: 'Aesthetic appearance under simulation is not the goal. The goal is functional clarity.',
+          explanation: 'A simulation is not an appearance preference test. Check whether each visual cue still communicates the information needed for the task.',
         },
         {
           stableId: 'whether-the-page-renders-without-errors',
@@ -106,13 +106,13 @@ export const lesson5_5: LessonConfig = {
           stableId: 'whether-any-element-still-relies-on-color-alone-to-communicate-m',
           label: 'Whether any element still relies on color alone to communicate meaning',
           isCorrect: true,
-          explanation: 'Contrast and color-alone are separate concerns. A passing ratio does not fix a color-only problem.',
+          explanation: 'Contrast and use of color are separate WCAG requirements. A passing ratio does not provide another visual way to convey information.',
         },
         {
           stableId: 'typography-scale',
           label: 'Typography scale',
           isCorrect: false,
-          explanation: 'Typography scale affects which contrast threshold applies, but is not the next audit step.',
+          explanation: 'Text size and weight determine which contrast threshold applies. After checking contrast, this workflow checks whether information relies on color alone.',
         },
         {
           stableId: 'whether-the-brand-palette-is-on-trend',

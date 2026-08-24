@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { contrastRatioWcag, hexToRgb } from '../../utils/color.ts';
 import shellStyles from './ToolShell.module.css';
 
@@ -29,6 +29,11 @@ function isValidHex(hex: string): boolean {
   return /^#[0-9a-fA-F]{6}$/.test(hex);
 }
 
+function formatRatio(ratio: number, digits: number): string {
+  const factor = 10 ** digits;
+  return (Math.floor(ratio * factor) / factor).toFixed(digits);
+}
+
 interface TextContrastLabToolProps {
   interactive?: boolean;
   onComplete?: () => void;
@@ -42,8 +47,21 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
   const [bgColors, setBgColors] = useState<Record<string, string>>(
     Object.fromEntries(PAIRS.map((p) => [p.id, p.defaultBg])),
   );
-  const [passed, setPassed] = useState<Record<string, boolean>>({});
-  const [completed, setCompleted] = useState(false);
+  const passed = Object.fromEntries(PAIRS.map((p) => [
+    p.id,
+    isValidHex(textColors[p.id])
+      && isValidHex(bgColors[p.id])
+      && calcRatio(textColors[p.id], bgColors[p.id]) >= p.threshold,
+  ]));
+  const completed = PAIRS.every((p) => passed[p.id]);
+  const wasCompleted = useRef(false);
+
+  useEffect(() => {
+    if (completed && !wasCompleted.current) {
+      onComplete?.();
+    }
+    wasCompleted.current = completed;
+  }, [completed, onComplete]);
 
   const pair = PAIRS[activePair];
   const textColor = textColors[pair.id];
@@ -55,33 +73,11 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
   function handleTextChange(val: string) {
     if (!interactive) return;
     setTextColors((prev) => ({ ...prev, [pair.id]: val }));
-    if (isValidHex(val)) {
-      checkPair(pair.id, val, bgColor);
-    }
   }
 
   function handleBgChange(val: string) {
     if (!interactive) return;
     setBgColors((prev) => ({ ...prev, [pair.id]: val }));
-    if (isValidHex(val)) {
-      checkPair(pair.id, textColor, val);
-    }
-  }
-
-  function checkPair(id: string, txt: string, bg: string) {
-    const r = calcRatio(txt, bg);
-    const thresh = PAIRS.find((p) => p.id === id)!.threshold;
-    if (r >= thresh) {
-      setPassed((prev) => {
-        const next = { ...prev, [id]: true };
-        const allPassed = PAIRS.every((p) => next[p.id]);
-        if (allPassed && !completed) {
-          setCompleted(true);
-          onComplete?.();
-        }
-        return next;
-      });
-    }
   }
 
   const passedCount = Object.values(passed).filter(Boolean).length;
@@ -92,7 +88,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
 
       {interactive && (
         <p style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>
-          Fix all three pairs so they pass their threshold. ({passedCount}/{PAIRS.length} passing)
+          Fix all three pairs so their normal text reaches 4.5:1. ({passedCount}/{PAIRS.length} passing)
         </p>
       )}
 
@@ -130,7 +126,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
         }}
       >
         <p style={{ color: isValidHex(textColor) ? textColor : '#000', fontSize: '1rem', margin: '0 0 0.5rem' }}>
-          Sample text — normal size (16px)
+          Sample normal text (16px)
         </p>
         <p style={{ color: isValidHex(textColor) ? textColor : '#000', fontSize: '1.5rem', fontWeight: 700, margin: 0 }}>
           Large heading (24px bold)
@@ -144,7 +140,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
           padding: '0.3rem 0.65rem', borderRadius: 'var(--radius-sm)',
           background: 'var(--surface)', border: '1px solid var(--border)',
         }}>
-          ratio: <strong>{ratio.toFixed(2)}:1</strong>
+          ratio: <strong>{formatRatio(ratio, 2)}:1</strong>
         </div>
         <div style={{
           fontSize: '0.75rem', padding: '0.3rem 0.65rem',
@@ -155,7 +151,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
           border: `1px solid ${normalPass ? 'var(--accent-success)' : 'var(--accent-danger)'}`,
           color: normalPass ? 'var(--accent-success)' : 'var(--accent-danger)',
         }}>
-          Normal text (≥4.5:1) — {normalPass ? 'PASS' : 'FAIL'}
+          Normal text (≥4.5:1): {normalPass ? 'PASS' : 'FAIL'}
         </div>
         <div style={{
           fontSize: '0.75rem', padding: '0.3rem 0.65rem',
@@ -166,7 +162,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
           border: `1px solid ${largePass ? 'var(--accent-success)' : 'var(--accent-danger)'}`,
           color: largePass ? 'var(--accent-success)' : 'var(--accent-danger)',
         }}>
-          Large text (≥3:1) — {largePass ? 'PASS' : 'FAIL'}
+          Large text (≥3:1): {largePass ? 'PASS' : 'FAIL'}
         </div>
       </div>
 
@@ -214,7 +210,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          ✓ All three pairs now pass. Lightness difference, not hue, is the key to contrast.
+          ✓ All three pairs now meet the 4.5:1 threshold for normal text.
         </p>
       )}
     </div>
