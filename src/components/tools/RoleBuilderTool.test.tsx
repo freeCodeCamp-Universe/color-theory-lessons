@@ -83,4 +83,17 @@ describe('RoleBuilderTool', () => {
     expect(screen.getByText('All color-role checks pass. The preview keeps labels and icons so meaning never depends on color alone.')).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
   });
+
+  it('clears completion when a passing configuration becomes invalid', () => {
+    const onComplete = vi.fn();
+    render(<RoleBuilderTool interactive onComplete={onComplete} />);
+
+    setRole('primary-text', '#101827');
+    expect(screen.getByText(/All color-role checks pass/)).toBeInTheDocument();
+
+    setRole('success', '#invalid');
+    expect(screen.queryByText(/All color-role checks pass/)).not.toBeInTheDocument();
+    expect(screen.getByText('Valid role colors').parentElement).toHaveTextContent('✗');
+    expect(onComplete).toHaveBeenCalledOnce();
+  });
 });

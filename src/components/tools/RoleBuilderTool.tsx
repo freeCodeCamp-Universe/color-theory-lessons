@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { hexToRgb, contrastRatioWcag, hexToHsl } from '../../utils/color.ts';
 import shellStyles from './ToolShell.module.css';
 
@@ -132,24 +132,25 @@ function validateRoles(roles: Record<RoleKey, string>) {
 
 export const RoleBuilderTool = memo(function RoleBuilderTool({ interactive = false, onComplete }: RoleBuilderToolProps) {
   const [roles, setRoles] = useState<Record<RoleKey, string>>(DEFAULTS);
-  const [completed, setCompleted] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   function update(key: RoleKey, val: string) {
     if (!interactive) return;
-    setRoles((prev) => {
-      const next = { ...prev, [key]: val };
-      if (!completed) {
-        const metrics = validateRoles(next);
-        if (metrics.allPass) {
-          setCompleted(true);
-          onComplete?.();
-        }
-      }
-      return next;
-    });
+    setHasInteracted(true);
+    setRoles((prev) => ({ ...prev, [key]: val }));
   }
 
   const metrics = validateRoles(roles);
+  const completed = hasInteracted && metrics.allPass;
+  const wasCompleted = useRef(false);
+
+  useEffect(() => {
+    if (completed && !wasCompleted.current) {
+      onComplete?.();
+    }
+    wasCompleted.current = completed;
+  }, [completed, onComplete]);
+
   const {
     validRoles,
     primaryContrast,
