@@ -38,11 +38,13 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
   }
 
   const {
-    textContrast,
+    pageTextContrast,
+    cardTextContrast,
     surfaceContrast,
     pressure,
     actionChecks,
-    textOk,
+    pageTextOk,
+    cardTextOk,
     surfaceOk,
     pressureOk,
     allPass,
@@ -130,7 +132,8 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
         <div style={{ flex: '0 0 190px' }}>
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>CHECKS</p>
           {[
-            { label: 'Text contrast (4.5:1)', pass: textOk, ratio: textContrast },
+            { label: 'Primary text / page background (4.5:1)', pass: pageTextOk, ratio: pageTextContrast },
+            { label: 'Primary text / card surface (4.5:1)', pass: cardTextOk, ratio: cardTextContrast },
             { label: 'Page/surface separation', pass: surfaceOk, ratio: surfaceContrast },
             ...actionChecks.map(action => ({
               label: `${action.label} text (4.5:1)`,

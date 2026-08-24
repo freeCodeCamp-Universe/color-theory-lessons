@@ -54,7 +54,8 @@ export function getBrandPressureStatus(
   roles: Record<RoleKey, string>,
   fixedActions: readonly FixedAction[] = FIXED_ACTIONS,
 ) {
-  const textContrast = getContrast(roles['primary-text'], roles['page-bg']);
+  const pageTextContrast = getContrast(roles['primary-text'], roles['page-bg']);
+  const cardTextContrast = getContrast(roles['primary-text'], roles['surface']);
   const surfaceContrast = getContrast(roles['surface'], roles['page-bg']);
   const pressure = brandPressurePercent(roles);
   const actionChecks = fixedActions.map(action => {
@@ -62,19 +63,22 @@ export function getBrandPressureStatus(
     return { ...action, ratio, pass: ratio >= NORMAL_TEXT_MINIMUM };
   });
 
-  const textOk = textContrast >= NORMAL_TEXT_MINIMUM;
+  const pageTextOk = pageTextContrast >= NORMAL_TEXT_MINIMUM;
+  const cardTextOk = cardTextContrast >= NORMAL_TEXT_MINIMUM;
   const surfaceOk = surfaceContrast >= 1.2;
   const pressureOk = pressure < 40;
   const fixedActionsOk = actionChecks.every(check => check.pass);
 
   return {
-    textContrast,
+    pageTextContrast,
+    cardTextContrast,
     surfaceContrast,
     pressure,
     actionChecks,
-    textOk,
+    pageTextOk,
+    cardTextOk,
     surfaceOk,
     pressureOk,
-    allPass: textOk && surfaceOk && pressureOk && fixedActionsOk,
+    allPass: pageTextOk && cardTextOk && surfaceOk && pressureOk && fixedActionsOk,
   };
 }
