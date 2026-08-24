@@ -25,7 +25,23 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
 
 const MIN_DIFF = 80;
 
-function ChartBars({ colors, simulated }: { colors: string[]; simulated: boolean }) {
+function getWeakPairs(colors: string[]) {
+  const pairs: [number, number][] = [];
+  for (let a = 0; a < SERIES.length; a++) {
+    for (let b = a + 1; b < SERIES.length; b++) {
+      if (colorDiff(colors[a], colors[b]) < MIN_DIFF) pairs.push([a, b]);
+    }
+  }
+  return pairs;
+}
+
+function palettePasses(colors: string[]) {
+  if (!colors.every(isValidHex)) return false;
+  return getWeakPairs(colors).length === 0 &&
+    getWeakPairs(colors.map(simulateDeuteranopia)).length === 0;
+}
+
+function ChartBars({ colors, simulated, showLabels }: { colors: string[]; simulated: boolean; showLabels: boolean }) {
   const displayColors = simulated ? colors.map(simulateDeuteranopia) : colors;
   const maxVal = 100;
   return (
@@ -33,17 +49,38 @@ function ChartBars({ colors, simulated }: { colors: string[]; simulated: boolean
       {MONTHS.map((month, mi) => (
         <div key={month} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
           <div style={{ display: 'flex', gap: 1, alignItems: 'flex-end', height: 80 }}>
-            {SERIES.map((_, si) => {
+            {SERIES.map((name, si) => {
               const h = (CHART_DATA[mi][si] / maxVal) * 80;
               return (
                 <div
-                  key={si}
+                  key={name}
                   style={{ width: 8, height: h, background: displayColors[si], borderRadius: '2px 2px 0 0', flexShrink: 0 }}
                   title={`${SERIES[si]}: ${CHART_DATA[mi][si]}`}
                 />
               );
             })}
           </div>
+          {showLabels && (
+            <div style={{ display: 'flex', gap: 1, alignItems: 'flex-start', height: 48 }}>
+              {SERIES.map((name) => (
+                <span
+                  key={name}
+                  data-testid={`direct-label-${month}-${name}`}
+                  style={{
+                    width: 8,
+                    color: 'var(--primary-foreground)',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.5rem',
+                    lineHeight: 1,
+                    writingMode: 'vertical-rl',
+                    transform: 'rotate(180deg)',
+                  }}
+                >
+                  {name}
+                </span>
+              ))}
+            </div>
+          )}
           <span style={{ fontSize: '0.6rem', color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>{month}</span>
         </div>
       ))}
@@ -61,32 +98,34 @@ function isValidHex(h: string) { return /^#[0-9a-fA-F]{6}$/.test(h); }
 export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false, onComplete }: ChartTunerToolProps) {
   const [colors, setColors] = useState<string[]>(DEFAULTS);
   const [simulated, setSimulated] = useState(false);
+  const [showLabels, setShowLabels] = useState(false);
   const [completed, setCompleted] = useState(false);
 
-  /**
-   * Updates a specific series color and checks if the new palette passes 
-   * the distinguishability threshold (MIN_DIFF) in both normal and CVD views.
-   */
+  function completeIfReady(nextColors: string[], nextShowLabels: boolean) {
+    if (!completed && nextShowLabels && palettePasses(nextColors)) {
+      setCompleted(true);
+      onComplete?.();
+    }
+  }
+
   function update(i: number, val: string) {
     if (!interactive) return;
     const next = [...colors];
     next[i] = val;
     setColors(next);
+    completeIfReady(next, showLabels);
+  }
 
-    if (!completed && isValidHex(val)) {
-      const pairs = [];
-      for (let a = 0; a < 4; a++) for (let b = a + 1; b < 4; b++) pairs.push([next[a], next[b]]);
-      const simPairs = pairs.map(([a, b]) => [simulateDeuteranopia(a), simulateDeuteranopia(b)]);
-      const allOk = pairs.every(([a, b]) => colorDiff(a, b) >= MIN_DIFF) &&
-        simPairs.every(([a, b]) => colorDiff(a, b) >= MIN_DIFF);
-      if (allOk) {
-        setCompleted(true);
-        onComplete?.();
-      }
-    }
+  function toggleLabels(checked: boolean) {
+    if (!interactive || completed) return;
+    setShowLabels(checked);
+    completeIfReady(colors, checked);
   }
 
   const simColors = colors.map(simulateDeuteranopia);
+  const weakNormal = getWeakPairs(colors);
+  const weakSimulated = getWeakPairs(simColors);
+  const paletteIsReady = weakNormal.length === 0 && weakSimulated.length === 0;
 
   return (
     <div className={shellStyles.shell}>
@@ -117,7 +156,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
         </button>
       </div>
 
-      <ChartBars colors={colors} simulated={simulated} />
+      <ChartBars colors={colors} simulated={simulated} showLabels={showLabels} />
 
       <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginTop: '0.75rem' }}>
         {SERIES.map((name, i) => (
@@ -131,6 +170,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
                 onChange={e => update(i, e.target.value)}
                 style={{ width: 22, height: 22, padding: 0, border: 'none', cursor: 'pointer', background: 'transparent' }}
                 title={`Pick color for ${name}`}
+                aria-label={`Pick color for ${name}`}
               />
             )}
           </div>
@@ -138,21 +178,37 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
       </div>
 
       {interactive && (
-        <div style={{ marginTop: '0.75rem', fontSize: '0.78rem', color: 'var(--muted)' }}>
-          {(() => {
-            const pairs: [number, number][] = [];
-            for (let a = 0; a < 4; a++) for (let b = a + 1; b < 4; b++) pairs.push([a, b]);
-            const weak = pairs.filter(([a, b]) => colorDiff(simColors[a], simColors[b]) < MIN_DIFF);
-            return weak.length > 0
-              ? <span style={{ color: 'var(--accent-cta)' }}>⚠ Under simulation: {weak.map(([a, b]) => `${SERIES[a]}/${SERIES[b]}`).join(', ')} are hard to distinguish</span>
-              : <span style={{ color: 'var(--accent-success)' }}>✓ All series distinguishable in both views</span>;
-          })()}
+        <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.75rem', fontSize: '0.78rem', color: 'var(--primary-foreground)' }}>
+          <input
+            type="checkbox"
+            checked={showLabels}
+            disabled={completed}
+            onChange={(event) => toggleLabels(event.target.checked)}
+          />
+          Add direct labels to every bar
+        </label>
+      )}
+
+      {interactive && (
+        <div style={{ marginTop: '0.5rem', fontSize: '0.78rem', color: 'var(--muted)' }}>
+          {!paletteIsReady ? (
+            <span style={{ color: 'var(--accent-cta)' }}>
+              ⚠ Hard to distinguish: {[
+                ...weakNormal.map(([a, b]) => `${SERIES[a]}/${SERIES[b]} in normal view`),
+                ...weakSimulated.map(([a, b]) => `${SERIES[a]}/${SERIES[b]} under simulation`),
+              ].join('; ')}
+            </span>
+          ) : showLabels ? (
+            <span style={{ color: 'var(--accent-success)' }}>✓ Palette passes both views and direct labels identify every series</span>
+          ) : (
+            <span style={{ color: 'var(--accent-cta)' }}>Palette passes both views. Add direct labels so the bars do not rely on color alone.</span>
+          )}
         </div>
       )}
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          Chart palette passes normal and CVD simulation — series are distinguishable in both views.
+          The palette passes normal and CVD views, and direct labels identify every series.
         </p>
       )}
     </div>

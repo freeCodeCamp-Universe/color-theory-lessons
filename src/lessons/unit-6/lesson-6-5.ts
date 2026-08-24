@@ -11,14 +11,14 @@ export const lesson6_5: LessonConfig = {
     { text: 'Categorical palettes use distinct hues for groups that have no order: product categories, countries, team names. Too many similar hues or too many fully saturated hues make categorical charts hard to read quickly.' },
     { text: 'Sequential palettes move from light to dark (or low to high saturation) to represent ordered data: temperature, quantity, severity. A single hue progressing from light to dark is usually more readable than a rainbow for sequential data.' },
     { text: 'Chart colors should contrast sufficiently with the chart background and with adjacent series. Red-green combinations are especially risky — use shape, pattern, or direct labels to support color in all chart contexts.' },
-    { text: 'In the chart tuner, adjust series colors for a bar chart and a line chart. A CVD simulation button shows the chart under deuteranopia. A similarity warning appears when series become too close. Your challenge: make both charts clear in normal view and under simulation.' },
+    { text: 'In the chart tuner, adjust the series colors in a grouped bar chart. Compare the normal and deuteranopia views, then add direct labels so each bar identifies its series without relying on color.' },
   ],
   challenge: {
-      prompt: 'Tune the chart series colors so both charts are readable in normal view and under CVD simulation.',
+      prompt: 'Tune the series colors for normal and deuteranopia views, then add direct labels so every bar identifies its series without color.',
       hints: [
         'Aim for high contrast between adjacent series, not just different hues.',
-        'If two bars look similar under deuteranopia, add direct labels to the bars.',
-        'Avoid using red and green as the only distinguishing pair — use blue/orange or add patterns.',
+        'Use the simulation warning to find series pairs that need different colors.',
+        'Turn on direct labels after the palette passes both views.',
       ],
   },
   quizItems: [
