@@ -160,7 +160,7 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({ interactive = fal
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          All checks pass. Your semantic roles create a clear, readable hierarchy.
+          All validation checks pass.
         </p>
       )}
     </div>
