@@ -38,7 +38,7 @@ export const lesson6_1: LessonConfig = {
       choices: [
         { stableId: 'the-blue-may-go-out-of-fashion', label: 'The blue may go out of fashion', isCorrect: false, explanation: 'Visual trends are not the primary risk here.' },
         { stableId: 'the-blue-carries-too-many-different-meanings-users-cannot-tell-w', label: 'The blue represents unrelated roles, so color no longer distinguishes interactive elements from decorative ones', isCorrect: true, explanation: 'Correct. Reusing one color for unrelated roles removes the distinction that the color could provide.' },
-        { stableId: 'blue-is-not-accessible', label: 'Blue is not accessible', isCorrect: false, explanation: 'A blue can meet accessibility requirements. The risk in this example comes from assigning the same blue to unrelated roles.' },
+        { stableId: 'blue-is-not-accessible', label: 'Blue is not accessible', isCorrect: false, explanation: 'Blue is not inherently inaccessible. Its use must provide sufficient contrast, and information cannot rely on blue alone. The problem here is assigning the same blue to unrelated roles.' },
         { stableId: 'decorative-elements-should-always-match-buttons', label: 'Using one blue keeps the interface consistent because the hex value matches', isCorrect: false, explanation: 'Repeating a hex value does not create semantic consistency when the color represents unrelated roles.' },
       ],
     },
