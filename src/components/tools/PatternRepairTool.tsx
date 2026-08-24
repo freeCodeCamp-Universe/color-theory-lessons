@@ -84,10 +84,10 @@ const MODULES: Module[] = [
     id: 'alert-stack',
     name: 'Alert stack',
     repairOptions: ['Add icons (✓/⚠/✕)', 'Add structured heading', 'Add border-left accent'],
-    isValidRepair: (checked) => checked.length >= 2,
+    isValidRepair: (checked) => checked.includes('Add icons (✓/⚠/✕)') || checked.includes('Add structured heading'),
     invalidFeedback: (checked) => checked.length === 0
       ? 'The alerts still rely on color to distinguish their states.'
-      : 'One cue is not enough to distinguish every alert state without color.',
+      : 'The border accents still rely on color to distinguish the alert states.',
     brokenPreview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
         {[{ bg: '#dcfce7', text: '#166534', msg: 'Changes saved.' }, { bg: '#fef9c3', text: '#854d0e', msg: 'Unsaved changes.' }, { bg: '#fee2e2', text: '#991b1b', msg: 'Upload failed.' }].map((alert) => (

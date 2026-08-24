@@ -104,17 +104,25 @@ describe('PatternRepairTool', () => {
   });
 
   it.each([
-    ['Add icons (✓/⚠/✕)', 'Add structured heading'],
-    ['Add icons (✓/⚠/✕)', 'Add border-left accent'],
-    ['Add structured heading', 'Add border-left accent'],
-  ])('keeps %s with %s as a valid alert repair', (firstOption, secondOption) => {
+    'Add icons (✓/⚠/✕)',
+    'Add structured heading',
+  ])('repairs alert states with %s alone', (option) => {
     render(<PatternRepairTool interactive />);
 
-    selectOption(firstOption);
-    selectOption(secondOption);
+    selectOption(option);
     fireEvent.click(screen.getByRole('button', { name: 'check repairs' }));
 
     expect(screen.getByText(/1\/4 repaired/)).toBeInTheDocument();
+  });
+
+  it('does not repair alert states with color-coded border accents alone', () => {
+    render(<PatternRepairTool interactive />);
+
+    selectOption('Add border-left accent');
+    fireEvent.click(screen.getByRole('button', { name: 'check repairs' }));
+
+    expect(screen.getByText(/0\/4 repaired/)).toBeInTheDocument();
+    expect(screen.getByText('The border accents still rely on color to distinguish the alert states.')).toBeInTheDocument();
   });
 
   it('explains when the alert stack has no selected cues', () => {
@@ -123,7 +131,7 @@ describe('PatternRepairTool', () => {
     fireEvent.click(screen.getByRole('button', { name: 'check repairs' }));
 
     expect(screen.getByText('The alerts still rely on color to distinguish their states.')).toBeInTheDocument();
-    expect(screen.queryByText('One cue is not enough to distinguish every alert state without color.')).not.toBeInTheDocument();
+    expect(screen.queryByText('The border accents still rely on color to distinguish the alert states.')).not.toBeInTheDocument();
   });
 
   it('preserves selections when retrying an invalid repair', () => {
