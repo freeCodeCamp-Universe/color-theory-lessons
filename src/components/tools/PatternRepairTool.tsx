@@ -16,6 +16,12 @@ const CHART_SERIES = [
   { h: 50, color: '#ef4444', label: 'Series B', val: '50', patternAngle: 0 },
 ];
 
+const SERVICE_STATUSES = [
+  { service: 'Payments API', color: '#22c55e', status: 'Operational', icon: '✓' },
+  { service: 'Email service', color: '#eab308', status: 'Degraded', icon: '⚠' },
+  { service: 'User database', color: '#ef4444', status: 'Offline', icon: '✕' },
+];
+
 function chartPattern(color: string, angle: number, repeat = 6) {
   return `repeating-linear-gradient(${angle}deg, ${color}, ${color} 2px, transparent 2px, transparent ${repeat}px)`;
 }
@@ -81,47 +87,40 @@ const MODULES: Module[] = [
     ),
   },
   {
-    id: 'alert-stack',
-    name: 'Alert stack',
-    repairOptions: ['Add icons (✓/⚠/✕)', 'Add structured heading', 'Add border-left accent'],
-    isValidRepair: (checked) => checked.includes('Add icons (✓/⚠/✕)') || checked.includes('Add structured heading'),
+    id: 'service-status',
+    name: 'Service status dashboard',
+    repairOptions: ['Add status icons (✓/⚠/✕)', 'Add status text labels', 'Add colored outlines'],
+    isValidRepair: (checked) => checked.includes('Add status icons (✓/⚠/✕)') || checked.includes('Add status text labels'),
     invalidFeedback: (checked) => checked.length === 0
-      ? 'The alerts still rely on color to distinguish their states.'
-      : 'The border accents still rely on color to distinguish the alert states.',
+      ? 'The colored dots are the only cues that identify each service status.'
+      : 'The dots and outlines still use hue as the only way to identify each service status.',
     brokenPreview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
-        {[{ bg: '#dcfce7', text: '#166534', msg: 'Changes saved.' }, { bg: '#fef9c3', text: '#854d0e', msg: 'Unsaved changes.' }, { bg: '#fee2e2', text: '#991b1b', msg: 'Upload failed.' }].map((alert) => (
-          <div key={alert.msg} style={{ background: alert.bg, borderRadius: 3, padding: '0.3rem 0.5rem', fontSize: '0.72rem', color: alert.text }}>
-            {alert.msg}
+        {SERVICE_STATUSES.map((service) => (
+          <div key={service.service} style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.72rem', color: '#374151' }}>
+            <span style={{ width: 9, height: 9, borderRadius: '50%', background: service.color, flexShrink: 0 }} />
+            {service.service}
           </div>
         ))}
       </div>
     ),
     repairedPreview: (checked) => (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
-        {[
-          { bg: '#dcfce7', text: '#166534', msg: 'Changes saved.', heading: 'Success', icon: '✓', borderColor: '#22c55e' },
-          { bg: '#fef9c3', text: '#854d0e', msg: 'Unsaved changes.', heading: 'Warning', icon: '⚠', borderColor: '#eab308' },
-          { bg: '#fee2e2', text: '#991b1b', msg: 'Upload failed.', heading: 'Error', icon: '✕', borderColor: '#ef4444' },
-        ].map((alert) => (
+        {SERVICE_STATUSES.map((service) => (
           <div
-            key={alert.msg}
+            key={service.service}
             style={{
-              background: alert.bg, borderRadius: 3, padding: '0.3rem 0.5rem',
-              fontSize: '0.72rem', color: alert.text,
-              borderLeft: checked.includes('Add border-left accent') ? `3px solid ${alert.borderColor}` : 'none',
-              display: 'flex', gap: '0.35rem', alignItems: 'flex-start',
+              display: 'flex', alignItems: 'center', gap: '0.35rem',
+              border: checked.includes('Add colored outlines') ? `1px solid ${service.color}` : '1px solid transparent',
+              borderRadius: 3, padding: '0.15rem 0.25rem', fontSize: '0.72rem', color: '#374151',
             }}
           >
-            {checked.includes('Add icons (✓/⚠/✕)') && (
-              <span style={{ fontWeight: 700, flexShrink: 0 }}>{alert.icon}</span>
+            <span style={{ width: 9, height: 9, borderRadius: '50%', background: service.color, flexShrink: 0 }} />
+            <span style={{ flex: 1 }}>{service.service}</span>
+            {checked.includes('Add status icons (✓/⚠/✕)') && (
+              <span style={{ fontWeight: 700 }}>{service.icon}</span>
             )}
-            <div>
-              {checked.includes('Add structured heading') && (
-                <strong style={{ display: 'block', fontSize: '0.72rem' }}>{alert.heading}:</strong>
-              )}
-              {alert.msg}
-            </div>
+            {checked.includes('Add status text labels') && <strong>{service.status}</strong>}
           </div>
         ))}
       </div>

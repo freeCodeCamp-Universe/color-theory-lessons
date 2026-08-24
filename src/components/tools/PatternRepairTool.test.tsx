@@ -104,9 +104,9 @@ describe('PatternRepairTool', () => {
   });
 
   it.each([
-    'Add icons (✓/⚠/✕)',
-    'Add structured heading',
-  ])('repairs alert states with %s alone', (option) => {
+    'Add status icons (✓/⚠/✕)',
+    'Add status text labels',
+  ])('repairs service statuses with %s alone', (option) => {
     render(<PatternRepairTool interactive />);
 
     selectOption(option);
@@ -115,23 +115,37 @@ describe('PatternRepairTool', () => {
     expect(screen.getByText(/Repaired patterns: 1 of 4/)).toBeInTheDocument();
   });
 
-  it('does not repair alert states with color-coded border accents alone', () => {
+  it('adds text labels that identify each service status', () => {
     render(<PatternRepairTool interactive />);
 
-    selectOption('Add border-left accent');
+    expect(screen.queryByText('Operational')).not.toBeInTheDocument();
+    expect(screen.queryByText('Degraded')).not.toBeInTheDocument();
+    expect(screen.queryByText('Offline')).not.toBeInTheDocument();
+
+    selectOption('Add status text labels');
+
+    expect(screen.getByText('Operational')).toBeInTheDocument();
+    expect(screen.getByText('Degraded')).toBeInTheDocument();
+    expect(screen.getByText('Offline')).toBeInTheDocument();
+  });
+
+  it('does not repair service statuses with colored outlines alone', () => {
+    render(<PatternRepairTool interactive />);
+
+    selectOption('Add colored outlines');
     fireEvent.click(screen.getByRole('button', { name: 'check repairs' }));
 
     expect(screen.getByText(/Repaired patterns: 0 of 4/)).toBeInTheDocument();
-    expect(screen.getByText('The border accents still rely on color to distinguish the alert states.')).toBeInTheDocument();
+    expect(screen.getByText('The dots and outlines still use hue as the only way to identify each service status.')).toBeInTheDocument();
   });
 
-  it('explains when the alert stack has no selected cues', () => {
+  it('explains when the service status dashboard has no selected cues', () => {
     render(<PatternRepairTool interactive />);
 
     fireEvent.click(screen.getByRole('button', { name: 'check repairs' }));
 
-    expect(screen.getByText('The alerts still rely on color to distinguish their states.')).toBeInTheDocument();
-    expect(screen.queryByText('The border accents still rely on color to distinguish the alert states.')).not.toBeInTheDocument();
+    expect(screen.getByText('The colored dots are the only cues that identify each service status.')).toBeInTheDocument();
+    expect(screen.queryByText('The dots and outlines still use hue as the only way to identify each service status.')).not.toBeInTheDocument();
   });
 
   it('preserves selections when retrying an invalid repair', () => {
@@ -158,8 +172,8 @@ describe('PatternRepairTool', () => {
     selectOption('Add error icon ✕');
     selectOption('Make label bold and red');
     selectOption('Add underline to links');
-    selectOption('Add icons (✓/⚠/✕)');
-    selectOption('Add structured heading');
+    selectOption('Add status icons (✓/⚠/✕)');
+    selectOption('Add status text labels');
     selectOption('Add value labels at top');
 
     expect(onComplete).not.toHaveBeenCalled();
