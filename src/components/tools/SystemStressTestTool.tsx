@@ -157,8 +157,15 @@ function ContextPreview({ context }: { context: ContextId }) {
         ) : (
           <p style={{ fontSize: '0.72rem', margin: 0 }}>The primary action keeps its light-mode color instead of using a dark-mode action role.</p>
         )}
-        <button disabled={context === 'light'} style={{ background: palette.action, border: 0, borderRadius: 4, color: '#ffffff', justifySelf: 'start', padding: '0.35rem 0.7rem' }} type="button">
-          Save changes
+        <button
+          aria-label="Save changes"
+          disabled={context === 'light'}
+          style={{ background: 'transparent', border: 0, color: palette.action, justifySelf: 'start', padding: '0.35rem' }}
+          type="button"
+        >
+          <svg aria-hidden="true" focusable="false" height="18" viewBox="0 0 24 24" width="18">
+            <path d="M5 3h12l2 2v16H5V3Zm2 2v5h8V5H7Zm0 14h10v-7H7v7Zm2-12h4V5H9v2Z" fill="currentColor" />
+          </svg>
         </button>
       </div>
     </div>

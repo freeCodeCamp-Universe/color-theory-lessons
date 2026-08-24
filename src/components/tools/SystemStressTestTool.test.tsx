@@ -1,5 +1,6 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { contrastRatioWcag, hexToRgb } from '../../utils/color.ts';
 import { SystemStressTestTool } from './SystemStressTestTool.tsx';
 
 afterEach(() => cleanup());
@@ -48,9 +49,16 @@ describe('SystemStressTestTool', () => {
     render(<SystemStressTestTool interactive />);
 
     expect(screen.getByPlaceholderText('Search by name')).not.toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Save changes' })).toBeDisabled();
 
     fireEvent.click(screen.getByRole('button', { name: 'Dark mode' }));
-    expect(screen.getByRole('button', { name: 'Save changes' })).not.toBeDisabled();
+    const action = screen.getByRole('button', { name: 'Save changes' });
+    expect(action).not.toBeDisabled();
+    expect(action).toHaveStyle({ background: 'transparent', color: '#1e40af' });
+    expect(action).toHaveTextContent('');
+    expect(action.querySelector('svg[aria-hidden="true"]')).toBeInTheDocument();
+    expect(action.parentElement).toHaveStyle({ background: '#1e293b' });
+    expect(contrastRatioWcag(hexToRgb('#1e40af'), hexToRgb('#1e293b'))).toBeLessThan(3);
   });
 
   it('reports incomplete findings without completing', () => {
