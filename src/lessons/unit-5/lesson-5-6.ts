@@ -8,7 +8,7 @@ export const lesson5_6: LessonConfig = {
   reviewTags: ['workflow', 'inclusive-design', 'testing', 'user-research'],
   steps: [
     {
-      text: 'CVD simulations approximate how an interface may appear under a specific type of CVD. They cannot represent differences between individuals, so use them to find design risks rather than predict any person\'s experience.',
+      text: 'CVD simulations approximate how an interface may appear under a specific type of CVD. They cannot represent every individual\'s vision, so use them to find design risks rather than predict any person\'s experience.',
     },
     {
       text: 'Use a repeatable review workflow. First, view the interface without a simulation and identify each element that uses color to carry meaning. Then check each CVD simulation, find elements that become ambiguous, add another visual cue, and check the simulations again.',
