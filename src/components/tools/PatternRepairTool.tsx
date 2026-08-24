@@ -5,9 +5,19 @@ interface Module {
   id: string;
   name: string;
   repairOptions: string[];
-  minRepairs: number;
+  isValidRepair: (checked: string[]) => boolean;
+  invalidFeedback: (checked: string[]) => string;
   brokenPreview: React.ReactNode;
   repairedPreview: (checked: string[]) => React.ReactNode;
+}
+
+const CHART_SERIES = [
+  { h: 75, color: '#22c55e', label: 'Series A', val: '75', patternAngle: 45 },
+  { h: 50, color: '#ef4444', label: 'Series B', val: '50', patternAngle: 0 },
+];
+
+function chartPattern(color: string, angle: number, repeat = 6) {
+  return `repeating-linear-gradient(${angle}deg, ${color}, ${color} 2px, transparent 2px, transparent ${repeat}px)`;
 }
 
 const MODULES: Module[] = [
@@ -15,7 +25,8 @@ const MODULES: Module[] = [
     id: 'form-validation',
     name: 'Form validation',
     repairOptions: ['Add error icon ✕', 'Add error message text', 'Make label bold and red'],
-    minRepairs: 2,
+    isValidRepair: (checked) => checked.includes('Add error message text'),
+    invalidFeedback: () => 'The form does not explain what is wrong. A visible error description is still missing.',
     brokenPreview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
         <label style={{ fontSize: '0.72rem', color: '#374151' }}>Email address</label>
@@ -39,7 +50,8 @@ const MODULES: Module[] = [
     id: 'link-paragraph',
     name: 'Link paragraph',
     repairOptions: ['Add underline to links', 'Add bold weight to links', 'Add › arrow indicator'],
-    minRepairs: 1,
+    isValidRepair: (checked) => checked.length >= 1,
+    invalidFeedback: () => 'The links need a non-color cue that distinguishes them from the surrounding text.',
     brokenPreview: (
       <p style={{ fontSize: '0.75rem', color: '#374151', lineHeight: 1.6, margin: 0 }}>
         For more information, read our{' '}
@@ -72,7 +84,10 @@ const MODULES: Module[] = [
     id: 'alert-stack',
     name: 'Alert stack',
     repairOptions: ['Add icons (✓/⚠/✕)', 'Add structured heading', 'Add border-left accent'],
-    minRepairs: 2,
+    isValidRepair: (checked) => checked.includes('Add icons (✓/⚠/✕)') || checked.includes('Add structured heading'),
+    invalidFeedback: (checked) => checked.length === 0
+      ? 'The alerts still rely on color to distinguish their states.'
+      : 'The border accents still rely on color to distinguish the alert states.',
     brokenPreview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
         {[{ bg: '#dcfce7', text: '#166534', msg: 'Changes saved.' }, { bg: '#fef9c3', text: '#854d0e', msg: 'Unsaved changes.' }, { bg: '#fee2e2', text: '#991b1b', msg: 'Upload failed.' }].map((alert) => (
@@ -116,7 +131,10 @@ const MODULES: Module[] = [
     id: 'chart-series',
     name: 'Chart series',
     repairOptions: ['Add direct labels', 'Add pattern fills', 'Add value labels at top'],
-    minRepairs: 1,
+    isValidRepair: (checked) => checked.includes('Add direct labels') || checked.includes('Add pattern fills'),
+    invalidFeedback: (checked) => checked.includes('Add value labels at top')
+      ? 'The values show amounts, but they do not identify the series.'
+      : 'The chart still relies on color to distinguish its series.',
     brokenPreview: (
       <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-end', height: 60 }}>
         {[{ h: 75, color: '#22c55e' }, { h: 50, color: '#ef4444' }].map((bar) => (
@@ -125,27 +143,45 @@ const MODULES: Module[] = [
       </div>
     ),
     repairedPreview: (checked) => (
-      <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-end', height: 70 }}>
-        {[{ h: 75, color: '#22c55e', label: 'Series A', val: '75' }, { h: 50, color: '#ef4444', label: 'Series B', val: '50' }].map((bar) => (
-          <div key={bar.color} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end' }}>
-            {checked.includes('Add value labels at top') && (
-              <span style={{ fontSize: '0.65rem', color: '#333', marginBottom: '0.1rem' }}>{bar.val}</span>
-            )}
-            <div
-              style={{
-                width: '100%', height: `${bar.h}%`,
-                background: checked.includes('Add pattern fills')
-                  ? `repeating-linear-gradient(45deg, ${bar.color}, ${bar.color} 2px, transparent 2px, transparent 6px)`
-                  : bar.color,
-                borderRadius: '3px 3px 0 0', position: 'relative',
-              }}
-            >
-              {checked.includes('Add direct labels') && (
-                <span style={{ position: 'absolute', top: -16, left: '50%', transform: 'translateX(-50%)', fontSize: '0.6rem', color: bar.color, fontWeight: 700, whiteSpace: 'nowrap' }}>{bar.label}</span>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+        <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-end', height: 70 }}>
+          {CHART_SERIES.map((bar) => (
+            <div key={bar.color} style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end' }}>
+              {(checked.includes('Add direct labels') || checked.includes('Add value labels at top')) && (
+                <span style={{ fontSize: '0.65rem', color: '#333', marginBottom: '0.1rem', whiteSpace: 'nowrap' }}>
+                  {checked.includes('Add direct labels') && bar.label}
+                  {checked.includes('Add direct labels') && checked.includes('Add value labels at top') && ': '}
+                  {checked.includes('Add value labels at top') && bar.val}
+                </span>
               )}
+              <div
+                data-testid={`chart-${bar.label.toLowerCase().replace(' ', '-')}`}
+                style={{
+                  width: '100%', height: `${bar.h}%`,
+                  background: checked.includes('Add pattern fills')
+                    ? chartPattern(bar.color, bar.patternAngle)
+                    : bar.color,
+                  border: checked.includes('Add pattern fills') ? '1px solid #777' : 'none',
+                  borderRadius: '3px 3px 0 0',
+                }}
+              />
             </div>
+          ))}
+        </div>
+        {checked.includes('Add pattern fills') && (
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.6rem', fontSize: '0.6rem', color: '#333' }}>
+            {CHART_SERIES.map((series) => (
+              <span key={series.label} style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+                <span
+                  aria-hidden="true"
+                  data-testid={`legend-${series.label.toLowerCase().replace(' ', '-')}`}
+                  style={{ width: 10, height: 10, border: '1px solid #777', background: chartPattern(series.color, series.patternAngle, 4) }}
+                />
+                {series.label}
+              </span>
+            ))}
           </div>
-        ))}
+        )}
       </div>
     ),
   },
@@ -160,30 +196,36 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
   const [checked, setChecked] = useState<Record<string, string[]>>(
     Object.fromEntries(MODULES.map((m) => [m.id, []])),
   );
-  const [repaired, setRepaired] = useState<Record<string, boolean>>({});
+  const [submitted, setSubmitted] = useState(false);
   const [completed, setCompleted] = useState(false);
 
   function toggleOption(moduleId: string, option: string) {
-    if (!interactive || completed) return;
+    if (!interactive || submitted || completed) return;
     setChecked((prev) => {
       const current = prev[moduleId];
       const next = current.includes(option) ? current.filter((o) => o !== option) : [...current, option];
-      const mod = MODULES.find((m) => m.id === moduleId)!;
-      const isRepaired = next.length >= mod.minRepairs;
-      setRepaired((prevR) => {
-        const nextR = { ...prevR, [moduleId]: isRepaired };
-        const allRepaired = MODULES.every((m) => nextR[m.id]);
-        if (allRepaired && !completed) {
-          setCompleted(true);
-          onComplete?.();
-        }
-        return nextR;
-      });
       return { ...prev, [moduleId]: next };
     });
   }
 
-  const repairedCount = Object.values(repaired).filter(Boolean).length;
+  function handleCheck() {
+    if (!interactive || submitted || completed) return;
+    const allRepaired = MODULES.every((mod) => mod.isValidRepair(checked[mod.id]));
+    setSubmitted(true);
+    if (allRepaired) {
+      setCompleted(true);
+      onComplete?.();
+    }
+  }
+
+  function handleRetry() {
+    if (completed) return;
+    setSubmitted(false);
+  }
+
+  const repairedCount = submitted
+    ? MODULES.filter((mod) => mod.isValidRepair(checked[mod.id])).length
+    : 0;
 
   return (
     <div className={shellStyles.shell}>
@@ -198,7 +240,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         {MODULES.map((mod) => {
           const modChecked = checked[mod.id];
-          const isRepaired = repaired[mod.id];
+          const isRepaired = submitted && mod.isValidRepair(modChecked);
 
           return (
             <div
@@ -210,13 +252,8 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
                 background: isRepaired ? 'color-mix(in srgb, var(--accent-success) 6%, transparent)' : 'transparent',
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+              <div style={{ marginBottom: '0.4rem' }}>
                 <p style={{ fontWeight: 600, fontSize: '0.8rem', margin: 0, color: 'var(--primary-foreground)' }}>{mod.name}</p>
-                <span style={{ fontSize: '0.68rem', color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
-                  {isRepaired
-                    ? <span style={{ color: 'var(--accent-success)' }}>✓ repaired</span>
-                    : `select at least ${mod.minRepairs} option${mod.minRepairs > 1 ? 's' : ''}`}
-                </span>
               </div>
 
               {/* Before / After */}
@@ -238,11 +275,12 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
               {interactive && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
                   {mod.repairOptions.map((option) => (
-                    <label key={option} style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', cursor: 'pointer' }}>
+                    <label key={option} style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', cursor: submitted ? 'not-allowed' : 'pointer' }}>
                       <input
                         type="checkbox"
                         checked={modChecked.includes(option)}
                         onChange={() => toggleOption(mod.id, option)}
+                        disabled={submitted}
                         style={{ accentColor: 'var(--accent-cta)' }}
                       />
                       {option}
@@ -250,10 +288,38 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
                   ))}
                 </div>
               )}
+
+              {submitted && (
+                <p
+                  aria-live="polite"
+                  data-testid={`feedback-${mod.id}`}
+                  style={{ margin: '0.45rem 0 0', fontSize: '0.68rem', fontFamily: 'var(--font-mono)', color: isRepaired ? 'var(--accent-success)' : 'var(--accent-danger)' }}
+                >
+                  {isRepaired ? '✓ repaired' : mod.invalidFeedback(modChecked)}
+                </p>
+              )}
             </div>
           );
         })}
       </div>
+
+      {interactive && !submitted && (
+        <button
+          onClick={handleCheck}
+          style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'var(--yellow)', color: 'var(--gray-90)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.85rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: 'pointer' }}
+        >
+          check repairs
+        </button>
+      )}
+
+      {interactive && submitted && !completed && (
+        <button
+          onClick={handleRetry}
+          style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'transparent', color: 'var(--secondary-foreground)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', cursor: 'pointer' }}
+        >
+          try again
+        </button>
+      )}
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
