@@ -106,7 +106,7 @@ export const lesson5_1: LessonConfig = {
   ],
   keyPoints: [
     'WCAG calculates text contrast from the relative luminance of the text and background colors, not from their hues.',
-    'At WCAG Level AA, normal text needs at least 4.5:1 contrast. Large text needs at least 3:1.',
+    'At WCAG Level AA, normal text needs at least 4.5:1 contrast. Large text is at least 18 pt at regular weight or at least 14 pt and bold; it needs at least 3:1.',
     'Changing hue can raise, lower, or leave the contrast ratio unchanged. Check the ratio after each color change.',
     'Check rendered text at its displayed size and weight as well as its calculated contrast ratio.',
   ],
