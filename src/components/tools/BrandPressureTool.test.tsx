@@ -104,7 +104,19 @@ describe('BrandPressureTool contrast validation', () => {
     ).toHaveTextContent('✓ 21.0:1');
     expect(
       screen.getByText('Primary text / card surface (4.5:1)').parentElement,
-    ).toHaveTextContent('✗ 3.7:1');
+    ).toHaveTextContent('✗ 3.6:1');
+  });
+
+  it('does not display a failing card contrast ratio as 4.5:1', () => {
+    render(<BrandPressureTool interactive />);
+
+    fireEvent.change(screen.getAllByRole('textbox')[0], { target: { value: '#000000' } });
+    setSurface('#ffffff');
+    fireEvent.change(screen.getAllByRole('textbox')[2], { target: { value: '#777777' } });
+
+    expect(
+      screen.getByText('Primary text / card surface (4.5:1)').parentElement,
+    ).toHaveTextContent('✗ 4.4:1');
   });
 
   it('completes when editable roles and both fixed action labels pass', () => {
