@@ -14,7 +14,7 @@ export const lesson6_6: LessonConfig = {
       text: 'Display P3 has a wider gamut than sRGB, so it can specify some colors that sRGB cannot. CSS represents these colors with color(display-p3 ...). When a screen cannot reproduce a specified color, the browser maps it into the screen\'s gamut. Provide an sRGB fallback, then add Display P3 colors where supported.',
     },
     {
-      text: 'Scalable Vector Graphics (SVG) displays vector images such as icons. The HTML Canvas element uses JavaScript to draw charts and other graphics. WebGL renders two-dimensional and three-dimensional graphics in the browser. Each context accepts explicit color values, so use the same semantic roles to choose values across them.',
+      text: 'Scalable Vector Graphics (SVG) is a language for two-dimensional graphics such as icons. The HTML Canvas element provides a surface that JavaScript can use to draw charts and other graphics. WebGL uses the Canvas element to render interactive three-dimensional graphics in the browser. These contexts accept explicit color values, so use the same semantic roles to choose values across them.',
     },
     {
       text: 'Surrounding colors affect how a color looks. For example, the same gray can look lighter on a dark background and darker on a light background. This effect is called simultaneous contrast. Test color systems in complete interface layouts as well as swatch grids.',
@@ -24,11 +24,12 @@ export const lesson6_6: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'Sort each item as a raw value, semantic role, or usage context.',
+      prompt: 'Sort each item as a raw value, semantic role, or usage context. Then decide whether each Display P3 sample needs gamut mapping for sRGB output.',
       hints: [
         'A raw value is a specific number like #0B57D0 or rgb(34, 34, 34).',
         'A semantic role is a token name like --color-text-primary or --color-success-bg.',
         'A usage context identifies where the color appears or how it is rendered: a wide-gamut display, a Canvas chart fill, or an SVG icon fill.',
+        'Use the gamut result under each sample to decide whether it needs mapping for sRGB output.',
       ],
   },
   quizItems: [
