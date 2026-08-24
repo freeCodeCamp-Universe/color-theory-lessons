@@ -123,10 +123,10 @@ export const lesson5_6: LessonConfig = {
     },
   ],
   keyPoints: [
-    'CVD simulation is a useful approximation — a valuable first-pass check — but not a perfect substitute for real user testing.',
-    'A repeatable inclusive workflow: view normally → simulate each CVD type → identify ambiguous elements → add backup cues → re-check.',
-    'Inclusive color checks should happen early: structural fixes are cheap in a design file and expensive in a shipped product.',
-    'User testing with people who have CVD adds real-world validity that simulation alone cannot provide.',
-    'Accessible color design is a quality lens applied throughout regular work, not a last-minute compliance step.',
+    'CVD simulations approximate how an interface may appear under a specific type of CVD; they do not predict any individual\'s experience.',
+    'A repeatable review checks the interface without a simulation, checks each CVD simulation, repairs ambiguous elements, and checks the simulations again.',
+    'Running inclusive color checks before implementation can avoid reworking interface patterns after they have been built.',
+    'User testing can show how individual participants with CVD interpret an interface and complete its tasks.',
+    'Repeat accessible color checks throughout the design process and whenever the design changes.',
   ],
 };

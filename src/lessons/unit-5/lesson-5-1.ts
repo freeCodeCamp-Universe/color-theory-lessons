@@ -105,9 +105,9 @@ export const lesson5_1: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Text readability depends primarily on the luminance contrast between text and background, not on hue.',
-    'Common practical thresholds: 4.5:1 for normal text, 3:1 for large text (18pt+ or 14pt+ bold).',
-    'Changing hue alone rarely fixes a contrast failure — focus on lightness difference.',
-    'Always test contrast with actual text sizes and weights in context, not only with color chip pairs.',
+    'WCAG calculates text contrast from the relative luminance of the text and background colors, not from their hues.',
+    'At WCAG Level AA, normal text needs at least 4.5:1 contrast. Large text needs at least 3:1.',
+    'Changing hue can raise, lower, or leave the contrast ratio unchanged. Check the ratio after each color change.',
+    'Check rendered text at its displayed size and weight as well as its calculated contrast ratio.',
   ],
 };

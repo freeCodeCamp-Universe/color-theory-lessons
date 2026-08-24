@@ -124,10 +124,10 @@ export const lesson5_5: LessonConfig = {
     },
   ],
   keyPoints: [
-    'A contrast tool calculates ratios — it does not replace judgment. Always test in realistic context with real sizes and content.',
-    'A practical screen-level audit: identify priority elements → check contrast → simulate CVD → verify task completion.',
-    'Priority elements are those users depend on to complete tasks: text, buttons, inputs, feedback, alerts, chart marks.',
-    'Contrast passing does not mean color-alone passing — both checks must be done separately.',
-    'During simulated review, ask "can the user complete the task?" — not just "do the colors look different?"',
+    'A contrast checker calculates the ratio between a foreground color and a background color; it does not evaluate the accessibility of an entire design.',
+    'A screen-level audit identifies priority elements, checks contrast, checks simulations for color-only information, and verifies task completion.',
+    'Priority elements include the text, controls, states, and graphics that users need to complete the current task.',
+    'A passing contrast ratio does not show whether another visual cue conveys the same information. Check contrast and use of color separately.',
+    'During a simulated review, follow the main tasks and record each place where the task becomes unclear.',
   ],
 };
