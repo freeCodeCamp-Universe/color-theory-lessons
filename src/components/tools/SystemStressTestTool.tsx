@@ -19,12 +19,12 @@ interface Check {
 }
 
 const CHECKS: Check[] = [
-  { id: 'hierarchy', label: 'Visual hierarchy', description: 'Primary actions are more prominent than secondary ones. Page backgrounds recede, content surfaces step forward.', failNote: 'Action button blends into secondary controls — no clear prominence difference.' },
-  { id: 'text-contrast', label: 'Text contrast', description: 'Body text meets 4.5:1, large text meets 3:1, placeholder text is at least 3:1 on its background.', failNote: 'Placeholder text (#aaa on #fff) is only ~2.3:1 — fails for interactive element context.' },
-  { id: 'semantic-clarity', label: 'Semantic clarity', description: 'Success, warning, and error states use clearly different colors and are not easily confused.', failNote: 'Warning uses #ffcc00 (yellow) and success uses a similar yellow-green. Under CVD they are nearly identical.' },
-  { id: 'dark-mode', label: 'Dark mode adaptation', description: 'Roles adapt to the dark context — surfaces step up in lightness, text inverts, accent remains visible.', failNote: 'Dark mode uses the same blue accent (#1e40af) that was designed for light — it becomes too dark to see.' },
-  { id: 'chart-readability', label: 'Chart readability', description: 'Chart series have adequate contrast with each other and with the chart background. Labels or patterns supplement color.', failNote: 'Chart uses red/green only — indistinguishable under deuteranopia, no labels.' },
-  { id: 'cvd-robustness', label: 'CVD robustness', description: 'Interface communicates meaning through shape, text, or icons in addition to color, and palette is legible under deuteranopia simulation.', failNote: 'Error icons are removed — only color distinguishes error from success in the notification row.' },
+  { id: 'hierarchy', label: 'Visual hierarchy', description: 'Primary actions are more prominent than secondary ones. Page backgrounds recede, content surfaces step forward.', failNote: 'The action button blends into the secondary controls, so neither action appears primary.' },
+  { id: 'text-contrast', label: 'Text contrast', description: 'Normal text, including placeholder text, meets 4.5:1. Large text meets 3:1.', failNote: 'Placeholder text (#aaa on #fff) is about 2.3:1, below the 4.5:1 requirement for normal text.' },
+  { id: 'semantic-clarity', label: 'Semantic clarity', description: 'Success, warning, and error states pair color with distinct labels, icons, or shapes.', failNote: 'Warning and success use similar yellow and yellow-green colors. Their difference narrows under CVD simulation.' },
+  { id: 'dark-mode', label: 'Dark mode adaptation', description: 'Roles adapt to the dark context. Surfaces become lighter at each elevation, text becomes light, and accents remain visible.', failNote: 'Dark mode reuses the #1e40af accent from light mode. It has too little contrast against the dark surface.' },
+  { id: 'chart-readability', label: 'Chart readability', description: 'Chart series contrast with the chart background and use labels, patterns, or boundaries when colors alone do not distinguish adjacent data.', failNote: 'The chart uses only red and green to identify its series. Deuteranopia simulation reduces the hue difference, and there are no labels or patterns.' },
+  { id: 'cvd-robustness', label: 'CVD support', description: 'Labels, shapes, or icons repeat meaning carried by color. CVD simulation preserves distinctions between palette colors.', failNote: 'The notification row removes its error icons, so color is the only cue that distinguishes error from success.' },
 ];
 
 const SYSTEM_COLORS = {
@@ -144,7 +144,7 @@ export const SystemStressTestTool = memo(function SystemStressTestTool({ interac
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          Stress test complete. A robust system survives light, dark, chart, alert, and CVD contexts.
+          Stress test complete. Review each failed check before using this color system.
         </p>
       )}
     </div>
