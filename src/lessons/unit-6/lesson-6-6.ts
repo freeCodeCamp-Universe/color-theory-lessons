@@ -11,7 +11,7 @@ export const lesson6_6: LessonConfig = {
       text: 'Before stress-testing your color system in the next lesson, consider the color space used by each value. In CSS, the HEX, RGB, and HSL formats introduced in Unit 3 represent sRGB colors. This color space provides a common baseline for web content and displays.',
     },
     {
-      text: 'Display P3 has a wider gamut than sRGB, so it can specify some colors that sRGB cannot. CSS represents these colors with color(display-p3 ...). When a screen cannot reproduce a specified color, the browser maps it into the screen\'s gamut. Provide an sRGB fallback, then add Display P3 colors where supported.',
+      text: 'Display P3 has a wider gamut than sRGB, so it can specify some colors that sRGB cannot. CSS represents these colors with color(display-p3 ...). When a screen cannot reproduce a specified color, the browser maps it into the screen\'s gamut. Start with an sRGB declaration for browsers that cannot parse Display P3 syntax. Use @media (color-gamut: p3) when the Display P3 declaration should apply only to wide-gamut displays.',
     },
     {
       text: 'Scalable Vector Graphics (SVG) is a language for two-dimensional graphics such as icons. The HTML Canvas element provides a surface that JavaScript can use to draw charts and other graphics. WebGL uses the Canvas element to render interactive three-dimensional graphics in the browser. These contexts accept explicit color values, so use the same semantic roles to choose values across them.',
@@ -37,8 +37,8 @@ export const lesson6_6: LessonConfig = {
       id: 'q1',
       prompt: 'Which color space should a web design provide as its baseline?',
       choices: [
-        { stableId: 'display-p3-because-it-has-more-vivid-colors', label: 'Display P3, because its gamut is wider', isCorrect: false, explanation: 'Display P3 includes colors outside sRGB, but a design still needs an sRGB fallback for browsers or displays that cannot reproduce the intended P3 color.' },
-        { stableId: 'srgb-because-it-is-supported-by-virtually-all-screens', label: 'sRGB, because it is widely supported in CSS and by displays', isCorrect: true, explanation: 'The HEX, RGB, and HSL formats in CSS represent sRGB colors, and sRGB displays are widespread. Add a Display P3 declaration after the fallback when a wider-gamut version is needed.' },
+        { stableId: 'display-p3-because-it-has-more-vivid-colors', label: 'Display P3, because its gamut is wider', isCorrect: false, explanation: 'Display P3 includes colors outside sRGB, but an sRGB fallback is still needed for browsers that cannot parse Display P3 syntax. Display gamut is a separate concern handled with the color-gamut media feature.' },
+        { stableId: 'srgb-because-it-is-supported-by-virtually-all-screens', label: 'sRGB, because it is widely supported in CSS and by displays', isCorrect: true, explanation: 'The HEX, RGB, and HSL formats in CSS represent sRGB colors, and sRGB displays are widespread. Start with an sRGB declaration, then use @media (color-gamut: p3) for a Display P3 override intended only for wide-gamut displays.' },
         { stableId: 'neither-css-automatically-picks-the-right-one', label: 'Neither, because CSS selects the color space automatically', isCorrect: false, explanation: 'CSS does not replace an sRGB declaration with Display P3 automatically. The author must specify a Display P3 color.' },
         { stableId: 'it-depends-on-which-browser-the-user-prefers', label: 'It depends on which browser the user prefers', isCorrect: false, explanation: 'The device gamut and its CSS support affect the result. A browser preference does not choose the color space.' },
       ],
@@ -58,7 +58,7 @@ export const lesson6_6: LessonConfig = {
       prompt: 'What should you do when using Display P3 colors on the web?',
       choices: [
         { stableId: 'never-use-saturated-colors', label: 'Avoid all saturated colors', isCorrect: false, explanation: 'Saturated sRGB and Display P3 colors are valid. Check whether each color keeps its intended role after gamut mapping.' },
-        { stableId: 'standard-srgb-is-always-safer-and-should-be-used-exclusively', label: 'Use sRGB values exclusively', isCorrect: false, explanation: 'Display P3 can add colors outside sRGB when the browser and display support them. An sRGB fallback covers other cases.' },
+        { stableId: 'standard-srgb-is-always-safer-and-should-be-used-exclusively', label: 'Use sRGB values exclusively', isCorrect: false, explanation: 'Display P3 can add colors outside sRGB. An sRGB declaration covers browsers that cannot parse Display P3 syntax, while a color-gamut media query controls whether the P3 override applies on a wide-gamut display.' },
         { stableId: 'colors-may-appear-more-vivid-than-expected-use-restrained-satura', label: 'Provide sRGB fallbacks and test across display gamuts', isCorrect: true, explanation: 'A Display P3 color outside sRGB must be gamut-mapped on an sRGB display, which can reduce its chroma or otherwise change its appearance.' },
         { stableId: 'wide-gamut-displays-are-only-for-photographers', label: 'Reserve wide-gamut colors for photography', isCorrect: false, explanation: 'Wide-gamut CSS colors can be used in any web interface. They are not limited to photographs.' },
       ],
