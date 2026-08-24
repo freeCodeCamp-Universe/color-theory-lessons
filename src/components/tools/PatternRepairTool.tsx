@@ -16,8 +16,8 @@ const CHART_SERIES = [
   { h: 50, color: '#ef4444', label: 'Series B', val: '50', patternAngle: 0 },
 ];
 
-function chartPattern(color: string, angle: number) {
-  return `repeating-linear-gradient(${angle}deg, ${color}, ${color} 2px, transparent 2px, transparent 6px)`;
+function chartPattern(color: string, angle: number, repeat = 6) {
+  return `repeating-linear-gradient(${angle}deg, ${color}, ${color} 2px, transparent 2px, transparent ${repeat}px)`;
 }
 
 const MODULES: Module[] = [
@@ -174,7 +174,8 @@ const MODULES: Module[] = [
               <span key={series.label} style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
                 <span
                   aria-hidden="true"
-                  style={{ width: 10, height: 10, border: '1px solid #777', background: chartPattern(series.color, series.patternAngle) }}
+                  data-testid={`legend-${series.label.toLowerCase().replace(' ', '-')}`}
+                  style={{ width: 10, height: 10, border: '1px solid #777', background: chartPattern(series.color, series.patternAngle, 4) }}
                 />
                 {series.label}
               </span>

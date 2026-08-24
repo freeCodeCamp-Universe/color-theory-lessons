@@ -80,6 +80,9 @@ describe('PatternRepairTool', () => {
     expect(seriesABackground).toContain('45deg');
     expect(seriesBBackground).toContain('0deg');
     expect(seriesABackground).not.toBe(seriesBBackground);
+    expect(seriesABackground).toContain('transparent 6px');
+    expect(screen.getByTestId('legend-series-a').style.background).toContain('transparent 4px');
+    expect(screen.getByTestId('legend-series-b').style.background).toContain('transparent 4px');
     expect(screen.getByTestId('chart-series-a')).toHaveStyle({ border: '1px solid #777' });
     expect(screen.getByTestId('chart-series-b')).toHaveStyle({ border: '1px solid #777' });
     expect(screen.getByText('Series A')).toBeInTheDocument();
