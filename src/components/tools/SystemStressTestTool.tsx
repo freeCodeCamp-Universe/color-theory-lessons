@@ -9,7 +9,7 @@ interface SystemStressTestToolProps {
 }
 
 type ContextId = 'light' | 'dark' | 'chart' | 'alerts' | 'simulation';
-type FindingId = 'placeholder' | 'dark-action' | 'chart-series' | 'alert-cues';
+type FindingId = 'placeholder' | 'dark-warning' | 'chart-series' | 'alert-cues';
 type Classification = 'role-drift' | 'missing-role' | 'token-override';
 
 interface Finding {
@@ -37,11 +37,11 @@ const FINDINGS: Finding[] = [
     explanation: 'The #aaa placeholder bypasses the shared text token.',
   },
   {
-    id: 'dark-action',
-    label: 'Dark action loses contrast',
+    id: 'dark-warning',
+    label: 'Warning has no semantic role',
     context: 'Dark mode',
     expectedClassification: 'missing-role',
-    explanation: 'The system has no dark-mode action role, so it reuses the light-mode value.',
+    explanation: 'The system has no warning role, so the payment warning uses the default text style.',
   },
   {
     id: 'chart-series',
@@ -70,21 +70,21 @@ type FindingClassifications = Record<FindingId, Classification | ''>;
 
 const INITIAL_SELECTIONS: FindingSelections = {
   placeholder: false,
-  'dark-action': false,
+  'dark-warning': false,
   'chart-series': false,
   'alert-cues': false,
 };
 
 const INITIAL_CLASSIFICATIONS: FindingClassifications = {
   placeholder: '',
-  'dark-action': '',
+  'dark-warning': '',
   'chart-series': '',
   'alert-cues': '',
 };
 
 const COLORS = {
   light: { background: '#f9fafb', surface: '#ffffff', text: '#111827', action: '#1e40af' },
-  dark: { background: '#0f172a', surface: '#1e293b', text: '#f1f5f9', action: '#1e40af' },
+  dark: { background: '#0f172a', surface: '#1e293b', text: '#f1f5f9', action: '#60a5fa' },
   chart: ['#16a34a', '#dc2626'],
   alerts: ['#16a34a', '#dc2626'],
 };
@@ -155,7 +155,11 @@ function ContextPreview({ context }: { context: ContextId }) {
             <span style={{ color: '#aaa' }}>Placeholder color: #aaa</span>
           </div>
         ) : (
-          <p style={{ fontSize: '0.72rem', margin: 0 }}>The primary action keeps its light-mode color instead of using a dark-mode action role.</p>
+          <div style={{ display: 'grid', fontSize: '0.72rem', gap: '0.2rem' }}>
+            <p style={{ color: palette.text, margin: 0 }}>Recent account activity</p>
+            <p aria-label="Payment warning preview" style={{ color: palette.text, margin: 0 }}>Payment method expires soon</p>
+            <span>The warning uses the default text style; no warning role is defined.</span>
+          </div>
         )}
         <span
           aria-label="Save changes action preview"
