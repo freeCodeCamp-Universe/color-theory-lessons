@@ -26,7 +26,7 @@ export const lesson5_6: LessonConfig = {
   challenge: {
       prompt: 'Work through the inclusive review checklist for the sample interface. Mark each item as Pass or Needs Work based on what you observe.',
       hints: [
-        'Compare each checklist item with the visible evidence in the sample interface.',
+        'Switch through the CVD simulation modes and compare each view with the original interface.',
         'Check whether labels, icons, patterns, or text communicate the information carried by each color.',
       ],
   },

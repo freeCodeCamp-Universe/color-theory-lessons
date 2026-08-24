@@ -2,6 +2,33 @@ import { memo, useState } from 'react';
 import shellStyles from './ToolShell.module.css';
 
 type Assessment = 'pass' | 'needs-work' | null;
+type SimulationMode = 'normal' | 'deuteranopia' | 'protanopia' | 'tritanopia' | 'achromatopsia';
+
+const SIMULATION_FILTERS = `
+<svg style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <filter id="inclusive-review-deuteranopia">
+      <feColorMatrix type="matrix" values="0.625 0.375 0 0 0  0.7 0.3 0 0 0  0 0.3 0.7 0 0  0 0 0 1 0"/>
+    </filter>
+    <filter id="inclusive-review-protanopia">
+      <feColorMatrix type="matrix" values="0.567 0.433 0 0 0  0.558 0.442 0 0 0  0 0.242 0.758 0 0  0 0 0 1 0"/>
+    </filter>
+    <filter id="inclusive-review-tritanopia">
+      <feColorMatrix type="matrix" values="0.95 0.05 0 0 0  0 0.433 0.567 0 0  0 0.475 0.525 0 0  0 0 0 1 0"/>
+    </filter>
+    <filter id="inclusive-review-achromatopsia">
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </defs>
+</svg>`;
+
+const SIMULATION_MODES: { id: SimulationMode; label: string; filter: string }[] = [
+  { id: 'normal', label: 'Original', filter: 'none' },
+  { id: 'deuteranopia', label: 'Deuteranopia', filter: 'url(#inclusive-review-deuteranopia)' },
+  { id: 'protanopia', label: 'Protanopia', filter: 'url(#inclusive-review-protanopia)' },
+  { id: 'tritanopia', label: 'Tritanopia', filter: 'url(#inclusive-review-tritanopia)' },
+  { id: 'achromatopsia', label: 'Complete achromatopsia', filter: 'url(#inclusive-review-achromatopsia)' },
+];
 
 interface ChecklistItem {
   id: string;
@@ -14,7 +41,7 @@ const CHECKLIST: ChecklistItem[] = [
   {
     id: 'simulation',
     label: 'Simulation check',
-    detail: 'Did you view the interface under CVD simulation modes?',
+    detail: 'Does the interface remain understandable under CVD simulation modes?',
     correctAnswer: 'needs-work',
   },
   {
@@ -49,6 +76,7 @@ interface InclusiveReviewToolProps {
 }
 
 export const InclusiveReviewTool = memo(function InclusiveReviewTool({ interactive = false, onComplete }: InclusiveReviewToolProps) {
+  const [simulationMode, setSimulationMode] = useState<SimulationMode>('normal');
   const [answers, setAnswers] = useState<Record<string, Assessment>>(
     Object.fromEntries(CHECKLIST.map((c) => [c.id, null])),
   );
@@ -68,15 +96,45 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({ interacti
   }
 
   const answeredCount = Object.values(answers).filter((a) => a !== null).length;
+  const simulationFilter = SIMULATION_MODES.find((mode) => mode.id === simulationMode)?.filter ?? 'none';
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>inclusive review</span>
+      <div dangerouslySetInnerHTML={{ __html: SIMULATION_FILTERS }} />
+
+      <div
+        role="group"
+        aria-label="CVD simulation mode"
+        style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}
+      >
+        {SIMULATION_MODES.map((mode) => (
+          <button
+            key={mode.id}
+            type="button"
+            disabled={!interactive}
+            aria-pressed={simulationMode === mode.id}
+            onClick={() => setSimulationMode(mode.id)}
+            style={{
+              padding: '0.25rem 0.5rem',
+              fontSize: '0.72rem',
+              fontFamily: 'var(--font-mono)',
+              background: simulationMode === mode.id ? 'var(--accent-cta)' : 'transparent',
+              color: simulationMode === mode.id ? '#111' : 'var(--muted)',
+              border: `1px solid ${simulationMode === mode.id ? 'var(--accent-cta)' : 'var(--border)'}`,
+              borderRadius: 'var(--radius-sm)',
+              cursor: interactive ? 'pointer' : 'default',
+            }}
+          >
+            {mode.label}
+          </button>
+        ))}
+      </div>
 
       {/* Compact mockup reference */}
-      <div style={{
+      <div data-testid="inclusive-review-mockup" style={{
         border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)',
-        overflow: 'hidden', marginBottom: '0.75rem', fontSize: '0.72rem',
+        overflow: 'hidden', marginBottom: '0.75rem', fontSize: '0.72rem', filter: simulationFilter,
       }}>
         <div style={{ background: '#1e3a5f', padding: '0.35rem 0.6rem', display: 'flex', gap: '0.75rem' }}>
           <span style={{ color: '#4da6ff', fontWeight: 600 }}>Dashboard</span>
@@ -105,6 +163,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({ interacti
           return (
             <div
               key={item.id}
+              data-testid={`checklist-${item.id}`}
               style={{
                 padding: '0.5rem 0.65rem',
                 borderRadius: 'var(--radius-sm)',
@@ -145,7 +204,9 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({ interacti
               </div>
               {answer && !isCorrect && (
                 <p style={{ fontSize: '0.7rem', color: 'var(--accent-cta)', marginTop: '0.25rem', margin: '0.25rem 0 0' }}>
-                  This mockup does not meet this check. Choose "Needs work."
+                  {item.id === 'simulation'
+                    ? 'The chart bars become hard to distinguish under CVD simulation and have no labels or patterns. Choose "Needs work".'
+                    : 'This mockup does not meet this check. Choose "Needs work".'}
                 </p>
               )}
             </div>
