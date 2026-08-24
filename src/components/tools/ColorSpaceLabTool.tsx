@@ -11,7 +11,7 @@ interface SortItem {
 const SORT_ITEMS: SortItem[] = [
   { label: '#0B57D0',              category: 'value' },
   { label: '--color-text-primary', category: 'role' },
-  { label: 'Display P3',          category: 'context' },
+  { label: 'wide-gamut display', category: 'context' },
   { label: 'chart bar fill',      category: 'context' },
   { label: 'rgb(34, 34, 34)',     category: 'value' },
   { label: '--color-success-bg',  category: 'role' },
@@ -22,11 +22,11 @@ const SORT_ITEMS: SortItem[] = [
 
 // Sample accent colors for exploration
 const ACCENTS = [
-  { label: 'Vivid blue',   hex: '#0066FF' },
-  { label: 'Hot pink',     hex: '#FF1493' },
-  { label: 'Electric green', hex: '#00FF66' },
-  { label: 'Safe blue',    hex: '#2563EB' },
-  { label: 'Safe coral',   hex: '#E05252' },
+  { label: 'Bright blue', hex: '#0066FF' },
+  { label: 'Pink',        hex: '#FF1493' },
+  { label: 'Green',       hex: '#00FF66' },
+  { label: 'Dark blue',   hex: '#2563EB' },
+  { label: 'Coral',       hex: '#E05252' },
 ];
 
 interface ColorSpaceLabToolProps {
@@ -92,7 +92,7 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
         </div>
         <div style={{ flex: 1 }}>
           <p style={{ fontSize: '0.72rem', color: 'var(--muted)', marginBottom: '0.25rem' }}>
-            Display P3 {isVivid ? '(may extend beyond sRGB)' : '(within sRGB)'}
+            Saturation comparison {isVivid ? '(30% increase)' : '(no increase)'}
           </p>
           <div style={{
             height: 60, borderRadius: 'var(--radius-sm)', background: accent.hex,
@@ -113,7 +113,7 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
               height: 36, borderRadius: 'var(--radius-sm)', background: accent.hex,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <span style={{ color: '#fff', fontSize: '0.7rem', fontFamily: 'var(--font-mono)' }}>CSS btn</span>
+              <span style={{ color: '#fff', fontSize: '0.7rem', fontFamily: 'var(--font-mono)' }}>CSS button</span>
             </div>
             <span style={{ fontSize: '0.68rem', color: 'var(--muted)' }}>HTML/CSS</span>
           </div>
@@ -149,7 +149,7 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
         <span style={{ color: 'var(--muted)' }}>HSL</span> {hsl.h}°,{hsl.s}%,{hsl.l}%
         {isVivid && (
           <span style={{ color: 'var(--yellow)', marginLeft: '0.5rem' }}>
-            ⚠ Extremely vivid — may clip on sRGB displays
+            The right preview increases CSS saturation by 30%. It does not display a P3 color.
           </span>
         )}
       </div>
@@ -158,7 +158,7 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
       {interactive && (
         <div style={{ borderTop: '1px solid var(--border)', paddingTop: '0.6rem' }}>
           <p style={{ fontSize: '0.82rem', color: 'var(--muted)', marginBottom: '0.4rem' }}>
-            Classify each item as raw value, semantic role, or rendering context:
+            Classify each item as a raw value, semantic role, or usage context:
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginBottom: '0.5rem' }}>
             {SORT_ITEMS.map((item) => {
@@ -184,10 +184,10 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
                     }}
                     aria-label={`Category for ${item.label}`}
                   >
-                    <option value="">—</option>
+                    <option value="">choose</option>
                     <option value="value">raw value</option>
                     <option value="role">semantic role</option>
-                    <option value="context">rendering context</option>
+                    <option value="context">usage context</option>
                   </select>
                 </div>
               );
@@ -214,7 +214,7 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
 
       {completed && (
         <p style={{ color: 'var(--green)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          All items correctly sorted. Color decisions matter regardless of the rendering context.
+          All nine items are correctly classified.
         </p>
       )}
     </div>
