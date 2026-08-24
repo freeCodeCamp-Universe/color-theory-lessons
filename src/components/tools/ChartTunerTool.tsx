@@ -102,7 +102,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
             border: 'none',
           }}
         >
-          Normal
+          Normal view
         </button>
         <button
           onClick={() => setSimulated(true)}
@@ -113,7 +113,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
             border: 'none',
           }}
         >
-          Deuteranopia sim
+          Deuteranopia simulation
         </button>
       </div>
 
@@ -144,7 +144,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
             for (let a = 0; a < 4; a++) for (let b = a + 1; b < 4; b++) pairs.push([a, b]);
             const weak = pairs.filter(([a, b]) => colorDiff(simColors[a], simColors[b]) < MIN_DIFF);
             return weak.length > 0
-              ? <span style={{ color: 'var(--accent-cta)' }}>⚠ Under simulation: {weak.map(([a, b]) => `${SERIES[a]}/${SERIES[b]}`).join(', ')} are hard to distinguish</span>
+              ? <span style={{ color: 'var(--accent-cta)' }}>⚠ Pairs that are hard to distinguish under simulation: {weak.map(([a, b]) => `${SERIES[a]}/${SERIES[b]}`).join(', ')}</span>
               : <span style={{ color: 'var(--accent-success)' }}>✓ All series distinguishable in both views</span>;
           })()}
         </div>
@@ -152,7 +152,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          Chart palette passes normal and CVD simulation — series are distinguishable in both views.
+          The series meet the tool's difference threshold in both normal view and the deuteranopia simulation.
         </p>
       )}
     </div>
