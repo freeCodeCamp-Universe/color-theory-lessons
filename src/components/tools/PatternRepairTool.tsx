@@ -25,10 +25,8 @@ const MODULES: Module[] = [
     id: 'form-validation',
     name: 'Form validation',
     repairOptions: ['Add error icon ✕', 'Add error message text', 'Change label to bold+red'],
-    isValidRepair: (checked) => checked.length >= 2 && checked.includes('Add error message text'),
-    invalidFeedback: (checked) => checked.includes('Add error message text')
-      ? 'The error message needs one more supporting cue.'
-      : 'The form does not explain what is wrong. A visible error description is still missing.',
+    isValidRepair: (checked) => checked.includes('Add error message text'),
+    invalidFeedback: () => 'The form does not explain what is wrong. A visible error description is still missing.',
     brokenPreview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
         <label style={{ fontSize: '0.72rem', color: '#374151' }}>Email address</label>
@@ -87,7 +85,9 @@ const MODULES: Module[] = [
     name: 'Alert stack',
     repairOptions: ['Add icons (✓/⚠/✕)', 'Add structured heading', 'Add border-left accent'],
     isValidRepair: (checked) => checked.length >= 2,
-    invalidFeedback: () => 'One cue is not enough to distinguish every alert state without color.',
+    invalidFeedback: (checked) => checked.length === 0
+      ? 'The alerts still rely on color to distinguish their states.'
+      : 'One cue is not enough to distinguish every alert state without color.',
     brokenPreview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
         {[{ bg: '#dcfce7', text: '#166534', msg: 'Changes saved.' }, { bg: '#fef9c3', text: '#854d0e', msg: 'Unsaved changes.' }, { bg: '#fee2e2', text: '#991b1b', msg: 'Upload failed.' }].map((alert) => (

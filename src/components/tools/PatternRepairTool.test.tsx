@@ -30,11 +30,10 @@ describe('PatternRepairTool', () => {
     expect(feedback.parentElement?.lastElementChild).toBe(feedback);
   });
 
-  it('repairs form validation when error message text is paired with another cue', () => {
+  it('repairs form validation with error message text alone', () => {
     render(<PatternRepairTool interactive />);
 
     selectOption('Add error message text');
-    selectOption('Add error icon ✕');
     fireEvent.click(screen.getByRole('button', { name: 'check repairs' }));
 
     expect(screen.getByText(/1\/4 repaired/)).toBeInTheDocument();
@@ -116,6 +115,15 @@ describe('PatternRepairTool', () => {
     fireEvent.click(screen.getByRole('button', { name: 'check repairs' }));
 
     expect(screen.getByText(/1\/4 repaired/)).toBeInTheDocument();
+  });
+
+  it('explains when the alert stack has no selected cues', () => {
+    render(<PatternRepairTool interactive />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'check repairs' }));
+
+    expect(screen.getByText('The alerts still rely on color to distinguish their states.')).toBeInTheDocument();
+    expect(screen.queryByText('One cue is not enough to distinguish every alert state without color.')).not.toBeInTheDocument();
   });
 
   it('preserves selections when retrying an invalid repair', () => {
