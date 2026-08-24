@@ -81,6 +81,15 @@ describe('ChartTunerTool', () => {
     expect(screen.getByText('The palette passes normal and CVD views, every series has a distinct pattern, and the data table identifies every bar.')).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
     expect(screen.getByRole('checkbox', { name: 'Show the chart data table' })).toBeDisabled();
+    SERIES_COLOR_LABELS.forEach((name) => {
+      expect(screen.getByLabelText(`Change ${name} color`)).toBeDisabled();
+      expect(screen.getByRole('combobox', { name: `Pattern for ${name}` })).toBeDisabled();
+    });
+
+    fireEvent.change(screen.getByRole('combobox', { name: 'Pattern for Expenses' }), { target: { value: 'diagonal' } });
+
+    expect(screen.queryByText('Palette passes both views. Assign a different pattern to each series.')).not.toBeInTheDocument();
+    expect(screen.getByText('The palette passes normal and CVD views, every series has a distinct pattern, and the data table identifies every bar.')).toBeInTheDocument();
   });
 
   it('does not enable completion with a failing palette or duplicate patterns', () => {

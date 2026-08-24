@@ -168,14 +168,14 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
   const [completed, setCompleted] = useState(false);
 
   function update(i: number, val: string) {
-    if (!interactive) return;
+    if (!interactive || completed) return;
     const next = [...colors];
     next[i] = val;
     setColors(next);
   }
 
   function updatePattern(i: number, pattern: Pattern) {
-    if (!interactive) return;
+    if (!interactive || completed) return;
     const next = [...patterns];
     next[i] = pattern;
     setPatterns(next);
@@ -236,8 +236,9 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
                 id={`chart-color-${i}`}
                 type="color"
                 value={isValidHex(colors[i]) ? colors[i] : '#000000'}
+                disabled={completed}
                 onChange={e => update(i, e.target.value)}
-                style={{ gridRow: '1 / span 2', width: 32, height: 32, padding: 0, border: '1px solid var(--border)', borderRadius: 4, cursor: 'pointer', background: 'transparent' }}
+                style={{ gridRow: '1 / span 2', width: 32, height: 32, padding: 0, border: '1px solid var(--border)', borderRadius: 4, cursor: completed ? 'not-allowed' : 'pointer', background: 'transparent' }}
                 aria-label={`Change ${name} color`}
               />
             )}
@@ -249,6 +250,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
               <select
                 aria-label={`Pattern for ${name}`}
                 value={patterns[i]}
+                disabled={completed}
                 onChange={(event) => updatePattern(i, event.target.value as Pattern)}
                 style={{ gridColumn: '1 / -1', width: '100%', fontFamily: 'var(--font-mono)', fontSize: '0.68rem', padding: '0.25rem', color: 'var(--primary-foreground)', background: 'var(--primary-background)', border: '1px solid var(--border)', borderRadius: 4 }}
               >
