@@ -17,14 +17,14 @@ const STATUS_HUE_DIFFERENCE_MINIMUM = 30;
 const STATUS_LUMINANCE_CONTRAST_MINIMUM = 1.5;
 
 const DEFAULTS: Record<RoleKey, string> = {
-  'page-bg': '#c4cbd4',
+  'page-bg': '#f9fafb',
   'surface': '#ffffff',
   'primary-text': '#111827',
-  'secondary-text': '#4b5563',
-  'action': '#1e40af',
-  'success': '#052e16',
-  'warning': '#facc15',
-  'error': '#991b1b',
+  'secondary-text': '#9ca3af',
+  'action': '#3b82f6',
+  'success': '#22c55e',
+  'warning': '#f59e0b',
+  'error': '#ef4444',
 };
 
 const ROLE_LABELS: Record<RoleKey, string> = {

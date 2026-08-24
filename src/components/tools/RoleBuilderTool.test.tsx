@@ -19,7 +19,32 @@ function setRole(role: keyof typeof ROLE_INDEX, value: string) {
   fireEvent.change(screen.getAllByRole('textbox')[ROLE_INDEX[role]], { target: { value } });
 }
 
+function setPassingRoles() {
+  setRole('page-bg', '#c4cbd4');
+  setRole('surface', '#ffffff');
+  setRole('primary-text', '#101827');
+  setRole('secondary-text', '#4b5563');
+  setRole('action', '#1e40af');
+  setRole('success', '#052e16');
+  setRole('warning', '#facc15');
+  setRole('error', '#991b1b');
+}
+
 describe('RoleBuilderTool', () => {
+  it('starts with failed checks and does not complete after one passing edit', () => {
+    const onComplete = vi.fn();
+    render(<RoleBuilderTool interactive onComplete={onComplete} />);
+
+    expect(screen.getByText('Secondary text / surface').parentElement).toHaveTextContent('✗');
+    expect(screen.getByText('Page / surface ≥ 1.5:1').parentElement).toHaveTextContent('✗');
+    expect(screen.getByText('Status luminance ≥ 1.5:1').parentElement).toHaveTextContent('✗');
+
+    setRole('primary-text', '#101827');
+
+    expect(screen.queryByText(/All color-role checks pass/)).not.toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+
   it('checks primary text against the card surface', () => {
     const onComplete = vi.fn();
     render(<RoleBuilderTool interactive onComplete={onComplete} />);
@@ -46,6 +71,7 @@ describe('RoleBuilderTool', () => {
     render(<RoleBuilderTool interactive onComplete={onComplete} />);
 
     setRole('success', '#facc15');
+    setRole('warning', '#facc15');
 
     expect(screen.getByText('Status hues ≥ 30° apart').parentElement).toHaveTextContent('✗');
     expect(screen.getByText('Status luminance ≥ 1.5:1').parentElement).toHaveTextContent('✗ 1.00:1');
@@ -90,7 +116,7 @@ describe('RoleBuilderTool', () => {
     const onComplete = vi.fn();
     render(<RoleBuilderTool interactive onComplete={onComplete} />);
 
-    setRole('primary-text', '#101827');
+    setPassingRoles();
 
     expect(screen.getByText('All color-role checks pass. The preview keeps labels and icons so meaning never depends on color alone.')).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
@@ -100,7 +126,7 @@ describe('RoleBuilderTool', () => {
     const onComplete = vi.fn();
     render(<RoleBuilderTool interactive onComplete={onComplete} />);
 
-    setRole('primary-text', '#101827');
+    setPassingRoles();
     expect(screen.getByText(/All color-role checks pass/)).toBeInTheDocument();
 
     setRole('success', '#invalid');
