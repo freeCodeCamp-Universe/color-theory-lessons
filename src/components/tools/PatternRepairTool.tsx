@@ -142,6 +142,7 @@ const MODULES: Module[] = [
                 background: checked.includes('Add pattern fills')
                   ? `repeating-linear-gradient(45deg, ${bar.color}, ${bar.color} 2px, transparent 2px, transparent 6px)`
                   : bar.color,
+                border: checked.includes('Add pattern fills') ? '1px solid #777' : 'none',
                 borderRadius: '3px 3px 0 0', position: 'relative',
               }}
             >
