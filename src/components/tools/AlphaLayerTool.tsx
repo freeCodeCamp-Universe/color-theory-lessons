@@ -76,6 +76,10 @@ function rgbCss({ r, g, b }: { r: number; g: number; b: number }): string {
   return `rgb(${r} ${g} ${b})`;
 }
 
+function formatContrastRatio(ratio: number): string {
+  return (Math.floor(ratio * 10) / 10).toFixed(1);
+}
+
 interface AlphaLayerToolProps {
   interactive?: boolean;
   onComplete?: () => void;
@@ -193,7 +197,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({ interactive = false
           {ctx.id === 'image' && imageTextContrast !== null && (
             <div style={{ marginTop: '0.25rem' }}>
               <span style={{ color: 'var(--muted)' }}>Text contrast:</span>{' '}
-              {imageTextContrast.toFixed(1)}:1 (target: {IMAGE_TEXT_CONTRAST_TARGET}:1)
+              {formatContrastRatio(imageTextContrast)}:1 (target: {IMAGE_TEXT_CONTRAST_TARGET}:1)
             </div>
           )}
         </div>
