@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { InclusiveReviewTool } from './InclusiveReviewTool.tsx';
 
 afterEach(() => cleanup());
@@ -36,5 +36,21 @@ describe('InclusiveReviewTool', () => {
 
     fireEvent.click(within(simulationCheck).getByRole('button', { name: 'Needs work' }));
     expect(within(simulationCheck).queryByText(/chart bars become hard to distinguish/)).not.toBeInTheDocument();
+  });
+
+  it('completes only after every incorrect assessment is revised', () => {
+    const onComplete = vi.fn();
+    render(<InclusiveReviewTool interactive onComplete={onComplete} />);
+
+    screen.getAllByRole('button', { name: 'Pass' }).forEach((button) => fireEvent.click(button));
+
+    expect(onComplete).not.toHaveBeenCalled();
+    expect(screen.queryByText(/Review complete/)).not.toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: 'Needs work' })[0]).toBeEnabled();
+
+    screen.getAllByRole('button', { name: 'Needs work' }).forEach((button) => fireEvent.click(button));
+
+    expect(onComplete).toHaveBeenCalledOnce();
+    expect(screen.getByText(/Review complete/)).toBeInTheDocument();
   });
 });

@@ -86,8 +86,8 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({ interacti
     if (!interactive || completed) return;
     setAnswers((prev) => {
       const next = { ...prev, [id]: value };
-      const allAnswered = CHECKLIST.every((c) => next[c.id] !== null);
-      if (allAnswered && !completed) {
+      const allCorrect = CHECKLIST.every((item) => next[item.id] === item.correctAnswer);
+      if (allCorrect && !completed) {
         setCompleted(true);
         onComplete?.();
       }
