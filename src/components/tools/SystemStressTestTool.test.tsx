@@ -28,7 +28,7 @@ describe('SystemStressTestTool', () => {
   it('provides observable previews for all five contexts', () => {
     render(<SystemStressTestTool interactive />);
 
-    expect(screen.getByPlaceholderText('Search by name')).toBeInTheDocument();
+    expect(screen.getByText('Search by name')).toBeInTheDocument();
     expect(screen.getByText('Placeholder color: #aaa')).toHaveStyle({ color: '#aaa' });
 
     fireEvent.click(screen.getByRole('button', { name: 'Dark mode' }));
@@ -45,15 +45,16 @@ describe('SystemStressTestTool', () => {
     expect(screen.getByLabelText('Alerts under deuteranopia simulation')).toBeInTheDocument();
   });
 
-  it('keeps the required contrast examples active', () => {
+  it('presents the required contrast evidence without interactive controls', () => {
     render(<SystemStressTestTool interactive />);
 
-    expect(screen.getByPlaceholderText('Search by name')).not.toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Save changes' })).toBeDisabled();
+    expect(screen.getByText('Search by name')).toBeInTheDocument();
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+    expect(contrastRatioWcag(hexToRgb('#aaaaaa'), hexToRgb('#ffffff'))).toBeLessThan(4.5);
 
     fireEvent.click(screen.getByRole('button', { name: 'Dark mode' }));
-    const action = screen.getByRole('button', { name: 'Save changes' });
-    expect(action).not.toBeDisabled();
+    const action = screen.getByRole('img', { name: 'Save changes action preview' });
+    expect(screen.queryByRole('button', { name: 'Save changes' })).not.toBeInTheDocument();
     expect(action).toHaveStyle({ background: 'transparent', color: '#1e40af' });
     expect(action).toHaveTextContent('');
     expect(action.querySelector('svg[aria-hidden="true"]')).toBeInTheDocument();

@@ -149,24 +149,23 @@ function ContextPreview({ context }: { context: ContextId }) {
       <div style={{ background: palette.surface, borderRadius: 4, color: palette.text, display: 'grid', gap: '0.65rem', padding: '0.75rem' }}>
         <strong style={{ fontSize: '0.85rem' }}>Account dashboard</strong>
         {context === 'light' ? (
-          <label style={{ display: 'grid', fontSize: '0.7rem', gap: '0.2rem' }}>
-            Search accounts
-            <input aria-label="Search accounts" className={styles.placeholder} placeholder="Search by name" />
+          <div style={{ display: 'grid', fontSize: '0.7rem', gap: '0.2rem' }}>
+            <span>Search accounts</span>
+            <div className={styles.placeholder}>Search by name</div>
             <span style={{ color: '#aaa' }}>Placeholder color: #aaa</span>
-          </label>
+          </div>
         ) : (
           <p style={{ fontSize: '0.72rem', margin: 0 }}>The primary action keeps its light-mode color instead of using a dark-mode action role.</p>
         )}
-        <button
-          aria-label="Save changes"
-          disabled={context === 'light'}
+        <span
+          aria-label="Save changes action preview"
+          role="img"
           style={{ background: 'transparent', border: 0, color: palette.action, justifySelf: 'start', padding: '0.35rem' }}
-          type="button"
         >
           <svg aria-hidden="true" focusable="false" height="18" viewBox="0 0 24 24" width="18">
             <path d="M5 3h12l2 2v16H5V3Zm2 2v5h8V5H7Zm0 14h10v-7H7v7Zm2-12h4V5H9v2Z" fill="currentColor" />
           </svg>
-        </button>
+        </span>
       </div>
     </div>
   );
