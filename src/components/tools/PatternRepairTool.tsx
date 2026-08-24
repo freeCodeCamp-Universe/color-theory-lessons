@@ -255,11 +255,11 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
                 <p style={{ fontWeight: 600, fontSize: '0.8rem', margin: 0, color: 'var(--primary-foreground)' }}>{mod.name}</p>
                 <span aria-live="polite" style={{ fontSize: '0.68rem', color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
-                  {!submitted
-                    ? 'not checked'
-                    : isRepaired
+                  {submitted && (
+                    isRepaired
                       ? <span style={{ color: 'var(--accent-success)' }}>✓ repaired</span>
-                      : <span style={{ color: 'var(--accent-danger)' }}>{mod.invalidFeedback(modChecked)}</span>}
+                      : <span style={{ color: 'var(--accent-danger)' }}>{mod.invalidFeedback(modChecked)}</span>
+                  )}
                 </span>
               </div>
 

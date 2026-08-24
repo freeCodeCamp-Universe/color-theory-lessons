@@ -12,7 +12,7 @@ describe('PatternRepairTool', () => {
   it('does not reveal repair requirements before checking', () => {
     render(<PatternRepairTool interactive />);
 
-    expect(screen.getAllByText('not checked')).toHaveLength(4);
+    expect(screen.queryByText('not checked')).not.toBeInTheDocument();
     expect(screen.queryByText(/needs error text/)).not.toBeInTheDocument();
     expect(screen.queryByText(/needs direct labels/)).not.toBeInTheDocument();
   });
