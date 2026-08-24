@@ -44,6 +44,15 @@ describe('SystemStressTestTool', () => {
     expect(screen.getByLabelText('Alerts under deuteranopia simulation')).toBeInTheDocument();
   });
 
+  it('keeps the required contrast examples active', () => {
+    render(<SystemStressTestTool interactive />);
+
+    expect(screen.getByPlaceholderText('Search by name')).not.toBeDisabled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Dark mode' }));
+    expect(screen.getByRole('button', { name: 'Save changes' })).not.toBeDisabled();
+  });
+
   it('reports incomplete findings without completing', () => {
     const onComplete = vi.fn();
     render(<SystemStressTestTool interactive onComplete={onComplete} />);

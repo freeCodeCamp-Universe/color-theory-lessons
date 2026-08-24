@@ -151,13 +151,13 @@ function ContextPreview({ context }: { context: ContextId }) {
         {context === 'light' ? (
           <label style={{ display: 'grid', fontSize: '0.7rem', gap: '0.2rem' }}>
             Search accounts
-            <input aria-label="Search accounts" className={styles.placeholder} disabled placeholder="Search by name" />
+            <input aria-label="Search accounts" className={styles.placeholder} placeholder="Search by name" />
             <span style={{ color: '#aaa' }}>Placeholder color: #aaa</span>
           </label>
         ) : (
           <p style={{ fontSize: '0.72rem', margin: 0 }}>The primary action keeps its light-mode color instead of using a dark-mode action role.</p>
         )}
-        <button disabled style={{ background: palette.action, border: 0, borderRadius: 4, color: '#ffffff', justifySelf: 'start', padding: '0.35rem 0.7rem' }}>
+        <button disabled={context === 'light'} style={{ background: palette.action, border: 0, borderRadius: 4, color: '#ffffff', justifySelf: 'start', padding: '0.35rem 0.7rem' }} type="button">
           Save changes
         </button>
       </div>
