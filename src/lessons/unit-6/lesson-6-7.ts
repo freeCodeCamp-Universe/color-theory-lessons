@@ -29,7 +29,7 @@ export const lesson6_7: LessonConfig = {
         'Toggle between all five contexts before marking anything. The same issue might appear in multiple views.',
         'Ask: does hierarchy still work? Are states distinct? Is anything too loud or too faint?',
         'For each issue, classify the root cause: role drift, missing role definition, or token override.',
-        'Check the chart and alert views for differences that disappear under CVD simulation.',
+        'Check the chart and alert views for differences that become harder to distinguish under CVD simulation.',
       ],
   },
   quizItems: [
