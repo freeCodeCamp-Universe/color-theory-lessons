@@ -81,7 +81,7 @@ export const lesson5_6: LessonConfig = {
           stableId: 'because-accessibility-problems-disappear-later-in-the-process',
           label: 'Because accessibility problems disappear later in the process',
           isCorrect: false,
-          explanation: 'Accessibility problems do not self-resolve. They become harder and more expensive to fix over time.',
+          explanation: 'A color-only status remains color-only until the design adds a label, icon, or another visual cue.',
         },
         {
           stableId: 'because-inclusive-design-only-applies-to-wireframes',
