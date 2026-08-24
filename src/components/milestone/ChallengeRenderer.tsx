@@ -35,7 +35,7 @@ export function ChallengeRenderer({ challengeType, onComplete, sessionKey }: Cha
     case 'simulation-spotter':
       return <SimulationSpotterChallenge onComplete={onComplete} sessionKey={sessionKey} />;
     case 'accessibility-rescue':
-      return <AccessibilityRescueChallenge onComplete={onComplete} />;
+      return <AccessibilityRescueChallenge onComplete={onComplete} sessionKey={sessionKey} />;
     case 'semantic-audit':
       return <SemanticAuditChallenge onComplete={onComplete} />;
     case 'dark-mode-stress':

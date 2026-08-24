@@ -8,6 +8,7 @@ export const READ_INTERFACE_SESSION_PREFIX = 'color-theory-course-read-interface
 export const CHANNEL_PREDICTION_SESSION_PREFIX = 'color-theory-course-channel-prediction-session:';
 export const THEME_FROM_SCRATCH_SESSION_PREFIX = 'color-theory-course-theme-from-scratch-session:';
 export const SIMULATION_SPOTTER_SESSION_PREFIX = 'color-theory-course-simulation-spotter-session:';
+export const ACCESSIBILITY_RESCUE_SESSION_PREFIX = 'color-theory-course-accessibility-rescue-session:';
 
 interface StoredState {
   version: number;
@@ -82,6 +83,7 @@ export function clearMilestoneSessions(): void {
         || key?.startsWith(CHANNEL_PREDICTION_SESSION_PREFIX)
         || key?.startsWith(THEME_FROM_SCRATCH_SESSION_PREFIX)
         || key?.startsWith(SIMULATION_SPOTTER_SESSION_PREFIX)
+        || key?.startsWith(ACCESSIBILITY_RESCUE_SESSION_PREFIX)
       ) {
         sessionStorage.removeItem(key);
       }

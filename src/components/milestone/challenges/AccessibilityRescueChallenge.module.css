@@ -55,7 +55,7 @@
   font-size: 0.78rem;
 }
 
-.errorMark {
+.colorOnlyLabel {
   color: var(--red);
   font-weight: 700;
 }
@@ -84,7 +84,11 @@
   font-size: 0.72rem;
 }
 
-.focusOn {
+.fakeButton:focus-visible {
+  outline: none;
+}
+
+.fakeButton.focusOn:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 1px;
 }
