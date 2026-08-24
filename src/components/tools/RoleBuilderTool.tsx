@@ -53,9 +53,11 @@ function getReadableForeground(background: string) {
 }
 
 function getHueDifference(first: string, second: string) {
-  const firstHue = hexToHsl(first).h;
-  const secondHue = hexToHsl(second).h;
-  const difference = Math.abs(firstHue - secondHue);
+  const firstHsl = hexToHsl(first);
+  const secondHsl = hexToHsl(second);
+  if (firstHsl.s === 0 || secondHsl.s === 0) return null;
+
+  const difference = Math.abs(firstHsl.h - secondHsl.h);
   return Math.min(difference, 360 - difference);
 }
 
@@ -83,9 +85,10 @@ function validateRoles(roles: Record<RoleKey, string>) {
     STATUS_KEYS.slice(index + 1).map((otherRole) => [role, otherRole] as const),
   );
   const statusesValid = STATUS_KEYS.every((role) => isValidHex(roles[role]));
-  const statusHueDistinct = statusesValid && statusPairs.every(
-    ([first, second]) => getHueDifference(roles[first], roles[second]) >= STATUS_HUE_DIFFERENCE_MINIMUM,
-  );
+  const statusHueDistinct = statusesValid && statusPairs.every(([first, second]) => {
+    const difference = getHueDifference(roles[first], roles[second]);
+    return difference !== null && difference >= STATUS_HUE_DIFFERENCE_MINIMUM;
+  });
   const statusLuminanceContrasts = statusesValid
     ? statusPairs.map(([first, second]) => getContrast(roles[first], roles[second]))
     : [1];

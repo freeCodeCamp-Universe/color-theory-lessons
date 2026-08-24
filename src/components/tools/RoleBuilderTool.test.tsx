@@ -52,6 +52,18 @@ describe('RoleBuilderTool', () => {
     expect(onComplete).not.toHaveBeenCalled();
   });
 
+  it('does not treat an achromatic status color as having a distinct hue', () => {
+    const onComplete = vi.fn();
+    render(<RoleBuilderTool interactive onComplete={onComplete} />);
+
+    setRole('success', '#000000');
+    setRole('error', '#0000ff');
+
+    expect(screen.getByText('Status hues ≥ 30° apart').parentElement).toHaveTextContent('✗');
+    expect(screen.getByText('Status luminance ≥ 1.5:1').parentElement).toHaveTextContent('✓ 2.44:1');
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+
   it('does not complete when the page and card surface match', () => {
     const onComplete = vi.fn();
     render(<RoleBuilderTool interactive onComplete={onComplete} />);
