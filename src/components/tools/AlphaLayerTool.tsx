@@ -1,4 +1,5 @@
 import { memo, useState, useRef } from 'react';
+import { contrastRatioWcag } from '../../utils/color.ts';
 import shellStyles from './ToolShell.module.css';
 
 interface OverlayContext {
@@ -11,6 +12,9 @@ interface OverlayContext {
   targetAlphaMax: number;
   targetColorDark: boolean; // true = foreground should be dark-ish, false = light-ish
 }
+
+const IMAGE_TEXT_CONTRAST_TARGET = 4.5;
+const IMAGE_TEXT_COLOR = { r: 255, g: 255, b: 255 };
 
 const CONTEXTS: OverlayContext[] = [
   {
@@ -59,13 +63,21 @@ function blendChannel(fg: number, bg: number, alpha: number): number {
   return Math.round(fg * alpha + bg * (1 - alpha));
 }
 
-function blend(fgR: number, fgG: number, fgB: number, alpha: number, bgHex: string): string {
+function blendRgb(fgR: number, fgG: number, fgB: number, alpha: number, bgHex: string): { r: number; g: number; b: number } {
   const bg = parseInt(bgHex.slice(1), 16);
   const bgR = (bg >> 16) & 255, bgG = (bg >> 8) & 255, bgB = bg & 255;
   const r = blendChannel(fgR, bgR, alpha);
   const g = blendChannel(fgG, bgG, alpha);
   const b = blendChannel(fgB, bgB, alpha);
+  return { r, g, b };
+}
+
+function rgbCss({ r, g, b }: { r: number; g: number; b: number }): string {
   return `rgb(${r} ${g} ${b})`;
+}
+
+function formatContrastRatio(ratio: number): string {
+  return (Math.floor(ratio * 10) / 10).toFixed(1);
 }
 
 interface AlphaLayerToolProps {
@@ -85,14 +97,20 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({ interactive = false
   const fgG = isDark ? 0 : 255;
   const fgB = isDark ? 0 : 255;
   const fgLabel = isDark ? 'black' : 'white';
-  const blended = blend(fgR, fgG, fgB, alpha, ctx.bgColor);
+  const blendedRgb = blendRgb(fgR, fgG, fgB, alpha, ctx.bgColor);
+  const blended = rgbCss(blendedRgb);
+  const imageTextContrast = ctx.id === 'image'
+    ? contrastRatioWcag(IMAGE_TEXT_COLOR, blendedRgb)
+    : null;
+  const imageTextPassesContrast = imageTextContrast !== null && imageTextContrast >= IMAGE_TEXT_CONTRAST_TARGET;
   const allDone = completed.every(Boolean);
 
   function checkOverlay() {
     if (!interactive || doneRef.current) return;
     const colorMatch = isDark === ctx.targetColorDark;
     const alphaInRange = alpha >= ctx.targetAlphaMin && alpha <= ctx.targetAlphaMax;
-    if (colorMatch && alphaInRange) {
+    const passesContextCheck = ctx.id === 'image' ? imageTextPassesContrast : alphaInRange;
+    if (colorMatch && passesContextCheck) {
       const next = [...completed];
       next[ctxIdx] = true;
       setCompleted(next);
@@ -143,6 +161,22 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({ interactive = false
           position: 'absolute', inset: 0,
           background: `rgba(${fgR}, ${fgG}, ${fgB}, ${alpha})`,
         }} />
+        {ctx.id === 'image' && (
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#fff',
+            fontSize: '0.95rem',
+            fontWeight: 700,
+            letterSpacing: '0.02em',
+            fontFamily: 'var(--font-mono)',
+          }}>
+            Readable overlay text
+          </div>
+        )}
         <div style={{
           position: 'absolute', bottom: 8, left: 10,
           fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)',
@@ -160,6 +194,12 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({ interactive = false
         }} />
         <div style={{ fontSize: '0.8rem', fontFamily: 'var(--font-mono)' }}>
           <span style={{ color: 'var(--muted)' }}>Result:</span> {blended}
+          {ctx.id === 'image' && imageTextContrast !== null && (
+            <div style={{ marginTop: '0.25rem' }}>
+              <span style={{ color: 'var(--muted)' }}>Text contrast:</span>{' '}
+              {formatContrastRatio(imageTextContrast)}:1 (target: {IMAGE_TEXT_CONTRAST_TARGET}:1)
+            </div>
+          )}
         </div>
       </div>
 
