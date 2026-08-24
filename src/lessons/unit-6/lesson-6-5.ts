@@ -11,14 +11,15 @@ export const lesson6_5: LessonConfig = {
     { text: 'Categorical palettes use distinct hues for groups that have no order: product categories, countries, team names. Too many similar hues or too many fully saturated hues make categorical charts hard to read quickly.' },
     { text: 'Sequential palettes move from light to dark (or low to high saturation) to represent ordered data: temperature, quantity, severity. A single hue progressing from light to dark is usually more readable than a rainbow for sequential data.' },
     { text: 'Chart colors should contrast sufficiently with the chart background and with adjacent series. Red-green combinations are especially risky — use shape, pattern, or direct labels to support color in all chart contexts.' },
-    { text: 'In the chart tuner, use the labeled color controls to adjust each series. Compare the normal and deuteranopia views, then show the data table so every bar can be identified by month, series, and value without relying on color.' },
+    { text: 'In the chart tuner, adjust each series color and assign a different pattern to each series. Compare the normal and deuteranopia views, then show the data table to inspect every bar by month, series, and value.' },
   ],
   challenge: {
-      prompt: 'Tune the series colors for normal and deuteranopia views, then show the data table so every bar can be identified without color.',
+      prompt: 'Tune the series colors for normal and deuteranopia views, assign a different pattern to each series, and inspect the data table before completing the chart.',
       hints: [
         'Aim for high contrast between adjacent series, not just different hues.',
         'Use the simulation warning to find series pairs that need different colors.',
-        'Show the data table after the palette passes both views.',
+        'Assign a different pattern to each series so the bars remain identifiable without color.',
+        'Show the data table, inspect the chart values, then complete the chart.',
       ],
   },
   quizItems: [

@@ -25,6 +25,49 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
 
 const MIN_DIFF = 80;
 
+const PATTERN_OPTIONS = [
+  { value: 'diagonal', label: 'Diagonal stripes' },
+  { value: 'horizontal', label: 'Horizontal stripes' },
+  { value: 'dots', label: 'Dots' },
+  { value: 'crosshatch', label: 'Crosshatch' },
+] as const;
+
+type Pattern = typeof PATTERN_OPTIONS[number]['value'];
+
+const DEFAULT_PATTERNS: Pattern[] = SERIES.map(() => 'diagonal');
+
+function patternStyle(pattern: Pattern, color: string) {
+  const base = { backgroundColor: color };
+
+  switch (pattern) {
+    case 'diagonal':
+      return {
+        ...base,
+        backgroundImage: 'repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0 2px, rgba(255, 255, 255, 0.7) 2px 4px)',
+      };
+    case 'horizontal':
+      return {
+        ...base,
+        backgroundImage: 'repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0 2px, rgba(255, 255, 255, 0.7) 2px 4px)',
+      };
+    case 'dots':
+      return {
+        ...base,
+        backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, rgba(255, 255, 255, 0.9) 0 1px, transparent 1.2px), radial-gradient(circle at 4.5px 4.5px, rgba(0, 0, 0, 0.9) 0 1px, transparent 1.2px)',
+        backgroundSize: '6px 6px',
+      };
+    case 'crosshatch':
+      return {
+        ...base,
+        backgroundImage: 'repeating-linear-gradient(45deg, transparent 0 3px, rgba(255, 255, 255, 0.8) 3px 4px), repeating-linear-gradient(135deg, transparent 0 3px, rgba(0, 0, 0, 0.8) 3px 4px)',
+      };
+  }
+}
+
+function patternLabel(pattern: Pattern) {
+  return PATTERN_OPTIONS.find((option) => option.value === pattern)?.label ?? pattern;
+}
+
 function getWeakPairs(colors: string[]) {
   const pairs: [number, number][] = [];
   for (let a = 0; a < SERIES.length; a++) {
@@ -35,13 +78,7 @@ function getWeakPairs(colors: string[]) {
   return pairs;
 }
 
-function palettePasses(colors: string[]) {
-  if (!colors.every(isValidHex)) return false;
-  return getWeakPairs(colors).length === 0 &&
-    getWeakPairs(colors.map(simulateDeuteranopia)).length === 0;
-}
-
-function ChartBars({ colors, simulated }: { colors: string[]; simulated: boolean }) {
+function ChartBars({ colors, patterns, simulated }: { colors: string[]; patterns: Pattern[]; simulated: boolean }) {
   const displayColors = simulated ? colors.map(simulateDeuteranopia) : colors;
   const maxVal = 100;
   return (
@@ -54,7 +91,7 @@ function ChartBars({ colors, simulated }: { colors: string[]; simulated: boolean
               return (
                 <div
                   key={name}
-                  style={{ width: 8, height: h, background: displayColors[si], borderRadius: '2px 2px 0 0', flexShrink: 0 }}
+                  style={{ width: 10, height: h, ...patternStyle(patterns[si], displayColors[si]), borderRadius: '2px 2px 0 0', flexShrink: 0 }}
                   title={`${SERIES[si]}: ${CHART_DATA[mi][si]}`}
                 />
               );
@@ -67,7 +104,7 @@ function ChartBars({ colors, simulated }: { colors: string[]; simulated: boolean
   );
 }
 
-function ChartDataTable({ colors, simulated }: { colors: string[]; simulated: boolean }) {
+function ChartDataTable({ colors, patterns, simulated }: { colors: string[]; patterns: Pattern[]; simulated: boolean }) {
   const displayColors = simulated ? colors.map(simulateDeuteranopia) : colors;
   const viewName = simulated ? 'Deuteranopia simulation' : 'Normal view';
 
@@ -88,12 +125,12 @@ function ChartDataTable({ colors, simulated }: { colors: string[]; simulated: bo
                 <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', whiteSpace: 'nowrap' }}>
                   <span
                     aria-hidden="true"
-                    style={{ width: 10, height: 10, background: displayColors[index], borderRadius: 2, flexShrink: 0 }}
+                    style={{ width: 12, height: 12, ...patternStyle(patterns[index], displayColors[index]), borderRadius: 2, flexShrink: 0 }}
                   />
                   {name}
                 </span>
                 <span style={{ display: 'block', marginTop: 2, color: 'var(--muted)', fontSize: '0.65rem' }}>
-                  {displayColors[index].toUpperCase()}
+                  {patternLabel(patterns[index])} · {displayColors[index].toUpperCase()}
                 </span>
               </th>
             ))}
@@ -125,35 +162,37 @@ function isValidHex(h: string) { return /^#[0-9a-fA-F]{6}$/.test(h); }
  */
 export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false, onComplete }: ChartTunerToolProps) {
   const [colors, setColors] = useState<string[]>(DEFAULTS);
+  const [patterns, setPatterns] = useState<Pattern[]>(DEFAULT_PATTERNS);
   const [simulated, setSimulated] = useState(false);
   const [showDataTable, setShowDataTable] = useState(false);
   const [completed, setCompleted] = useState(false);
-
-  function completeIfReady(nextColors: string[], nextShowDataTable: boolean) {
-    if (!completed && nextShowDataTable && palettePasses(nextColors)) {
-      setCompleted(true);
-      onComplete?.();
-    }
-  }
 
   function update(i: number, val: string) {
     if (!interactive) return;
     const next = [...colors];
     next[i] = val;
     setColors(next);
-    completeIfReady(next, showDataTable);
   }
 
-  function toggleDataTable(checked: boolean) {
-    if (!interactive || completed) return;
-    setShowDataTable(checked);
-    completeIfReady(colors, checked);
+  function updatePattern(i: number, pattern: Pattern) {
+    if (!interactive) return;
+    const next = [...patterns];
+    next[i] = pattern;
+    setPatterns(next);
+  }
+
+  function complete() {
+    if (completed || !readyToComplete) return;
+    setCompleted(true);
+    onComplete?.();
   }
 
   const simColors = colors.map(simulateDeuteranopia);
   const weakNormal = getWeakPairs(colors);
   const weakSimulated = getWeakPairs(simColors);
   const paletteIsReady = weakNormal.length === 0 && weakSimulated.length === 0;
+  const patternsAreDistinct = new Set(patterns).size === SERIES.length;
+  const readyToComplete = paletteIsReady && patternsAreDistinct && showDataTable;
 
   return (
     <div className={shellStyles.shell}>
@@ -184,16 +223,17 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
         </button>
       </div>
 
-      <ChartBars colors={colors} simulated={simulated} />
+      <ChartBars colors={colors} patterns={patterns} simulated={simulated} />
 
-      <div role="group" aria-label="Series color controls" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '0.5rem', marginTop: '0.75rem' }}>
+      <div role="group" aria-label="Series color and pattern controls" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '0.5rem', marginTop: '0.75rem' }}>
         {SERIES.map((name, i) => (
-          <label
+          <div
             key={name}
-            style={{ display: 'grid', gridTemplateColumns: '32px 1fr', gap: '0.15rem 0.5rem', alignItems: 'center', padding: '0.5rem', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', cursor: interactive ? 'pointer' : 'default' }}
+            style={{ display: 'grid', gridTemplateColumns: '32px 1fr', gap: '0.3rem 0.5rem', alignItems: 'center', padding: '0.5rem', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}
           >
             {interactive && (
               <input
+                id={`chart-color-${i}`}
                 type="color"
                 value={isValidHex(colors[i]) ? colors[i] : '#000000'}
                 onChange={e => update(i, e.target.value)}
@@ -201,11 +241,27 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
                 aria-label={`Change ${name} color`}
               />
             )}
-            <span style={{ color: 'var(--primary-foreground)', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700 }}>{name}</span>
+            <label htmlFor={interactive ? `chart-color-${i}` : undefined} style={{ color: 'var(--primary-foreground)', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700 }}>{name}</label>
             <span style={{ color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: '0.68rem' }}>
               {interactive ? `Change color · ${colors[i].toUpperCase()}` : (simulated ? simColors[i] : colors[i]).toUpperCase()}
             </span>
-          </label>
+            {interactive ? (
+              <select
+                aria-label={`Pattern for ${name}`}
+                value={patterns[i]}
+                onChange={(event) => updatePattern(i, event.target.value as Pattern)}
+                style={{ gridColumn: '1 / -1', width: '100%', fontFamily: 'var(--font-mono)', fontSize: '0.68rem', padding: '0.25rem', color: 'var(--primary-foreground)', background: 'var(--primary-background)', border: '1px solid var(--border)', borderRadius: 4 }}
+              >
+                {PATTERN_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            ) : (
+              <span style={{ gridColumn: '1 / -1', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: '0.68rem' }}>
+                {patternLabel(patterns[i])}
+              </span>
+            )}
+          </div>
         ))}
       </div>
 
@@ -215,13 +271,13 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
             type="checkbox"
             checked={showDataTable}
             disabled={completed}
-            onChange={(event) => toggleDataTable(event.target.checked)}
+            onChange={(event) => setShowDataTable(event.target.checked)}
           />
           Show the chart data table
         </label>
       )}
 
-      {showDataTable && <ChartDataTable colors={colors} simulated={simulated} />}
+      {showDataTable && <ChartDataTable colors={colors} patterns={patterns} simulated={simulated} />}
 
       {interactive && (
         <div style={{ marginTop: '0.5rem', fontSize: '0.78rem', color: 'var(--muted)' }}>
@@ -232,17 +288,30 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
                 ...weakSimulated.map(([a, b]) => `${SERIES[a]}/${SERIES[b]} under simulation`),
               ].join('; ')}
             </span>
-          ) : showDataTable ? (
-            <span style={{ color: 'var(--accent-success)' }}>✓ Palette passes both views and the data table identifies every bar</span>
+          ) : !patternsAreDistinct ? (
+            <span style={{ color: 'var(--accent-cta)' }}>Palette passes both views. Assign a different pattern to each series.</span>
+          ) : !showDataTable ? (
+            <span style={{ color: 'var(--accent-cta)' }}>Palette and patterns pass. Show the data table to inspect each bar.</span>
           ) : (
-            <span style={{ color: 'var(--accent-cta)' }}>Palette passes both views. Show the data table so the bars do not rely on color alone.</span>
+            <span style={{ color: 'var(--accent-success)' }}>✓ Palette and patterns pass, and the data table identifies every bar</span>
           )}
         </div>
       )}
 
+      {interactive && (
+        <button
+          type="button"
+          disabled={!readyToComplete || completed}
+          onClick={complete}
+          style={{ marginTop: '0.75rem', padding: '0.4rem 0.75rem', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700, color: readyToComplete ? '#000' : 'var(--muted)', background: readyToComplete ? 'var(--accent-cta)' : 'var(--border)', border: 'none', borderRadius: 'var(--radius-sm)', cursor: readyToComplete ? 'pointer' : 'not-allowed' }}
+        >
+          Complete chart
+        </button>
+      )}
+
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          The palette passes normal and CVD views, and the data table identifies every bar.
+          The palette passes normal and CVD views, every series has a distinct pattern, and the data table identifies every bar.
         </p>
       )}
     </div>
