@@ -1,22 +1,26 @@
 import { memo, useState } from 'react';
-import { hexToRgb, contrastRatioWcag } from '../../utils/color.ts';
 import shellStyles from './ToolShell.module.css';
+import {
+  FIXED_ACTIONS,
+  getBrandPressureStatus,
+  type RoleKey,
+} from './brand-pressure-validation.ts';
 
 interface BrandPressureToolProps {
   interactive?: boolean;
   onComplete?: () => void;
 }
 
-const BRAND = '#7c3aed';
-const SECONDARY_ACTION = '#a78bfa';
-
-type RoleKey = 'page-bg' | 'surface' | 'primary-text' | 'neutral-divider';
-
 const ROLE_LABELS: Record<RoleKey, string> = {
   'page-bg': 'Page background',
   'surface': 'Card surface',
   'primary-text': 'Primary text',
   'neutral-divider': 'Divider',
+};
+
+const FIXED_ROLE_LABELS: Record<string, string> = {
+  action: 'Primary action',
+  'secondary-action': 'Secondary action',
 };
 
 const NON_INTERACTIVE_DEFAULTS: Record<RoleKey, string> = {
@@ -33,38 +37,7 @@ const INTERACTIVE_DEFAULTS: Record<RoleKey, string> = {
   'neutral-divider': '#e2e8f0',
 };
 
-function getContrast(fg: string, bg: string): number {
-  try { return contrastRatioWcag(hexToRgb(fg), hexToRgb(bg)); } catch { return 1; }
-}
-
 function isValidHex(h: string) { return /^#[0-9a-fA-F]{6}$/.test(h); }
-
-function brandPressurePercent(roles: Record<RoleKey, string>): number {
-  let count = 0;
-  const brandHue = 262;
-  for (const val of Object.values(roles)) {
-    if (!isValidHex(val)) continue;
-    try {
-      const rgb = hexToRgb(val);
-      const r = rgb.r / 255, g = rgb.g / 255, b = rgb.b / 255;
-      const max = Math.max(r, g, b), min = Math.min(r, g, b);
-      if (max === min) continue;
-      let h = 0;
-      if (max === r) h = ((g - b) / (max - min)) * 60;
-      else if (max === g) h = (2 + (b - r) / (max - min)) * 60;
-      else h = (4 + (r - g) / (max - min)) * 60;
-      if (h < 0) h += 360;
-      const diff = Math.abs(h - brandHue);
-      const wrapped = Math.min(diff, 360 - diff);
-      const s = (max - min) / max;
-      if (wrapped < 50 && s > 0.3) count++;
-    } catch { /* skip */ }
-  }
-  // count is out of 4 editable roles + 2 read-only = 6 total visual areas
-  const total = 6;
-  const brandCount = count + 2; // action and secondary_action always brand
-  return Math.round((brandCount / total) * 100);
-}
 
 export const BrandPressureTool = memo(function BrandPressureTool({ interactive = false, onComplete }: BrandPressureToolProps) {
   const defaults = interactive ? INTERACTIVE_DEFAULTS : NON_INTERACTIVE_DEFAULTS;
@@ -76,14 +49,16 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
     setRoles(prev => ({ ...prev, [key]: val }));
   }
 
-  const textContrast = getContrast(roles['primary-text'], roles['page-bg']);
-  const surfaceContrast = getContrast(roles['surface'], roles['page-bg']);
-  const pressure = brandPressurePercent(roles);
-
-  const textOk = textContrast >= 4.5;
-  const surfaceOk = surfaceContrast >= 1.2;
-  const pressureOk = pressure < 40;
-  const allPass = textOk && surfaceOk && pressureOk;
+  const {
+    textContrast,
+    surfaceContrast,
+    pressure,
+    actionChecks,
+    textOk,
+    surfaceOk,
+    pressureOk,
+    allPass,
+  } = getBrandPressureStatus(roles);
 
   if (interactive && allPass && !completed) {
     setCompleted(true);
@@ -107,11 +82,11 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>ROLES</p>
 
           {/* Read-only brand roles */}
-          {[['Primary action', BRAND], ['Secondary action', SECONDARY_ACTION]].map(([label, val]) => (
-            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem', opacity: 0.7 }}>
-              <div style={{ width: 18, height: 18, borderRadius: 3, background: val, border: '1px solid var(--border)', flexShrink: 0 }} />
-              <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{label} (fixed)</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--primary-foreground)' }}>{val}</span>
+          {FIXED_ACTIONS.map(action => (
+            <div key={action.role} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem', opacity: 0.7 }}>
+              <div style={{ width: 18, height: 18, borderRadius: 3, background: action.background, border: '1px solid var(--border)', flexShrink: 0 }} />
+              <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{FIXED_ROLE_LABELS[action.role]} (fixed)</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--primary-foreground)' }}>{action.background}</span>
             </div>
           ))}
 
@@ -151,12 +126,14 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
             </div>
             <hr style={{ borderColor: div, margin: '0.3rem 0' }} />
             <div style={{ display: 'flex', gap: '0.3rem', marginTop: '0.3rem' }}>
-              <button style={{ background: BRAND, color: '#fff', border: 'none', borderRadius: 4, padding: '0.2rem 0.5rem', fontSize: '0.75rem', cursor: 'default' }}>
-                Save
-              </button>
-              <button style={{ background: SECONDARY_ACTION, color: '#fff', border: 'none', borderRadius: 4, padding: '0.2rem 0.5rem', fontSize: '0.75rem', cursor: 'default' }}>
-                Cancel
-              </button>
+              {FIXED_ACTIONS.map(action => (
+                <button
+                  key={action.role}
+                  style={{ background: action.background, color: action.foreground, border: 'none', borderRadius: 4, padding: '0.2rem 0.5rem', fontSize: '0.75rem', cursor: 'default' }}
+                >
+                  {action.label}
+                </button>
+              ))}
             </div>
           </div>
         </div>
@@ -167,6 +144,11 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
           {[
             { label: 'Text contrast (4.5:1)', pass: textOk, ratio: textContrast },
             { label: 'Page / surface (target 1.2:1)', pass: surfaceOk, ratio: surfaceContrast },
+            ...actionChecks.map(action => ({
+              label: `${action.label} text (4.5:1)`,
+              pass: action.pass,
+              ratio: action.ratio,
+            })),
           ].map(({ label, pass, ratio }) => (
             <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', padding: '0.2rem 0' }}>
               <span style={{ color: 'var(--primary-foreground)' }}>{label}</span>
