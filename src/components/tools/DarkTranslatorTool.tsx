@@ -61,7 +61,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive
   }
 
   const d = dark;
-  const primaryContrast = getContrast(d['primary-text'], d['page-bg']);
+  const primaryContrast = getContrast(d['primary-text'], d['surface']);
   const secondaryContrast = getContrast(d['secondary-text'], d['surface']);
   const surfaceContrast = getContrast(d['surface'], d['page-bg']);
   const actionContrast = getContrast('#ffffff', d['action']);
@@ -73,8 +73,8 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive
   const semanticRolesValid = successValid && errorValid;
   const semanticHueDifference = semanticRolesValid ? getHueDifference(d.success, d.error) : null;
 
-  const primaryOk = primaryContrast >= 4.5;
-  const secondaryOk = secondaryContrast >= 3.0;
+  const primaryOk = primaryContrast >= TEXT_CONTRAST_MINIMUM;
+  const secondaryOk = secondaryContrast >= TEXT_CONTRAST_MINIMUM;
   const surfaceOk = surfaceContrast >= 1.1;
   const actionOk = actionContrast >= 4.5;
   const successOk = successValid && successContrast >= TEXT_CONTRAST_MINIMUM;
@@ -106,8 +106,8 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive
 
   const KEYS = Object.keys(DARK_DEFAULTS) as RoleKey[];
   const checks: { label: string; pass: boolean; ratio?: number }[] = [
-    { label: 'Primary text / page-bg (4.5:1)', pass: primaryOk, ratio: primaryContrast },
-    { label: 'Secondary text / surface (3:1)', pass: secondaryOk, ratio: secondaryContrast },
+    { label: 'Primary text / surface (4.5:1)', pass: primaryOk, ratio: primaryContrast },
+    { label: 'Secondary text / surface (4.5:1)', pass: secondaryOk, ratio: secondaryContrast },
     { label: 'Surface ≠ page-bg (1.1:1)', pass: surfaceOk, ratio: surfaceContrast },
     { label: 'White / action (4.5:1)', pass: actionOk, ratio: actionContrast },
     { label: 'Valid success color', pass: successValid },
