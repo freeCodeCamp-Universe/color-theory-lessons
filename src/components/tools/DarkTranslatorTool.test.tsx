@@ -61,6 +61,22 @@ describe('DarkTranslatorTool', () => {
     expect(onComplete).not.toHaveBeenCalled();
   });
 
+  it('explains when a valid achromatic color cannot meet the hue requirement', () => {
+    const onComplete = vi.fn();
+    render(<DarkTranslatorTool interactive onComplete={onComplete} />);
+
+    setRole('success', '#222222');
+    setRole('error', '#14532d');
+    setPassingBaseRoles();
+
+    expect(screen.getByText('Valid success color').parentElement).toHaveTextContent('✓');
+    expect(screen.getByText('Valid error color').parentElement).toHaveTextContent('✓');
+    expect(screen.getByText('Success / error luminance (1.5:1)').parentElement).toHaveTextContent('✓');
+    expect(screen.getByText('Success / error hues (30°)').parentElement).toHaveTextContent('✗ no hue (achromatic)');
+    expect(screen.queryByText(/Both themes show readable hierarchy/)).not.toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+
   it.each([
     ['success', 'White / success (4.5:1)'],
     ['error', 'White / error (4.5:1)'],

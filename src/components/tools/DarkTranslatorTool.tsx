@@ -207,7 +207,9 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', padding: '0.15rem 0' }}>
             <span style={{ color: 'var(--primary-foreground)' }}>Success / error hues (30°)</span>
             <span style={{ color: semanticHueOk ? '#22c55e' : '#ef4444', fontFamily: 'var(--font-mono)' }}>
-              {semanticHueOk ? '✓' : '✗'} {semanticHueDifference === null ? 'invalid' : `${semanticHueDifference}°`}
+              {semanticHueOk ? '✓' : '✗'} {semanticHueDifference === null
+                ? (semanticRolesValid ? 'no hue (achromatic)' : 'invalid')
+                : `${semanticHueDifference}°`}
             </span>
           </div>
         </div>
