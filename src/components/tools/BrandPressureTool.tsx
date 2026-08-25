@@ -179,7 +179,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          The two brand actions remain prominent while neutral supporting roles define the page structure.
+          The supporting roles avoid saturated colors near the brand hue, and every contrast check passes.
         </p>
       )}
     </div>

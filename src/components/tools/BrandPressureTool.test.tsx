@@ -125,7 +125,7 @@ describe('BrandPressureTool contrast validation', () => {
 
     setSurface(PASSING_ROLES.surface);
 
-    expect(screen.getByText(/The two brand actions remain prominent/)).toBeInTheDocument();
+    expect(screen.getByText(/supporting roles avoid saturated colors near the brand hue/)).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
   });
 });

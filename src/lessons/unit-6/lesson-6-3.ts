@@ -24,19 +24,19 @@ export const lesson6_3: LessonConfig = {
   quizItems: [
     {
       id: 'q1',
-      prompt: 'Why is one brand color not enough to build a complete interface?',
+      prompt: 'Why does a complete interface need more than one color value?',
       choices: [
-        { stableId: 'brand-colors-are-always-too-dark', label: 'A brand color might be too dark for some roles', isCorrect: false, explanation: 'Lightness affects contrast for a specific color pair. The larger limitation is that one hue cannot distinguish every interface role.' },
-        { stableId: 'interfaces-need-neutrals-surface-levels-text-hierarchy-states-an', label: 'Interfaces need structural, content, interactive, and semantic roles that one hue cannot distinguish', isCorrect: true, explanation: 'Correct. Assigning one hue to unrelated roles removes the color distinctions between them.' },
+        { stableId: 'brand-colors-are-always-too-dark', label: 'Every brand color is too dark to use in an interface', isCorrect: false, explanation: 'Brand colors can be light or dark. Contrast depends on each foreground and background pair.' },
+        { stableId: 'interfaces-need-neutrals-surface-levels-text-hierarchy-states-an', label: 'Different roles need color values that distinguish surfaces, text, actions, and statuses', isCorrect: true, explanation: 'Correct. Assigning different color values to these roles creates the contrast and color relationships that separate them.' },
         { stableId: 'regulations-require-multiple-colors', label: 'Accessibility standards require multiple colors', isCorrect: false, explanation: 'Accessibility standards do not require a minimum number of interface colors. They define requirements such as contrast and non-color cues.' },
         { stableId: 'brand-guidelines-always-forbid-overuse', label: 'Brand guidelines set the required number of interface colors', isCorrect: false, explanation: 'A design system defines the roles an interface needs. A brand guideline does not determine that number.' },
       ],
     },
     {
       id: 'q2',
-      prompt: 'A saturated brand color appears on page backgrounds, cards, buttons, links, icons, and badges simultaneously. What is the likely result?',
+      prompt: 'The same saturated brand color appears on page backgrounds, cards, buttons, links, icons, and badges. What happens to the interface hierarchy?',
       choices: [
-        { stableId: 'the-brand-becomes-more-recognizable', label: 'The brand becomes easier to identify', isCorrect: false, explanation: 'Repeating the brand color removes the contrast between branded emphasis and surrounding elements.' },
+        { stableId: 'the-brand-becomes-more-recognizable', label: 'One element becomes the clear focal point', isCorrect: false, explanation: 'Repeating the same emphasis across these elements prevents any one of them from becoming the focal point.' },
         { stableId: 'contrast-improves-everywhere', label: 'The saturation guarantees contrast between every pair', isCorrect: false, explanation: 'Contrast ratios depend on relative luminance, not saturation alone.' },
         { stableId: 'hierarchy-collapses-every-element-competes-equally-for-attention', label: 'The elements compete for attention, making the interface harder to scan', isCorrect: true, explanation: 'Correct. Giving each element the same color emphasis makes it difficult to identify a primary action or focal point.' },
         { stableId: 'users-trust-the-product-more', label: 'Users trust the product more', isCorrect: false, explanation: 'Color repetition alone provides no basis for predicting user trust.' },
