@@ -31,7 +31,7 @@ export function GlossaryPage() {
 
       {visibleTerms.length === 0 ? (
         <p className={styles.empty}>
-          No terms yet — complete your first lesson to unlock this glossary.
+          No terms yet. Complete your first lesson to unlock this glossary.
         </p>
       ) : (
         <dl className={styles.termList}>
