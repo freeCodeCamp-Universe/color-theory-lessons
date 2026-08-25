@@ -36,7 +36,7 @@ describe('SemanticAuditChallenge', () => {
 
     const finishButton = screen.getByRole('button', { name: 'finish challenge' });
     expect(finishButton).toBeDisabled();
-    expect(screen.getByRole('status')).toHaveTextContent('Not passed: Assign all eight roles with at least seven correct.');
+    expect(screen.getByRole('status')).toHaveTextContent('Not passed: Assign a swatch to every role with at least seven correct.');
 
     completeAssignments(6);
     fireEvent.change(screen.getByRole('combobox', { name: 'Which role issue exists in this set?' }), {
@@ -46,8 +46,8 @@ describe('SemanticAuditChallenge', () => {
 
     assignSwatch('#f97316', 'Warning');
     expect(screen.getByText('7 / 8 correct')).toBeInTheDocument();
-    expect(screen.getByRole('status')).toHaveTextContent('Pass: Assign all eight roles with at least seven correct.');
-    expect(screen.getByRole('status')).toHaveTextContent('Pass: Identify the warning and error color conflict.');
+    expect(screen.getByRole('status')).toHaveTextContent('Pass: Assign a swatch to every role with at least seven correct.');
+    expect(screen.getByRole('status')).toHaveTextContent('Pass: Identify the color conflict in the palette.');
     expect(finishButton).toBeEnabled();
 
     fireEvent.click(finishButton);

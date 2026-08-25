@@ -196,19 +196,19 @@ export function SemanticAuditChallenge({ onComplete, sessionKey }: SemanticAudit
         <label htmlFor="semantic-role-problem">Which role issue exists in this set?</label>
         <select id="semantic-role-problem" value={problem} onChange={(event) => setProblem(event.target.value)}>
           <option value="">Choose issue...</option>
-          <option value="warning-error-too-close">Warning and error hues are too close</option>
-          <option value="surface-too-bright">Surface is brighter than primary text</option>
-          <option value="action-too-muted">Action color is too muted for links</option>
-          <option value="success-too-dark">Success color is darker than page background</option>
+          <option value="warning-error-too-close">Warning and error have too little luminance contrast</option>
+          <option value="surface-too-bright">Page background and surface have the same lightness</option>
+          <option value="action-too-muted">Action and success use the same hue</option>
+          <option value="success-too-dark">Primary and secondary text use the same color value</option>
         </select>
       </div>
 
       <div className={styles.status} role="status" aria-live="polite" aria-atomic="true">
         <p className={rolePass && labelsAssigned ? styles.good : styles.bad}>
-          {rolePass && labelsAssigned ? 'Pass' : 'Not passed'}: Assign all eight roles with at least seven correct.
+          {rolePass && labelsAssigned ? 'Pass' : 'Not passed'}: Assign a swatch to every role with at least seven correct.
         </p>
         <p className={problemPass ? styles.good : styles.bad}>
-          {problemPass ? 'Pass' : 'Not passed'}: Identify the warning and error color conflict.
+          {problemPass ? 'Pass' : 'Not passed'}: Identify the color conflict in the palette.
         </p>
       </div>
 
