@@ -30,9 +30,18 @@ export const lesson1_2: LessonConfig = {
   challenge: {
       prompt: 'Complete three color matches, one each for hue, saturation, and lightness.',
       hints: [
-        'A change from one color family to another means the hue changed.',
-        'Compare how vivid or muted the colors look while hue and lightness remain fixed. That difference comes from saturation.',
-        'Lightness is the changing value when one color is darker or lighter and the other two values match.',
+        {
+          stageId: 'hue',
+          text: 'A change from one color family to another means the hue changed.',
+        },
+        {
+          stageId: 'saturation',
+          text: 'Compare how vivid or muted the colors look while hue and lightness remain fixed. That difference comes from saturation.',
+        },
+        {
+          stageId: 'lightness',
+          text: 'Lightness is the changing value when one color is darker or lighter and the other two values match.',
+        },
       ],
   },
   quizItems: [

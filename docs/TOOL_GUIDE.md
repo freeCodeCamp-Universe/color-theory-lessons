@@ -16,6 +16,7 @@ import styles from './YourTool.module.css';
 interface YourToolProps {
   interactive?: boolean;     // Can the user change its state?
   onComplete?: () => void;   // Callback for finishing a challenge
+  onStageChange?: ExerciseStageChangeHandler; // Reports the active task
 }
 
 export function YourTool({ interactive = true, onComplete }: YourToolProps) {
@@ -38,6 +39,55 @@ export function YourTool({ interactive = true, onComplete }: YourToolProps) {
   );
 }
 ```
+
+## Exercise stage contract
+
+Every lesson exercise has at least one stage. Define each stage with an `id`, `title`, and `instruction` from `ExerciseStageDefinition` in `src/components/tools/exercise-stage.ts`. The ID is a stable content identifier such as `hue` or `contrast-check`; do not use its array index or visible position as the ID.
+
+Use `ExerciseToolProps`, `useExerciseStages`, and `ExerciseStage` for evaluative tools. The hook owns the active position, result, completed-stage IDs, advancement, and final completion callback. The component renders the shared `Stage X of Y` progress pattern, including `Stage 1 of 1`, plus the title, instruction, result, retry action, completion message, and next action. Answer values remain in the tool so its retry handler can either preserve the current work or reset it when the exercise requires a fresh attempt.
+
+```tsx
+const stages = [
+  {
+    id: 'identify-role',
+    title: 'Identify the color role',
+    instruction: 'Choose the semantic role used by the highlighted color.',
+  },
+] satisfies readonly ExerciseStageDefinition[];
+
+export function YourTool({ onComplete, onStageChange }: ExerciseToolProps) {
+  const stage = useExerciseStages({ stages, onComplete, onStageChange });
+
+  return (
+    <ExerciseStage
+      controller={stage}
+      incorrectFeedback="Review the highlighted element and try again."
+      completionFeedback="Exercise complete."
+    >
+      {/* Inputs and the explicit Check action */}
+    </ExerciseStage>
+  );
+}
+```
+
+Call `markIncorrect` or `markPassed` only from an explicit Check action for an evaluative stage. A failed result stays on the same stage. `advance` ignores calls until the current stage passes. `onComplete` fires once when the final stage passes, not when an earlier stage passes or when the learner merely selects an input. This submission behavior follows the inventory and exceptions tracked in #183.
+
+`ToolRenderer` passes `onStageChange` from `LessonPlayer` to staged tools. The callback reports the active stage ID, title, instruction, position, and total. `LessonPlayer` uses the ID to select stage hints. A challenge hint can remain challenge-wide as a string or use `{ text, stageId }` to associate it with one stable stage ID. Do not add a second hint control inside a tool.
+
+### Mapping activity content to stages
+
+- An exploratory activity with one continuous goal is one stage, even when it contains several controls. It still renders `Stage 1 of 1`. Completion can follow the documented exploration requirement instead of a correct answer.
+- Repeated items that practice the same skill belong to one stage. For example, classifying several swatches with the same rule is one classification stage.
+- Tasks that test different skills are separate stages. Render only the active task's instruction, inputs, answer-specific feedback, and hints. Later tasks must not be present in the rendered page.
+- A completed stage remains represented by its completed progress segment. Its inputs and answers are replaced by the next stage rather than remaining visible.
+
+### Results, focus, and announcements
+
+`ExerciseStage` exposes result and completion text through one polite status region. Supply feedback that identifies the result and the learner's next action. When the learner selects the next-stage action, `useExerciseStages` moves focus to the new stage heading. The heading references the new instruction with `aria-describedby`, so the title and instruction are announced once through the focus change. Do not add another live announcement for the same transition.
+
+The final stage shows its completion feedback in the same status region. It has no next-stage action. The lesson flow can offer its quiz or finish action only after the tool calls `onComplete`.
+
+Challenge prompts should state the number and sequence of stages without copying the detailed stage instructions. Stage instructions belong in the stage definitions, where they remain aligned with the active inputs and hints.
 
 ### 2. Registering the Tool
 There are three steps to making your tool available to lessons:

@@ -26,9 +26,18 @@ export const lesson5_5: LessonConfig = {
   challenge: {
       prompt: 'Complete all four stages of the audit activity: identify priority elements, check contrast, choose a repair for a color-only status, and identify the impact on task completion.',
       hints: [
-        'Select every element that users need to read, identify a control, or understand information.',
-        'A passing contrast ratio does not provide a second visual cue. Check contrast and use of color separately.',
-        'For a color-only status, choose a repair that adds text or an icon.',
+        {
+          stageId: 'priority',
+          text: 'Select every element that users need to read, identify a control, or understand information.',
+        },
+        {
+          stageId: 'contrast-check',
+          text: 'A passing contrast ratio does not provide a second visual cue. Check contrast and use of color separately.',
+        },
+        {
+          stageId: 'cvd-sim',
+          text: 'For a color-only status, choose a repair that adds text or an icon.',
+        },
       ],
   },
   quizItems: [

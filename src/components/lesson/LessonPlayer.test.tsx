@@ -11,10 +11,42 @@ const sessionKey = (lessonId: string) => `color-theory-course-lesson-session:${l
 vi.mock('../tools/ToolRenderer.tsx', async () => {
   const { useEffect, useRef } = await import('react');
   return {
-    ToolRenderer: ({ onChallengeComplete }: { onChallengeComplete?: () => void }) => {
+    ToolRenderer: ({
+      onChallengeComplete,
+      onStageChange,
+    }: {
+      onChallengeComplete?: () => void;
+      onStageChange?: (stage: {
+        id: string;
+        title: string;
+        instruction: string;
+        position: number;
+        total: number;
+      }) => void;
+    }) => {
       const initialOnChallengeComplete = useRef(onChallengeComplete);
-      useEffect(() => { initialOnChallengeComplete.current?.(); }, []);
-      return null;
+      const initialOnStageChange = useRef(onStageChange);
+      useEffect(() => {
+        initialOnStageChange.current?.({
+          id: 'hue',
+          title: 'Match the hue',
+          instruction: 'Match the hue target.',
+          position: 1,
+          total: 3,
+        });
+        initialOnChallengeComplete.current?.();
+      }, []);
+      return (
+        <button onClick={() => onStageChange?.({
+          id: 'saturation',
+          title: 'Match the saturation',
+          instruction: 'Match the saturation target.',
+          position: 2,
+          total: 3,
+        })}>
+          advance mock stage
+        </button>
+      );
     },
   };
 });
@@ -87,7 +119,7 @@ async function advanceThroughChallenge() {
 
 describe('LessonPlayer', () => {
   describe('challenge content', () => {
-    it('renders the prompt and hints from the lesson challenge', () => {
+    it('renders the prompt with a closed hint interaction', () => {
       renderLesson(makeLesson({
         challenge: {
           prompt: 'Match the target color.',
@@ -96,7 +128,55 @@ describe('LessonPlayer', () => {
       }));
 
       expect(screen.getByText('Match the target color.')).toBeInTheDocument();
+      expect(screen.queryByText('Adjust one channel at a time.')).not.toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: 'show hint' }));
       expect(screen.getByText('Adjust one channel at a time.')).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /hint/ })).not.toBeInTheDocument();
+    });
+
+    it('resets and filters mapped hints when the active stage changes', async () => {
+      renderLesson(makeLesson({
+        challenge: {
+          prompt: 'Match each HSL target.',
+          hints: [
+            { stageId: 'hue', text: 'Hue hint' },
+            { stageId: 'saturation', text: 'Saturation hint' },
+          ],
+        },
+      }));
+
+      fireEvent.click(await screen.findByRole('button', { name: 'show hint' }));
+      expect(screen.getByText('Hue hint')).toBeInTheDocument();
+      expect(screen.queryByText('Saturation hint')).not.toBeInTheDocument();
+
+      fireEvent.click(screen.getByRole('button', { name: 'advance mock stage' }));
+      expect(screen.queryByText('Hue hint')).not.toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: 'show hint' }));
+      expect(screen.getByText('Saturation hint')).toBeInTheDocument();
+    });
+
+    it('uses the closed hint interaction in the challenge phase', () => {
+      const lesson = makeLesson({
+        id: 'challenge-phase-lesson',
+        challenge: { prompt: 'Challenge phase prompt', hints: ['Challenge phase hint'] },
+      });
+      sessionStorage.setItem(sessionKey(lesson.id), JSON.stringify({
+        version: 2,
+        phase: 'challenge',
+        stepIndex: 0,
+        challengeDone: false,
+        quizIndex: 0,
+        answers: [],
+        selectedChoice: null,
+        submitted: false,
+        quizSignature: null,
+      }));
+
+      renderLesson(lesson);
+      expect(screen.getByText('Challenge phase prompt')).toBeInTheDocument();
+      expect(screen.queryByText('Challenge phase hint')).not.toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: 'show hint' }));
+      expect(screen.getByText('Challenge phase hint')).toBeInTheDocument();
     });
   });
 

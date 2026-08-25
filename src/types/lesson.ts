@@ -72,8 +72,14 @@ export interface LessonStep {
 
 export interface Challenge {
   prompt: string;
-  hints: string[];
+  hints: ChallengeHint[];
 }
+
+export type ChallengeHint = string | {
+  text: string;
+  /** Stable stage identifier from the exercise-stage contract. */
+  stageId?: string;
+};
 
 export interface QuizChoice {
   stableId: string;

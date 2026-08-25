@@ -1,7 +1,10 @@
 import { memo, useState } from 'react';
+import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 
-interface AuditStage {
+interface AuditStage extends ExerciseStageDefinition {
   id: string;
   title: string;
   instruction: string;
@@ -15,7 +18,7 @@ interface AuditStage {
 const STAGES: AuditStage[] = [
   {
     id: 'priority',
-    title: 'Stage 1: Priority Elements',
+    title: 'Priority elements',
     instruction: 'Which elements convey information or identify controls and need a contrast check? Select all that apply.',
     type: 'multi-select',
     options: ['Text content', 'Decorative background pattern', 'Status indicators', 'Chart series marks', 'Border that identifies a button', 'Page margin'],
@@ -24,7 +27,7 @@ const STAGES: AuditStage[] = [
   },
   {
     id: 'contrast-check',
-    title: 'Stage 2: Contrast Check',
+    title: 'Contrast check',
     instruction: 'The normal-size secondary text (#aaaaaa on white) has a contrast ratio of 2.3:1. What is your verdict?',
     type: 'single-choice',
     options: [
@@ -39,7 +42,7 @@ const STAGES: AuditStage[] = [
   },
   {
     id: 'cvd-sim',
-    title: 'Stage 3: CVD Simulation',
+    title: 'CVD simulation',
     instruction: 'After simulating deuteranopia, the green and red status dots look similar. What should you do?',
     type: 'single-choice',
     options: [
@@ -54,7 +57,7 @@ const STAGES: AuditStage[] = [
   },
   {
     id: 'task-verify',
-    title: 'Stage 4: Task Verification',
+    title: 'Task verification',
     instruction: 'A chart identifies its series only with colored lines and a color-only legend. What is the impact?',
     type: 'single-choice',
     options: [
@@ -69,33 +72,28 @@ const STAGES: AuditStage[] = [
   },
 ];
 
-interface AuditFlowToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
-
-export const AuditFlowTool = memo(function AuditFlowTool({ interactive = false, onComplete }: AuditFlowToolProps) {
-  const [currentStage, setCurrentStage] = useState(0);
+export const AuditFlowTool = memo(function AuditFlowTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [multiSelected, setMultiSelected] = useState<string[]>([]);
   const [singleSelected, setSingleSelected] = useState<string | null>(null);
-  const [stageResult, setStageResult] = useState<'correct' | 'incorrect' | null>(null);
-  const [completedStages, setCompletedStages] = useState<string[]>([]);
-  const [completed, setCompleted] = useState(false);
-
-  const stage = STAGES[currentStage];
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const stage = STAGES.find(({ id }) => id === stageController.activeStage.id) ?? STAGES[0];
 
   function toggleMulti(option: string) {
-    if (!interactive || stageResult === 'correct') return;
+    if (!interactive || stageController.result === 'passed') return;
     setMultiSelected((prev) =>
       prev.includes(option) ? prev.filter((o) => o !== option) : [...prev, option],
     );
-    setStageResult(null);
+    stageController.retry();
   }
 
   function selectSingle(option: string) {
-    if (!interactive || stageResult === 'correct') return;
+    if (!interactive || stageController.result === 'passed') return;
     setSingleSelected(option);
-    setStageResult(null);
+    stageController.retry();
   }
 
   function checkAnswer() {
@@ -108,59 +106,34 @@ export const AuditFlowTool = memo(function AuditFlowTool({ interactive = false, 
     } else {
       correct = singleSelected === stage.correctSingle;
     }
-    setStageResult(correct ? 'correct' : 'incorrect');
-    if (correct) {
-      const newCompleted = [...completedStages, stage.id];
-      setCompletedStages(newCompleted);
-      if (newCompleted.length === STAGES.length && !completed) {
-        setCompleted(true);
-        onComplete?.();
-      }
-    }
+    if (correct) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
-  function advance() {
-    if (currentStage < STAGES.length - 1) {
-      setCurrentStage((s) => s + 1);
-      setMultiSelected([]);
-      setSingleSelected(null);
-      setStageResult(null);
-    }
+  function prepareNextStage() {
+    setMultiSelected([]);
+    setSingleSelected(null);
+    stageController.advance();
   }
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>accessibility audit flow</span>
 
-      {/* Stage progress */}
-      <div style={{ display: 'flex', gap: '0.3rem' }}>
-        {STAGES.map((s, i) => (
-          <div
-            key={s.id}
-            style={{
-              flex: 1, height: 4, borderRadius: 2,
-              background: completedStages.includes(s.id)
-                ? 'var(--accent-success)'
-                : i === currentStage
-                ? 'var(--accent-cta)'
-                : 'var(--border)',
-            }}
-          />
-        ))}
-      </div>
-      <p style={{ fontSize: '0.72rem', color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
-        Stage {currentStage + 1} of {STAGES.length}: {completedStages.length} complete
-      </p>
-
-      {/* Current stage */}
-      <div style={{ border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '0.75rem' }}>
-        <p style={{ fontWeight: 700, fontSize: '0.85rem', marginBottom: '0.35rem', color: 'var(--primary-foreground)' }}>
-          {stage.title}
-        </p>
-        <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.65rem' }}>
-          {stage.instruction}
-        </p>
-
+      <ExerciseStage
+        controller={{ ...stageController, advance: prepareNextStage }}
+        incorrectFeedback={(
+          <span style={{ color: 'var(--accent-danger)' }}>
+            Not quite. Review your selection and try again.
+          </span>
+        )}
+        passedFeedback={<span style={{ color: 'var(--accent-success)' }}>✓ {stage.explanation}</span>}
+        completionFeedback={(
+          <span style={{ color: 'var(--accent-success)' }}>
+            ✓ Audit activity complete. Use these four stages to structure another interface audit.
+          </span>
+        )}
+      >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
           {stage.options.map((option) => {
             const isSelected = stage.type === 'multi-select'
@@ -171,7 +144,7 @@ export const AuditFlowTool = memo(function AuditFlowTool({ interactive = false, 
                 key={option}
                 style={{
                   display: 'flex', alignItems: 'flex-start', gap: '0.4rem',
-                  fontSize: '0.78rem', cursor: interactive && stageResult !== 'correct' ? 'pointer' : 'default',
+                  fontSize: '0.78rem', cursor: interactive && stageController.result !== 'passed' ? 'pointer' : 'default',
                   padding: '0.3rem 0.5rem', borderRadius: 'var(--radius-sm)',
                   border: `1px solid ${isSelected ? 'var(--accent-cta)' : 'var(--border)'}`,
                   background: isSelected ? 'color-mix(in srgb, var(--accent-cta) 10%, transparent)' : 'transparent',
@@ -181,7 +154,7 @@ export const AuditFlowTool = memo(function AuditFlowTool({ interactive = false, 
                   type={stage.type === 'multi-select' ? 'checkbox' : 'radio'}
                   name={stage.id}
                   checked={isSelected}
-                  disabled={!interactive || stageResult === 'correct'}
+                  disabled={!interactive || stageController.result === 'passed'}
                   onChange={() => stage.type === 'multi-select' ? toggleMulti(option) : selectSingle(option)}
                   style={{ accentColor: 'var(--accent-cta)', marginTop: 2 }}
                 />
@@ -191,7 +164,7 @@ export const AuditFlowTool = memo(function AuditFlowTool({ interactive = false, 
           })}
         </div>
 
-        {interactive && stageResult !== 'correct' && (
+        {interactive && stageController.result !== 'passed' && (
           <button
             onClick={checkAnswer}
             style={{
@@ -205,39 +178,7 @@ export const AuditFlowTool = memo(function AuditFlowTool({ interactive = false, 
           </button>
         )}
 
-        {stageResult === 'incorrect' && (
-          <p style={{ fontSize: '0.75rem', color: 'var(--accent-danger)', marginTop: '0.4rem' }}>
-            Not quite. Review your selection and try again.
-          </p>
-        )}
-
-        {stageResult === 'correct' && (
-          <div style={{ marginTop: '0.4rem' }}>
-            <p style={{ fontSize: '0.75rem', color: 'var(--accent-success)' }}>
-              ✓ {stage.explanation}
-            </p>
-            {currentStage < STAGES.length - 1 && (
-              <button
-                onClick={advance}
-                style={{
-                  marginTop: '0.4rem', padding: '0.3rem 0.65rem',
-                  fontSize: '0.75rem', borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--accent-success)', background: 'color-mix(in srgb, var(--accent-success) 10%, transparent)',
-                  color: 'var(--primary-foreground)', cursor: 'pointer',
-                }}
-              >
-                Next stage →
-              </button>
-            )}
-          </div>
-        )}
-      </div>
-
-      {completed && (
-        <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          ✓ Audit activity complete. Use these four stages to structure another interface audit.
-        </p>
-      )}
+      </ExerciseStage>
     </div>
   );
 });

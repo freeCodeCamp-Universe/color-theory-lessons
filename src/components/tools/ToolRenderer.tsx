@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import type { ReactNode } from 'react';
 import type { LessonConfig } from '../../types/lesson.ts';
+import type { ExerciseStageChangeHandler } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
 
 const BeforeAfterTool = lazy(() => import('./BeforeAfterTool.tsx').then((m) => ({ default: m.BeforeAfterTool })));
@@ -43,6 +44,8 @@ interface ToolRendererProps {
   lesson: LessonConfig;
   /** Callback triggered when the tool's challenge condition is met. */
   onChallengeComplete: () => void;
+  /** Reports the stable identifier and data for the tool's active stage. */
+  onStageChange?: ExerciseStageChangeHandler;
 }
 
 /**
@@ -52,7 +55,7 @@ interface ToolRendererProps {
  * It acts as the bridge between the generic LessonPlayer and the
  * specific logic of 30+ different tools.
  */
-export function ToolRenderer({ lesson, onChallengeComplete }: ToolRendererProps) {
+export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: ToolRendererProps) {
   let tool: ReactNode;
 
   switch (lesson.interactionType) {
@@ -67,7 +70,13 @@ export function ToolRenderer({ lesson, onChallengeComplete }: ToolRendererProps)
       break;
 
     case 'slider-explore':
-      tool = <HSLSliderTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <HSLSliderTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'contrast-checker':
@@ -75,7 +84,13 @@ export function ToolRenderer({ lesson, onChallengeComplete }: ToolRendererProps)
       break;
 
     case 'temperature-sorter':
-      tool = <TemperatureSorterTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <TemperatureSorterTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'color-wheel':
@@ -159,7 +174,13 @@ export function ToolRenderer({ lesson, onChallengeComplete }: ToolRendererProps)
       break;
 
     case 'audit-flow':
-      tool = <AuditFlowTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <AuditFlowTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'pattern-repair':
