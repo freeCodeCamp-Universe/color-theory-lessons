@@ -1,6 +1,13 @@
 import { memo, useState } from 'react';
+import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
 import styles from './BeforeAfterTool.module.css';
+import type {
+  ExerciseStageController,
+  ExerciseStageDefinition,
+  ExerciseToolProps,
+} from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 
 /* ── Clickable region data ────────────────────────────────────────────── */
 
@@ -55,20 +62,44 @@ const REGIONS: Region[] = [
 
 /* ── Component ────────────────────────────────────────────────────────── */
 
-interface BeforeAfterToolProps {
+interface BeforeAfterToolProps extends ExerciseToolProps {
   variant?: 'color-function' | 'hierarchy';
-  interactive?: boolean;
   previewMockup?: 'purposeful' | 'noisy';
-  onComplete?: () => void;
 }
 
-export const BeforeAfterTool = memo(function BeforeAfterTool({ variant = 'color-function', interactive = true, previewMockup, onComplete }: BeforeAfterToolProps) {
+const COLOR_ROLE_STAGES = [
+  {
+    id: 'identify-color-roles',
+    title: 'identify the color roles',
+    instruction: 'Select each colored area and identify the job its color performs.',
+  },
+] satisfies readonly ExerciseStageDefinition[];
+
+const HIERARCHY_STAGES = [
+  {
+    id: 'assign-action-hierarchy',
+    title: 'assign the action hierarchy',
+    instruction: 'Assign a primary, secondary, or tertiary role to each action, then check the hierarchy.',
+  },
+] satisfies readonly ExerciseStageDefinition[];
+
+export const BeforeAfterTool = memo(function BeforeAfterTool({
+  variant = 'color-function',
+  interactive = true,
+  previewMockup,
+  onComplete,
+  onStageChange,
+}: BeforeAfterToolProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [results, setResults] = useState<Record<string, boolean | null>>({});
   const [triedAnswer, setTriedAnswer] = useState<string | null>(null);
 
   const solvedCount = Object.values(results).filter(Boolean).length;
-  const allSolved = solvedCount === REGIONS.length;
+  const stageController = useExerciseStages({
+    stages: variant === 'hierarchy' ? HIERARCHY_STAGES : COLOR_ROLE_STAGES,
+    onComplete,
+    onStageChange,
+  });
 
   function handleRegionClick(id: string) {
     if (results[id] === true) return; // already solved
@@ -91,10 +122,11 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({ variant = 'color-
       const next = { ...results, [regionId]: true };
       setResults(next);
       if (Object.values(next).filter(Boolean).length === REGIONS.length) {
-        onComplete?.();
+        stageController.markPassed();
       }
     } else {
       setResults((prev) => ({ ...prev, [regionId]: prev[regionId] === true ? true : false }));
+      stageController.markIncorrect();
     }
   }
 
@@ -127,7 +159,7 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({ variant = 'color-
     return (
       <div className={shellStyles.shell}>
         <span className={shellStyles.toolLabel}>hierarchy tuner</span>
-        <HierarchyDemo interactive={interactive} onComplete={onComplete} />
+        <HierarchyDemo interactive={interactive} stageController={stageController} />
       </div>
     );
   }
@@ -140,6 +172,13 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({ variant = 'color-
       <span className={shellStyles.toolLabel}>
         {interactive ? 'identify each color\'s role' : 'before / after comparison'}
       </span>
+
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback={<span style={{ color: 'var(--red)' }}>That role does not match this area.</span>}
+        completionFeedback={<span style={{ color: 'var(--green)' }}>✓ All four color roles identified.</span>}
+        onRetry={() => setTriedAnswer(null)}
+      >
 
       <div>
         {/* Purposeful mockup — interactive */}
@@ -213,7 +252,7 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({ variant = 'color-
             <button className={styles.dismissBtn} onClick={handleDismiss} aria-label="Close">✕</button>
           </div>
 
-          {triedAnswer === null || !lastAnswerCorrect ? (
+          {triedAnswer === null ? (
             <div className={styles.answerChoices}>
               {ALL_JOBS.map((job) => (
                 <button
@@ -252,10 +291,8 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({ variant = 'color-
       {/* Progress */}
       {interactive && <div className={styles.progressRow}>
         <span className={styles.score}>{solvedCount} / {REGIONS.length} identified</span>
-        {allSolved && (
-          <span className={styles.allDone}>challenge complete!</span>
-        )}
       </div>}
+      </ExerciseStage>
     </div>
   );
 });
@@ -269,13 +306,19 @@ const HIERARCHY_ITEMS = [
 ] as const;
 type BtnRole = 'primary' | 'secondary' | 'tertiary';
 
-function HierarchyDemo({ interactive = true, onComplete }: { interactive?: boolean; onComplete?: () => void }) {
+function HierarchyDemo({
+  interactive = true,
+  stageController,
+}: {
+  interactive?: boolean;
+  stageController: ExerciseStageController;
+}) {
   const [roles, setRoles] = useState<Record<string, BtnRole>>({
     submit: 'secondary',
     draft: 'secondary',
     cancel: 'secondary',
   });
-  const [checked, setChecked] = useState(false);
+  const checked = stageController.result !== 'idle';
 
   const btnStyle = (role: BtnRole): React.CSSProperties => {
     if (role === 'primary') return { background: 'var(--yellow)', color: 'var(--gray-90)', border: 'none', padding: '0.5rem 1.2rem', borderRadius: '3px', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 700 };
@@ -286,12 +329,23 @@ function HierarchyDemo({ interactive = true, onComplete }: { interactive?: boole
   const isCorrect = roles.submit === 'primary' && roles.draft === 'secondary' && roles.cancel === 'tertiary';
 
   function handleCheck() {
-    setChecked(true);
-    if (isCorrect) onComplete?.();
+    if (isCorrect) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+    <ExerciseStage
+      controller={stageController}
+      incorrectFeedback={(
+        <span style={{ color: 'var(--red)' }}>
+          Submit should be primary, Save Draft secondary, and Cancel tertiary.
+        </span>
+      )}
+      completionFeedback={(
+        <span style={{ color: 'var(--green)' }}>✓ Submit stands out as the primary action.</span>
+      )}
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '6px', padding: 'var(--spacing-lg)', display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
         {HIERARCHY_ITEMS.map((item) => (
           <span key={item.id} style={btnStyle(roles[item.id])}>{item.label}</span>
@@ -324,23 +378,7 @@ function HierarchyDemo({ interactive = true, onComplete }: { interactive?: boole
           check hierarchy
         </button>
       )}
-      {checked && (
-        <>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: isCorrect ? 'var(--green)' : 'var(--red)' }}>
-            {isCorrect
-              ? '✓ Submit stands out as the primary action. Well done.'
-              : '✗ Submit should be primary, Save Draft secondary, and Cancel tertiary.'}
-          </p>
-          {!isCorrect && (
-            <button
-              onClick={() => setChecked(false)}
-              style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'transparent', color: 'var(--secondary-foreground)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', border: '1px solid var(--border)', borderRadius: '3px', cursor: 'pointer' }}
-            >
-              try again
-            </button>
-          )}
-        </>
-      )}
-    </div>
+      </div>
+    </ExerciseStage>
   );
 }

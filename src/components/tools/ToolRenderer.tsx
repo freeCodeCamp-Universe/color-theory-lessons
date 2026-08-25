@@ -65,6 +65,7 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
           variant={lesson.id === 'u1-l5' ? 'hierarchy' : 'color-function'}
           interactive={true}
           onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
         />
       );
       break;
@@ -80,7 +81,13 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
       break;
 
     case 'contrast-checker':
-      tool = <ContrastTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <ContrastTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'temperature-sorter':
@@ -94,7 +101,13 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
       break;
 
     case 'color-wheel':
-      tool = <ColorWheelTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <ColorWheelTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'additive-sort':

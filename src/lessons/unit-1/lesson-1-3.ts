@@ -25,7 +25,7 @@ export const lesson1_3: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'Repair three low-contrast text pairs in the dashboard card: the section label, the helper text, and the Submit text on its button background.',
+      prompt: 'Complete one stage by repairing the section label, helper text, and Submit button color pairs.',
       hints: [
         'The section label sits on a dark background. Increase the label\'s lightness to raise its contrast.',
         'Increase the helper text\'s lightness so it stands out from the dark background.',
