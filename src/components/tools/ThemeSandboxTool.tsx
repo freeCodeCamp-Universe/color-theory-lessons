@@ -25,11 +25,16 @@ const ROLES: RoleDef[] = [
 
 const GRADIENT_DEFAULTS = { start: '#4f46e5', end: '#7c3aed' };
 const TEXT_CONTRAST_TARGET = 4.5;
+const HERO_TEXT_COLOR = '#ffffff';
+
+function formatContrastRatio(ratio: number): string {
+  return (Math.floor(ratio * 10) / 10).toFixed(1);
+}
 
 const STAGES: readonly ExerciseStageDefinition[] = [{
   id: 'build-readable-theme',
   title: 'Build a readable theme',
-  instruction: 'Adjust the role colors and gradient, then make all three text contrast checks pass.',
+  instruction: 'Adjust the role colors and gradient until all five text contrast checks pass.',
 }];
 
 export const ThemeSandboxTool = memo(function ThemeSandboxTool({
@@ -59,12 +64,19 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
   const surfRgb = hexToRgb(colors.surface);
   const textPriRgb = hexToRgb(colors.textPri);
   const textSecRgb = hexToRgb(colors.textSec);
+  const heroTextRgb = hexToRgb(HERO_TEXT_COLOR);
+  const gradStartRgb = hexToRgb(gradStart);
+  const gradEndRgb = hexToRgb(gradEnd);
   const priOnBg = contrastRatioWcag(textPriRgb, bgRgb);
   const priOnSurf = contrastRatioWcag(textPriRgb, surfRgb);
   const secOnSurf = contrastRatioWcag(textSecRgb, surfRgb);
+  const heroOnGradStart = contrastRatioWcag(heroTextRgb, gradStartRgb);
+  const heroOnGradEnd = contrastRatioWcag(heroTextRgb, gradEndRgb);
   const allPass = priOnBg >= TEXT_CONTRAST_TARGET
     && priOnSurf >= TEXT_CONTRAST_TARGET
-    && secOnSurf >= TEXT_CONTRAST_TARGET;
+    && secOnSurf >= TEXT_CONTRAST_TARGET
+    && heroOnGradStart >= TEXT_CONTRAST_TARGET
+    && heroOnGradEnd >= TEXT_CONTRAST_TARGET;
 
   return (
     <div className={shellStyles.shell}>
@@ -73,7 +85,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
       <ExerciseStage
         controller={stageController}
         incorrectFeedback="At least one text pair is below 4.5:1. Try this stage again."
-        completionFeedback="Theme complete. All three checked text pairs meet 4.5:1."
+        completionFeedback="Theme complete. All five checked text pairs meet 4.5:1."
       >
       {/* Live preview */}
       <div style={{
@@ -85,7 +97,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
           background: `linear-gradient(135deg, ${gradStart}, ${gradEnd})`,
           borderRadius: 'var(--radius-sm)', padding: '1rem', marginBottom: '0.6rem',
         }}>
-          <span style={{ color: '#fff', fontFamily: 'var(--font-mono)', fontSize: '0.82rem' }}>
+          <span style={{ color: HERO_TEXT_COLOR, fontFamily: 'var(--font-mono)', fontSize: '0.82rem' }}>
             Hero gradient
           </span>
         </div>
@@ -160,13 +172,19 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
       {/* Contrast readout */}
       <div style={{ fontSize: '0.78rem', fontFamily: 'var(--font-mono)', marginBottom: '0.5rem' }}>
         <div style={{ color: priOnBg >= TEXT_CONTRAST_TARGET ? 'var(--green)' : 'var(--red)' }}>
-          {priOnBg >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Primary text on background: {priOnBg.toFixed(1)}:1 (target: 4.5:1)
+          {priOnBg >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Primary text on background: {formatContrastRatio(priOnBg)}:1 (target: 4.5:1)
         </div>
         <div style={{ color: priOnSurf >= TEXT_CONTRAST_TARGET ? 'var(--green)' : 'var(--red)' }}>
-          {priOnSurf >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Primary text on surface: {priOnSurf.toFixed(1)}:1 (target: 4.5:1)
+          {priOnSurf >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Primary text on surface: {formatContrastRatio(priOnSurf)}:1 (target: 4.5:1)
         </div>
         <div style={{ color: secOnSurf >= TEXT_CONTRAST_TARGET ? 'var(--green)' : 'var(--red)' }}>
-          {secOnSurf >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Secondary text on surface: {secOnSurf.toFixed(1)}:1 (target: 4.5:1)
+          {secOnSurf >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Secondary text on surface: {formatContrastRatio(secOnSurf)}:1 (target: 4.5:1)
+        </div>
+        <div style={{ color: heroOnGradStart >= TEXT_CONTRAST_TARGET ? 'var(--green)' : 'var(--red)' }}>
+          {heroOnGradStart >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Hero text on gradient start: {formatContrastRatio(heroOnGradStart)}:1 (target: 4.5:1)
+        </div>
+        <div style={{ color: heroOnGradEnd >= TEXT_CONTRAST_TARGET ? 'var(--green)' : 'var(--red)' }}>
+          {heroOnGradEnd >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Hero text on gradient end: {formatContrastRatio(heroOnGradEnd)}:1 (target: 4.5:1)
         </div>
       </div>
 
