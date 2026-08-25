@@ -52,6 +52,16 @@ describe('DarkModeStressChallenge', () => {
     expect(screen.getByRole('slider', { name: /Action lightness/ })).toHaveFocus();
   });
 
+  it('uses the more readable light or dark text color on the action preview', () => {
+    render(<DarkModeStressChallenge onComplete={vi.fn()} />);
+
+    setSlider(/Action lightness/, 50);
+    expect(screen.getByText('Apply changes')).toHaveStyle({ color: 'rgb(255, 255, 255)' });
+
+    setSlider(/Action lightness/, 70);
+    expect(screen.getByText('Apply changes')).toHaveStyle({ color: 'rgb(10, 10, 35)' });
+  });
+
   it('restores all three controls after reload during an attempt', async () => {
     const sessionKey = 'milestone-6:1';
     const first = render(

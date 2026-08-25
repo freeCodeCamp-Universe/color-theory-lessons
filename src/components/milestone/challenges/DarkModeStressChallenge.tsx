@@ -86,16 +86,23 @@ export function DarkModeStressChallenge({ onComplete, sessionKey }: DarkModeStre
     const text = hslToHex(220, 16, textL);
     const surface = hslToHex(222, 18, surfaceL);
     const action = hslToHex(221, 88, actionL);
+    const darkActionText = '#0a0a23';
+    const lightActionText = '#ffffff';
 
     const textContrast = contrastRatioWcag(hexToRgb(text), hexToRgb(surface));
     const hierarchyContrast = contrastRatioWcag(hexToRgb(surface), hexToRgb(bg));
     const actionContrast = contrastRatioWcag(hexToRgb(action), hexToRgb(surface));
+    const actionText = contrastRatioWcag(hexToRgb(darkActionText), hexToRgb(action))
+      >= contrastRatioWcag(hexToRgb(lightActionText), hexToRgb(action))
+      ? darkActionText
+      : lightActionText;
 
     return {
       bg,
       text,
       surface,
       action,
+      actionText,
       textContrast,
       hierarchyContrast,
       actionContrast,
@@ -123,7 +130,7 @@ export function DarkModeStressChallenge({ onComplete, sessionKey }: DarkModeStre
       <div className={styles.preview} style={{ backgroundColor: checks.bg }} aria-hidden="true">
         <div className={styles.surface} style={{ backgroundColor: checks.surface }}>
           <p className={styles.title} style={{ color: checks.text }}>Dashboard title</p>
-          <span className={styles.action} style={{ backgroundColor: checks.action }}>Apply changes</span>
+          <span className={styles.action} style={{ backgroundColor: checks.action, color: checks.actionText }}>Apply changes</span>
         </div>
       </div>
 
