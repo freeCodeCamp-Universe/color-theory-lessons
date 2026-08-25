@@ -40,6 +40,20 @@ describe('DarkModeStressChallenge', () => {
     expect(onComplete).toHaveBeenCalledOnce();
   });
 
+  it('does not round failing contrast ratios up to their targets', () => {
+    render(<DarkModeStressChallenge onComplete={vi.fn()} />);
+
+    setSlider(/Surface lightness/, 20);
+    setSlider(/Text lightness/, 61);
+    expect(screen.getByText(/Not passed: Text against surface: 4\.4:1 \(target: 4\.5:1\)/))
+      .toBeInTheDocument();
+
+    setSlider(/Surface lightness/, 25);
+    setSlider(/Action lightness/, 62);
+    expect(screen.getByText(/Not passed: Action against surface: 2\.9:1 \(target: 3\.0:1\)/))
+      .toBeInTheDocument();
+  });
+
   it('supports keyboard changes on each named range control', async () => {
     const user = userEvent.setup();
     render(<DarkModeStressChallenge onComplete={vi.fn()} />);

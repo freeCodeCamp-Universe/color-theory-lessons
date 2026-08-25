@@ -22,6 +22,10 @@ const DEFAULT_SESSION: DarkModeStressSession = {
   actionLightness: 40,
 };
 
+function formatContrastRatio(ratio: number): string {
+  return (Math.floor(ratio * 10) / 10).toFixed(1);
+}
+
 function validInteger(value: unknown, minimum: number, maximum: number): value is number {
   return Number.isInteger(value) && (value as number) >= minimum && (value as number) <= maximum;
 }
@@ -137,19 +141,19 @@ export function DarkModeStressChallenge({ onComplete, sessionKey }: DarkModeStre
       <div className={styles.row}>
         <label htmlFor="dark-text">Text lightness ({textL})</label>
         <input id="dark-text" type="range" min={60} max={100} value={textL} onChange={(event) => setTextL(Number(event.target.value))} />
-        <span className={checks.textPass ? styles.good : styles.bad}>{checks.textPass ? 'Pass' : 'Not passed'}: Text against surface: {checks.textContrast.toFixed(2)}:1 (target: 4.5:1)</span>
+        <span className={checks.textPass ? styles.good : styles.bad}>{checks.textPass ? 'Pass' : 'Not passed'}: Text against surface: {formatContrastRatio(checks.textContrast)}:1 (target: 4.5:1)</span>
       </div>
 
       <div className={styles.row}>
         <label htmlFor="dark-surface">Surface lightness ({surfaceL})</label>
         <input id="dark-surface" type="range" min={10} max={40} value={surfaceL} onChange={(event) => setSurfaceL(Number(event.target.value))} />
-        <span className={checks.hierarchyPass ? styles.good : styles.bad}>{checks.hierarchyPass ? 'Pass' : 'Not passed'}: Surface against background: {checks.hierarchyContrast.toFixed(2)}:1 (exercise target: 1.2:1)</span>
+        <span className={checks.hierarchyPass ? styles.good : styles.bad}>{checks.hierarchyPass ? 'Pass' : 'Not passed'}: Surface against background: {formatContrastRatio(checks.hierarchyContrast)}:1 (exercise target: 1.2:1)</span>
       </div>
 
       <div className={styles.row}>
         <label htmlFor="dark-action">Action lightness ({actionL})</label>
         <input id="dark-action" type="range" min={35} max={85} value={actionL} onChange={(event) => setActionL(Number(event.target.value))} />
-        <span className={checks.actionPass ? styles.good : styles.bad}>{checks.actionPass ? 'Pass' : 'Not passed'}: Action against surface: {checks.actionContrast.toFixed(2)}:1 (target: 3.0:1)</span>
+        <span className={checks.actionPass ? styles.good : styles.bad}>{checks.actionPass ? 'Pass' : 'Not passed'}: Action against surface: {formatContrastRatio(checks.actionContrast)}:1 (target: 3.0:1)</span>
       </div>
 
       <p className={styles.result} role="status" aria-live="polite" aria-atomic="true">
