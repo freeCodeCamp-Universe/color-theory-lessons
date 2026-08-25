@@ -54,10 +54,10 @@ export const lesson6_4: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Inverting a light theme can reduce surface separation, change text contrast, and make semantic colors harder to distinguish.',
-    'Different lightness values can distinguish a dark theme\'s base background from raised surfaces.',
-    'Check each text color against the surface where it appears in both the light and dark themes.',
-    'An accent can change visual prominence when its background and nearby colors change. Adjust its lightness or saturation if needed.',
-    'Assign a dark-theme value to each role, then compare the two themes for surface hierarchy, text readability, and semantic distinction.',
+    'Build a dark theme role by role; direct inversion can flatten surfaces, alter contrast, and blur semantic distinctions.',
+    'Separate base and raised surface roles with different lightness values.',
+    'Retest every text-and-surface pair in each theme because light-theme contrast does not carry over automatically.',
+    'Judge an accent against its theme background and nearby semantic colors, adjusting lightness or saturation when its prominence changes.',
+    'After assigning every dark-theme role, compare the paired themes for surface hierarchy, text readability, and semantic distinction.',
   ],
 };

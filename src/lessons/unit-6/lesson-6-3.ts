@@ -54,9 +54,9 @@ export const lesson6_3: LessonConfig = {
     },
   ],
   keyPoints: [
-    'A brand color does not fill every role in a color system. Interfaces also need neutrals, tonal variants, and separate semantic colors.',
-    'Reserve the brand color for a small set of emphasis roles, such as primary actions, links, or selected highlights.',
-    'Lighter and darker variants of a brand color can support surfaces and interaction states after their contrast is tested.',
-    'Applying the same saturated brand color to backgrounds, cards, buttons, links, icons, and badges makes those elements compete for attention.',
+    'Treat the brand color as one part of the system; neutrals, tonal variants, and semantic colors fill other roles.',
+    'Limit the brand color to defined emphasis roles so primary actions, links, and selections remain distinguishable.',
+    'Test lighter and darker brand variants before assigning them to surfaces or interaction states.',
+    'When one saturated hue covers structural, content, action, icon, and status roles, those elements compete instead of creating hierarchy.',
   ],
 };

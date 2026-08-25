@@ -55,9 +55,9 @@ export const lesson6_5: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Categorical palettes use distinct hues for unordered groups. Sequential palettes use an ordered progression in lightness for ordered data.',
-    'Use differences in lightness as well as hue to distinguish chart series from one another and from the chart background.',
-    'Some people with protan or deutan CVD may have trouble distinguishing red and green. Add labels, shapes, or patterns so color is not the only cue.',
-    'Placing each series name next to its marks identifies the series without requiring a color match to a separate legend.',
+    'Match the palette to the data: separate unordered categories by hue and encode ordered values through a lightness progression.',
+    'Combine hue and lightness differences so chart series remain separate from one another and the background.',
+    'Red and green can become difficult to distinguish under protan or deutan CVD; labels, shapes, or patterns preserve the distinction without color.',
+    'Direct series labels remove the need to match marks with colors in a separate legend.',
   ],
 };

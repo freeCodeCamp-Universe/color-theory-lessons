@@ -65,10 +65,10 @@ export const lesson6_6: LessonConfig = {
     },
   ],
   keyPoints: [
-    'HEX, RGB, and HSL values in CSS represent sRGB colors, which provide a common baseline for web content and displays.',
-    'Display P3 can specify colors outside sRGB. Start with an sRGB declaration for browsers that cannot parse Display P3 syntax.',
-    'SVG, Canvas, and WebGL accept explicit color values. Use the same semantic roles to choose values across these contexts.',
-    'Surrounding colors can change how a color looks through simultaneous contrast. Test complete interface layouts as well as swatch grids.',
-    'A Display P3 color outside sRGB can lose chroma or otherwise change when mapped to an sRGB display. Test wide-gamut colors on both display types.',
+    'Use sRGB as the web baseline because CSS HEX, RGB, and HSL values belong to that color space.',
+    'Declare an sRGB fallback before a Display P3 color so browsers without P3 syntax can use the baseline value.',
+    'Keep semantic-role choices consistent when supplying explicit values to SVG, Canvas, and WebGL.',
+    'Simultaneous contrast changes a color\'s appearance relative to its surroundings, so evaluate full layouts alongside swatches.',
+    'Check Display P3 colors on wide-gamut and sRGB displays because gamut mapping can reduce chroma or change their appearance.',
   ],
 };

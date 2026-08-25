@@ -54,9 +54,9 @@ export const lesson6_2: LessonConfig = {
     },
   ],
   keyPoints: [
-    'A useful role set covers four areas: structural, content, interactive, and semantic.',
-    'Primary text identifies headings and important labels. Secondary text identifies supporting information, captions, and metadata.',
-    'Differences in color, borders, shadows, or spacing can distinguish a page background, card surface, and raised panel.',
-    'Hover, focus, pressed, and disabled treatments communicate a button\'s current interaction state.',
+    'Organize color roles around structure, content, interaction, and semantic status.',
+    'Primary and secondary text roles separate important labels from supporting copy; inverse text covers dark or colored surfaces.',
+    'Page, card, and raised-panel boundaries can come from color, borders, shadows, or spacing.',
+    'Buttons need visible treatments for hover, focus, pressed, and disabled states.',
   ],
 };

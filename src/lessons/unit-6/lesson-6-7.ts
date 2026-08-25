@@ -65,9 +65,9 @@ export const lesson6_7: LessonConfig = {
     },
   ],
   keyPoints: [
-    'A stress test applies a color system to light mode, dark mode, charts, alerts, and CVD simulation to check how its roles work in each context.',
-    'A consistency audit finds roles used for multiple meanings, multiple roles used for one meaning, and local values that bypass shared tokens.',
-    'Before shipping, check hierarchy, text contrast, semantic distinction without color, dark-theme roles, chart series, CVD simulations, and token propagation.',
-    'Evaluate each context with the visual hierarchy, additive color, color format, perception, accessibility, and semantic-role concepts from Units 1 through 6.',
+    'Stress-test roles in light mode, dark mode, charts, alerts, and CVD simulation instead of relying on a single mockup.',
+    'Audit roles and meanings for one-to-one mapping, then check components for local values outside the token system.',
+    'Before release, verify hierarchy, required text contrast, non-color status cues, theme roles, chart series, CVD distinctions, and token propagation.',
+    'The final evaluation combines earlier work on hierarchy, additive color, formats, perception, accessibility, and semantic roles.',
   ],
 };

@@ -54,9 +54,9 @@ export const lesson6_1: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Unit 3 introduced role assignment within one interface. A color system keeps each role\'s meaning consistent across a product.',
-    'A system becomes inconsistent when one role represents multiple meanings, multiple roles represent the same meaning, or local values replace shared tokens.',
-    'Add a role when the interface needs a meaning that its existing roles do not cover.',
-    'Shared tokens let a role\'s value change across every screen and flow that uses it.',
+    'Semantic roles move color decisions from individual screens into a product-wide system.',
+    'Role drift, overlapping meanings, and values outside shared tokens make a color system inconsistent.',
+    'Create a role only when no existing role covers the required meaning.',
+    'Changing a shared token updates every screen and flow that references it.',
   ],
 };
