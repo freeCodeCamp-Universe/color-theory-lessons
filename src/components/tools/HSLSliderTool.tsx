@@ -1,11 +1,15 @@
-import { memo, useState, useEffect, useRef, useMemo } from 'react';
+import { memo, useState, useMemo } from 'react';
 import type { HSL } from '../../utils/color.ts';
 import { hslString } from '../../utils/color.ts';
+import { ExerciseStage } from './ExerciseStage.tsx';
 import { HUE_MAX, HueWheel } from './HueWheel.tsx';
 import shellStyles from './ToolShell.module.css';
 import styles from './HSLSliderTool.module.css';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 
 interface Target {
+  id: string;
   name: string;
   locked: 'h' | 's' | 'l';
   target: HSL;
@@ -14,18 +18,21 @@ interface Target {
 
 const TARGETS: Target[] = [
   {
+    id: 'hue',
     name: 'Match the hue',
     locked: 'h',
     target: { h: 200, s: 70, l: 55 },
     start: { h: 0, s: 70, l: 55 },
   },
   {
+    id: 'saturation',
     name: 'Match the saturation',
     locked: 's',
     target: { h: 200, s: 20, l: 55 },
     start: { h: 200, s: 90, l: 55 },
   },
   {
+    id: 'lightness',
     name: 'Match the lightness',
     locked: 'l',
     target: { h: 200, s: 70, l: 20 },
@@ -35,24 +42,33 @@ const TARGETS: Target[] = [
 
 const TOLERANCE = 8;
 
-interface HSLSliderToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
+interface HSLSliderToolProps extends ExerciseToolProps {
   previewDimension?: 'h' | 's' | 'l';
 }
 
-export const HSLSliderTool = memo(function HSLSliderTool({ interactive = true, onComplete, previewDimension }: HSLSliderToolProps) {
-  const [targetIdx, setTargetIdx] = useState(0);
+const EXERCISE_STAGES: readonly ExerciseStageDefinition[] = TARGETS.map((target) => ({
+  id: target.id,
+  title: target.name,
+  instruction: target.locked === 'h'
+    ? 'Adjust the hue wheel and slider to match the target, then check your answer.'
+    : `Adjust the ${target.locked === 's' ? 'saturation' : 'lightness'} slider to match the target, then check your answer.`,
+  nextActionLabel: 'next stage →',
+}));
+
+export const HSLSliderTool = memo(function HSLSliderTool({
+  interactive = true,
+  onComplete,
+  onStageChange,
+  previewDimension,
+}: HSLSliderToolProps) {
   const [current, setCurrent] = useState<HSL>({ ...TARGETS[0].start });
-  const [checked, setChecked] = useState(false);
-  const [allDone, setAllDone] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => () => { if (timerRef.current !== null) clearTimeout(timerRef.current); }, []);
+  const stageController = useExerciseStages({ stages: EXERCISE_STAGES, onComplete, onStageChange });
 
   // State used only in the previewDimension branch (always declared to follow Rules of Hooks)
   const [previewCurrent, setPreviewCurrent] = useState<HSL>({ h: 200, s: 70, l: 55 });
 
-  const target = TARGETS[targetIdx];
+  const target = TARGETS.find(({ id }) => id === stageController.activeStage.id) ?? TARGETS[0];
+  const checked = stageController.result !== 'idle';
 
   const close =
     Math.abs(current.h - target.target.h) <= TOLERANCE &&
@@ -65,25 +81,18 @@ export const HSLSliderTool = memo(function HSLSliderTool({ interactive = true, o
   }
 
   function handleCheck() {
-    setChecked(true);
-    if (close) {
-      timerRef.current = setTimeout(() => {
-        if (targetIdx < TARGETS.length - 1) {
-          const next = targetIdx + 1;
-          setTargetIdx(next);
-          setCurrent({ ...TARGETS[next].start });
-          setChecked(false);
-        } else {
-          setAllDone(true);
-          onComplete?.();
-        }
-      }, 900);
-    }
+    if (close) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   function handleRetry() {
     setCurrent({ ...target.start });
-    setChecked(false);
+  }
+
+  function handleAdvance() {
+    const nextTarget = TARGETS[stageController.activeStage.position];
+    if (nextTarget) setCurrent({ ...nextTarget.start });
+    stageController.advance();
   }
 
   const hueGradient = useMemo(
@@ -167,11 +176,18 @@ export const HSLSliderTool = memo(function HSLSliderTool({ interactive = true, o
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>HSL color lab</span>
 
+      <ExerciseStage
+        controller={{ ...stageController, advance: handleAdvance }}
+        incorrectFeedback={<span style={{ color: 'var(--red)' }}>No match yet. Try this stage again.</span>}
+        passedFeedback={<span style={{ color: 'var(--green)' }}>✓ Target matched.</span>}
+        completionFeedback={<span style={{ color: 'var(--green)' }}>✓ All three dimensions matched.</span>}
+        onRetry={handleRetry}
+      >
       <div className={styles.root}>
         <div style={{ display: 'flex', gap: 'var(--spacing-lg)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
           <HueWheel
             hue={current.h}
-            interactive={interactive && target.locked === 'h' && !checked && !allDone}
+            interactive={interactive && target.locked === 'h' && !checked}
             onChange={(h) => updateChannel('h', h)}
           />
           {/* Swatches */}
@@ -193,22 +209,6 @@ export const HSLSliderTool = memo(function HSLSliderTool({ interactive = true, o
               </span>
             </div>
           </div>
-        </div>
-
-        {/* Challenge label */}
-        <div>
-          <span className={styles.sliderName} style={{ color: 'var(--yellow)' }}>
-            {targetIdx + 1}/{TARGETS.length}: {target.name}
-          </span>
-          <p style={{ fontSize: '0.85rem', color: 'var(--secondary-foreground)', marginTop: '4px' }}>
-            {target.locked === 'h' ? (
-              <>The <strong style={{ color: 'var(--primary-foreground)' }}>hue wheel and slider</strong> are unlocked. Adjust either control to match the target, then check.</>
-            ) : (
-              <>Only the <strong style={{ color: 'var(--primary-foreground)' }}>
-                {target.locked === 's' ? 'saturation' : 'lightness'}
-              </strong> slider is unlocked. Adjust it to match the target, then check.</>
-            )}
-          </p>
         </div>
 
         {/* Sliders */}
@@ -246,7 +246,7 @@ export const HSLSliderTool = memo(function HSLSliderTool({ interactive = true, o
         </div>
 
         {/* Actions / result */}
-        {interactive && !allDone && !checked && (
+        {interactive && !checked && (
           <button
             onClick={handleCheck}
             disabled={false}
@@ -267,41 +267,8 @@ export const HSLSliderTool = memo(function HSLSliderTool({ interactive = true, o
           </button>
         )}
 
-        {checked && !allDone && (
-          close ? (
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--green)' }}>
-              ✓ match! advancing…
-            </p>
-          ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--red)' }}>
-                No match yet. Select retry to reset the slider.
-              </p>
-              <button
-                onClick={handleRetry}
-                style={{
-                  padding: '0.3rem 0.75rem',
-                  background: 'transparent',
-                  color: 'var(--secondary-foreground)',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.8rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--border)',
-                  cursor: 'pointer',
-                }}
-              >
-                retry
-              </button>
-            </div>
-          )
-        )}
-
-        {allDone && (
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--green)' }}>
-            ✓ all three dimensions matched. Great work!
-          </p>
-        )}
       </div>
+      </ExerciseStage>
     </div>
   );
 });

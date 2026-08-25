@@ -1,5 +1,8 @@
 import { memo, useState } from 'react';
+import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 
 interface Swatch {
   id: string;
@@ -28,13 +31,25 @@ const INTERFACE_GOALS = [
 
 type Temperature = 'warm' | 'cool' | 'neutral';
 
-interface TemperatureSorterToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+const STAGES: readonly ExerciseStageDefinition[] = [
+  {
+    id: 'classify-colors',
+    title: 'classify the colors',
+    instruction: 'Classify each swatch as warm, cool, or neutral.',
+    nextActionLabel: 'next stage →',
+  },
+  {
+    id: 'match-interface-goals',
+    title: 'match temperature to interface goals',
+    instruction: 'Choose the palette direction that best supports each interface goal.',
+  },
+];
 
-export const TemperatureSorterTool = memo(function TemperatureSorterTool({ interactive = true, onComplete }: TemperatureSorterToolProps) {
-  const [stage, setStage] = useState<1 | 2>(1);
+export const TemperatureSorterTool = memo(function TemperatureSorterTool({
+  interactive = true,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [swatchAnswers, setSwatchAnswers] = useState<Record<string, Temperature | ''>>(() =>
     Object.fromEntries(SWATCHES.map((s) => [s.id, ''])),
   );
@@ -43,19 +58,22 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({ inter
   );
   const [swatchesChecked, setSwatchesChecked] = useState(false);
   const [goalsChecked, setGoalsChecked] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
   const swatchCorrect = SWATCHES.filter((s) => swatchAnswers[s.id] === s.correct).length;
   const goalCorrect = INTERFACE_GOALS.filter((g) => goalAnswers[g.id] === g.correct).length;
   const allSwatchesAnswered = SWATCHES.every((s) => swatchAnswers[s.id] !== '');
   const allGoalsAnswered = INTERFACE_GOALS.every((g) => goalAnswers[g.id] !== '');
-  const swatchesPassed = swatchesChecked && swatchCorrect === SWATCHES.length;
-  const goalsPassed = goalsChecked && goalCorrect >= Math.ceil(INTERFACE_GOALS.length * 0.7);
+  function handleCheckSwatches() {
+    setSwatchesChecked(true);
+    if (swatchCorrect === SWATCHES.length) stageController.markPassed();
+    else stageController.markIncorrect();
+  }
 
   function handleCheckGoals() {
     setGoalsChecked(true);
-    if (goalCorrect >= Math.ceil(INTERFACE_GOALS.length * 0.7)) {
-      onComplete?.();
-    }
+    if (goalCorrect >= Math.ceil(INTERFACE_GOALS.length * 0.7)) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   function handleRetrySwatches() {
@@ -75,32 +93,30 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({ inter
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>color temperature exercise</span>
 
-      <div style={{ display: 'flex', gap: '0.3rem' }} aria-hidden="true">
-        {[1, 2].map((stageNumber) => (
-          <div
-            key={stageNumber}
-            style={{
-              flex: 1,
-              height: 4,
-              borderRadius: 2,
-              background: stageNumber < stage
-                ? 'var(--accent-success)'
-                : stageNumber === stage
-                  ? 'var(--accent-cta)'
-                  : 'var(--border)',
-            }}
-          />
-        ))}
-      </div>
-      <p style={{ fontSize: '0.72rem', color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
-        Stage {stage} of 2
-      </p>
-
-      {stage === 1 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
-            classify the colors
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback={(
+          <span style={{ color: 'var(--yellow)' }}>
+            {stageController.activeStage.id === 'classify-colors'
+              ? `${swatchCorrect} / ${SWATCHES.length} correct`
+              : `${goalCorrect} / ${INTERFACE_GOALS.length} correct`}
           </span>
+        )}
+        passedFeedback={(
+          <span style={{ color: 'var(--green)' }}>{swatchCorrect} / {SWATCHES.length} correct</span>
+        )}
+        completionFeedback={(
+          <span style={{ color: 'var(--green)' }}>
+            ✓ Color temperature exercise complete. {goalCorrect} / {INTERFACE_GOALS.length} correct.
+          </span>
+        )}
+        onRetry={stageController.activeStage.id === 'classify-colors'
+          ? handleRetrySwatches
+          : handleRetryGoals}
+      >
+
+      {stageController.activeStage.id === 'classify-colors' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 'var(--spacing-sm)' }}>
             {SWATCHES.map((s) => {
               const chosen = swatchAnswers[s.id];
@@ -163,7 +179,7 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({ inter
           {interactive && !swatchesChecked && (
             <button
               disabled={!allSwatchesAnswered}
-              onClick={() => setSwatchesChecked(true)}
+              onClick={handleCheckSwatches}
               style={{
                 alignSelf: 'flex-start',
                 padding: '0.5rem 1.25rem',
@@ -181,58 +197,11 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({ inter
             </button>
           )}
 
-          {swatchesChecked && (
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: swatchesPassed ? 'var(--green)' : 'var(--yellow)' }}>
-              {swatchCorrect} / {SWATCHES.length} correct
-            </p>
-          )}
-
-          {swatchesPassed && (
-            <button
-              onClick={() => setStage(2)}
-              style={{
-                alignSelf: 'flex-start',
-                padding: '0.5rem 1.25rem',
-                background: 'var(--accent-success)',
-                color: 'var(--gray-90)',
-                fontFamily: 'var(--font-mono)',
-                fontWeight: 700,
-                fontSize: '0.85rem',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              next stage →
-            </button>
-          )}
-
-          {swatchesChecked && !swatchesPassed && (
-            <button
-              onClick={handleRetrySwatches}
-              style={{
-                alignSelf: 'flex-start',
-                padding: '0.5rem 1.25rem',
-                background: 'transparent',
-                color: 'var(--secondary-foreground)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.85rem',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-sm)',
-                cursor: 'pointer',
-              }}
-            >
-              try stage again
-            </button>
-          )}
         </div>
       )}
 
-      {stage === 2 && (
+      {stageController.activeStage.id === 'match-interface-goals' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
-            match temperature to interface goals
-          </span>
           {INTERFACE_GOALS.map((g) => {
             const chosen = goalAnswers[g.id];
             const isCorrect = goalsChecked && chosen === g.correct;
@@ -302,32 +271,9 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({ inter
             </button>
           )}
 
-          {goalsChecked && (
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: goalsPassed ? 'var(--green)' : 'var(--yellow)' }}>
-              {goalCorrect} / {INTERFACE_GOALS.length} correct
-            </p>
-          )}
-
-          {goalsChecked && !goalsPassed && (
-            <button
-              onClick={handleRetryGoals}
-              style={{
-                alignSelf: 'flex-start',
-                padding: '0.5rem 1.25rem',
-                background: 'transparent',
-                color: 'var(--secondary-foreground)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.85rem',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-sm)',
-                cursor: 'pointer',
-              }}
-            >
-              try stage again
-            </button>
-          )}
         </div>
       )}
+      </ExerciseStage>
     </div>
   );
 });
