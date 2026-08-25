@@ -54,10 +54,10 @@ export const lesson6_4: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Dark mode is not light-mode inversion — surfaces, text, and accents all need intentional dark-theme values.',
-    'Use very dark but not pure-black backgrounds (e.g. #0f172a) to allow card and panel layers to appear above.',
-    'Text should be soft off-white in dark mode, not pure white, to reduce glare and halation.',
-    'Accent colors often need lighter or less-saturated values in dark mode — vivid colors intensify on dark surfaces.',
-    'Check contrast in both modes separately — what passes in light mode may fail in dark mode.',
+    'Build a dark theme role by role; direct inversion can flatten surfaces, alter contrast, and blur semantic distinctions.',
+    'Separate base and raised surface roles with different lightness values.',
+    'Retest every text-and-surface pair in each theme because light-theme contrast does not carry over automatically.',
+    'Judge an accent against its theme background and nearby semantic colors, adjusting lightness or saturation when its prominence changes.',
+    'After assigning every dark-theme role, compare the paired themes for surface hierarchy, text readability, and semantic distinction.',
   ],
 };

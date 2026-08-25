@@ -65,9 +65,9 @@ export const lesson6_7: LessonConfig = {
     },
   ],
   keyPoints: [
-    'A stress test applies the system across multiple contexts — light mode, dark mode, charts, alerts, CVD simulation — to find hidden weaknesses.',
-    'A consistency audit checks governance: role drift, duplicate role meaning, and token overrides that break propagation.',
-    'Before shipping, verify: hierarchy, readability, semantic clarity, dark mode performance, chart readability, CVD robustness, and cross-context token propagation.',
-    'This is a synthesis exercise — visual vocabulary, additive model, format knowledge, perception, accessibility, and systems thinking all come together.',
+    'Stress-test roles in light mode, dark mode, charts, alerts, and CVD simulation instead of relying on a single mockup.',
+    'Audit roles and meanings for one-to-one mapping, then check components for local values outside the token system.',
+    'Before release, verify hierarchy, required text contrast, non-color status cues, theme roles, chart series, CVD distinctions, and token propagation.',
+    'The final evaluation combines earlier work on hierarchy, additive color, formats, perception, accessibility, and semantic roles.',
   ],
 };

@@ -54,9 +54,9 @@ export const lesson6_3: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Brand colors are anchors, not complete systems — interfaces also need neutrals, tonal steps, and semantic roles.',
-    'Put the brand color on primary interactive roles (buttons, links, highlights); use neutrals for structure and content.',
-    'A tonal scale expands one brand hue into lighter/darker variants for states and hierarchy without introducing new hues.',
-    'Accent overuse occurs when the brand color appears on everything — hierarchy collapses and nothing stands out.',
+    'Treat the brand color as one part of the system; neutrals, tonal variants, and semantic colors fill other roles.',
+    'Limit the brand color to defined emphasis roles so primary actions, links, and selections remain distinguishable.',
+    'Test lighter and darker brand variants before assigning them to surfaces or interaction states.',
+    'When one saturated hue covers structural, content, action, icon, and status roles, those elements compete instead of creating hierarchy.',
   ],
 };
