@@ -65,10 +65,10 @@ export const lesson6_6: LessonConfig = {
     },
   ],
   keyPoints: [
-    'sRGB is the default color space for web work — supported by virtually all screens and the safe baseline.',
-    'Display P3 can represent more vivid colors, but unsupported devices clip them back to sRGB. Design for sRGB first.',
-    'Colors appear in CSS, SVG, Canvas, and WebGL contexts — the rendering context changes but the need for thoughtful decisions does not.',
-    'Context effect: the same hex looks different depending on surroundings. Test in real layouts, not just swatch grids.',
-    'Wide-gamut displays can make saturated colors appear overwhelming — use restrained saturation and test across display types.',
+    'Use sRGB as the web baseline because CSS HEX, RGB, and HSL values belong to that color space.',
+    'Declare an sRGB fallback before a Display P3 color so browsers without P3 syntax can use the baseline value.',
+    'Keep semantic-role choices consistent when supplying explicit values to SVG, Canvas, and WebGL.',
+    'Simultaneous contrast changes a color\'s appearance relative to its surroundings, so evaluate full layouts alongside swatches.',
+    'Check Display P3 colors on wide-gamut and sRGB displays because gamut mapping can reduce chroma or change their appearance.',
   ],
 };

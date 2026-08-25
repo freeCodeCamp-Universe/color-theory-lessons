@@ -54,9 +54,9 @@ export const lesson6_2: LessonConfig = {
     },
   ],
   keyPoints: [
-    'A useful role set covers four areas: structural, content, interactive, and semantic.',
-    'Text needs multiple levels (primary, secondary, inverse) to support readable hierarchy across components.',
-    'Surfaces need distinct levels (page, card, raised panel) to create depth and layout clarity.',
-    'Component states (hover, focus, pressed, disabled) are essential — they tell users whether their actions are registering.',
+    'Organize color roles around structure, content, interaction, and semantic status.',
+    'Primary and secondary text roles separate important labels from supporting copy; inverse text covers dark or colored surfaces.',
+    'Page, card, and raised-panel boundaries can come from color, borders, shadows, or spacing.',
+    'Buttons need visible treatments for hover, focus, pressed, and disabled states.',
   ],
 };

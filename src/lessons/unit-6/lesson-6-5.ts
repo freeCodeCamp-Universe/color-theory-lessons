@@ -55,9 +55,9 @@ export const lesson6_5: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Categorical palettes use distinct hues for unordered groups; sequential palettes use light-to-dark progression for ordered data.',
-    'Chart colors need sufficient contrast with each other and with the chart background — not just different hues.',
-    'Red-green only differentiation is risky — support with labels, patterns, or different shapes under CVD conditions.',
-    'Direct labels on chart series are more robust than color-only legends and work under CVD simulation.',
+    'Match the palette to the data: separate unordered categories by hue and encode ordered values through a lightness progression.',
+    'Combine hue and lightness differences so chart series remain separate from one another and the background.',
+    'Red and green can become difficult to distinguish under protan or deutan CVD; labels, shapes, or patterns preserve the distinction without color.',
+    'Direct series labels remove the need to match marks with colors in a separate legend.',
   ],
 };
