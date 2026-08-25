@@ -86,4 +86,4 @@ npm run build   # tsc + vite build
 
 ## Learning Outcomes
 
-By completion, learners should be able to: explain additive vs subtractive color, build usable palettes for digital interfaces, understand RGB/HEX/HSL/HSV/alpha, identify accessibility mistakes, design with awareness of color blindness and low contrast, apply WCAG guidance, and make strong UI color choices for hierarchy, emphasis, readability, and feedback states.
+By completion, learners should be able to: explain additive vs subtractive color, build usable palettes for digital interfaces, understand RGB/HEX/HSL/alpha, identify accessibility mistakes, design with awareness of color blindness and low contrast, apply WCAG guidance, and make strong UI color choices for hierarchy, emphasis, readability, and feedback states.
