@@ -1,0 +1,12 @@
+.p3Preview {
+  height: 60px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--srgb-fallback);
+}
+
+@supports (color: color(display-p3 1 0 0)) {
+  .p3Preview {
+    background-color: var(--p3-color);
+  }
+}

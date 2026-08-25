@@ -11,14 +11,15 @@ export const lesson6_5: LessonConfig = {
     { text: 'Categorical palettes use distinct hues for groups that have no order, such as product categories, countries, or team names. Too many hues, or hues that differ only slightly, make it harder to match chart marks to categories.' },
     { text: 'Sequential palettes use an ordered progression in lightness, sometimes combined with a change in saturation, to represent values such as temperature, quantity, or severity. A light-to-dark progression gives viewers a consistent cue for order. A rainbow palette can introduce uneven changes in perceived lightness.' },
     { text: 'Choose series colors that remain distinct from one another and the chart background. If red and green encode different series or meanings, some people with protan or deutan CVD may have trouble distinguishing them. Add direct labels, shapes, or patterns so color is not the only cue.' },
-    { text: 'In the chart tuner, adjust four series colors in a grouped bar chart. Switch to the deuteranopia simulation to check whether each pair remains distinct. The warning lists pairs that the simulation makes hard to distinguish. Choose a palette that clears the warning and remains distinct in the normal view.' },
+    { text: 'In the chart tuner, adjust each series color and assign a different pattern to each series. Compare the normal and deuteranopia views, then show the data table to inspect every bar by month, series, and value.' },
   ],
   challenge: {
-      prompt: 'Choose four series colors that remain distinguishable in both normal view and the deuteranopia simulation.',
+      prompt: 'Tune the series colors for normal and deuteranopia views, assign a different pattern to each series, and inspect the data table before completing the chart.',
       hints: [
-        'Use differences in lightness as well as hue to separate the series.',
-        'Switch between the normal view and simulation after each color change.',
-        'If red and green become similar in the simulation, replace one with a color that also differs in lightness.',
+        'Aim for high contrast between adjacent series, not just different hues.',
+        'Use the simulation warning to find series pairs that need different colors.',
+        'Assign a different pattern to each series so the bars remain identifiable without color.',
+        'Show the data table, inspect the chart values, then complete the chart.',
       ],
   },
   quizItems: [
