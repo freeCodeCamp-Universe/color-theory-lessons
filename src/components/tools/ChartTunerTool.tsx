@@ -208,7 +208,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
             border: 'none',
           }}
         >
-          Normal
+          Normal view
         </button>
         <button
           onClick={() => setSimulated(true)}
@@ -219,7 +219,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
             border: 'none',
           }}
         >
-          Deuteranopia sim
+          Deuteranopia simulation
         </button>
       </div>
 
@@ -285,17 +285,17 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
         <div style={{ marginTop: '0.5rem', fontSize: '0.78rem', color: 'var(--muted)' }}>
           {!paletteIsReady ? (
             <span style={{ color: 'var(--accent-cta)' }}>
-              ⚠ Hard to distinguish: {[
+              ⚠ Below the tool's difference threshold: {[
                 ...weakNormal.map(([a, b]) => `${SERIES[a]}/${SERIES[b]} in normal view`),
                 ...weakSimulated.map(([a, b]) => `${SERIES[a]}/${SERIES[b]} under simulation`),
               ].join('; ')}
             </span>
           ) : !patternsAreDistinct ? (
-            <span style={{ color: 'var(--accent-cta)' }}>Palette passes both views. Assign a different pattern to each series.</span>
+            <span style={{ color: 'var(--accent-cta)' }}>The colors meet the tool's difference threshold in both views. Assign a different pattern to each series.</span>
           ) : !showDataTable ? (
-            <span style={{ color: 'var(--accent-cta)' }}>Palette and patterns pass. Show the data table to inspect each bar.</span>
+            <span style={{ color: 'var(--accent-cta)' }}>The colors and patterns meet the tool's criteria. Show the data table to inspect each bar.</span>
           ) : (
-            <span style={{ color: 'var(--accent-success)' }}>✓ Palette and patterns pass, and the data table identifies every bar</span>
+            <span style={{ color: 'var(--accent-success)' }}>✓ The colors and patterns meet the tool's criteria, and the data table identifies every bar</span>
           )}
         </div>
       )}
@@ -313,7 +313,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          The palette passes normal and CVD views, every series has a distinct pattern, and the data table identifies every bar.
+          The colors meet the tool's difference threshold in normal view and the deuteranopia simulation. Each series has a distinct pattern, and the data table identifies every bar.
         </p>
       )}
     </div>
