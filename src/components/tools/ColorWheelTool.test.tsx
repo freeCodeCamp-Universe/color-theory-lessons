@@ -118,6 +118,9 @@ describe('ColorWheelTool locked palette behavior', () => {
 
     fireEvent.change(baseHueInput, { target: { value: '45' } });
     fireEvent.click(screen.getByRole('button', { name: 'analogous' }));
+
+    expect(screen.queryByText(/30° on either side of the base/i)).not.toBeInTheDocument();
+
     fireEvent.click(screen.getByRole('button', { name: /lock in this palette/i }));
 
     expect(baseHueInput).toBeDisabled();
@@ -128,6 +131,7 @@ describe('ColorWheelTool locked palette behavior', () => {
     expect(screen.getByRole('button', { name: 'triadic' })).toBeDisabled();
     expect(screen.getByText(/Selected relationship:/i)).toHaveTextContent('Selected relationship: analogous.');
     expect(screen.queryByText('Where are analogous hues positioned relative to the base hue?')).not.toBeInTheDocument();
+    expect(screen.queryByText(/30° on either side of the base/i)).not.toBeInTheDocument();
 
     fireEvent.change(baseHueInput, { target: { value: '90' } });
     fireEvent.keyDown(wheel, { key: 'ArrowRight' });

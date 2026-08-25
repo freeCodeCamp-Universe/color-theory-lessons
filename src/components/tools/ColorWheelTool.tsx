@@ -283,7 +283,11 @@ export const ColorWheelTool = memo(function ColorWheelTool({
               {option}
             </button>
           ))}
-          <p style={{ fontSize: '0.8rem', color: 'var(--muted)' }}>{RELATIONSHIP_DESCRIPTION[relationship]}</p>
+          {previewRelationship && (
+            <p style={{ fontSize: '0.8rem', color: 'var(--muted)' }}>
+              {RELATIONSHIP_DESCRIPTION[relationship]}
+            </p>
+          )}
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
