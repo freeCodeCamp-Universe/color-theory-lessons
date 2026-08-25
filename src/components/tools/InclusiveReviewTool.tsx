@@ -41,7 +41,7 @@ const CHECKLIST: ChecklistItem[] = [
   {
     id: 'simulation',
     label: 'Simulation check',
-    detail: 'Does the interface remain understandable under CVD simulation modes?',
+    detail: 'Does the interface remain understandable under color vision deficiency simulation modes?',
     correctAnswer: 'needs-work',
   },
   {
@@ -103,7 +103,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({ interacti
 
       <div
         role="group"
-        aria-label="CVD simulation mode"
+        aria-label="Color vision deficiency simulation mode"
         style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}
       >
         {SIMULATION_MODES.map((mode) => (
@@ -203,7 +203,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({ interacti
               {answer && !isCorrect && (
                 <p style={{ fontSize: '0.7rem', color: 'var(--accent-cta)', marginTop: '0.25rem', margin: '0.25rem 0 0' }}>
                   {item.id === 'simulation'
-                    ? 'The chart bars become hard to distinguish under CVD simulation and have no labels or patterns. Choose "Needs work".'
+                    ? 'The chart bars become hard to distinguish under color vision deficiency simulation and have no labels or patterns. Choose "Needs work".'
                     : 'This mockup does not meet this check. Choose "Needs work".'}
                 </p>
               )}

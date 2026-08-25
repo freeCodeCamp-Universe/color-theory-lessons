@@ -42,7 +42,7 @@ const STAGES: AuditStage[] = [
   },
   {
     id: 'cvd-sim',
-    title: 'CVD simulation',
+    title: 'Color vision deficiency simulation',
     instruction: 'After simulating deuteranopia, the green and red status dots look similar. What should you do?',
     type: 'single-choice',
     options: [

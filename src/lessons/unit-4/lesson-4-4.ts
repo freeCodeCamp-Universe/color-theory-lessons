@@ -9,16 +9,16 @@ export const lesson4_4: LessonConfig = {
   reviewTags: ['color-only', 'observation', 'accessibility', 'ui-patterns'],
   steps: [
     {
-      text: 'You have seen how CVD can change color distinctions. Now examine common interface patterns. Some designs pair hue with labels, icons, shapes, or patterns. Others use hue as the only cue, so information can become ambiguous when a viewer cannot distinguish the hues.',
+      text: 'You have seen how color vision deficiency can change color distinctions. Now examine common interface patterns. Some designs pair hue with labels, icons, shapes, or patterns. Others use hue as the only cue, so information can become ambiguous when a viewer cannot distinguish the hues.',
     },
     {
-      text: 'Consider status indicators that use a red dot for an error and a green dot for success. Protan or deutan CVD can make those hues difficult to tell apart. Without labels, icons, or other cues, a viewer may not know which status each dot represents.',
+      text: 'Consider status indicators that use a red dot for an error and a green dot for success. Protan or deutan types of color vision deficiency can make those hues difficult to tell apart. Without labels, icons, or other cues, a viewer may not know which status each dot represents.',
     },
     {
       text: 'A form field with only a red border also uses hue as its only error cue. A viewer who does not notice the color change may miss the error state. First identify where the hue carries information and what becomes unclear when that cue is lost.',
     },
     {
-      text: 'A chart may use hue as the only way to distinguish its data series. Under a CVD simulation, two or more series can appear alike, which makes their values harder to identify.',
+      text: 'A chart may use hue as the only way to distinguish its data series. Under a color vision deficiency simulation, two or more series can appear alike, which makes their values harder to identify.',
     },
     {
       text: 'Each example has the same problem: hue is the only visual cue carrying information. Your task is to identify where a hue difference communicates meaning and explain what becomes ambiguous when that difference is hard to perceive. Unit 5 covers how to add labels, icons, patterns, and other cues.',
@@ -36,7 +36,7 @@ export const lesson4_4: LessonConfig = {
     {
       id: 'q1',
       prompt:
-        'Why can red and green status dots become ambiguous for viewers with protan or deutan CVD?',
+        'Why can red and green status dots become ambiguous for viewers with protan or deutan types of color vision deficiency?',
       choices: [
         {
           stableId: 'red-and-green-are-ugly-together',
@@ -48,7 +48,7 @@ export const lesson4_4: LessonConfig = {
         {
           stableId: 'under-protan-and-deutan-cvd-those-hues-converge-and-the-dots-bec',
           label:
-            'Protan and deutan CVD can reduce the hue difference, and the dots have no other identifying cue',
+            'Protan and deutan types of color vision deficiency can reduce the hue difference, and the dots have no other identifying cue',
           isCorrect: true,
           explanation:
             'When a red-green hue difference is the only identifying feature, viewers who cannot distinguish the hues have no other way to identify each status.',
@@ -58,7 +58,7 @@ export const lesson4_4: LessonConfig = {
           label: 'Screens cannot display red and green at the same time',
           isCorrect: false,
           explanation:
-            'A screen can display red and green at the same time. Protan and deutan CVD affect how a viewer distinguishes those hues.',
+            'A screen can display red and green at the same time. Protan and deutan types of color vision deficiency affect how a viewer distinguishes those hues.',
         },
         {
           stableId: 'the-dots-are-too-small-to-see-color-clearly',
@@ -94,7 +94,7 @@ export const lesson4_4: LessonConfig = {
           label: 'Using maximum saturation for every series',
           isCorrect: false,
           explanation:
-            'Two saturated colors can still appear alike under CVD. Saturation does not add a second identifying cue.',
+            'Two saturated colors can still appear alike for viewers with color vision deficiency. Saturation does not add a second identifying cue.',
         },
         {
           stableId: 'avoiding-color-entirely-and-using-only-gray-shades',

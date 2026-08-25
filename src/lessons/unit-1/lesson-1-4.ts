@@ -64,7 +64,7 @@ export const lesson1_4: LessonConfig = {
     },
     {
       id: 'q3',
-      prompt: 'Which statement is most accurate about warm and cool colors in UI design?',
+      prompt: 'Which statement is most accurate about warm and cool colors in user interface (UI) design?',
       choices: [
         { stableId: 'warm-colors-are-the-strongest-choice-for-any-warning-or-error', label: 'Warm colors are the strongest choice for any warning or error.', isCorrect: false, explanation: 'Warm colors can support warnings and errors, but their meaning depends on conventions and context.' },
         { stableId: 'cool-palettes-are-generally-more-professional-than-warm-palettes', label: 'Cool palettes are generally more professional than warm palettes.', isCorrect: false, explanation: 'Some industries favor cool palettes, but professional interfaces can also use warm colors.' },

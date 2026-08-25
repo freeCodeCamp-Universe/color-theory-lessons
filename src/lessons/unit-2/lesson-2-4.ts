@@ -12,6 +12,9 @@ export const lesson2_4: LessonConfig = {
       text: 'Pigments and inks do not shine light out at the viewer. They absorb some wavelengths of incoming light and reflect others back to your eye. The result depends on the material and on the wavelengths and intensity of the light striking it.',
     },
     {
+      text: 'Many print processes use cyan, magenta, yellow, and black (CMYK) inks. The cyan, magenta, and yellow inks absorb different ranges of wavelengths, while black ink provides a separate dark channel.',
+    },
+    {
       text: 'A screen emits light directly, while ink and paint absorb some wavelengths of incoming light and reflect others. A display can produce colors that a particular ink-and-paper combination cannot reproduce, so a physical result can differ from its screen preview.',
     },
     {
@@ -68,6 +71,7 @@ export const lesson2_4: LessonConfig = {
     },
   ],
   keyPoints: [
+    'Many print processes use cyan, magenta, yellow, and black (CMYK) inks.',
     'A gamut is the range of colors a device or medium can reproduce.',
     'A color inside a display’s gamut can fall outside the gamut of a specific ink, printer, and paper combination.',
     'Pigments and inks absorb some wavelengths of incoming light and reflect others toward the viewer.',

@@ -60,7 +60,7 @@ export const lesson2_5: LessonConfig = {
         { stableId: 'true-screens-layer-digital-paint-in-the-rgb-color-space', label: 'True. Screens layer digital paint in the RGB color space.', isCorrect: false, explanation: 'Screens control light rather than layering pigment.' },
         { stableId: 'false-screens-emit-light-a-painted-surface-reflects-ambient-ligh', label: 'False. Screens control light, while painted surfaces reflect ambient light.', isCorrect: true, explanation: 'Displays form images with controlled light. Paint absorbs some wavelengths from ambient light and reflects others.' },
         { stableId: 'true-both-screens-and-paint-are-creating-color-for-the-viewer-s-', label: 'True. Both produce color for the viewer through the same process.', isCorrect: false, explanation: 'Both result in perceived color, but they send light to the eye through different physical processes.' },
-        { stableId: 'it-depends-on-the-type-of-screen-technology-used', label: 'It depends on the type of screen technology used.', isCorrect: false, explanation: 'LCD pixels modulate light from a backlight, while emissive displays generate light at their pixels. Both form images with controlled light rather than reflected pigment.' },
+        { stableId: 'it-depends-on-the-type-of-screen-technology-used', label: 'It depends on the type of screen technology used.', isCorrect: false, explanation: 'Some displays modulate light from a backlight, while emissive displays generate light at their pixels. Both form images with controlled light rather than reflected pigment.' },
       ],
     },
   ],
