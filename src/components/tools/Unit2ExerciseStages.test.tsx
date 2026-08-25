@@ -133,6 +133,7 @@ describe('Unit 2 exercise stages', () => {
     fireEvent.click(screen.getByRole('button', { name: /light background amplifies the accent/i }));
     fireEvent.click(screen.getByRole('button', { name: 'check' }));
     expect(screen.getByText('Stage 1 of 3')).toBeInTheDocument();
+    expect(screen.getAllByText(/displayed background does not reflect the accent/i)).toHaveLength(1);
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
 
     const answers = [

@@ -393,26 +393,6 @@ export const BackgroundShiftTool = memo(function BackgroundShiftTool({
             })}
           </div>
 
-          {/* Explanation after submit */}
-          {submitted && chosen?.explanation && (
-            <p
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.8rem',
-                color: isCorrect ? 'var(--green)' : 'var(--muted)',
-                margin: 0,
-                padding: 'var(--spacing-sm)',
-                background: isCorrect
-                  ? 'color-mix(in srgb, var(--green) 6%, var(--surface))'
-                  : 'color-mix(in srgb, var(--red) 6%, var(--surface))',
-                borderRadius: 'var(--radius-sm)',
-                border: `1px solid ${isCorrect ? 'color-mix(in srgb, var(--green) 30%, var(--border))' : 'color-mix(in srgb, var(--red) 30%, var(--border))'}`,
-              }}
-            >
-              {chosen.explanation}
-            </p>
-          )}
-
           {/* Actions */}
           {stageController.result === 'idle' && (
             <button
