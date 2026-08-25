@@ -16,7 +16,7 @@ export const lesson6_5: LessonConfig = {
   challenge: {
       prompt: 'Tune the series colors for normal and deuteranopia views, assign a different pattern to each series, and inspect the data table before completing the chart.',
       hints: [
-        'Aim for high contrast between adjacent series, not just different hues.',
+        'Use differences in lightness as well as hue to separate the series.',
         'Use the simulation warning to find series pairs that need different colors.',
         'Assign a different pattern to each series so the bars remain identifiable without color.',
         'Show the data table, inspect the chart values, then complete the chart.',
