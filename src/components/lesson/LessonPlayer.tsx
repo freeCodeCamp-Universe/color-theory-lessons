@@ -9,6 +9,8 @@ import {
   getQuizChoiceStableId,
 } from '../../lessons/quiz-utils.ts';
 import { ToolRenderer } from '../tools/ToolRenderer.tsx';
+import type { ActiveExerciseStage } from '../tools/exercise-stage.ts';
+import { ChallengeHints } from './ChallengeHints.tsx';
 import StepPanelRenderer from './StepPanelRenderer.tsx';
 import styles from './LessonPlayer.module.css';
 
@@ -166,6 +168,12 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
   const [answers, setAnswers] = useState<QuizAnswer[]>(initialSession.answers);
   const [selectedChoice, setSelectedChoice] = useState<string | null>(initialSession.selectedChoice);
   const [submitted, setSubmitted] = useState(initialSession.submitted);
+  const [activeStageState, setActiveStageState] = useState<{
+    lessonId: string;
+    stage: ActiveExerciseStage;
+  } | null>(null);
+  const [challengeAttempt, setChallengeAttempt] = useState(0);
+  const activeStage = activeStageState?.lessonId === lesson.id ? activeStageState.stage : null;
 
   useEffect(() => {
     saveLessonSession(lesson.id, {
@@ -216,6 +224,8 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
     setAnswers([]);
     setSelectedChoice(null);
     setSubmitted(false);
+    setActiveStageState(null);
+    setChallengeAttempt((attempt) => attempt + 1);
   }
 
   function handleSubmitAnswer() {
@@ -314,12 +324,11 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
               {stepIndex === lesson.steps.length - 1 && challenge && (
                 <>
                   <p className={styles.challengePrompt}>{challenge.prompt}</p>
-                  <div className={styles.hints}>
-                    <span className={styles.hintsLabel}>hints</span>
-                    {challenge.hints.map((h) => (
-                      <p key={h} className={styles.hint}>{h}</p>
-                    ))}
-                  </div>
+                  <ChallengeHints
+                    hints={challenge.hints}
+                    activeStageId={activeStage?.id ?? null}
+                    resetKey={`${lesson.id}:${challengeAttempt}`}
+                  />
                 </>
               )}
             </div>
@@ -350,12 +359,11 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
             <div className={styles.scrollArea}>
               <span className={styles.stepNumber}>challenge</span>
               <p className={styles.challengePrompt}>{challenge.prompt}</p>
-              <div className={styles.hints}>
-                <span className={styles.hintsLabel}>hints</span>
-                {challenge.hints.map((h, i) => (
-                  <p key={i} className={styles.hint}>{h}</p>
-                ))}
-              </div>
+              <ChallengeHints
+                hints={challenge.hints}
+                activeStageId={activeStage?.id ?? null}
+                resetKey={`${lesson.id}:${challengeAttempt}`}
+              />
             </div>
             <div aria-live="polite">
               {challengeDone && (
@@ -503,6 +511,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
                 <ToolRenderer
                   lesson={lesson}
                   onChallengeComplete={() => setChallengeDone(true)}
+                  onStageChange={(stage) => setActiveStageState({ lessonId: lesson.id, stage })}
                 />
               </fieldset>
             : null
