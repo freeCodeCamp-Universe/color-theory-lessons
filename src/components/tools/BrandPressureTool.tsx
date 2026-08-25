@@ -11,6 +11,18 @@ interface BrandPressureToolProps {
   onComplete?: () => void;
 }
 
+const ROLE_LABELS: Record<RoleKey, string> = {
+  'page-bg': 'Page background',
+  'surface': 'Card surface',
+  'primary-text': 'Primary text',
+  'neutral-divider': 'Divider',
+};
+
+const FIXED_ROLE_LABELS: Record<string, string> = {
+  action: 'Primary action',
+  'secondary-action': 'Secondary action',
+};
+
 const NON_INTERACTIVE_DEFAULTS: Record<RoleKey, string> = {
   'page-bg': '#7c3aed',
   'surface': '#6d28d9',
@@ -79,7 +91,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
           {FIXED_ACTIONS.map(action => (
             <div key={action.role} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem', opacity: 0.7 }}>
               <div style={{ width: 18, height: 18, borderRadius: 3, background: action.background, border: '1px solid var(--border)', flexShrink: 0 }} />
-              <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{action.role} (fixed)</span>
+              <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{FIXED_ROLE_LABELS[action.role]} (fixed)</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--primary-foreground)' }}>{action.background}</span>
             </div>
           ))}
@@ -91,7 +103,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
             return (
               <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
                 <div style={{ width: 18, height: 18, borderRadius: 3, background: isValidHex(val) ? val : '#888', border: '1px solid var(--border)', flexShrink: 0 }} />
-                <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{key}</span>
+                <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{ROLE_LABELS[key]}</span>
                 <input
                   type="text"
                   value={val}
@@ -138,7 +150,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
           {[
             { label: 'Primary text / page background (4.5:1)', pass: pageTextOk, ratio: pageTextContrast },
             { label: 'Primary text / card surface (4.5:1)', pass: cardTextOk, ratio: cardTextContrast },
-            { label: 'Page/surface separation', pass: surfaceOk, ratio: surfaceContrast },
+            { label: 'Page / surface (target 1.2:1)', pass: surfaceOk, ratio: surfaceContrast },
             ...actionChecks.map(action => ({
               label: `${action.label} text (4.5:1)`,
               pass: action.pass,
@@ -160,14 +172,14 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
             <div style={{ background: 'var(--border)', borderRadius: 99, height: 6, marginTop: '0.25rem', overflow: 'hidden' }}>
               <div style={{ height: '100%', width: `${Math.min(pressure, 100)}%`, background: meterColor, borderRadius: 99, transition: 'width 0.3s' }} />
             </div>
-            <div style={{ fontSize: '0.7rem', color: 'var(--muted)', marginTop: '0.2rem' }}>Target: &lt; 40%</div>
+            <div style={{ fontSize: '0.7rem', color: 'var(--muted)', marginTop: '0.2rem' }}>Activity target: under 40%</div>
           </div>
         </div>
       </div>
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          Brand is present but not overwhelming. Neutrals carry the structural weight.
+          The supporting roles avoid saturated colors near the brand hue, and every contrast check passes.
         </p>
       )}
     </div>

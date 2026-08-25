@@ -26,7 +26,7 @@ describe('ChartTunerTool', () => {
     expect(screen.getByRole('row', { name: 'Jan 80 60 20 75' })).toBeInTheDocument();
     expect(screen.getByRole('row', { name: 'May 88 68 20 82' })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Deuteranopia sim' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Deuteranopia simulation' }));
     expect(screen.getByRole('table', { name: 'Chart data in deuteranopia simulation' })).toBeVisible();
   });
 
@@ -50,7 +50,7 @@ describe('ChartTunerTool', () => {
       backgroundImage: 'repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0 2px, rgba(255, 255, 255, 0.7) 2px 4px)',
     });
 
-    fireEvent.click(screen.getByRole('button', { name: 'Deuteranopia sim' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Deuteranopia simulation' }));
 
     expect(screen.getByTitle('Revenue: 80')).toHaveStyle({
       backgroundImage: 'repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0 2px, rgba(255, 255, 255, 0.7) 2px 4px)',
@@ -63,12 +63,12 @@ describe('ChartTunerTool', () => {
 
     fireEvent.change(screen.getByLabelText('Change Expenses color'), { target: { value: '#000000' } });
 
-    expect(screen.getByText('Palette passes both views. Assign a different pattern to each series.')).toBeInTheDocument();
+    expect(screen.getByText("The colors meet the tool's difference threshold in both views. Assign a different pattern to each series.")).toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
 
     assignDistinctPatterns();
 
-    expect(screen.getByText('Palette and patterns pass. Show the data table to inspect each bar.')).toBeInTheDocument();
+    expect(screen.getByText("The colors and patterns meet the tool's criteria. Show the data table to inspect each bar.")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('checkbox', { name: 'Show the chart data table' }));
 
@@ -78,7 +78,7 @@ describe('ChartTunerTool', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Complete chart' }));
 
-    expect(screen.getByText('The palette passes normal and CVD views, every series has a distinct pattern, and the data table identifies every bar.')).toBeInTheDocument();
+    expect(screen.getByText("The colors meet the tool's difference threshold in normal view and the deuteranopia simulation. Each series has a distinct pattern, and the data table identifies every bar.")).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
     expect(screen.getByRole('checkbox', { name: 'Show the chart data table' })).toBeDisabled();
     SERIES_COLOR_LABELS.forEach((name) => {
@@ -88,8 +88,8 @@ describe('ChartTunerTool', () => {
 
     fireEvent.change(screen.getByRole('combobox', { name: 'Pattern for Expenses' }), { target: { value: 'diagonal' } });
 
-    expect(screen.queryByText('Palette passes both views. Assign a different pattern to each series.')).not.toBeInTheDocument();
-    expect(screen.getByText('The palette passes normal and CVD views, every series has a distinct pattern, and the data table identifies every bar.')).toBeInTheDocument();
+    expect(screen.queryByText("The colors meet the tool's difference threshold in both views. Assign a different pattern to each series.")).not.toBeInTheDocument();
+    expect(screen.getByText("The colors meet the tool's difference threshold in normal view and the deuteranopia simulation. Each series has a distinct pattern, and the data table identifies every bar.")).toBeInTheDocument();
   });
 
   it('does not enable completion with a failing palette or duplicate patterns', () => {
@@ -98,12 +98,12 @@ describe('ChartTunerTool', () => {
 
     fireEvent.click(screen.getByRole('checkbox', { name: 'Show the chart data table' }));
 
-    expect(screen.getByText(/Expenses\/Profit under simulation/)).toBeInTheDocument();
+    expect(screen.getByText(/Below the tool's difference threshold:.*Expenses\/Profit under simulation/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Complete chart' })).toBeDisabled();
 
     fireEvent.change(screen.getByLabelText('Change Expenses color'), { target: { value: '#000000' } });
 
-    expect(screen.getByText('Palette passes both views. Assign a different pattern to each series.')).toBeInTheDocument();
+    expect(screen.getByText("The colors meet the tool's difference threshold in both views. Assign a different pattern to each series.")).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Complete chart' })).toBeDisabled();
     expect(onComplete).not.toHaveBeenCalled();
   });
