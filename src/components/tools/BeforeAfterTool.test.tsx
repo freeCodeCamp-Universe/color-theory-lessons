@@ -115,7 +115,31 @@ describe('BeforeAfterTool color-role keyboard activation', () => {
     fireEvent.click(navRegion);
     fireEvent.click(screen.getByRole('button', { name: 'separating sections' }));
 
+    expect(navRegion).not.toHaveAttribute('aria-disabled', 'true');
+
+    fireEvent.click(screen.getByRole('button', { name: 'check role' }));
+
     expect(navRegion).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('does not grade a selected role until the learner checks it', () => {
+    const onComplete = vi.fn();
+    render(<BeforeAfterTool onComplete={onComplete} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /nav bar color/i }));
+
+    const checkButton = screen.getByRole('button', { name: 'check role' });
+    expect(checkButton).toBeDisabled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'drawing attention' }));
+
+    expect(checkButton).toBeEnabled();
+    expect(screen.queryByRole('button', { name: 'try stage again' })).not.toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+
+    fireEvent.click(checkButton);
+
+    expect(screen.getByRole('button', { name: 'try stage again' })).toBeInTheDocument();
   });
 
   it('stays in the stage after an incorrect role and completes once after all four roles pass', () => {
@@ -131,6 +155,7 @@ describe('BeforeAfterTool color-role keyboard activation', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /nav bar color/i }));
     fireEvent.click(screen.getByRole('button', { name: 'drawing attention' }));
+    fireEvent.click(screen.getByRole('button', { name: 'check role' }));
     expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
@@ -138,6 +163,7 @@ describe('BeforeAfterTool color-role keyboard activation', () => {
     for (const [region, answer] of regions) {
       fireEvent.click(screen.getByRole('button', { name: new RegExp(`${region} color`, 'i') }));
       fireEvent.click(screen.getByRole('button', { name: answer }));
+      fireEvent.click(screen.getByRole('button', { name: 'check role' }));
       if (region !== 'blue card border') {
         fireEvent.click(screen.getByRole('button', { name: 'got it' }));
       }

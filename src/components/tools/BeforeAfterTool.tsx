@@ -92,7 +92,8 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
 }: BeforeAfterToolProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [results, setResults] = useState<Record<string, boolean | null>>({});
-  const [triedAnswer, setTriedAnswer] = useState<string | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<ColorJob | null>(null);
+  const [triedAnswer, setTriedAnswer] = useState<ColorJob | null>(null);
 
   const solvedCount = Object.values(results).filter(Boolean).length;
   const stageController = useExerciseStages({
@@ -104,6 +105,7 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
   function handleRegionClick(id: string) {
     if (results[id] === true) return; // already solved
     setActiveId(id);
+    setSelectedAnswer(null);
     setTriedAnswer(null);
   }
 
@@ -114,7 +116,7 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
     handleRegionClick(id);
   }
 
-  function handleAnswer(regionId: string, job: ColorJob) {
+  function handleCheckAnswer(regionId: string, job: ColorJob) {
     const region = REGIONS.find((r) => r.id === regionId)!;
     const correct = job === region.correctJob;
     setTriedAnswer(job);
@@ -132,6 +134,7 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
 
   function handleDismiss() {
     setActiveId(null);
+    setSelectedAnswer(null);
     setTriedAnswer(null);
   }
 
@@ -258,14 +261,21 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
                 <button
                   key={job}
                   className={`${styles.answerChoice} ${
-                    triedAnswer === job && !lastAnswerCorrect ? styles.answerWrong : ''
+                    selectedAnswer === job ? styles.answerSelected : ''
                   }`}
-                  onClick={() => handleAnswer(activeRegion.id, job)}
-                  disabled={lastAnswerCorrect}
+                  onClick={() => setSelectedAnswer(job)}
+                  aria-pressed={selectedAnswer === job}
                 >
                   {job}
                 </button>
               ))}
+              <button
+                className={styles.checkAnswerBtn}
+                disabled={selectedAnswer === null}
+                onClick={() => selectedAnswer && handleCheckAnswer(activeRegion.id, selectedAnswer)}
+              >
+                check role
+              </button>
             </div>
           ) : null}
 
