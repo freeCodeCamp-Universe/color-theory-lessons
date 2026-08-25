@@ -30,7 +30,10 @@ export const lesson3_2: LessonConfig = {
     hints: [
       'In a six-digit value, the first pair controls red, the second controls green, and the third controls blue.',
       'HEX channel values run from 00 to FF. Raise a pair to add more of that channel.',
-      'In a six-digit value, repeat the same pair three times for a neutral color.',
+      {
+        stageId: 'light-gray-surface',
+        text: 'In a six-digit value, repeat the same pair three times for a neutral color.',
+      },
     ],
   },
   quizItems: [

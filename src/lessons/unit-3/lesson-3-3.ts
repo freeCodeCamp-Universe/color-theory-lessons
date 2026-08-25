@@ -31,8 +31,14 @@ export const lesson3_3: LessonConfig = {
         'Complete three HSL stages in order: match the muted teal surface, then the vivid coral accent, then the dark desaturated navy.',
       hints: [
         'Start with hue to get the right color family, then adjust saturation and lightness.',
-        'A muted target has low saturation. A light target has high lightness.',
-        'If the target looks gray, saturation is near zero. Focus on lightness to match how light or dark it appears.',
+        {
+          stageId: 'muted-teal-surface',
+          text: 'A muted target has low saturation. A light target has high lightness.',
+        },
+        {
+          stageId: 'dark-desaturated-navy',
+          text: 'For a desaturated target, lower saturation and use lightness to match how light or dark it appears.',
+        },
       ],
   },
   quizItems: [

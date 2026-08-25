@@ -28,9 +28,18 @@ export const lesson3_4: LessonConfig = {
       prompt:
         'Complete four overlay stages in order: modal scrim, card hover, image text overlay, and disabled button.',
       hints: [
-        'For the modal scrim, try a dark overlay between 40% and 60% opacity. It should dim the background while leaving it visible.',
-        'For the hover state, try a light or dark overlay between 10% and 20% opacity.',
-        'For text over the image, choose a dark overlay between 45% and 80% opacity.',
+        {
+          stageId: 'scrim',
+          text: 'Try a dark overlay between 40% and 60% opacity. It should dim the background while leaving it visible.',
+        },
+        {
+          stageId: 'hover',
+          text: 'Try a light overlay between 10% and 20% opacity.',
+        },
+        {
+          stageId: 'image',
+          text: 'Choose a dark overlay between 45% and 80% opacity.',
+        },
       ],
   },
   quizItems: [
