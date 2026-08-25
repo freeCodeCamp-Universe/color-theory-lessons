@@ -1,5 +1,8 @@
 import { memo, useState } from 'react';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
+import { useExerciseStages } from './useExerciseStages.ts';
 
 const SVG_FILTERS = `
 <svg style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -29,36 +32,46 @@ const MODES: { id: SimMode; label: string; filter: string }[] = [
   { id: 'achromatopsia', label: 'Complete achromatopsia', filter: 'url(#ig-achromatopsia)' },
 ];
 
-interface InterfaceGalleryToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
+interface InterfaceGalleryToolProps extends ExerciseToolProps {
   previewSimulation?: SimMode;
 }
 
-export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({ interactive = false, onComplete, previewSimulation }: InterfaceGalleryToolProps) {
+const STAGES: readonly ExerciseStageDefinition[] = [{
+  id: 'review-simulations',
+  title: 'Review color vision simulations',
+  instruction: 'Compare the original interface with all four simulation modes.',
+}];
+
+export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+  previewSimulation,
+}: InterfaceGalleryToolProps) {
   const [mode, setMode] = useState<SimMode>(previewSimulation ?? 'normal');
   const [seen, setSeen] = useState<Set<SimMode>>(new Set(['normal']));
-  const [completed, setCompleted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
   function selectMode(m: SimMode) {
-    if (!interactive) return;
+    if (!interactive || stageController.result === 'passed') return;
     setMode(m);
-    setSeen((prev) => {
-      const next = new Set(prev);
-      next.add(m);
-      if (next.size === MODES.length && !completed) {
-        setCompleted(true);
-        onComplete?.();
-      }
-      return next;
-    });
+    const next = new Set(seen);
+    next.add(m);
+    setSeen(next);
+    if (next.size === MODES.length) stageController.markPassed();
   }
 
   const currentFilter = MODES.find((m) => m.id === mode)?.filter ?? 'none';
+  const simulationsExplored = [...seen].filter((id) => id !== 'normal').length;
 
-  return (
-    <div className={shellStyles.shell}>
-      <span className={shellStyles.toolLabel}>interface gallery</span>
+  const gallery = (
+    <>
+      {interactive && (
+        <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.6rem' }}>
+          {simulationsExplored}/4 simulation modes explored
+        </p>
+      )}
+
       {/* Hidden SVG filter definitions */}
       <div dangerouslySetInnerHTML={{ __html: SVG_FILTERS }} />
 
@@ -67,8 +80,10 @@ export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({ interac
         {MODES.map((m) => (
           <button
             key={m.id}
+            type="button"
             onClick={() => selectMode(m.id)}
-            disabled={!interactive}
+            disabled={!interactive || stageController.result === 'passed'}
+            aria-pressed={mode === m.id}
             style={{
               padding: '0.3rem 0.6rem',
               fontSize: '0.75rem',
@@ -133,17 +148,21 @@ export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({ interac
         </div>
       </div>
 
-      {interactive && seen.size < MODES.length && (
-        <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginTop: '0.4rem' }}>
-          {seen.size}/{MODES.length} modes explored
-        </p>
-      )}
+    </>
+  );
 
-      {completed && (
-        <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.4rem' }}>
-          All simulation modes explored. Notice which elements became harder to distinguish in each simulation.
-        </p>
-      )}
+  return (
+    <div className={shellStyles.shell}>
+      <span className={shellStyles.toolLabel}>interface gallery</span>
+
+      {interactive ? (
+        <ExerciseStage
+          controller={stageController}
+          completionFeedback="All four simulation modes explored. Notice which elements became harder to distinguish in each simulation."
+        >
+          {gallery}
+        </ExerciseStage>
+      ) : gallery}
     </div>
   );
 });
