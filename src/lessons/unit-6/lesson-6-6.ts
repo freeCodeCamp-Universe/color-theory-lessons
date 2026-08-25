@@ -8,58 +8,59 @@ export const lesson6_6: LessonConfig = {
   reviewTags: ['color-spaces', 'srgb', 'display-p3', 'context', 'wide-gamut'],
   steps: [
     {
-      text: 'Before stress-testing your color system in the next lesson, you need to understand one more layer: the color space your values live in. sRGB is the standard color space for most web work. It defines the range of colors that virtually every screen can display. When you write a HEX, RGB, or HSL value in CSS, you are working in sRGB by default.',
+      text: 'Before stress-testing your color system in the next lesson, consider the color space used by each value. In CSS, the HEX, RGB, and HSL formats introduced in Unit 3 represent sRGB colors. This color space provides a common baseline for web content and displays.',
     },
     {
-      text: "Display P3 is a wider color space available on many modern screens — especially Apple devices. It can represent more vivid colors than sRGB. If a user's screen does not support P3, those extra-vivid colors are clipped back to the nearest sRGB equivalent. Design for sRGB first, then enhance with P3 where supported.",
+      text: 'Display P3 has a wider gamut than sRGB, so it can specify some colors that sRGB cannot. CSS represents these colors with color(display-p3 ...). When a screen cannot reproduce a specified color, the browser maps it into the screen\'s gamut. Start with an sRGB declaration for browsers that cannot parse Display P3 syntax. Use @media (color-gamut: p3) when the Display P3 declaration should apply only to wide-gamut displays.',
     },
     {
-      text: 'Colors appear not only in CSS but in SVG graphics, HTML Canvas elements, and WebGL scenes. A chart bar in Canvas, an icon fill in SVG, a 3D surface in WebGL — each rendering context uses explicit color values. The context changes, but the need for thoughtful color decisions does not.',
+      text: 'Scalable Vector Graphics (SVG) is a language for two-dimensional graphics such as icons. The HTML Canvas element provides a surface that JavaScript can use to draw charts and other graphics. WebGL uses the Canvas element to render interactive three-dimensional graphics in the browser. These contexts accept explicit color values, so use the same semantic roles to choose values across them.',
     },
     {
-      text: 'Color does not exist in isolation. The same hex value looks different depending on surroundings: a neutral gray on white looks warm; the same gray on a blue background looks cool. This context effect — also called simultaneous contrast — means your system must be tested in real layouts, not just in swatch grids.',
+      text: 'Surrounding colors affect how a color looks. For example, the same gray can look lighter on a dark background and darker on a light background. This effect is called simultaneous contrast. Test color systems in complete interface layouts as well as swatch grids.',
     },
     {
-      text: 'Wide-gamut displays can make carefully chosen colors appear overwhelming on newer hardware. A saturated cyan or vivid orange that looks fine on a standard sRGB screen may appear even more intense on a P3 display. Use restrained saturation and test across display types.',
+      text: 'A Display P3 color outside the sRGB gamut can lose chroma or otherwise change appearance when it is mapped to an sRGB display. Test wide-gamut colors on both display types, and do not rely on a difference that disappears after gamut mapping.',
     },
   ],
   challenge: {
-      prompt: 'Sort items into three categories: raw value, semantic role, or rendering/device context. Then identify which colors might be risky in a sRGB-only environment.',
+      prompt: 'Sort each item as a raw value, semantic role, or usage context. Then decide whether each Display P3 sample needs gamut mapping for sRGB output.',
       hints: [
         'A raw value is a specific number like #0B57D0 or rgb(34, 34, 34).',
         'A semantic role is a token name like --color-text-primary or --color-success-bg.',
-        'A rendering context is where the color appears: Display P3, Canvas chart fill, SVG icon fill.',
+        'A usage context identifies where the color appears or how it is rendered: a wide-gamut display, a Canvas chart fill, or an SVG icon fill.',
+        'Use the gamut result under each sample to decide whether it needs mapping for sRGB output.',
       ],
   },
   quizItems: [
     {
       id: 'q1',
-      prompt: 'Which is the safer baseline for most web design work?',
+      prompt: 'Which color space should a web design provide as its baseline?',
       choices: [
-        { stableId: 'display-p3-because-it-has-more-vivid-colors', label: 'Display P3 — because it has more vivid colors', isCorrect: false, explanation: 'P3 offers wider gamut, but not all screens support it. sRGB is the safe baseline that works everywhere.' },
-        { stableId: 'srgb-because-it-is-supported-by-virtually-all-screens', label: 'sRGB — because it is supported by virtually all screens', isCorrect: true, explanation: 'sRGB is the universal default. Design in sRGB first, then enhance with P3 where supported.' },
-        { stableId: 'neither-css-automatically-picks-the-right-one', label: 'Neither — CSS automatically picks the right one', isCorrect: false, explanation: 'CSS uses sRGB by default. The designer still needs to be aware of the color space.' },
-        { stableId: 'it-depends-on-which-browser-the-user-prefers', label: 'It depends on which browser the user prefers', isCorrect: false, explanation: 'sRGB is the safe universal baseline regardless of browser.' },
+        { stableId: 'display-p3-because-it-has-more-vivid-colors', label: 'Display P3, because its gamut is wider', isCorrect: false, explanation: 'Display P3 includes colors outside sRGB, but an sRGB fallback is still needed for browsers that cannot parse Display P3 syntax. Display gamut is a separate concern handled with the color-gamut media feature.' },
+        { stableId: 'srgb-because-it-is-supported-by-virtually-all-screens', label: 'sRGB, because it is widely supported in CSS and by displays', isCorrect: true, explanation: 'The HEX, RGB, and HSL formats in CSS represent sRGB colors, and sRGB displays are widespread. Start with an sRGB declaration, then use @media (color-gamut: p3) for a Display P3 override intended only for wide-gamut displays.' },
+        { stableId: 'neither-css-automatically-picks-the-right-one', label: 'Neither, because CSS selects the color space automatically', isCorrect: false, explanation: 'CSS does not replace an sRGB declaration with Display P3 automatically. The author must specify a Display P3 color.' },
+        { stableId: 'it-depends-on-which-browser-the-user-prefers', label: 'It depends on which browser the user prefers', isCorrect: false, explanation: 'The device gamut and its CSS support affect the result. A browser preference does not choose the color space.' },
       ],
     },
     {
       id: 'q2',
       prompt: 'Why can the same hex color look different in different interface contexts?',
       choices: [
-        { stableId: 'browsers-apply-different-color-profiles-randomly', label: 'Browsers apply different color profiles randomly', isCorrect: false, explanation: 'Browsers do not apply random color profiles — the effect is perceptual.' },
-        { stableId: 'surrounding-colors-influence-perception-a-neutral-looks-warmer-o', label: 'Surrounding colors influence perception — a neutral looks warmer or cooler depending on adjacent hues', isCorrect: true, explanation: 'Simultaneous contrast means every color is perceived relative to its neighbors.' },
-        { stableId: 'hex-values-shift-when-loaded-in-different-files', label: 'Hex values shift when loaded in different files', isCorrect: false, explanation: 'Hex values are exact — they do not shift between files.' },
-        { stableId: 'color-memory-is-inaccurate', label: 'Color memory is inaccurate', isCorrect: false, explanation: 'Color memory can be inaccurate, but simultaneous contrast is a perceptual phenomenon, not a memory one.' },
+        { stableId: 'browsers-apply-different-color-profiles-randomly', label: 'Browsers apply different color profiles randomly', isCorrect: false, explanation: 'Random color-profile changes do not explain a repeatable difference caused by surrounding colors.' },
+        { stableId: 'surrounding-colors-influence-perception-a-neutral-looks-warmer-o', label: 'Surrounding colors affect how light, dark, warm, or cool a color looks', isCorrect: true, explanation: 'Simultaneous contrast changes a color\'s appearance in response to the colors around it.' },
+        { stableId: 'hex-values-shift-when-loaded-in-different-files', label: 'Hex values shift when loaded in different files', isCorrect: false, explanation: 'The numeric value stays the same when the file changes. Its appearance can still vary with the display and its surroundings.' },
+        { stableId: 'color-memory-is-inaccurate', label: 'Color memory is inaccurate', isCorrect: false, explanation: 'Color memory does not explain the immediate change seen when one color is placed against different neighbors.' },
       ],
     },
     {
       id: 'q3',
-      prompt: 'What is the practical design lesson of wide-gamut displays?',
+      prompt: 'What should you do when using Display P3 colors on the web?',
       choices: [
-        { stableId: 'never-use-saturated-colors', label: 'Never use saturated colors', isCorrect: false, explanation: 'Saturated colors are not forbidden — they should be used with awareness of display variation.' },
-        { stableId: 'standard-srgb-is-always-safer-and-should-be-used-exclusively', label: 'Standard sRGB is always safer and should be used exclusively', isCorrect: false, explanation: 'Wide gamut is increasingly common and worth preparing for, not avoiding.' },
-        { stableId: 'colors-may-appear-more-vivid-than-expected-use-restrained-satura', label: 'Colors may appear more vivid than expected — use restrained saturation and test on multiple display types', isCorrect: true, explanation: 'Wide-gamut displays can make carefully chosen colors appear overwhelming on newer hardware.' },
-        { stableId: 'wide-gamut-displays-are-only-for-photographers', label: 'Wide-gamut displays are only for photographers', isCorrect: false, explanation: 'Wide-gamut displays are standard on many consumer devices including phones and laptops.' },
+        { stableId: 'never-use-saturated-colors', label: 'Avoid all saturated colors', isCorrect: false, explanation: 'Saturated sRGB and Display P3 colors are valid. Check whether each color keeps its intended role after gamut mapping.' },
+        { stableId: 'standard-srgb-is-always-safer-and-should-be-used-exclusively', label: 'Use sRGB values exclusively', isCorrect: false, explanation: 'Display P3 can add colors outside sRGB. An sRGB declaration covers browsers that cannot parse Display P3 syntax, while a color-gamut media query controls whether the P3 override applies on a wide-gamut display.' },
+        { stableId: 'colors-may-appear-more-vivid-than-expected-use-restrained-satura', label: 'Provide sRGB fallbacks and test across display gamuts', isCorrect: true, explanation: 'A Display P3 color outside sRGB must be gamut-mapped on an sRGB display, which can reduce its chroma or otherwise change its appearance.' },
+        { stableId: 'wide-gamut-displays-are-only-for-photographers', label: 'Reserve wide-gamut colors for photography', isCorrect: false, explanation: 'Wide-gamut CSS colors can be used in any web interface. They are not limited to photographs.' },
       ],
     },
   ],
