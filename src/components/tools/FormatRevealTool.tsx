@@ -33,7 +33,7 @@ const ELEMENTS: ColorElement[] = [
     id: 'cta',
     label: 'Primary action button',
     hex: '#2563eb',
-    description: 'The saturated blue used for the primary call-to-action button.',
+    description: 'The saturated blue used for the primary action button.',
   },
   {
     id: 'cta-text',
