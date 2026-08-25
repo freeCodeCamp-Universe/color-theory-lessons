@@ -1,5 +1,8 @@
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { useState } from 'react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { ChallengeHints } from '../lesson/ChallengeHints.tsx';
+import { lesson2_2 } from '../../lessons/unit-2/lesson-2-2.ts';
 import { AdditiveSortTool } from './AdditiveSortTool.tsx';
 import { BackgroundShiftTool } from './BackgroundShiftTool.tsx';
 import { LogicFixerTool } from './LogicFixerTool.tsx';
@@ -7,6 +10,22 @@ import { MismatchExplainerTool } from './MismatchExplainerTool.tsx';
 import { RGBMixerTool } from './RGBMixerTool.tsx';
 
 afterEach(() => cleanup());
+
+function RGBMixerWithHints() {
+  const [activeStageId, setActiveStageId] = useState<string | null>(null);
+
+  return (
+    <>
+      <span data-testid="active-stage">{activeStageId}</span>
+      <ChallengeHints
+        hints={lesson2_2.challenge?.hints ?? []}
+        activeStageId={activeStageId}
+        resetKey="u2-l2:0"
+      />
+      <RGBMixerTool onStageChange={(stage) => setActiveStageId(stage.id)} />
+    </>
+  );
+}
 
 describe('Unit 2 exercise stages', () => {
   it('keeps the additive and subtractive sort as one retryable stage', () => {
@@ -68,6 +87,36 @@ describe('Unit 2 exercise stages', () => {
 
     expect(screen.getByText('Stage 10 of 10')).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledTimes(1);
+  });
+
+  it('offers only the hint for the active RGB stage', async () => {
+    render(<RGBMixerWithHints />);
+
+    await waitFor(() => expect(screen.getByTestId('active-stage')).toHaveTextContent('predict-warm-pink'));
+    fireEvent.click(screen.getByRole('button', { name: 'show hint' }));
+    expect(screen.getByText('Warm pink needs the most red, some blue, and less green.')).toBeInTheDocument();
+    expect(screen.queryByText('For pale sky blue, keep blue highest, green next, and red lowest.')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'show next hint' })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Red high, blue in the middle, green low' }));
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+    fireEvent.click(screen.getByRole('button', { name: 'mix this target →' }));
+
+    await waitFor(() => expect(screen.getByTestId('active-stage')).toHaveTextContent('match-warm-pink'));
+    expect(screen.queryByText('Warm pink needs the most red, some blue, and less green.')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'show hint' }));
+    expect(screen.getByText('Warm pink needs the most red, some blue, and less green.')).toBeInTheDocument();
+
+    for (const [channel, value] of [['Red', 220], ['Green', 45], ['Blue', 110]] as const) {
+      fireEvent.change(screen.getByRole('slider', { name: channel }), { target: { value } });
+    }
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+    fireEvent.click(screen.getByRole('button', { name: 'next target →' }));
+
+    await waitFor(() => expect(screen.getByTestId('active-stage')).toHaveTextContent('predict-pale-sky-blue'));
+    fireEvent.click(screen.getByRole('button', { name: 'show hint' }));
+    expect(screen.getByText('For pale sky blue, keep blue highest, green next, and red lowest.')).toBeInTheDocument();
+    expect(screen.queryByText('Warm pink needs the most red, some blue, and less green.')).not.toBeInTheDocument();
   });
 
   it('keeps logic scenarios on their current stage after a failed retry', () => {
