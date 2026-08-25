@@ -9,6 +9,8 @@ export const CHANNEL_PREDICTION_SESSION_PREFIX = 'color-theory-course-channel-pr
 export const THEME_FROM_SCRATCH_SESSION_PREFIX = 'color-theory-course-theme-from-scratch-session:';
 export const SIMULATION_SPOTTER_SESSION_PREFIX = 'color-theory-course-simulation-spotter-session:';
 export const ACCESSIBILITY_RESCUE_SESSION_PREFIX = 'color-theory-course-accessibility-rescue-session:';
+export const SEMANTIC_AUDIT_SESSION_PREFIX = 'color-theory-course-semantic-audit-session:';
+export const DARK_MODE_STRESS_SESSION_PREFIX = 'color-theory-course-dark-mode-stress-session:';
 
 interface StoredState {
   version: number;
@@ -84,6 +86,8 @@ export function clearMilestoneSessions(): void {
         || key?.startsWith(THEME_FROM_SCRATCH_SESSION_PREFIX)
         || key?.startsWith(SIMULATION_SPOTTER_SESSION_PREFIX)
         || key?.startsWith(ACCESSIBILITY_RESCUE_SESSION_PREFIX)
+        || key?.startsWith(SEMANTIC_AUDIT_SESSION_PREFIX)
+        || key?.startsWith(DARK_MODE_STRESS_SESSION_PREFIX)
       ) {
         sessionStorage.removeItem(key);
       }
