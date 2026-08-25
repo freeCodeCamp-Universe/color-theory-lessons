@@ -217,7 +217,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          Your dark theme passes all four checks. Compare the preview in both modes before continuing.
+          Your dark theme passes every displayed check. Compare the preview in both modes before continuing.
         </p>
       )}
     </div>

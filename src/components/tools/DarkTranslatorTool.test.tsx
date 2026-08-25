@@ -139,7 +139,7 @@ describe('DarkTranslatorTool', () => {
     expect(screen.getByText('White / error (4.5:1)').parentElement).toHaveTextContent('✓');
     expect(screen.getByText('Success / error luminance (1.5:1)').parentElement).toHaveTextContent('✓');
     expect(screen.getByText('Success / error hues (30°)').parentElement).toHaveTextContent('✓');
-    expect(screen.getByText('Both themes show readable hierarchy. Dark mode is properly adapted, not just inverted.')).toBeInTheDocument();
+    expect(screen.getByText('Your dark theme passes every displayed check. Compare the preview in both modes before continuing.')).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
   });
 
@@ -148,11 +148,11 @@ describe('DarkTranslatorTool', () => {
     render(<DarkTranslatorTool interactive onComplete={onComplete} />);
 
     setPassingRoles();
-    expect(screen.getByText(/Both themes show readable hierarchy/)).toBeInTheDocument();
+    expect(screen.getByText(/passes every displayed check/)).toBeInTheDocument();
 
     setRole('error', '#invalid');
 
-    expect(screen.queryByText(/Both themes show readable hierarchy/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/passes every displayed check/)).not.toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
   });
 });

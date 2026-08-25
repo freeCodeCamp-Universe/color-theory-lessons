@@ -8,13 +8,13 @@ export const lesson6_4: LessonConfig = {
   reviewTags: ['dark-mode', 'theme', 'hierarchy', 'adaptation'],
   steps: [
     { text: 'Inverting a light theme does not preserve the relationships between its color roles. The result can reduce separation between surfaces, change text contrast, and make semantic colors harder to distinguish.' },
-    { text: 'A dark theme needs separate colors for its base background and raised surfaces. For example, a page background of #0f172a can pair with a lighter #1e293b card surface so the card remains distinguishable.' },
+    { text: 'One way to distinguish a dark theme\'s base background from raised surfaces is to give each role a different lightness. For example, a page background of #0f172a can pair with a lighter #1e293b card surface so the card remains distinguishable.' },
     { text: 'Check each text color against the surface where it appears. For example, #f8fafc primary text and #94a3b8 secondary text both exceed 4.5:1 against a #1e293b surface.' },
     { text: 'The same accent can have different visual prominence when its surrounding colors change. Compare it with its dark background and nearby semantic colors, then adjust its lightness or saturation if needed.' },
     { text: 'In the dark translator, you start with a fixed light theme and assign a dark value to each role. Switch the preview between modes to compare their surface hierarchy, text readability, and semantic colors.' },
   ],
   challenge: {
-      prompt: 'Choose dark-theme values for each semantic role. Use the preview and the four checks to compare the fixed light theme with your dark theme.',
+      prompt: 'Choose dark-theme values for each semantic role. Use the preview and the displayed checks to compare the fixed light theme with your dark theme.',
       hints: [
         'Try #0f172a for the page and a lighter #1e293b or #334155 for the surface.',
         'Check the action color against both its dark surroundings and its white button text.',
@@ -47,7 +47,7 @@ export const lesson6_4: LessonConfig = {
       prompt: 'How can a dark theme distinguish stacked surfaces?',
       choices: [
         { stableId: 'using-slightly-different-dark-values-for-each-surface-layer-page', label: 'Using different values for the page, card, and raised panel so each layer remains visible', isCorrect: true, explanation: 'Small lightness differences can separate adjacent surface layers.' },
-        { stableId: 'adding-white-borders-to-each-layer', label: 'Adding white borders to each layer', isCorrect: false, explanation: 'Borders can separate layers, but white borders are not required.' },
+        { stableId: 'adding-white-borders-to-each-layer', label: 'Using one color for every layer without a visible boundary', isCorrect: false, explanation: 'Identical fills without borders or other boundaries do not separate the layers.' },
         { stableId: 'inverting-the-light-theme-surface-values', label: 'Inverting the light theme surface values', isCorrect: false, explanation: 'Inversion does not guarantee useful differences between adjacent surface roles.' },
         { stableId: 'using-pure-black-for-all-backgrounds', label: 'Using pure black for all backgrounds', isCorrect: false, explanation: 'Pure black for all backgrounds eliminates all separation between layers.' },
       ],
