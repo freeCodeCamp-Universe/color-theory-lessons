@@ -31,9 +31,9 @@ const ELEMENTS: ColorElement[] = [
   },
   {
     id: 'cta',
-    label: 'CTA button',
+    label: 'Primary action button',
     hex: '#2563eb',
-    description: 'The saturated blue used for the primary call-to-action button.',
+    description: 'The saturated blue used for the primary action button.',
   },
   {
     id: 'cta-text',
@@ -209,7 +209,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({ interactive = t
                 className={`${styles.cta} ${selectedId === 'cta' ? styles.selected : ''} ${revealed.has('cta') ? styles.visited : ''}`}
                 style={{ backgroundColor: '#2563eb' }}
                 onClick={(e) => { e.stopPropagation(); handleSelect('cta'); }}
-                aria-label="CTA button"
+                aria-label="Primary action button"
               >
                 <span
                   className={`${selectedId === 'cta-text' ? styles.selected : ''} ${revealed.has('cta-text') ? styles.visited : ''}`}

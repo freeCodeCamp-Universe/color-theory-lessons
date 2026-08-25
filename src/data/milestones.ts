@@ -357,7 +357,7 @@ const milestone6: MilestoneConfig = {
             { id: 'a', label: 'Surface layers and text pairs can lose their hierarchy and readability', isCorrect: true, explanation: 'Each dark-theme role needs a value chosen for its new background and neighboring surfaces.' },
             { id: 'b', label: 'CSS cannot invert custom property values', isCorrect: false, explanation: 'CSS can transform rendered colors. The problem is whether the transformed role values still work together.' },
             { id: 'c', label: 'Inversion always changes every color to pure black or pure white', isCorrect: false, explanation: 'Inversion maps each channel to its opposite value. It does not limit the result to black and white.' },
-            { id: 'd', label: 'An inverted palette works only on OLED displays', isCorrect: false, explanation: 'Surface hierarchy and text contrast can fail on any display type.' },
+            { id: 'd', label: 'An inverted palette works only on self-emissive displays', isCorrect: false, explanation: 'Surface hierarchy and text contrast can fail on any display type.' },
           ],
         },
         {

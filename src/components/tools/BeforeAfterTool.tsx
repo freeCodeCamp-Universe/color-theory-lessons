@@ -42,7 +42,7 @@ const REGIONS: Region[] = [
   },
   {
     id: 'cta',
-    name: 'gold CTA button',
+    name: 'gold primary action button',
     correctJob: 'drawing attention',
     explanation: 'The gold button contrasts with the dark background and gray controls, drawing attention to the primary action.',
   },

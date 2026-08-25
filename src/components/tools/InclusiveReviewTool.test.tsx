@@ -16,7 +16,7 @@ describe('InclusiveReviewTool', () => {
 
     const mockup = screen.getByTestId('inclusive-review-mockup');
     expect(mockup).toHaveStyle({ filter: 'none' });
-    expect(screen.getByRole('group', { name: 'CVD simulation mode' })).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Color vision deficiency simulation mode' })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: mode }));
 
@@ -30,7 +30,7 @@ describe('InclusiveReviewTool', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Deuteranopia' }));
 
     const simulationCheck = screen.getByTestId('checklist-simulation');
-    expect(within(simulationCheck).getByText('Does the interface remain understandable under CVD simulation modes?')).toBeInTheDocument();
+    expect(within(simulationCheck).getByText('Does the interface remain understandable under color vision deficiency simulation modes?')).toBeInTheDocument();
 
     fireEvent.click(within(simulationCheck).getByRole('button', { name: 'Pass' }));
     expect(within(simulationCheck).getByText(/chart bars become hard to distinguish/)).toBeInTheDocument();
