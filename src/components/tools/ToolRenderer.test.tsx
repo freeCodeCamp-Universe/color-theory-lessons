@@ -35,4 +35,26 @@ describe('ToolRenderer stage reporting', () => {
       }));
     });
   });
+
+  it.each([
+    ['text-contrast-lab', 'repair-text-contrast', 1],
+    ['component-checker', 'repair-component-contrast', 1],
+    ['state-workshop', 'repair-semantic-states', 1],
+    ['pattern-repair', 'repair-interface-patterns', 1],
+    ['audit-flow', 'priority', 4],
+    ['inclusive-review', 'assess-inclusive-evidence', 1],
+  ] as const)('forwards the active stage for %s', async (interactionType, id, total) => {
+    const onStageChange = vi.fn();
+    render(
+      <ToolRenderer
+        lesson={{ ...lesson, interactionType }}
+        onChallengeComplete={vi.fn()}
+        onStageChange={onStageChange}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(onStageChange).toHaveBeenCalledWith(expect.objectContaining({ id, total }));
+    });
+  });
 });

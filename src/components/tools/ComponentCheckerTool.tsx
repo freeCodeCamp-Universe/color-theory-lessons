@@ -1,6 +1,9 @@
 import { memo, useState } from 'react';
 import { contrastRatio, hexToRgb } from '../../utils/color.ts';
+import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 
 const WHITE: ReturnType<typeof hexToRgb> = { r: 255, g: 255, b: 255 };
 const THRESHOLD = 3;
@@ -90,50 +93,54 @@ function calcRatio(hex: string): number {
   }
 }
 
-interface ComponentCheckerToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+const STAGES = [{
+  id: 'repair-component-contrast',
+  title: 'Repair component contrast',
+  instruction: 'Adjust all four component colors to at least 3:1 contrast against white, then check the stage.',
+}] satisfies readonly ExerciseStageDefinition[];
 
-export const ComponentCheckerTool = memo(function ComponentCheckerTool({ interactive = false, onComplete }: ComponentCheckerToolProps) {
+export const ComponentCheckerTool = memo(function ComponentCheckerTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [colors, setColors] = useState<Record<string, string>>(
     Object.fromEntries(COMPONENTS.map((c) => [c.id, c.defaultColor])),
   );
-  const [passed, setPassed] = useState<Record<string, boolean>>({});
-  const [completed, setCompleted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const passed = Object.fromEntries(COMPONENTS.map((component) => [
+    component.id,
+    isValidHex(colors[component.id]) && calcRatio(colors[component.id]) >= THRESHOLD,
+  ]));
 
   function handleChange(id: string, val: string) {
-    if (!interactive) return;
+    if (!interactive || stageController.result === 'passed') return;
     setColors((prev) => ({ ...prev, [id]: val }));
-    if (isValidHex(val)) {
-      const r = calcRatio(val);
-      if (r >= THRESHOLD) {
-        setPassed((prev) => {
-          const next = { ...prev, [id]: true };
-          const allPassed = COMPONENTS.every((c) => next[c.id]);
-          if (allPassed && !completed) {
-            setCompleted(true);
-            onComplete?.();
-          }
-          return next;
-        });
-      } else {
-        setPassed((prev) => ({ ...prev, [id]: false }));
-      }
-    }
+    stageController.retry();
   }
 
   const passedCount = Object.values(passed).filter(Boolean).length;
+
+  function checkRepairs() {
+    if (!interactive) return;
+    if (passedCount === COMPONENTS.length) stageController.markPassed();
+    else stageController.markIncorrect();
+  }
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>component visibility checker</span>
 
-      {interactive && (
-        <p style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>
-          Adjust each component's color until it has at least 3:1 contrast against white. ({passedCount}/{COMPONENTS.length} passing)
-        </p>
-      )}
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback="Not all components meet 3:1 yet. Adjust the failing colors and check again."
+        completionFeedback="All four components have at least 3:1 contrast against white."
+      >
+        {interactive && (
+          <p style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>
+            Passing components: {passedCount} of {COMPONENTS.length}.
+          </p>
+        )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         {COMPONENTS.map((comp) => {
@@ -171,6 +178,7 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({ interac
                   <input
                     type="text"
                     value={color}
+                    disabled={stageController.result === 'passed'}
                     onChange={(e) => handleChange(comp.id, e.target.value)}
                     style={{
                       fontFamily: 'var(--font-mono)', fontSize: '0.78rem',
@@ -188,11 +196,22 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({ interac
         })}
       </div>
 
-      {completed && (
-        <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          ✓ All four components have at least 3:1 contrast against white.
-        </p>
-      )}
+        {interactive && stageController.result !== 'passed' && (
+          <button
+            type="button"
+            onClick={checkRepairs}
+            style={{
+              alignSelf: 'flex-start', padding: '0.5rem 1.25rem',
+              background: 'var(--yellow)', color: 'var(--gray-90)',
+              fontFamily: 'var(--font-mono)', fontWeight: 700,
+              fontSize: '0.85rem', borderRadius: 'var(--radius-sm)',
+              border: 'none', cursor: 'pointer',
+            }}
+          >
+            check stage
+          </button>
+        )}
+      </ExerciseStage>
     </div>
   );
 });
