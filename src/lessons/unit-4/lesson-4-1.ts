@@ -26,7 +26,7 @@ export const lesson4_1: LessonConfig = {
   ],
   challenge: {
       prompt:
-        'Click through each part of the visual pathway to reveal how it contributes to color perception.',
+        'Complete four stages in order: screen light, the eye receiving light, retinal processing, and brain interpretation.',
       hints: [
         'Start with the light source and follow the path into the eye.',
         'Read the design implication for each step before moving on.',
