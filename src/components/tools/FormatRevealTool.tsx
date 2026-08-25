@@ -1,5 +1,8 @@
 import { memo, useState } from 'react';
 import { hexToRgb, hslToHex } from '../../utils/color.ts';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 import shellStyles from './ToolShell.module.css';
 import styles from './FormatRevealTool.module.css';
 
@@ -61,10 +64,11 @@ const ELEMENTS: ColorElement[] = [
   },
 ];
 
-interface FormatRevealToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+const STAGES: readonly ExerciseStageDefinition[] = [{
+  id: 'explore-formats',
+  title: 'Explore interface color formats',
+  instruction: 'Select all eight colored interface elements to compare their HEX, RGB, and HSL values.',
+}];
 
 interface HslDisplay {
   h: number;
@@ -135,20 +139,22 @@ function getRoundTripHsl(hex: string): HslDisplay {
   };
 }
 
-export const FormatRevealTool = memo(function FormatRevealTool({ interactive = true, onComplete }: FormatRevealToolProps) {
+export const FormatRevealTool = memo(function FormatRevealTool({
+  interactive = true,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [revealed, setRevealed] = useState<Set<string>>(new Set());
-  const [done, setDone] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const done = stageController.result === 'passed';
 
   function handleSelect(id: string) {
     if (!interactive) return;
     setSelectedId(id);
     const next = new Set(revealed).add(id);
     setRevealed(next);
-    if (next.size === ELEMENTS.length && !done) {
-      setDone(true);
-      onComplete?.();
-    }
+    if (next.size === ELEMENTS.length) stageController.markPassed();
   }
 
   const selected = ELEMENTS.find((e) => e.id === selectedId) ?? null;
@@ -161,7 +167,11 @@ export const FormatRevealTool = memo(function FormatRevealTool({ interactive = t
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>format explorer</span>
 
-      <div className={styles.layout}>
+      <ExerciseStage
+        controller={stageController}
+        completionFeedback="Format exploration complete. You compared all eight elements in three color formats."
+      >
+        <div className={styles.layout}>
         {/* ── Left: UI mockup ── */}
         <div className={styles.mockupWrapper}>
           <p className={styles.instruction}>
@@ -313,7 +323,8 @@ export const FormatRevealTool = memo(function FormatRevealTool({ interactive = t
             </div>
           )}
         </div>
-      </div>
+        </div>
+      </ExerciseStage>
     </div>
   );
 });

@@ -26,7 +26,7 @@ export const lesson3_4: LessonConfig = {
   ],
   challenge: {
       prompt:
-        'Create four useful overlays: a modal scrim, a card hover state, an image text overlay, and a disabled button state. Adjust the foreground color and alpha for each context.',
+        'Complete four overlay stages in order: modal scrim, card hover, image text overlay, and disabled button.',
       hints: [
         'For the modal scrim, try a dark overlay between 40% and 60% opacity. It should dim the background while leaving it visible.',
         'For the hover state, try a light or dark overlay between 10% and 20% opacity.',

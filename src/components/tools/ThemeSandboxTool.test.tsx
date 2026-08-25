@@ -35,18 +35,15 @@ describe('ThemeSandboxTool contrast requirements', () => {
     expect(screen.getByText('✗ Secondary text on surface: 1.5:1 (target: 4.5:1)')).toBeInTheDocument();
   });
 
-  it('keeps submission disabled when only the simplified ratios pass', () => {
+  it('keeps the same stage available for retry when the WCAG ratios fail', () => {
     const onComplete = vi.fn();
     render(<ThemeSandboxTool interactive onComplete={onComplete} />);
     setRegressionColors();
 
-    const submitButton = screen.getByRole('button', {
-      name: 'meet contrast targets to submit',
-    });
-    expect(submitButton).toBeDisabled();
-
-    fireEvent.click(submitButton);
+    fireEvent.click(screen.getByRole('button', { name: 'check theme' }));
     expect(onComplete).not.toHaveBeenCalled();
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'try stage again' })).toBeInTheDocument();
   });
 
   it('rejects secondary text below 4.5:1 and displays the target', () => {
@@ -56,7 +53,8 @@ describe('ThemeSandboxTool contrast requirements', () => {
 
     expect(screen.getByText(/Secondary text on surface: 3\.3:1 \(target: 4\.5:1\)/))
       .toHaveTextContent('✗');
-    expect(screen.getByRole('button', { name: 'meet contrast targets to submit' })).toBeDisabled();
+    fireEvent.click(screen.getByRole('button', { name: 'check theme' }));
+    expect(screen.getByRole('button', { name: 'try stage again' })).toBeInTheDocument();
   });
 
   it('accepts secondary text at or above 4.5:1', () => {
@@ -67,26 +65,31 @@ describe('ThemeSandboxTool contrast requirements', () => {
 
     expect(screen.getByText(/Secondary text on surface: 5\.2:1 \(target: 4\.5:1\)/))
       .toHaveTextContent('✓');
-    fireEvent.click(screen.getByRole('button', { name: 'submit theme' }));
+    fireEvent.click(screen.getByRole('button', { name: 'check theme' }));
     expect(onComplete).toHaveBeenCalledOnce();
+    expect(screen.getByText('Theme complete. All three checked text pairs meet 4.5:1.')).toBeInTheDocument();
   });
 
-  it('keeps submission disabled until all three text pairs pass', () => {
+  it('requires all three text pairs to pass the stage', () => {
     render(<ThemeSandboxTool interactive />);
 
     setColor('Background', '#777777');
     setColor('Surface', '#000000');
     setColor('Primary text', '#ffffff');
     setColor('Secondary text', '#ffffff');
-    expect(screen.getByRole('button', { name: 'meet contrast targets to submit' })).toBeDisabled();
+    fireEvent.click(screen.getByRole('button', { name: 'check theme' }));
+    expect(screen.getByRole('button', { name: 'try stage again' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
 
     setColor('Background', '#000000');
     setColor('Surface', '#777777');
     setColor('Secondary text', '#000000');
-    expect(screen.getByRole('button', { name: 'meet contrast targets to submit' })).toBeDisabled();
+    fireEvent.click(screen.getByRole('button', { name: 'check theme' }));
+    expect(screen.getByRole('button', { name: 'try stage again' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
 
     setColor('Surface', '#000000');
     setColor('Secondary text', '#ffffff');
-    expect(screen.getByRole('button', { name: 'submit theme' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'check theme' })).toBeEnabled();
   });
 });

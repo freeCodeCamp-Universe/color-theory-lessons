@@ -26,7 +26,7 @@ export const lesson3_1: LessonConfig = {
   ],
   challenge: {
     prompt:
-      'Select every colored element in the mockup to reveal its formats. Explore all of them before moving on.',
+      'Complete one exploration stage by selecting every colored element in the mockup and comparing its HEX, RGB, and HSL values.',
     hints: [
       'Select a colored region such as the background, button, text, or border.',
       'Each selection shows HEX, RGB, and HSL values.',

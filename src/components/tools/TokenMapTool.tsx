@@ -1,5 +1,8 @@
 import { memo, useState } from 'react';
 import { hslToHex, hexToHsl } from '../../utils/color.ts';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 import shellStyles from './ToolShell.module.css';
 
 interface TokenRole {
@@ -42,17 +45,34 @@ const SORT_ITEMS: SortItem[] = [
   { label: '--green-500',           category: 'palette' },
 ];
 
-interface TokenMapToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+const INITIAL_BASE_HUE = 220;
+const INITIAL_BASE_SATURATION = 70;
 
-export const TokenMapTool = memo(function TokenMapTool({ interactive = false, onComplete }: TokenMapToolProps) {
-  const [baseHue, setBaseHue] = useState(220);
-  const [baseSat, setBaseSat] = useState(70);
+const STAGES: readonly ExerciseStageDefinition[] = [
+  {
+    id: 'adjust-token-system',
+    title: 'Adjust the token system',
+    instruction: 'Change the base hue and saturation, then check that the action and error roles remain distinct.',
+    nextActionLabel: 'classify token names',
+  },
+  {
+    id: 'classify-token-names',
+    title: 'Classify token names',
+    instruction: 'Classify each item as a raw value, palette token name, or role token name.',
+  },
+];
+
+export const TokenMapTool = memo(function TokenMapTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
+  const [baseHue, setBaseHue] = useState(INITIAL_BASE_HUE);
+  const [baseSat, setBaseSat] = useState(INITIAL_BASE_SATURATION);
   const [sortAnswers, setSortAnswers] = useState<Record<string, string>>({});
-  const [sortChecked, setSortChecked] = useState(false);
-  const [completed, setCompleted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const isSystemStage = stageController.activeStage.id === 'adjust-token-system';
+  const inputsDisabled = !interactive || stageController.result !== 'idle';
 
   const derived = ROLES.map((r) => ({
     ...r,
@@ -64,15 +84,19 @@ export const TokenMapTool = memo(function TokenMapTool({ interactive = false, on
   const errorHsl = hexToHsl(derived.find((d) => d.name === '--color-error-bg')!.color);
   const hueDiff = Math.abs(actionHsl.h - errorHsl.h);
   const hueOk = hueDiff > 30 && hueDiff < 330;
+  const baseAdjusted = baseHue !== INITIAL_BASE_HUE && baseSat !== INITIAL_BASE_SATURATION;
+
+  function checkSystem() {
+    if (!interactive || stageController.result !== 'idle') return;
+    if (baseAdjusted && hueOk) stageController.markPassed();
+    else stageController.markIncorrect();
+  }
 
   function checkSort() {
-    if (!interactive || completed) return;
-    setSortChecked(true);
+    if (!interactive || stageController.result !== 'idle') return;
     const allCorrect = SORT_ITEMS.every((item) => sortAnswers[item.label] === item.category);
-    if (allCorrect && hueOk) {
-      setCompleted(true);
-      onComplete?.();
-    }
+    if (allCorrect) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   const sortCorrectCount = SORT_ITEMS.filter((item) => sortAnswers[item.label] === item.category).length;
@@ -81,12 +105,22 @@ export const TokenMapTool = memo(function TokenMapTool({ interactive = false, on
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>token map</span>
 
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback={isSystemStage
+          ? 'Change both base controls and keep the action and error hues distinct. Try this stage again.'
+          : `${sortCorrectCount} of ${SORT_ITEMS.length} classifications are correct. Try this stage again.`}
+        passedFeedback="The adjusted token system passes. Continue to classification."
+        completionFeedback="Token map complete. Both stages passed."
+      >
+      {isSystemStage && (
+        <>
       {/* Base controls */}
       <div style={{ marginBottom: '0.75rem' }}>
         <label style={{ fontSize: '0.82rem', display: 'block', marginBottom: '0.3rem' }}>
           Base hue: {baseHue}°
           <input type="range" min={0} max={360} value={baseHue}
-            disabled={!interactive || completed}
+            disabled={inputsDisabled}
             onChange={(e) => setBaseHue(Number(e.target.value))}
             style={{ width: '100%', accentColor: 'var(--yellow)' }}
             aria-label={`Base hue: ${baseHue} degrees`}
@@ -95,7 +129,7 @@ export const TokenMapTool = memo(function TokenMapTool({ interactive = false, on
         <label style={{ fontSize: '0.82rem', display: 'block' }}>
           Base saturation: {baseSat}%
           <input type="range" min={0} max={100} value={baseSat}
-            disabled={!interactive || completed}
+            disabled={inputsDisabled}
             onChange={(e) => setBaseSat(Number(e.target.value))}
             style={{ width: '100%', accentColor: 'var(--yellow)' }}
             aria-label={`Base saturation: ${baseSat} percent`}
@@ -161,8 +195,20 @@ export const TokenMapTool = memo(function TokenMapTool({ interactive = false, on
         </div>
       </div>
 
+      {interactive && stageController.result === 'idle' && (
+        <button onClick={checkSystem} style={{
+          padding: '0.4rem 1rem', background: 'var(--yellow)', color: '#111',
+          border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer',
+          fontFamily: 'var(--font-mono)', fontSize: '0.82rem',
+        }}>
+          check token system
+        </button>
+      )}
+        </>
+      )}
+
       {/* Sort activity */}
-      {interactive && (
+      {interactive && !isSystemStage && (
         <div style={{ borderTop: '1px solid var(--border)', paddingTop: '0.6rem' }}>
           <p style={{ fontSize: '0.82rem', color: 'var(--muted)', marginBottom: '0.4rem' }}>
             Classify each item as a raw value, palette token name, or role token name:
@@ -170,7 +216,7 @@ export const TokenMapTool = memo(function TokenMapTool({ interactive = false, on
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', marginBottom: '0.5rem' }}>
             {SORT_ITEMS.map((item) => {
               const answer = sortAnswers[item.label] ?? '';
-              const isWrong = sortChecked && answer !== item.category;
+              const isWrong = stageController.result === 'incorrect' && answer !== item.category;
               return (
                 <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <code style={{
@@ -181,7 +227,7 @@ export const TokenMapTool = memo(function TokenMapTool({ interactive = false, on
                   </code>
                   <select
                     value={answer}
-                    disabled={completed}
+                    disabled={inputsDisabled}
                     onChange={(e) => setSortAnswers((prev) => ({ ...prev, [item.label]: e.target.value }))}
                     style={{
                       fontSize: '0.75rem', fontFamily: 'var(--font-mono)',
@@ -201,7 +247,7 @@ export const TokenMapTool = memo(function TokenMapTool({ interactive = false, on
             })}
           </div>
 
-          {!completed && (
+          {stageController.result === 'idle' && (
             <button onClick={checkSort} style={{
               padding: '0.4rem 1rem', background: 'var(--yellow)', color: '#111',
               border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer',
@@ -211,20 +257,9 @@ export const TokenMapTool = memo(function TokenMapTool({ interactive = false, on
             </button>
           )}
 
-          {sortChecked && !completed && (
-            <p style={{ fontSize: '0.78rem', color: 'var(--red)', marginTop: '0.3rem' }}>
-              {!hueOk ? 'Adjust the base hue so action and error are distinct. ' : ''}
-              {sortCorrectCount < SORT_ITEMS.length ? 'Some items are miscategorized.' : ''}
-            </p>
-          )}
         </div>
       )}
-
-      {completed && (
-        <p style={{ color: 'var(--green)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          Token map complete. One base change updated every derived role color.
-        </p>
-      )}
+      </ExerciseStage>
     </div>
   );
 });

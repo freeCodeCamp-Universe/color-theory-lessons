@@ -1,5 +1,8 @@
 import { memo, useState } from 'react';
 import { hexToRgb, contrastRatioWcag } from '../../utils/color.ts';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 import shellStyles from './ToolShell.module.css';
 
 interface RoleDef {
@@ -23,29 +26,33 @@ const ROLES: RoleDef[] = [
 const GRADIENT_DEFAULTS = { start: '#4f46e5', end: '#7c3aed' };
 const TEXT_CONTRAST_TARGET = 4.5;
 
-interface ThemeSandboxToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+const STAGES: readonly ExerciseStageDefinition[] = [{
+  id: 'build-readable-theme',
+  title: 'Build a readable theme',
+  instruction: 'Adjust the role colors and gradient, then make all three text contrast checks pass.',
+}];
 
-export const ThemeSandboxTool = memo(function ThemeSandboxTool({ interactive = false, onComplete }: ThemeSandboxToolProps) {
+export const ThemeSandboxTool = memo(function ThemeSandboxTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [colors, setColors] = useState<Record<string, string>>(
     Object.fromEntries(ROLES.map((r) => [r.key, r.defaultValue]))
   );
   const [gradStart, setGradStart] = useState(GRADIENT_DEFAULTS.start);
   const [gradEnd, setGradEnd] = useState(GRADIENT_DEFAULTS.end);
-  const [completed, setCompleted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const inputsDisabled = !interactive || stageController.result !== 'idle';
 
   function setColor(key: string, value: string) {
     setColors((prev) => ({ ...prev, [key]: value }));
   }
 
   function checkTheme() {
-    if (!interactive || completed) return;
-    if (allPass) {
-      setCompleted(true);
-      onComplete?.();
-    }
+    if (!interactive || stageController.result !== 'idle') return;
+    if (allPass) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   const bgRgb = hexToRgb(colors.bg);
@@ -63,6 +70,11 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({ interactive = f
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>theme sandbox</span>
 
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback="At least one text pair is below 4.5:1. Try this stage again."
+        completionFeedback="Theme complete. All three checked text pairs meet 4.5:1."
+      >
       {/* Live preview */}
       <div style={{
         background: colors.bg, borderRadius: 'var(--radius-md)', padding: '0.75rem',
@@ -115,7 +127,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({ interactive = f
         {ROLES.map((role) => (
           <label key={role.key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.78rem' }}>
             <input type="color" value={colors[role.key]}
-              disabled={!interactive || completed}
+              disabled={inputsDisabled}
               onChange={(e) => setColor(role.key, e.target.value)}
               style={{ width: 24, height: 24, border: 'none', padding: 0, cursor: interactive ? 'pointer' : 'default' }}
               aria-label={role.label}
@@ -128,7 +140,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({ interactive = f
       {/* Gradient editors */}
       <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '0.6rem', alignItems: 'center' }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.78rem' }}>
-          <input type="color" value={gradStart} disabled={!interactive || completed}
+          <input type="color" value={gradStart} disabled={inputsDisabled}
             onChange={(e) => setGradStart(e.target.value)}
             style={{ width: 24, height: 24, border: 'none', padding: 0 }}
             aria-label="Gradient start"
@@ -136,7 +148,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({ interactive = f
           <span style={{ color: 'var(--muted)' }}>Gradient start</span>
         </label>
         <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.78rem' }}>
-          <input type="color" value={gradEnd} disabled={!interactive || completed}
+          <input type="color" value={gradEnd} disabled={inputsDisabled}
             onChange={(e) => setGradEnd(e.target.value)}
             style={{ width: 24, height: 24, border: 'none', padding: 0 }}
             aria-label="Gradient end"
@@ -158,23 +170,18 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({ interactive = f
         </div>
       </div>
 
-      {interactive && !completed && (
-        <button onClick={checkTheme} disabled={!allPass} style={{
-          padding: '0.4rem 1rem', background: allPass ? 'var(--yellow)' : 'var(--surface)',
-          color: allPass ? '#111' : 'var(--muted)',
+      {interactive && stageController.result === 'idle' && (
+        <button onClick={checkTheme} style={{
+          padding: '0.4rem 1rem', background: 'var(--yellow)',
+          color: '#111',
           border: 'none', borderRadius: 'var(--radius-sm)',
-          cursor: allPass ? 'pointer' : 'not-allowed',
+          cursor: 'pointer',
           fontFamily: 'var(--font-mono)', fontSize: '0.82rem',
         }}>
-          {allPass ? 'submit theme' : 'meet contrast targets to submit'}
+          check theme
         </button>
       )}
-
-      {completed && (
-        <p style={{ color: 'var(--green)', fontSize: '0.85rem' }}>
-          Theme complete. The checked text pairs meet their contrast targets.
-        </p>
-      )}
+      </ExerciseStage>
     </div>
   );
 });

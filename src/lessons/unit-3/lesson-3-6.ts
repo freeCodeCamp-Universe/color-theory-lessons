@@ -26,7 +26,7 @@ export const lesson3_6: LessonConfig = {
   ],
   challenge: {
     prompt:
-      'Use the token map to make the action and error hues distinct. Then classify each item as a raw value, palette token name, or role token name.',
+      'Complete two stages: adjust the token system so the action and error hues are distinct, then classify every value and token name.',
     hints: [
       'A raw value is a color code such as #1E40AF. A palette token name identifies a color family and step. A role token name identifies how a color is used.',
       'Changing the base controls updates every role color derived from them.',

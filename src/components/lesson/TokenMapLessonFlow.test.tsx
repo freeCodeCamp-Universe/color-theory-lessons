@@ -41,6 +41,8 @@ describe('Lesson 3.6 Token Map flow', () => {
     const baseHue = await screen.findByLabelText(/Base hue:/);
     fireEvent.change(baseHue, { target: { value: '180' } });
     fireEvent.change(screen.getByLabelText(/Base saturation:/), { target: { value: '80' } });
+    fireEvent.click(screen.getByRole('button', { name: 'check token system' }));
+    fireEvent.click(screen.getByRole('button', { name: 'classify token names' }));
 
     for (const [label, category] of Object.entries(ANSWERS)) {
       fireEvent.change(screen.getByLabelText(`Category for ${label}`), {

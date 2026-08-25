@@ -28,7 +28,7 @@ export const lesson3_3: LessonConfig = {
   ],
   challenge: {
     prompt:
-        'Match three target colors using the HSL sliders. The HSL, HEX, and RGB readouts update together as you adjust the color.',
+        'Complete three HSL stages in order: match the muted teal surface, then the vivid coral accent, then the dark desaturated navy.',
       hints: [
         'Start with hue to get the right color family, then adjust saturation and lightness.',
         'A muted target has low saturation. A light target has high lightness.',
