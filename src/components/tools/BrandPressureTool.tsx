@@ -39,6 +39,10 @@ const INTERACTIVE_DEFAULTS: Record<RoleKey, string> = {
 
 function isValidHex(h: string) { return /^#[0-9a-fA-F]{6}$/.test(h); }
 
+function formatContrastRatio(ratio: number): string {
+  return (Math.floor(ratio * 10) / 10).toFixed(1);
+}
+
 export const BrandPressureTool = memo(function BrandPressureTool({ interactive = false, onComplete }: BrandPressureToolProps) {
   const defaults = interactive ? INTERACTIVE_DEFAULTS : NON_INTERACTIVE_DEFAULTS;
   const [roles, setRoles] = useState<Record<RoleKey, string>>(defaults);
@@ -50,11 +54,13 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
   }
 
   const {
-    textContrast,
+    pageTextContrast,
+    cardTextContrast,
     surfaceContrast,
     pressure,
     actionChecks,
-    textOk,
+    pageTextOk,
+    cardTextOk,
     surfaceOk,
     pressureOk,
     allPass,
@@ -142,7 +148,8 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
         <div style={{ flex: '0 0 190px' }}>
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>CHECKS</p>
           {[
-            { label: 'Text contrast (4.5:1)', pass: textOk, ratio: textContrast },
+            { label: 'Primary text / page background (4.5:1)', pass: pageTextOk, ratio: pageTextContrast },
+            { label: 'Primary text / card surface (4.5:1)', pass: cardTextOk, ratio: cardTextContrast },
             { label: 'Page / surface (target 1.2:1)', pass: surfaceOk, ratio: surfaceContrast },
             ...actionChecks.map(action => ({
               label: `${action.label} text (4.5:1)`,
@@ -153,7 +160,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
             <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', padding: '0.2rem 0' }}>
               <span style={{ color: 'var(--primary-foreground)' }}>{label}</span>
               <span style={{ color: pass ? '#22c55e' : '#ef4444', fontFamily: 'var(--font-mono)' }}>
-                {pass ? '✓' : '✗'} {ratio.toFixed(1)}:1
+                {pass ? '✓' : '✗'} {formatContrastRatio(ratio)}:1
               </span>
             </div>
           ))}
