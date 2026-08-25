@@ -8,38 +8,38 @@ export const lesson5_6: LessonConfig = {
   reviewTags: ['workflow', 'inclusive-design', 'testing', 'user-research'],
   steps: [
     {
-      text: 'CVD simulations approximate how an interface may appear under a specific type of CVD. They cannot represent every individual\'s vision, so use them to find design risks rather than predict any person\'s experience.',
+      text: 'Color vision deficiency simulations approximate how an interface may appear under a specific type of color vision deficiency. They cannot represent every individual\'s vision, so use them to find design risks rather than predict any person\'s experience.',
     },
     {
-      text: 'Use a repeatable review workflow. First, view the interface without a simulation and identify each element that uses color to carry meaning. Then check each CVD simulation, find elements that become ambiguous, add another visual cue, and check the simulations again.',
+      text: 'Use a repeatable review workflow. First, view the interface without a simulation and identify each element that uses color to carry meaning. Then check each simulation, find elements that become ambiguous, add another visual cue, and check the simulations again.',
     },
     {
       text: 'Run inclusive checks before design decisions are fixed. In a design file, you can add a legend column or replace color-only dots with labeled badges before developers build those patterns throughout the interface.',
     },
     {
-      text: 'User testing with people who have CVD can reveal whether participants understand the interface and complete its tasks. A simulation cannot reproduce their individual perceptions, strategies, or reactions.',
+      text: 'User testing with people who have color vision deficiency can reveal whether participants understand the interface and complete its tasks. A simulation cannot reproduce their individual perceptions, strategies, or reactions.',
     },
     {
-      text: 'Include accessible color checks throughout the design process. Check early, use simulations to find risks, and test with people who have CVD when possible. Repeat the checks when the design changes.',
+      text: 'Include accessible color checks throughout the design process. Check early, use simulations to find risks, and test with people who have color vision deficiency when possible. Repeat the checks when the design changes.',
     },
   ],
   challenge: {
       prompt: 'Work through the inclusive review checklist for the sample interface. Mark each item as Pass or Needs Work based on what you observe.',
       hints: [
-        'Switch through the CVD simulation modes and compare each view with the original interface.',
+        'Switch through the color vision deficiency simulation modes and compare each view with the original interface.',
         'Check whether labels, icons, patterns, or text communicate the information carried by each color.',
       ],
   },
   quizItems: [
     {
       id: 'q1',
-      prompt: 'Does a CVD simulation show exactly how every person with that CVD type sees an interface?',
+      prompt: 'Does a color vision deficiency simulation show exactly how every person with that type sees an interface?',
       choices: [
         {
           stableId: 'yes-simulation-shows-exactly-what-every-cvd-user-sees',
-          label: 'Yes. It shows exactly what every person with CVD sees',
+          label: 'Yes. It shows exactly what every person with color vision deficiency sees',
           isCorrect: false,
-          explanation: 'A simulation applies a model to the interface. People with the same CVD type can still have different experiences.',
+          explanation: 'A simulation applies a model to the interface. People with the same type of color vision deficiency can still have different experiences.',
         },
         {
           stableId: 'no-it-is-a-useful-approximation-and-real-user-testing-still-adds',
@@ -49,13 +49,13 @@ export const lesson5_6: LessonConfig = {
         },
         {
           stableId: 'yes-all-protan-users-see-the-same-filtered-result',
-          label: 'Yes. Everyone with a protan CVD type sees the same result',
+          label: 'Yes. Everyone with a protan type of color vision deficiency sees the same result',
           isCorrect: false,
-          explanation: 'People within the same CVD category can perceive an interface differently. A single simulation cannot represent those differences.',
+          explanation: 'People within the same color vision deficiency category can perceive an interface differently. A single simulation cannot represent those differences.',
         },
         {
           stableId: 'no-simulation-is-inaccurate-and-should-not-be-used',
-          label: 'No. CVD simulations are too inaccurate to be useful',
+          label: 'No. Color vision deficiency simulations are too inaccurate to be useful',
           isCorrect: false,
           explanation: 'A simulation can reveal places where reduced color distinctions may make an interface ambiguous.',
         },
@@ -93,7 +93,7 @@ export const lesson5_6: LessonConfig = {
     },
     {
       id: 'q3',
-      prompt: 'What does user testing with CVD users add that simulation cannot?',
+      prompt: 'What does user testing with people who have color vision deficiency add that simulation cannot?',
       choices: [
         {
           stableId: 'nothing-simulation-is-sufficient-for-all-accessibility-checking',
@@ -123,10 +123,10 @@ export const lesson5_6: LessonConfig = {
     },
   ],
   keyPoints: [
-    'CVD simulations approximate how an interface may appear under a specific type of CVD; they do not predict any individual\'s experience.',
-    'A repeatable review checks the interface without a simulation, checks each CVD simulation, repairs ambiguous elements, and checks the simulations again.',
+    'Color vision deficiency simulations approximate how an interface may appear under a specific type of color vision deficiency; they do not predict any individual\'s experience.',
+    'A repeatable review checks the interface without a simulation, checks each simulation, repairs ambiguous elements, and checks the simulations again.',
     'Running inclusive color checks before implementation can avoid reworking interface patterns after they have been built.',
-    'User testing can show how individual participants with CVD interpret an interface and complete its tasks.',
+    'User testing can show how individual participants with color vision deficiency interpret an interface and complete its tasks.',
     'Repeat accessible color checks throughout the design process and whenever the design changes.',
   ],
 };

@@ -37,7 +37,7 @@ export const lesson2_3: LessonConfig = {
       id: 'q1',
       prompt: 'Which statement best explains why screens use the RGB model?',
       choices: [
-        { stableId: 'rgb-matches-the-three-pigment-primaries-used-in-print', label: 'RGB matches the three pigment primaries used in print.', isCorrect: false, explanation: 'Print commonly uses CMYK, not RGB. Color displays produce pixel colors from red, green, and blue light components.' },
+        { stableId: 'rgb-matches-the-three-pigment-primaries-used-in-print', label: 'RGB matches the three pigment primaries used in print.', isCorrect: false, explanation: 'Print commonly uses cyan, magenta, yellow, and black inks, not RGB. Color displays produce pixel colors from red, green, and blue light components.' },
         { stableId: 'rgb-channels-correspond-to-the-three-light-sources-that-displays', label: 'RGB channels represent the red, green, and blue light components of a display pixel.', isCorrect: true, explanation: 'Most color displays control red, green, and blue components at each pixel. RGB channel values describe each component\'s contribution to the displayed color.' },
         { stableId: 'rgb-is-simpler-to-work-with-than-paint-colors', label: 'RGB is simpler to work with than paint colors.', isCorrect: false, explanation: 'Simplicity is not the reason. The model corresponds to the red, green, and blue components controlled by most color displays.' },
         { stableId: 'rgb-produces-more-colors-than-other-models', label: 'RGB produces more colors than other models.', isCorrect: false, explanation: 'A display\'s gamut determines the range of colors it can reproduce. RGB matches the red, green, and blue light controlled by most color displays.' },

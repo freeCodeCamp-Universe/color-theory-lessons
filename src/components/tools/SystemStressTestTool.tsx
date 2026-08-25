@@ -25,7 +25,7 @@ const CONTEXTS: { id: ContextId; label: string }[] = [
   { id: 'dark', label: 'Dark mode' },
   { id: 'chart', label: 'Chart view' },
   { id: 'alerts', label: 'Alert stack' },
-  { id: 'simulation', label: 'CVD simulation' },
+  { id: 'simulation', label: 'Color vision deficiency simulation' },
 ];
 
 const FINDINGS: Finding[] = [
@@ -46,14 +46,14 @@ const FINDINGS: Finding[] = [
   {
     id: 'chart-series',
     label: 'Chart series reuse semantic colors',
-    context: 'Chart view and CVD simulation',
+    context: 'Chart view and color vision deficiency simulation',
     expectedClassification: 'role-drift',
     explanation: 'Success and error colors have drifted into data-series meanings.',
   },
   {
     id: 'alert-cues',
     label: 'Alerts rely on color alone',
-    context: 'Alert stack and CVD simulation',
+    context: 'Alert stack and color vision deficiency simulation',
     expectedClassification: 'missing-role',
     explanation: 'The system has no role for a non-color status cue such as an icon or label.',
   },

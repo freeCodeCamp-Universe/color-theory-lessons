@@ -42,7 +42,7 @@ describe('SystemStressTestTool', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Alert stack' }));
     expect(screen.getByLabelText('Color-only alert stack')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'CVD simulation' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Color vision deficiency simulation' }));
     expect(screen.getByLabelText('Chart under deuteranopia simulation')).toBeInTheDocument();
     expect(screen.getByLabelText('Alerts under deuteranopia simulation')).toBeInTheDocument();
   });
