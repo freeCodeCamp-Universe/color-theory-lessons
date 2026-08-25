@@ -9,7 +9,7 @@ interface SystemStressTestToolProps {
 }
 
 type ContextId = 'light' | 'dark' | 'chart' | 'alerts' | 'simulation';
-type FindingId = 'placeholder' | 'dark-action' | 'chart-series' | 'alert-cues';
+type FindingId = 'placeholder' | 'dark-warning' | 'chart-series' | 'alert-cues';
 type Classification = 'role-drift' | 'missing-role' | 'token-override';
 
 interface Finding {
@@ -37,11 +37,11 @@ const FINDINGS: Finding[] = [
     explanation: 'The #aaa placeholder bypasses the shared text token.',
   },
   {
-    id: 'dark-action',
-    label: 'Dark action loses contrast',
+    id: 'dark-warning',
+    label: 'Warning has no semantic role',
     context: 'Dark mode',
     expectedClassification: 'missing-role',
-    explanation: 'The system has no dark-mode action role, so it reuses the light-mode value.',
+    explanation: 'The system has no warning role, so the payment warning uses the default text style.',
   },
   {
     id: 'chart-series',
@@ -70,21 +70,21 @@ type FindingClassifications = Record<FindingId, Classification | ''>;
 
 const INITIAL_SELECTIONS: FindingSelections = {
   placeholder: false,
-  'dark-action': false,
+  'dark-warning': false,
   'chart-series': false,
   'alert-cues': false,
 };
 
 const INITIAL_CLASSIFICATIONS: FindingClassifications = {
   placeholder: '',
-  'dark-action': '',
+  'dark-warning': '',
   'chart-series': '',
   'alert-cues': '',
 };
 
 const COLORS = {
   light: { background: '#f9fafb', surface: '#ffffff', text: '#111827', action: '#1e40af' },
-  dark: { background: '#0f172a', surface: '#1e293b', text: '#f1f5f9', action: '#1e40af' },
+  dark: { background: '#0f172a', surface: '#1e293b', text: '#f1f5f9', action: '#60a5fa' },
   chart: ['#16a34a', '#dc2626'],
   alerts: ['#16a34a', '#dc2626'],
 };
@@ -149,17 +149,27 @@ function ContextPreview({ context }: { context: ContextId }) {
       <div style={{ background: palette.surface, borderRadius: 4, color: palette.text, display: 'grid', gap: '0.65rem', padding: '0.75rem' }}>
         <strong style={{ fontSize: '0.85rem' }}>Account dashboard</strong>
         {context === 'light' ? (
-          <label style={{ display: 'grid', fontSize: '0.7rem', gap: '0.2rem' }}>
-            Search accounts
-            <input aria-label="Search accounts" className={styles.placeholder} disabled placeholder="Search by name" />
+          <div style={{ display: 'grid', fontSize: '0.7rem', gap: '0.2rem' }}>
+            <span>Search accounts</span>
+            <div className={styles.placeholder}>Search by name</div>
             <span style={{ color: '#aaa' }}>Placeholder color: #aaa</span>
-          </label>
+          </div>
         ) : (
-          <p style={{ fontSize: '0.72rem', margin: 0 }}>The primary action keeps its light-mode color instead of using a dark-mode action role.</p>
+          <div style={{ display: 'grid', fontSize: '0.72rem', gap: '0.2rem' }}>
+            <p style={{ color: palette.text, margin: 0 }}>Recent account activity</p>
+            <p aria-label="Payment warning preview" style={{ color: palette.text, margin: 0 }}>Payment method expires soon</p>
+            <span>The warning uses the default text style; no warning role is defined.</span>
+          </div>
         )}
-        <button disabled style={{ background: palette.action, border: 0, borderRadius: 4, color: '#ffffff', justifySelf: 'start', padding: '0.35rem 0.7rem' }}>
-          Save changes
-        </button>
+        <span
+          aria-label="Save changes action preview"
+          role="img"
+          style={{ background: 'transparent', border: 0, color: palette.action, justifySelf: 'start', padding: '0.35rem' }}
+        >
+          <svg aria-hidden="true" focusable="false" height="18" viewBox="0 0 24 24" width="18">
+            <path d="M5 3h12l2 2v16H5V3Zm2 2v5h8V5H7Zm0 14h10v-7H7v7Zm2-12h4V5H9v2Z" fill="currentColor" />
+          </svg>
+        </span>
       </div>
     </div>
   );

@@ -1,12 +1,13 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { contrastRatioWcag, hexToRgb } from '../../utils/color.ts';
 import { SystemStressTestTool } from './SystemStressTestTool.tsx';
 
 afterEach(() => cleanup());
 
 const ANSWERS = [
   ['Low-contrast placeholder', 'Token override'],
-  ['Dark action loses contrast', 'Missing role'],
+  ['Warning has no semantic role', 'Missing role'],
   ['Chart series reuse semantic colors', 'Role drift'],
   ['Alerts rely on color alone', 'Missing role'],
 ] as const;
@@ -27,11 +28,13 @@ describe('SystemStressTestTool', () => {
   it('provides observable previews for all five contexts', () => {
     render(<SystemStressTestTool interactive />);
 
-    expect(screen.getByPlaceholderText('Search by name')).toBeInTheDocument();
+    expect(screen.getByText('Search by name')).toBeInTheDocument();
     expect(screen.getByText('Placeholder color: #aaa')).toHaveStyle({ color: '#aaa' });
 
     fireEvent.click(screen.getByRole('button', { name: 'Dark mode' }));
-    expect(screen.getByText(/keeps its light-mode color/)).toBeInTheDocument();
+    expect(screen.getByText('Recent account activity')).toHaveStyle({ color: '#f1f5f9' });
+    expect(screen.getByText('Payment method expires soon')).toHaveStyle({ color: '#f1f5f9' });
+    expect(screen.getByText(/no warning role is defined/)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Chart view' }));
     expect(screen.getByLabelText('Chart with two color-only series')).toBeInTheDocument();
@@ -42,6 +45,24 @@ describe('SystemStressTestTool', () => {
     fireEvent.click(screen.getByRole('button', { name: 'CVD simulation' }));
     expect(screen.getByLabelText('Chart under deuteranopia simulation')).toBeInTheDocument();
     expect(screen.getByLabelText('Alerts under deuteranopia simulation')).toBeInTheDocument();
+  });
+
+  it('presents the required contrast evidence without interactive controls', () => {
+    render(<SystemStressTestTool interactive />);
+
+    expect(screen.getByText('Search by name')).toBeInTheDocument();
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+    expect(contrastRatioWcag(hexToRgb('#aaaaaa'), hexToRgb('#ffffff'))).toBeLessThan(4.5);
+    const action = screen.getByRole('img', { name: 'Save changes action preview' });
+    expect(action).toHaveStyle({ background: 'transparent', color: '#1e40af' });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Dark mode' }));
+    expect(screen.queryByRole('button', { name: 'Save changes' })).not.toBeInTheDocument();
+    expect(action).toHaveStyle({ background: 'transparent', color: '#60a5fa' });
+    expect(action).toHaveTextContent('');
+    expect(action.querySelector('svg[aria-hidden="true"]')).toBeInTheDocument();
+    expect(action.parentElement).toHaveStyle({ background: '#1e293b' });
+    expect(contrastRatioWcag(hexToRgb('#60a5fa'), hexToRgb('#1e293b'))).toBeGreaterThanOrEqual(3);
   });
 
   it('reports incomplete findings without completing', () => {
@@ -65,7 +86,7 @@ describe('SystemStressTestTool', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Check findings' }));
 
     expect(screen.getByText('3 classifications are incorrect. Review the feedback and try again.')).toBeInTheDocument();
-    expect(screen.getByText(/no dark-mode action role/)).toBeInTheDocument();
+    expect(screen.getByText(/no warning role/)).toBeInTheDocument();
     expect(screen.getByText(/drifted into data-series meanings/)).toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
   });
