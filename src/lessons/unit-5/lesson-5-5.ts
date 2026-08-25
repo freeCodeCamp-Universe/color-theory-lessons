@@ -11,13 +11,13 @@ export const lesson5_5: LessonConfig = {
       text: 'A contrast checker calculates the ratio between a foreground color and a background color. It does not decide whether an entire design is accessible. Check the colors used in the rendered interface and compare each ratio with the threshold for that text or component. A text color that passes on white may fail when the same text appears on a colored card.',
     },
     {
-      text: 'A practical audit workflow has four stages. First, identify the text, controls, states, and graphics that users need. Second, check text and non-text contrast. Third, simulate CVD conditions, identify information conveyed by color alone, and add another visual cue. Fourth, verify whether users can still complete their tasks.',
+      text: 'A practical audit workflow has four stages. First, identify the text, controls, states, and graphics that users need. Second, check text and non-text contrast. Third, simulate color vision deficiency, identify information conveyed by color alone, and add another visual cue. Fourth, verify whether users can still complete their tasks.',
     },
     {
       text: 'Priority elements are the ones users depend on to complete tasks: headlines, body text, buttons, input fields, links, form feedback, alerts, and chart marks. Start with the elements needed for the current task, then check the remaining content and controls that convey information. Decorative elements do not convey information and do not need the same checks.',
     },
     {
-      text: 'After the contrast checks, look for elements that rely on color alone. A passing contrast ratio does not show whether another visual cue conveys the same information. Check both requirements separately. Then use CVD simulations to check how reduced color distinctions affect the main user tasks.',
+      text: 'After the contrast checks, look for elements that rely on color alone. A passing contrast ratio does not show whether another visual cue conveys the same information. Check both requirements separately. Then use color vision deficiency simulations to check how reduced color distinctions affect the main user tasks.',
     },
     {
       text: 'During a simulated review, check whether a user can complete each task, not only whether the colors look different. Follow the main tasks for the screen, such as filling in a form, reading a chart, or interpreting a status indicator. Record each place where the task becomes unclear.',

@@ -133,7 +133,7 @@ export const lesson4_1: LessonConfig = {
           label: 'Because colors change over time due to phosphor decay',
           isCorrect: false,
           explanation:
-            'Phosphor aging can alter the output of a CRT display, but it does not explain why two viewers can perceive the same displayed color differently.',
+            'Phosphor aging can alter the output of an older phosphor-based display, but it does not explain why two viewers can perceive the same displayed color differently.',
         },
       ],
     },

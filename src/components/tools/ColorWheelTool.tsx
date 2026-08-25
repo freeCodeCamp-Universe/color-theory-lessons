@@ -212,9 +212,9 @@ export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true,
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>palette preview</span>
             <div style={{ display: 'flex', gap: '4px' }}>
-              <div title={`Base: hsl(${baseH}, 70%, 50%)`} style={{ flex: 3, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: baseColor }} />
+              <div title={`Base: hsl(${baseH} 70% 50%)`} style={{ flex: 3, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: baseColor }} />
               {relatedColors.map((c, i) => (
-                <div key={c} title={`Related: hsl(${relatedH[i]}, 70%, 50%)`} style={{ flex: 1, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: c }} />
+                <div key={c} title={`Related: hsl(${relatedH[i]} 70% 50%)`} style={{ flex: 1, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: c }} />
               ))}
               <div style={{ flex: 1, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--gray-80)' }} title="Neutral" />
             </div>

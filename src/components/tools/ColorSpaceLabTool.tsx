@@ -19,7 +19,7 @@ const SORT_ITEMS: SortItem[] = [
   { label: '--color-text-primary', category: 'role' },
   { label: 'wide-gamut display', category: 'context' },
   { label: 'chart bar fill', category: 'context' },
-  { label: 'rgb(34, 34, 34)', category: 'value' },
+  { label: 'rgb(34 34 34)', category: 'value' },
   { label: '--color-success-bg', category: 'role' },
   { label: 'SVG icon fill', category: 'context' },
   { label: '#22c55e', category: 'value' },
@@ -196,9 +196,9 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
         marginBottom: '0.75rem',
         color: 'var(--primary-foreground)',
       }}>
-        <span style={{ color: 'var(--muted)' }}>Fallback RGB</span> {rgb.r},{rgb.g},{rgb.b}
+        <span style={{ color: 'var(--muted)' }}>Fallback RGB</span> rgb({rgb.r} {rgb.g} {rgb.b})
         {' · '}
-        <span style={{ color: 'var(--muted)' }}>Fallback HSL</span> {hsl.h}°,{hsl.s}%,{hsl.l}%
+        <span style={{ color: 'var(--muted)' }}>Fallback HSL</span> hsl({hsl.h} {hsl.s}% {hsl.l}%)
       </div>
 
       {interactive && (
