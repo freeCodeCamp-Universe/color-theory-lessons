@@ -9,7 +9,7 @@ const ELEMENT_LABELS = [
   'Nav background',
   'Nav text',
   'Hero surface',
-  'CTA button',
+  'Primary action button',
   'Button text',
   'Card background',
   'Card border',

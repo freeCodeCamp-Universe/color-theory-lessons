@@ -26,7 +26,7 @@ export const lesson6_6: LessonConfig = {
   challenge: {
       prompt: 'Sort each item as a raw value, semantic role, or usage context. Then decide whether each Display P3 sample needs gamut mapping for sRGB output.',
       hints: [
-        'A raw value is a specific number like #0B57D0 or rgb(34, 34, 34).',
+        'A raw value is a specific number like #0B57D0 or rgb(34 34 34).',
         'A semantic role is a token name like --color-text-primary or --color-success-bg.',
         'A usage context identifies where the color appears or how it is rendered: a wide-gamut display, a Canvas chart fill, or an SVG icon fill.',
         'Use the gamut result under each sample to decide whether it needs mapping for sRGB output.',

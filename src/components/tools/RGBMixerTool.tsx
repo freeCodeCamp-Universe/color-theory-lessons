@@ -67,8 +67,8 @@ export const RGBMixerTool = memo(function RGBMixerTool({
     type Swatch = { label: string; rgb: RGB; caption: string };
     const previewSwatches: Record<NonNullable<RGBMixerToolProps['previewMode']>, Swatch[]> = {
       extremes: [
-        { label: 'black', rgb: { r: 0, g: 0, b: 0 }, caption: 'rgb(0, 0, 0): all channels off' },
-        { label: 'white', rgb: { r: 255, g: 255, b: 255 }, caption: 'rgb(255, 255, 255): all channels full' },
+        { label: 'black', rgb: { r: 0, g: 0, b: 0 }, caption: 'rgb(0 0 0): all channels off' },
+        { label: 'white', rgb: { r: 255, g: 255, b: 255 }, caption: 'rgb(255 255 255): all channels full' },
       ],
       'channel-pairs': [
         { label: 'yellow', rgb: { r: 255, g: 255, b: 0 }, caption: 'red + green = yellow' },
@@ -76,9 +76,9 @@ export const RGBMixerTool = memo(function RGBMixerTool({
         { label: 'magenta', rgb: { r: 255, g: 0, b: 255 }, caption: 'red + blue = magenta' },
       ],
       'neutral-grays': [
-        { label: 'dark gray', rgb: { r: 64, g: 64, b: 64 }, caption: 'rgb(64, 64, 64)' },
-        { label: 'mid gray', rgb: { r: 128, g: 128, b: 128 }, caption: 'rgb(128, 128, 128)' },
-        { label: 'light gray', rgb: { r: 210, g: 210, b: 210 }, caption: 'rgb(210, 210, 210)' },
+        { label: 'dark gray', rgb: { r: 64, g: 64, b: 64 }, caption: 'rgb(64 64 64)' },
+        { label: 'mid gray', rgb: { r: 128, g: 128, b: 128 }, caption: 'rgb(128 128 128)' },
+        { label: 'light gray', rgb: { r: 210, g: 210, b: 210 }, caption: 'rgb(210 210 210)' },
       ],
     };
     return (

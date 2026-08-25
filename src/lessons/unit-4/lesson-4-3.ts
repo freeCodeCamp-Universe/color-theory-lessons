@@ -9,7 +9,7 @@ export const lesson4_3: LessonConfig = {
   reviewTags: ['cvd', 'simulation', 'interface-review'],
   steps: [
     {
-      text: 'Simulation tools apply a color transformation to approximate how an interface may appear to someone with a particular type of CVD. A simulation cannot represent every individual\'s vision, but it can reveal design problems caused by relying on color distinctions.',
+      text: 'Simulation tools apply a color transformation to approximate how an interface may appear to someone with a particular type of color vision deficiency. A simulation cannot represent every individual\'s vision, but it can reveal design problems caused by relying on color distinctions.',
     },
     {
       text: 'Under protan and deutan simulation, some red and green hues become hard to tell apart. In the gallery, the Active and Error badge backgrounds may look alike, but their text labels identify each status. A status system without those labels or another cue can become ambiguous.',
@@ -42,10 +42,10 @@ export const lesson4_3: LessonConfig = {
       choices: [
         {
           stableId: 'diagnosing-which-users-have-cvd',
-          label: 'Diagnosing which users have CVD',
+          label: 'Diagnosing which users have color vision deficiency',
           isCorrect: false,
           explanation:
-            'Simulation helps designers review an interface. It does not identify whether a user has CVD.',
+            'Simulation helps designers review an interface. It does not identify whether a user has color vision deficiency.',
         },
         {
           stableId: 'revealing-which-interface-areas-have-color-only-meaning-under-cv',
@@ -59,7 +59,7 @@ export const lesson4_3: LessonConfig = {
           label: 'Checking whether colors are within the sRGB gamut',
           isCorrect: false,
           explanation:
-            'Gamut checking is a separate concern from CVD simulation.',
+            'Gamut checking is a separate concern from color vision deficiency simulation.',
         },
         {
           stableId: 'automatically-fixing-all-color-accessibility-problems',
@@ -72,7 +72,7 @@ export const lesson4_3: LessonConfig = {
     },
     {
       id: 'q2',
-      prompt: 'Which CVD types affect red-green distinctions?',
+      prompt: 'Which types of color vision deficiency affect red-green distinctions?',
       choices: [
         {
           stableId: 'tritan-types-only',
@@ -97,17 +97,17 @@ export const lesson4_3: LessonConfig = {
         },
         {
           stableId: 'all-cvd-types-equally',
-          label: 'All CVD types equally',
+          label: 'All types of color vision deficiency equally',
           isCorrect: false,
           explanation:
-            'Different CVD types affect different axes. Protan/deutan affect red-green; tritan affects blue-yellow.',
+            'Different types of color vision deficiency affect different axes. Protan and deutan types affect red-green distinctions; tritan types affect blue-yellow distinctions.',
         },
       ],
     },
     {
       id: 'q3',
       prompt:
-        'Why might a color-coded chart be riskier than a text paragraph under CVD simulation?',
+        'Why might a color-coded chart be riskier than a text paragraph under color vision deficiency simulation?',
       choices: [
         {
           stableId: 'charts-use-more-colors-than-paragraphs-so-they-are-always-harder',
@@ -123,7 +123,7 @@ export const lesson4_3: LessonConfig = {
             'A chart may use hue as the only way to distinguish data, while body text can remain readable through lightness contrast',
           isCorrect: true,
           explanation:
-            'Chart series are often differentiated only by hue. Under CVD simulation, those hues may converge. Text paragraphs primarily use lightness contrast, which simulation does not eliminate.',
+            'Chart series are often differentiated only by hue. Under color vision deficiency simulation, those hues may converge. Text paragraphs primarily use lightness contrast, which simulation does not eliminate.',
         },
         {
           stableId: 'text-paragraphs-are-automatically-accessible-so-charts-are-alway',
@@ -144,7 +144,7 @@ export const lesson4_3: LessonConfig = {
     },
   ],
   keyPoints: [
-    'CVD simulation is an approximation that helps designers see which interface areas become ambiguous under reduced color distinction.',
+    'Color vision deficiency simulation is an approximation that helps designers see which interface areas become ambiguous under reduced color distinction.',
     'Protan and deutan simulations can make some red and green hues hard to tell apart. Tritan simulation can make some blue and green hues hard to tell apart.',
     'Charts, maps, and status indicators can become ambiguous when hue is the only way to distinguish their meaning.',
     'Icons, labels, patterns, and shapes preserve information when a viewer cannot distinguish the colors.',

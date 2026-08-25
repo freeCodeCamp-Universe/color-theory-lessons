@@ -10,7 +10,7 @@ const SORT_ANSWERS = [
   ['--color-text-primary', 'role'],
   ['wide-gamut display', 'context'],
   ['chart bar fill', 'context'],
-  ['rgb(34, 34, 34)', 'value'],
+  ['rgb(34 34 34)', 'value'],
   ['--color-success-bg', 'role'],
   ['SVG icon fill', 'context'],
   ['#22c55e', 'value'],

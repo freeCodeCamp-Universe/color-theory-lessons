@@ -10,7 +10,7 @@ export const lesson6_5: LessonConfig = {
     { text: 'Interface colors and chart colors do different jobs. Interface colors guide navigation and communicate interface states. Chart colors encode data by representing categories, ordered values, or emphasis. Each set of colors needs to fit its purpose.' },
     { text: 'Categorical palettes use distinct hues for groups that have no order, such as product categories, countries, or team names. Too many hues, or hues that differ only slightly, make it harder to match chart marks to categories.' },
     { text: 'Sequential palettes use an ordered progression in lightness, sometimes combined with a change in saturation, to represent values such as temperature, quantity, or severity. A light-to-dark progression gives viewers a consistent cue for order. A rainbow palette can introduce uneven changes in perceived lightness.' },
-    { text: 'Choose series colors that remain distinct from one another and the chart background. If red and green encode different series or meanings, some people with protan or deutan CVD may have trouble distinguishing them. Add direct labels, shapes, or patterns so color is not the only cue.' },
+    { text: 'Choose series colors that remain distinct from one another and the chart background. If red and green encode different series or meanings, some people with protan or deutan types of color vision deficiency may have trouble distinguishing them. Add direct labels, shapes, or patterns so color is not the only cue.' },
     { text: 'In the chart tuner, adjust each series color and assign a different pattern to each series. Compare the normal and deuteranopia views, then show the data table to inspect every bar by month, series, and value.' },
   ],
   challenge: {
@@ -37,9 +37,9 @@ export const lesson6_5: LessonConfig = {
       id: 'q2',
       prompt: 'A chart uses red for \'above target\' and green for \'below target.\' What is the main risk?',
       choices: [
-        { stableId: 'red-and-green-are-always-confusing-regardless-of-cvd', label: 'Every viewer will confuse the red and green marks', isCorrect: false, explanation: 'Many viewers can distinguish these colors. Some people with protan or deutan CVD may have difficulty telling them apart.' },
+        { stableId: 'red-and-green-are-always-confusing-regardless-of-cvd', label: 'Every viewer will confuse the red and green marks', isCorrect: false, explanation: 'Many viewers can distinguish these colors. Some people with protan or deutan types of color vision deficiency may have difficulty telling them apart.' },
         { stableId: 'the-chart-will-fail-browser-rendering', label: 'The chart will fail browser rendering', isCorrect: false, explanation: 'Browser rendering is not affected by color choice.' },
-        { stableId: 'under-protan-or-deutan-cvd-red-and-green-may-look-similar-users-', label: 'Some viewers with protan or deutan CVD may have difficulty distinguishing the two colors', isCorrect: true, explanation: 'Correct. These types of CVD can make some reds and greens appear more similar. Another visual cue can preserve the distinction.' },
+        { stableId: 'under-protan-or-deutan-cvd-red-and-green-may-look-similar-users-', label: 'Some viewers with protan or deutan types of color vision deficiency may have difficulty distinguishing the two colors', isCorrect: true, explanation: 'Correct. These types of color vision deficiency can make some reds and greens appear more similar. Another visual cue can preserve the distinction.' },
         { stableId: 'red-is-always-too-dark-for-charts', label: 'The red marks must be darker than the green marks', isCorrect: false, explanation: 'Neither color has a fixed lightness. The result depends on the specific red and green values.' },
       ],
     },
@@ -57,7 +57,7 @@ export const lesson6_5: LessonConfig = {
   keyPoints: [
     'Match the palette to the data: separate unordered categories by hue and encode ordered values through a lightness progression.',
     'Combine hue and lightness differences so chart series remain separate from one another and the background.',
-    'Red and green can become difficult to distinguish under protan or deutan CVD; labels, shapes, or patterns preserve the distinction without color.',
+    'Red and green can become difficult to distinguish for people with protan or deutan types of color vision deficiency; labels, shapes, or patterns preserve the distinction without color.',
     'Direct series labels remove the need to match marks with colors in a separate legend.',
   ],
 };
