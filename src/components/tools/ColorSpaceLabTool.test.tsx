@@ -8,7 +8,7 @@ afterEach(cleanup);
 const SORT_ANSWERS = [
   ['#0B57D0', 'value'],
   ['--color-text-primary', 'role'],
-  ['Display P3', 'context'],
+  ['wide-gamut display', 'context'],
   ['chart bar fill', 'context'],
   ['rgb(34, 34, 34)', 'value'],
   ['--color-success-bg', 'role'],

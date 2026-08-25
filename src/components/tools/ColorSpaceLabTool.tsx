@@ -17,7 +17,7 @@ interface SortItem {
 const SORT_ITEMS: SortItem[] = [
   { label: '#0B57D0', category: 'value' },
   { label: '--color-text-primary', category: 'role' },
-  { label: 'Display P3', category: 'context' },
+  { label: 'wide-gamut display', category: 'context' },
   { label: 'chart bar fill', category: 'context' },
   { label: 'rgb(34, 34, 34)', category: 'value' },
   { label: '--color-success-bg', category: 'role' },
@@ -161,7 +161,7 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-              <span style={{ color: '#fff', fontSize: '0.7rem', fontFamily: 'var(--font-mono)' }}>CSS btn</span>
+              <span style={{ color: '#fff', fontSize: '0.7rem', fontFamily: 'var(--font-mono)' }}>CSS button</span>
             </div>
             <span style={{ fontSize: '0.68rem', color: 'var(--muted)' }}>HTML/CSS</span>
           </div>
@@ -204,7 +204,7 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
       {interactive && (
         <div style={{ borderTop: '1px solid var(--border)', paddingTop: '0.6rem' }}>
           <p style={{ fontSize: '0.82rem', color: 'var(--muted)', marginBottom: '0.4rem' }}>
-            1. Classify each item as a raw value, semantic role, or rendering context.
+            1. Classify each item as a raw value, semantic role, or usage context.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginBottom: '0.75rem' }}>
             {SORT_ITEMS.map((item) => {
@@ -240,7 +240,7 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
                     <option value="">choose</option>
                     <option value="value">raw value</option>
                     <option value="role">semantic role</option>
-                    <option value="context">rendering context</option>
+                    <option value="context">usage context</option>
                   </select>
                 </div>
               );
