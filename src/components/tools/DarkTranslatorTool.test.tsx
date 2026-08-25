@@ -43,7 +43,7 @@ describe('DarkTranslatorTool', () => {
 
     expect(screen.getByText(`Valid ${role} color`).parentElement).toHaveTextContent('✗');
     expect(screen.getByText('Success / error hues (30°)').parentElement).toHaveTextContent('✗ invalid');
-    expect(screen.queryByText(/Both themes show readable hierarchy/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/passes every displayed check/)).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
   });
 
@@ -57,7 +57,7 @@ describe('DarkTranslatorTool', () => {
 
     expect(screen.getByText('Success / error luminance (1.5:1)').parentElement).toHaveTextContent('✗ 1.0:1');
     expect(screen.getByText('Success / error hues (30°)').parentElement).toHaveTextContent('✗ 0°');
-    expect(screen.queryByText(/Both themes show readable hierarchy/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/passes every displayed check/)).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
   });
 
@@ -73,7 +73,7 @@ describe('DarkTranslatorTool', () => {
     expect(screen.getByText('Valid error color').parentElement).toHaveTextContent('✓');
     expect(screen.getByText('Success / error luminance (1.5:1)').parentElement).toHaveTextContent('✓');
     expect(screen.getByText('Success / error hues (30°)').parentElement).toHaveTextContent('✗ no hue (achromatic)');
-    expect(screen.queryByText(/Both themes show readable hierarchy/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/passes every displayed check/)).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
   });
 
@@ -89,7 +89,7 @@ describe('DarkTranslatorTool', () => {
     setPassingBaseRoles();
 
     expect(screen.getByText(checkLabel).parentElement).toHaveTextContent('✗');
-    expect(screen.queryByText(/Both themes show readable hierarchy/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/passes every displayed check/)).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
   });
 
@@ -106,7 +106,7 @@ describe('DarkTranslatorTool', () => {
     setRole('error', '#dc2626');
 
     expect(screen.getByText('Primary text / surface (4.5:1)').parentElement).toHaveTextContent('✗ 2.8:1');
-    expect(screen.queryByText(/Both themes show readable hierarchy/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/passes every displayed check/)).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
   });
 
@@ -123,7 +123,7 @@ describe('DarkTranslatorTool', () => {
     setRole('error', '#dc2626');
 
     expect(screen.getByText('Secondary text / surface (4.5:1)').parentElement).toHaveTextContent('✗ 3.0:1');
-    expect(screen.queryByText(/Both themes show readable hierarchy/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/passes every displayed check/)).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
   });
 
