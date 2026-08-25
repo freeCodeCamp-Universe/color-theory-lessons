@@ -116,6 +116,37 @@ describe('HSLSliderTool exercise', () => {
     expect(wheel).toHaveAttribute('aria-valuenow', '5');
     expect(hueSlider).toHaveValue('5');
   });
+
+  it('reports each target as a stable stage and completes after the final target', () => {
+    const onComplete = vi.fn();
+    const onStageChange = vi.fn();
+    render(
+      <HSLSliderTool
+        interactive={true}
+        onComplete={onComplete}
+        onStageChange={onStageChange}
+      />,
+    );
+
+    expect(onStageChange).toHaveBeenLastCalledWith(expect.objectContaining({ id: 'hue' }));
+    fireEvent.change(screen.getByRole('slider', { name: /^Hue: /i }), { target: { value: '200' } });
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'next stage →' }));
+
+    expect(onStageChange).toHaveBeenLastCalledWith(expect.objectContaining({ id: 'saturation' }));
+    fireEvent.change(screen.getByRole('slider', { name: /^Saturation: /i }), { target: { value: '20' } });
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'next stage →' }));
+
+    expect(onStageChange).toHaveBeenLastCalledWith(expect.objectContaining({ id: 'lightness' }));
+    fireEvent.change(screen.getByRole('slider', { name: /^Lightness: /i }), { target: { value: '20' } });
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+
+    expect(onComplete).toHaveBeenCalledOnce();
+    expect(screen.getByRole('status')).toHaveTextContent('All three dimensions matched');
+  });
 });
 
 describe('HueWheel accessibility', () => {

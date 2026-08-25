@@ -27,9 +27,18 @@ export const lesson1_4: LessonConfig = {
   challenge: {
       prompt: 'Complete the activity in two stages. First, sort each swatch as warm, cool, or neutral. Then match a palette direction to each interface goal.',
       hints: [
-        'Start with the dominant hue. Reds, oranges, and yellows usually read as warm, while blues, blue-greens, and blue-purples usually read as cool.',
-        'Compare an uncertain swatch with the warmer and cooler examples. If neither temperature dominates, it may belong in the neutral group.',
-        'Use the intended mood as your guide. Consider whether the goal needs more energy, more calm, or less color emphasis.',
+        {
+          stageId: 'classify-colors',
+          text: 'Start with the dominant hue. Reds, oranges, and yellows usually read as warm, while blues, blue-greens, and blue-purples usually read as cool.',
+        },
+        {
+          stageId: 'classify-colors',
+          text: 'Compare an uncertain swatch with the warmer and cooler examples. If neither temperature dominates, it may belong in the neutral group.',
+        },
+        {
+          stageId: 'match-interface-goals',
+          text: 'Use the intended mood as your guide. Consider whether the goal needs more energy, more calm, or less color emphasis.',
+        },
       ],
   },
   quizItems: [
