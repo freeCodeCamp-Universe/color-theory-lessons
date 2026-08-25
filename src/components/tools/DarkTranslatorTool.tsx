@@ -141,7 +141,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive
         {/* Dark theme (editable) */}
         <div style={{ flex: '0 0 220px' }}>
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>
-            DARK {interactive ? '(edit)' : '(default — failing)'}
+            DARK {interactive ? '(edit)' : '(default: failing)'}
           </p>
           {KEYS.map(key => {
             const val = dark[key];
@@ -221,7 +221,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive
 
       {completed && (
         <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          Both themes show readable hierarchy. Dark mode is properly adapted, not just inverted.
+          Your dark theme passes every displayed check. Compare the preview in both modes before continuing.
         </p>
       )}
     </div>
