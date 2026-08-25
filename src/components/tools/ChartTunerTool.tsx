@@ -285,7 +285,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
         <div style={{ marginTop: '0.5rem', fontSize: '0.78rem', color: 'var(--muted)' }}>
           {!paletteIsReady ? (
             <span style={{ color: 'var(--accent-cta)' }}>
-              ⚠ Hard to distinguish: {[
+              ⚠ Below the tool's difference threshold: {[
                 ...weakNormal.map(([a, b]) => `${SERIES[a]}/${SERIES[b]} in normal view`),
                 ...weakSimulated.map(([a, b]) => `${SERIES[a]}/${SERIES[b]} under simulation`),
               ].join('; ')}

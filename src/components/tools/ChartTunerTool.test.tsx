@@ -98,7 +98,7 @@ describe('ChartTunerTool', () => {
 
     fireEvent.click(screen.getByRole('checkbox', { name: 'Show the chart data table' }));
 
-    expect(screen.getByText(/Expenses\/Profit under simulation/)).toBeInTheDocument();
+    expect(screen.getByText(/Below the tool's difference threshold:.*Expenses\/Profit under simulation/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Complete chart' })).toBeDisabled();
 
     fireEvent.change(screen.getByLabelText('Change Expenses color'), { target: { value: '#000000' } });
