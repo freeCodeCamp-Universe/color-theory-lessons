@@ -28,7 +28,7 @@ export const lesson2_4: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'For each scenario, select every factor that could explain why the screen color and the physical version look different.',
+      prompt: 'This exercise has three stages: brochure blue, painted-wall green, then packaging orange. At each stage, select every factor that could explain the screen-to-material mismatch.',
       hints: [
         'Compare the light each medium sends to your eyes: a screen emits light, while a physical material reflects it.',
         'A mismatch can result from the two color processes even when the designer and printer follow their specifications.',

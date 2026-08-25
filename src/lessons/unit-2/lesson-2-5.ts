@@ -25,7 +25,7 @@ export const lesson2_5: LessonConfig = {
     },
   ],
   challenge: {
-    prompt: 'The same accent color is shown on a dark background and a light background. Pick the answer that best explains why it appears more prominent in one context.',
+    prompt: 'This exercise has three stages: vivid blue, vivid orange, then vivid green. At each stage, compare the same accent on dark and light backgrounds and choose why it appears more prominent in one context.',
     hints: [
       'Compare the luminance of the accent with the luminance of each background.',
       'For these accents, the contrast is greater when the surrounding area is near-black than when it is near-white.',

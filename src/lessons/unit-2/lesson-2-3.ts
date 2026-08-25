@@ -25,7 +25,7 @@ export const lesson2_3: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'Each statement applies paint logic to a screen problem. Pick the rewrite that uses correct screen-first reasoning.',
+      prompt: 'This exercise has three stages, one for each statement that applies paint logic to a screen problem. Correct each statement in order by choosing the screen-first rewrite.',
       hints: [
         'Ask whether the color comes from emitted light or from a material reflecting incoming light.',
         'On screens, reducing RGB channel values means less emitted light and produces a darker color.',

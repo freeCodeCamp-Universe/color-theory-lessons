@@ -28,7 +28,7 @@ export const lesson2_2: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'Recreate each target color with the R, G, and B sliders. First predict which channels should be high, low, or close to equal.',
+      prompt: 'This exercise has ten stages. For each of five target colors, first predict the relative RGB channel levels, then match the color with the sliders.',
       hints: [
         'Warm pink needs the most red, some blue, and less green.',
         'For pale sky blue, keep blue highest, green next, and red lowest. Use the same order at lower values for dark navy.',

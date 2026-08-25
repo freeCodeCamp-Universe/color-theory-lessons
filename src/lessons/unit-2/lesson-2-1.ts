@@ -25,7 +25,7 @@ export const lesson2_1: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'Sort each example into the correct color model. Decide whether it produces color with emitted light or with materials that absorb and reflect incoming light.',
+      prompt: 'This exercise has one stage. Sort each example into additive or subtractive color by deciding whether it emits light or absorbs and reflects incoming light.',
       hints: [
         'Phones, monitors, projectors, and LED signs are additive because they emit light.',
         'Paint, ink, and printed paper use subtractive mixing because they absorb some wavelengths and reflect others.',
