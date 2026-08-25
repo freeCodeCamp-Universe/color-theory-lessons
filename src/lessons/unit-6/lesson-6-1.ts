@@ -54,9 +54,9 @@ export const lesson6_1: LessonConfig = {
     },
   ],
   keyPoints: [
-    'Unit 3 taught role assignment in implementation; Unit 6 applies role governance across full products.',
-    'System inconsistency usually comes from role drift, overlap, and local overrides rather than single bad color picks.',
-    'Consistent role boundaries make interfaces predictable across screens, states, and teams.',
-    'A compact role set can scale when governance is clear and changes propagate through shared tokens.',
+    'Unit 3 introduced role assignment within one interface. A color system keeps each role\'s meaning consistent across a product.',
+    'A system becomes inconsistent when one role represents multiple meanings, multiple roles represent the same meaning, or local values replace shared tokens.',
+    'Add a role when the interface needs a meaning that its existing roles do not cover.',
+    'Shared tokens let a role\'s value change across every screen and flow that uses it.',
   ],
 };
