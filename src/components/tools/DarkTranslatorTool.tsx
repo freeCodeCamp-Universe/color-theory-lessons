@@ -40,6 +40,10 @@ function getContrast(fg: string, bg: string): number {
 
 function isValidHex(h: string) { return /^#[0-9a-fA-F]{6}$/.test(h); }
 
+function formatContrastRatio(ratio: number): string {
+  return (Math.floor(ratio * 10) / 10).toFixed(1);
+}
+
 function getHueDifference(first: string, second: string) {
   const firstHsl = hexToHsl(first);
   const secondHsl = hexToHsl(second);
@@ -200,7 +204,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive
             <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', padding: '0.15rem 0' }}>
               <span style={{ color: 'var(--primary-foreground)' }}>{label}</span>
               <span style={{ color: pass ? '#22c55e' : '#ef4444', fontFamily: 'var(--font-mono)' }}>
-                {pass ? '✓' : '✗'} {ratio === undefined ? '' : `${ratio.toFixed(1)}:1`}
+                {pass ? '✓' : '✗'} {ratio === undefined ? '' : `${formatContrastRatio(ratio)}:1`}
               </span>
             </div>
           ))}

@@ -122,9 +122,42 @@ describe('DarkTranslatorTool', () => {
     setRole('success', '#14532d');
     setRole('error', '#dc2626');
 
-    expect(screen.getByText('Secondary text / surface (4.5:1)').parentElement).toHaveTextContent('✗ 3.1:1');
+    expect(screen.getByText('Secondary text / surface (4.5:1)').parentElement).toHaveTextContent('✗ 3.0:1');
     expect(screen.queryByText(/Both themes show readable hierarchy/)).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
+  });
+
+  it('keeps 4.5:1 text readouts consistent with their threshold results', () => {
+    render(<DarkTranslatorTool interactive />);
+
+    setRole('surface', '#ffffff');
+    setRole('primary-text', '#777777');
+    expect(screen.getByText('Primary text / surface (4.5:1)').parentElement).toHaveTextContent('✗ 4.4:1');
+
+    setRole('primary-text', '#767676');
+    expect(screen.getByText('Primary text / surface (4.5:1)').parentElement).toHaveTextContent('✓ 4.5:1');
+  });
+
+  it('keeps 1.5:1 semantic luminance readouts consistent with their threshold results', () => {
+    render(<DarkTranslatorTool interactive />);
+
+    setRole('success', '#ffffff');
+    setRole('error', '#d3d3d3');
+    expect(screen.getByText('Success / error luminance (1.5:1)').parentElement).toHaveTextContent('✗ 1.4:1');
+
+    setRole('error', '#d2d2d2');
+    expect(screen.getByText('Success / error luminance (1.5:1)').parentElement).toHaveTextContent('✓ 1.5:1');
+  });
+
+  it('keeps 1.1:1 surface readouts consistent with their threshold results', () => {
+    render(<DarkTranslatorTool interactive />);
+
+    setRole('page-bg', '#ffffff');
+    setRole('surface', '#f4f4f4');
+    expect(screen.getByText('Surface ≠ page-bg (1.1:1)').parentElement).toHaveTextContent('✗ 1.0:1');
+
+    setRole('surface', '#f3f3f3');
+    expect(screen.getByText('Surface ≠ page-bg (1.1:1)').parentElement).toHaveTextContent('✓ 1.1:1');
   });
 
   it('completes with valid, readable, and distinct semantic colors', () => {
