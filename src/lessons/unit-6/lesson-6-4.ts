@@ -14,7 +14,7 @@ export const lesson6_4: LessonConfig = {
     { text: 'In the dark translator, you start with a fixed light theme and assign a dark value to each role. Switch the preview between modes to compare their surface hierarchy, text readability, and semantic colors.' },
   ],
   challenge: {
-      prompt: 'Choose dark-theme values for each semantic role. Use the preview and the displayed checks to compare the fixed light theme with your dark theme.',
+      prompt: 'Choose dark-theme values for each semantic role. Use the preview to compare the fixed light theme with your dark theme. Use the displayed checks to evaluate your dark-theme values.',
       hints: [
         'Try #0f172a for the page and a lighter #1e293b or #334155 for the surface.',
         'Check the action color against both its dark surroundings and its white button text.',
