@@ -24,7 +24,7 @@ export const lesson5_5: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'Complete all four stages of the audit activity: identify priority elements, check contrast, choose a repair for a color-only status, and identify the impact on task completion.',
+      prompt: 'Complete four audit stages in order: identify priority elements, check contrast, choose a repair for a color-only status, and identify the impact on task completion.',
       hints: [
         {
           stageId: 'priority',

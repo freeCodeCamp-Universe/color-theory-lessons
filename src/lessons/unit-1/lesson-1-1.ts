@@ -29,7 +29,7 @@ export const lesson1_1: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'Select each colored area and identify its role: drawing attention, grouping items, signaling status, separating sections, or serving no clear purpose.',
+      prompt: 'Complete one stage by identifying the role of each colored area in the interface.',
       hints: [
         'Compare the gold button with the gray text around it. Its stronger contrast draws attention.',
         'A colored border can mark the content inside it as one group.',

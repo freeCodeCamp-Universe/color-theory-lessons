@@ -110,7 +110,7 @@ describe('ColorWheelTool buildPalette role assignment', () => {
 });
 
 describe('ColorWheelTool locked palette behavior', () => {
-  it('keeps the locked relationship and reflection synchronized by disabling further control changes', () => {
+  it('keeps the relationship stage hidden until the learner advances', () => {
     render(<ColorWheelTool interactive={true} />);
 
     const wheel = screen.getByRole('slider', { name: /Color wheel hue selector/i });
@@ -118,6 +118,9 @@ describe('ColorWheelTool locked palette behavior', () => {
 
     fireEvent.change(baseHueInput, { target: { value: '45' } });
     fireEvent.click(screen.getByRole('button', { name: 'analogous' }));
+
+    expect(screen.queryByText(/30° on either side of the base/i)).not.toBeInTheDocument();
+
     fireEvent.click(screen.getByRole('button', { name: /lock in this palette/i }));
 
     expect(baseHueInput).toBeDisabled();
@@ -127,7 +130,8 @@ describe('ColorWheelTool locked palette behavior', () => {
     expect(screen.getByRole('button', { name: 'complementary' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'triadic' })).toBeDisabled();
     expect(screen.getByText(/Selected relationship:/i)).toHaveTextContent('Selected relationship: analogous.');
-    expect(screen.getByText('Where are analogous hues positioned relative to the base hue?')).toBeInTheDocument();
+    expect(screen.queryByText('Where are analogous hues positioned relative to the base hue?')).not.toBeInTheDocument();
+    expect(screen.queryByText(/30° on either side of the base/i)).not.toBeInTheDocument();
 
     fireEvent.change(baseHueInput, { target: { value: '90' } });
     fireEvent.keyDown(wheel, { key: 'ArrowRight' });
@@ -135,7 +139,12 @@ describe('ColorWheelTool locked palette behavior', () => {
 
     expect(baseHueInput).toHaveValue('45');
     expect(screen.getByText(/Selected relationship:/i)).toHaveTextContent('Selected relationship: analogous.');
+
+    fireEvent.click(screen.getByRole('button', { name: 'identify the relationship →' }));
+
+    expect(screen.getByText('Stage 2 of 2')).toBeInTheDocument();
     expect(screen.getByText('Where are analogous hues positioned relative to the base hue?')).toBeInTheDocument();
+    expect(screen.queryByRole('slider', { name: /Base hue/i })).not.toBeInTheDocument();
   });
 });
 
@@ -145,11 +154,12 @@ describe('ColorWheelTool reflection completion gating', () => {
     render(<ColorWheelTool interactive={true} onComplete={onComplete} />);
 
     fireEvent.click(screen.getByRole('button', { name: /lock in this palette/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'identify the relationship →' }));
     fireEvent.click(screen.getByRole('button', { name: '30° from the base hue' }));
     fireEvent.click(screen.getByRole('button', { name: 'check' }));
 
-    expect(screen.queryByRole('button', { name: /done/i })).toBeNull();
-    expect(screen.getByRole('button', { name: /try again/i })).toBeInTheDocument();
+    expect(screen.getByText('Stage 2 of 2')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'try stage again' })).toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
   });
 
@@ -158,18 +168,31 @@ describe('ColorWheelTool reflection completion gating', () => {
     render(<ColorWheelTool interactive={true} onComplete={onComplete} />);
 
     fireEvent.click(screen.getByRole('button', { name: /lock in this palette/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'identify the relationship →' }));
     fireEvent.click(screen.getByRole('button', { name: '30° from the base hue' }));
     fireEvent.click(screen.getByRole('button', { name: 'check' }));
-    fireEvent.click(screen.getByRole('button', { name: /try again/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
 
     fireEvent.click(screen.getByRole('button', { name: '180° from the base hue' }));
     fireEvent.click(screen.getByRole('button', { name: 'check' }));
 
-    const doneButton = screen.getByRole('button', { name: /done/i });
-    fireEvent.click(doneButton);
-    fireEvent.click(doneButton);
-
     expect(onComplete).toHaveBeenCalledTimes(1);
-    expect(screen.getByText(/palette built\. Moving on\./i)).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('Relationship identified.');
+  });
+
+  it('reports both stable stages in order and never completes after the first stage', () => {
+    const onComplete = vi.fn();
+    const onStageChange = vi.fn();
+    render(<ColorWheelTool onComplete={onComplete} onStageChange={onStageChange} />);
+
+    expect(screen.getByText('Stage 1 of 2')).toBeInTheDocument();
+    expect(onStageChange).toHaveBeenLastCalledWith(expect.objectContaining({ id: 'build-palette' }));
+
+    fireEvent.click(screen.getByRole('button', { name: /lock in this palette/i }));
+    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'identify the relationship →' }));
+
+    expect(onStageChange).toHaveBeenLastCalledWith(expect.objectContaining({ id: 'identify-relationship' }));
+    expect(screen.queryByRole('button', { name: /lock in this palette/i })).not.toBeInTheDocument();
   });
 });

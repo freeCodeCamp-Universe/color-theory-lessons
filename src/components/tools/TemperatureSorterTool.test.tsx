@@ -37,6 +37,15 @@ function advanceToGoalStage() {
 }
 
 describe('TemperatureSorterTool stages', () => {
+  it('reports both stable stages in order', () => {
+    const onStageChange = vi.fn();
+    render(<TemperatureSorterTool onStageChange={onStageChange} />);
+
+    expect(onStageChange).toHaveBeenLastCalledWith(expect.objectContaining({ id: 'classify-colors' }));
+    advanceToGoalStage();
+    expect(onStageChange).toHaveBeenLastCalledWith(expect.objectContaining({ id: 'match-interface-goals' }));
+  });
+
   it('shows one exercise stage at a time', () => {
     render(<TemperatureSorterTool />);
 

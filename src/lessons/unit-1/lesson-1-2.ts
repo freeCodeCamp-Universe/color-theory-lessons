@@ -28,7 +28,7 @@ export const lesson1_2: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'Complete three color matches, one each for hue, saturation, and lightness.',
+      prompt: 'Complete three stages in order: match the hue, then the saturation, then the lightness.',
       hints: [
         {
           stageId: 'hue',

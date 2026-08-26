@@ -1,4 +1,7 @@
 import { memo, useState } from 'react';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 import shellStyles from './ToolShell.module.css';
 
 type Model = 'additive' | 'subtractive';
@@ -112,16 +115,22 @@ function MixingDiagram({ mode }: { mode: Model }) {
 
 /* ── Main tool ──────────────────────────────────────────────────────────── */
 
-interface AdditiveSortToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+const STAGES: readonly ExerciseStageDefinition[] = [{
+  id: 'sort-color-models',
+  title: 'Sort additive and subtractive color',
+  instruction: 'Classify every example by whether it emits light or absorbs and reflects light.',
+}];
 
-export const AdditiveSortTool = memo(function AdditiveSortTool({ interactive = true, onComplete }: AdditiveSortToolProps) {
+export const AdditiveSortTool = memo(function AdditiveSortTool({
+  interactive = true,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [assignments, setAssignments] = useState<Record<string, Model | ''>>(() =>
     Object.fromEntries(ITEMS.map((item) => [item.id, ''])),
   );
-  const [checked, setChecked] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const checked = stageController.result !== 'idle';
 
   const allAssigned = ITEMS.every((item) => assignments[item.id] !== '');
   const correctCount = ITEMS.filter((item) => assignments[item.id] === item.correct).length;
@@ -133,13 +142,12 @@ export const AdditiveSortTool = memo(function AdditiveSortTool({ interactive = t
   }
 
   function handleCheck() {
-    setChecked(true);
-    if (passed) onComplete?.();
+    if (passed) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   function handleRetry() {
     setAssignments(Object.fromEntries(ITEMS.map((item) => [item.id, ''])));
-    setChecked(false);
   }
 
   return (
@@ -154,7 +162,12 @@ export const AdditiveSortTool = memo(function AdditiveSortTool({ interactive = t
 
       {/* Sort activity — only when interactive */}
       {interactive && (
-        <>
+        <ExerciseStage
+          controller={stageController}
+          incorrectFeedback={`${correctCount} / ${ITEMS.length} correct. Review the incorrect answers.`}
+          completionFeedback={`✓ ${correctCount} / ${ITEMS.length} correct. Color models sorted.`}
+          onRetry={handleRetry}
+        >
           <div style={{ borderTop: '1px solid var(--border)', paddingTop: 'var(--spacing-md)', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
               sort each example
@@ -236,32 +249,7 @@ export const AdditiveSortTool = memo(function AdditiveSortTool({ interactive = t
             </button>
           )}
 
-          {checked && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: passed ? 'var(--green)' : 'var(--yellow)', margin: 0 }}>
-                {correctCount} / {ITEMS.length} correct
-                {passed ? '. Well done!' : '. Review the incorrect ones.'}
-              </p>
-              {!passed && (
-                <button
-                  onClick={handleRetry}
-                  style={{
-                    padding: '0.3rem 0.75rem',
-                    background: 'transparent',
-                    color: 'var(--secondary-foreground)',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.8rem',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border)',
-                    cursor: 'pointer',
-                  }}
-                >
-                  retry
-                </button>
-              )}
-            </div>
-          )}
-        </>
+        </ExerciseStage>
       )}
     </div>
   );
