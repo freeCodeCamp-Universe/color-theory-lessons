@@ -10,7 +10,8 @@
         let preference = 'system';
         try {
           const stored = JSON.parse(localStorage.getItem('color-theory-course-state') || 'null');
-          const savedTheme = stored && stored.preferences && stored.preferences.theme;
+          const savedTheme = stored && stored.version === 3
+            && stored.preferences && stored.preferences.theme;
           if (savedTheme === 'dark' || savedTheme === 'light') preference = savedTheme;
         } catch {
           // Use the system preference when storage is unavailable or invalid.
