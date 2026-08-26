@@ -22,13 +22,15 @@ describe('BeforeAfterTool hierarchy exercise', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'check hierarchy' }));
 
-    expect(screen.getByText('✗ Submit should be primary, Save Draft secondary, and Cancel tertiary.')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Submit should be primary, Save Draft secondary, and Cancel tertiary.',
+    );
     for (const label of HIERARCHY_LABELS) {
       expect(screen.getByRole('combobox', { name: label })).toBeDisabled();
     }
     expect(onComplete).not.toHaveBeenCalled();
 
-    fireEvent.click(screen.getByRole('button', { name: 'try again' }));
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
 
     const roleSelectors = HIERARCHY_LABELS.map((label) => screen.getByRole('combobox', { name: label }));
     for (const selector of roleSelectors) {
@@ -39,12 +41,36 @@ describe('BeforeAfterTool hierarchy exercise', () => {
     fireEvent.change(roleSelectors[2], { target: { value: 'tertiary' } });
     fireEvent.click(screen.getByRole('button', { name: 'check hierarchy' }));
 
-    expect(screen.getByText('✓ Submit stands out as the primary action. Well done.')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('Submit stands out as the primary action.');
     expect(onComplete).toHaveBeenCalledOnce();
+  });
+
+  it('reports its single named stage', () => {
+    const onStageChange = vi.fn();
+    render(<BeforeAfterTool variant="hierarchy" onStageChange={onStageChange} />);
+
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
+    expect(onStageChange).toHaveBeenLastCalledWith(expect.objectContaining({
+      id: 'assign-action-hierarchy',
+      position: 1,
+      total: 1,
+    }));
   });
 });
 
 describe('BeforeAfterTool color-role keyboard activation', () => {
+  it('renders the color-role work as one named stage', () => {
+    const onStageChange = vi.fn();
+    render(<BeforeAfterTool onStageChange={onStageChange} />);
+
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
+    expect(onStageChange).toHaveBeenLastCalledWith(expect.objectContaining({
+      id: 'identify-color-roles',
+      position: 1,
+      total: 1,
+    }));
+  });
+
   it('keeps all color-role regions keyboard focusable', () => {
     render(<BeforeAfterTool />);
 
@@ -89,6 +115,61 @@ describe('BeforeAfterTool color-role keyboard activation', () => {
     fireEvent.click(navRegion);
     fireEvent.click(screen.getByRole('button', { name: 'separating sections' }));
 
+    expect(navRegion).not.toHaveAttribute('aria-disabled', 'true');
+
+    fireEvent.click(screen.getByRole('button', { name: 'check role' }));
+
     expect(navRegion).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('does not grade a selected role until the learner checks it', () => {
+    const onComplete = vi.fn();
+    render(<BeforeAfterTool onComplete={onComplete} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /nav bar color/i }));
+
+    const checkButton = screen.getByRole('button', { name: 'check role' });
+    expect(checkButton).toBeDisabled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'drawing attention' }));
+
+    expect(checkButton).toBeEnabled();
+    expect(screen.queryByRole('button', { name: 'try stage again' })).not.toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+
+    fireEvent.click(checkButton);
+
+    expect(screen.getByRole('button', { name: 'try stage again' })).toBeInTheDocument();
+  });
+
+  it('stays in the stage after an incorrect role and completes once after all four roles pass', () => {
+    const onComplete = vi.fn();
+    render(<BeforeAfterTool onComplete={onComplete} />);
+
+    const regions = [
+      ['nav bar', 'separating sections'],
+      ['gold button', 'drawing attention'],
+      ['green text', 'signaling status'],
+      ['blue card border', 'grouping items'],
+    ] as const;
+
+    fireEvent.click(screen.getByRole('button', { name: /nav bar color/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'drawing attention' }));
+    fireEvent.click(screen.getByRole('button', { name: 'check role' }));
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
+
+    for (const [region, answer] of regions) {
+      fireEvent.click(screen.getByRole('button', { name: new RegExp(`${region} color`, 'i') }));
+      fireEvent.click(screen.getByRole('button', { name: answer }));
+      fireEvent.click(screen.getByRole('button', { name: 'check role' }));
+      if (region !== 'blue card border') {
+        fireEvent.click(screen.getByRole('button', { name: 'got it' }));
+      }
+    }
+
+    expect(onComplete).toHaveBeenCalledOnce();
+    expect(screen.getByRole('status')).toHaveTextContent('All four color roles identified.');
   });
 });

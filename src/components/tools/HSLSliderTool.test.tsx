@@ -147,6 +147,23 @@ describe('HSLSliderTool exercise', () => {
     expect(onComplete).toHaveBeenCalledOnce();
     expect(screen.getByRole('status')).toHaveTextContent('All three dimensions matched');
   });
+
+  it('keeps an incorrect match in the current stage until retry', () => {
+    const onComplete = vi.fn();
+    render(<HSLSliderTool onComplete={onComplete} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+
+    expect(screen.getByText('Stage 1 of 3')).toBeInTheDocument();
+    expect(screen.queryByText('Match the saturation')).not.toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('No match yet.');
+    expect(onComplete).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
+
+    expect(screen.getByRole('slider', { name: /^Hue: /i })).toBeEnabled();
+    expect(screen.getByText('Stage 1 of 3')).toBeInTheDocument();
+  });
 });
 
 describe('HueWheel accessibility', () => {
