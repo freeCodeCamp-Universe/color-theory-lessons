@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { lesson6_5 } from '../../lessons/unit-6/lesson-6-5.ts';
+import { ChallengeHints } from '../lesson/ChallengeHints.tsx';
 import { ChartTunerTool } from './ChartTunerTool.tsx';
 
 const SERIES_COLOR_LABELS = ['Revenue', 'Expenses', 'Profit', 'Forecast'];
@@ -20,6 +23,21 @@ function passPatternStage() {
   assignDistinctPatterns();
   fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
   fireEvent.click(screen.getByRole('button', { name: 'inspect the data table' }));
+}
+
+function ChartTunerWithHints() {
+  const [activeStageId, setActiveStageId] = useState<string | null>(null);
+
+  return (
+    <>
+      <ChallengeHints
+        hints={lesson6_5.challenge.hints}
+        activeStageId={activeStageId}
+        resetKey="u6-l5:0"
+      />
+      <ChartTunerTool interactive onStageChange={(stage) => setActiveStageId(stage.id)} />
+    </>
+  );
 }
 
 afterEach(cleanup);
@@ -47,6 +65,29 @@ describe('ChartTunerTool', () => {
     expect(screen.getByRole('heading', { name: 'Inspect the chart data' })).toHaveFocus();
     expect(screen.getByRole('checkbox', { name: 'Show the chart data table' })).toBeVisible();
     expect(screen.queryByRole('group', { name: 'Series pattern controls' })).not.toBeInTheDocument();
+  });
+
+  it('offers only hints for the active chart stage', () => {
+    render(<ChartTunerWithHints />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'show hint' }));
+    expect(screen.getByText('Use differences in lightness as well as hue to separate the series.')).toBeInTheDocument();
+    expect(screen.queryByText(/Assign a different pattern/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'show next hint' }));
+    expect(screen.queryByRole('button', { name: 'show next hint' })).not.toBeInTheDocument();
+
+    passColorStage();
+
+    expect(screen.queryByText('Use differences in lightness as well as hue to separate the series.')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'show hint' }));
+    expect(screen.getByText('Assign a different pattern to each series so the bars remain identifiable without color.')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'show next hint' })).not.toBeInTheDocument();
+
+    passPatternStage();
+
+    expect(screen.queryByText(/Assign a different pattern/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'show hint' }));
+    expect(screen.getByText('Show the data table and inspect each month, series, value, color, and pattern.')).toBeInTheDocument();
   });
 
   it('keeps a failed color attempt in the first stage for retry', () => {

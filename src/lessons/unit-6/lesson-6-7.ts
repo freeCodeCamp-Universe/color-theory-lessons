@@ -26,10 +26,22 @@ export const lesson6_7: LessonConfig = {
   challenge: {
       prompt: 'Complete two stages in order: find the weaknesses across all five contexts, then classify each finding.',
       hints: [
-        'Toggle between all five contexts before marking anything. The same issue might appear in multiple views.',
-        'Ask: does hierarchy still work? Are states distinct? Is anything too loud or too faint?',
-        'For each issue, classify the root cause: role drift, missing role definition, or token override.',
-        'Check the chart and alert views for differences that become harder to distinguish under color vision deficiency simulation.',
+        {
+          stageId: 'find-system-weaknesses',
+          text: 'Toggle between all five contexts before marking anything. The same issue might appear in multiple views.',
+        },
+        {
+          stageId: 'find-system-weaknesses',
+          text: 'Ask: does hierarchy still work? Are states distinct? Is anything too loud or too faint?',
+        },
+        {
+          stageId: 'classify-system-weaknesses',
+          text: 'For each issue, classify the root cause: role drift, missing role definition, or token override.',
+        },
+        {
+          stageId: 'find-system-weaknesses',
+          text: 'Check the chart and alert views for differences that become harder to distinguish under color vision deficiency simulation.',
+        },
       ],
   },
   quizItems: [

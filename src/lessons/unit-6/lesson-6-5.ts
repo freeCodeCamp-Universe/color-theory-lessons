@@ -16,10 +16,22 @@ export const lesson6_5: LessonConfig = {
   challenge: {
       prompt: 'Complete three stages in order: tune the series colors, assign a different pattern to each series, then inspect the data table.',
       hints: [
-        'Use differences in lightness as well as hue to separate the series.',
-        'Use the simulation warning to find series pairs below the tool\'s difference threshold.',
-        'Assign a different pattern to each series so the bars remain identifiable without color.',
-        'Show the data table, inspect the chart values, then complete the chart.',
+        {
+          stageId: 'tune-series-colors',
+          text: 'Use differences in lightness as well as hue to separate the series.',
+        },
+        {
+          stageId: 'tune-series-colors',
+          text: 'Use the simulation warning to find series pairs below the tool\'s difference threshold.',
+        },
+        {
+          stageId: 'assign-series-patterns',
+          text: 'Assign a different pattern to each series so the bars remain identifiable without color.',
+        },
+        {
+          stageId: 'inspect-data-table',
+          text: 'Show the data table and inspect each month, series, value, color, and pattern.',
+        },
       ],
   },
   quizItems: [
