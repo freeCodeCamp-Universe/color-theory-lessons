@@ -29,7 +29,7 @@ export const lesson4_2: LessonConfig = {
   ],
   challenge: {
       prompt:
-        'Expand each vision type card to learn about its color effects and a common design risk.',
+        'Complete one exploration stage by opening all six vision type cards.',
       hints: [
         'Click a card header to expand it. Each card describes the type, its color effects, and a design risk.',
         'There are six cards: two protan types, two deutan types, tritanopia, and achromatopsia. Expand all of them.',

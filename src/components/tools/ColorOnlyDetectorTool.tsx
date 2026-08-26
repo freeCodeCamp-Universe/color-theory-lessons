@@ -1,5 +1,8 @@
 import { memo, useState } from 'react';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
+import { useExerciseStages } from './useExerciseStages.ts';
 
 interface Example {
   id: string;
@@ -163,92 +166,104 @@ const EXAMPLES: Example[] = [
   },
 ];
 
-interface ColorOnlyDetectorToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+const STAGES: readonly ExerciseStageDefinition[] = [{
+  id: 'identify-color-only-cues',
+  title: 'Identify color-only meaning',
+  instruction: 'Select the three examples where hue is the only visual cue, then check your answer.',
+}];
 
-export const ColorOnlyDetectorTool = memo(function ColorOnlyDetectorTool({ interactive = false, onComplete }: ColorOnlyDetectorToolProps) {
-  const [feedback, setFeedback] = useState<Record<string, 'correct' | 'incorrect' | null>>({});
-  const [identified, setIdentified] = useState<Set<string>>(new Set());
-  const [completed, setCompleted] = useState(false);
+const PROBLEM_COUNT = EXAMPLES.filter((example) => example.isColorOnly).length;
 
-  const PROBLEM_COUNT = EXAMPLES.filter((e) => e.isColorOnly).length;
+export const ColorOnlyDetectorTool = memo(function ColorOnlyDetectorTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
-  function handleClick(ex: Example) {
-    if (!interactive || completed) return;
-    if (ex.isColorOnly) {
-      setFeedback((prev) => ({ ...prev, [ex.id]: 'correct' }));
-      setIdentified((prev) => {
-        const next = new Set(prev);
-        next.add(ex.id);
-        if (next.size === PROBLEM_COUNT && !completed) {
-          setCompleted(true);
-          onComplete?.();
-        }
-        return next;
-      });
-    } else {
-      setFeedback((prev) => ({ ...prev, [ex.id]: 'incorrect' }));
-    }
+  function toggleExample(id: string) {
+    if (!interactive || stageController.result !== 'idle') return;
+    const next = new Set(selected);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    setSelected(next);
+  }
+
+  function checkAnswer() {
+    const isCorrect = selected.size === PROBLEM_COUNT
+      && EXAMPLES.every((example) => selected.has(example.id) === example.isColorOnly);
+    if (isCorrect) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>color-only detector</span>
 
-      {interactive && (
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback="That selection includes a redundant-cue example or misses a color-only example. Review the cues and try again."
+        completionFeedback="You found all three examples that rely on hue alone. Each one needs a label, icon, pattern, or another non-color cue."
+      >
         <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.6rem' }}>
-          Select every example where hue is the <strong>only</strong> visual cue that communicates meaning.
-          ({identified.size}/{PROBLEM_COUNT} found)
+          {selected.size}/3 examples selected
         </p>
-      )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-        {EXAMPLES.map((ex) => {
-          const fb = feedback[ex.id];
-          const isCorrect = fb === 'correct';
-          const isWrong = fb === 'incorrect';
-          return (
-            <div
-              key={ex.id}
-              onClick={() => handleClick(ex)}
-              style={{
-                padding: '0.6rem',
-                borderRadius: 'var(--radius-md)',
-                border: `1px solid ${isCorrect ? 'var(--accent-success)' : isWrong ? 'var(--accent-danger)' : 'var(--border)'}`,
-                background: isCorrect
-                  ? 'color-mix(in srgb, var(--accent-success) 8%, transparent)'
-                  : isWrong
-                  ? 'color-mix(in srgb, var(--accent-danger) 8%, transparent)'
-                  : 'transparent',
-                cursor: interactive && !isCorrect && !completed ? 'pointer' : 'default',
-              }}
-            >
-              <p style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '0.4rem', color: 'var(--primary-foreground)' }}>
-                {ex.name}
-              </p>
-              <div style={{ marginBottom: '0.4rem' }}>{ex.visual}</div>
-              {isCorrect && (
-                <p style={{ fontSize: '0.72rem', color: 'var(--accent-success)', margin: 0 }}>
-                  ✓ {ex.correctFeedback}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+          {EXAMPLES.map((example) => {
+            const isSelected = selected.has(example.id);
+            const showCorrect = stageController.result === 'passed' && example.isColorOnly;
+            const showIncorrect = stageController.result === 'incorrect' && isSelected && !example.isColorOnly;
+            return (
+              <div
+                key={example.id}
+                style={{
+                  padding: '0.6rem',
+                  borderRadius: 'var(--radius-md)',
+                  border: `1px solid ${showCorrect ? 'var(--accent-success)' : showIncorrect ? 'var(--accent-danger)' : isSelected ? 'var(--accent-cta)' : 'var(--border)'}`,
+                  background: showCorrect
+                    ? 'color-mix(in srgb, var(--accent-success) 8%, transparent)'
+                    : showIncorrect
+                      ? 'color-mix(in srgb, var(--accent-danger) 8%, transparent)'
+                      : 'transparent',
+                }}
+              >
+                <p style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '0.4rem', color: 'var(--primary-foreground)' }}>
+                  {example.name}
                 </p>
-              )}
-              {isWrong && (
-                <p style={{ fontSize: '0.72rem', color: 'var(--accent-danger)', margin: 0 }}>
-                  {ex.incorrectFeedback}
-                </p>
-              )}
-            </div>
-          );
-        })}
-      </div>
+                <div style={{ marginBottom: '0.4rem' }}>{example.visual}</div>
+                {interactive && (
+                  <button
+                    type="button"
+                    aria-pressed={isSelected}
+                    disabled={stageController.result !== 'idle'}
+                    onClick={() => toggleExample(example.id)}
+                  >
+                    {isSelected ? 'selected' : 'select example'}
+                  </button>
+                )}
+                {showCorrect && (
+                  <p style={{ fontSize: '0.72rem', color: 'var(--accent-success)', margin: 0 }}>
+                    ✓ {example.correctFeedback}
+                  </p>
+                )}
+                {showIncorrect && (
+                  <p style={{ fontSize: '0.72rem', color: 'var(--accent-danger)', margin: 0 }}>
+                    {example.incorrectFeedback}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
 
-      {completed && (
-        <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          You found all three examples that rely on hue alone. Each one needs a label, icon, pattern, or another non-color cue.
-        </p>
-      )}
+        {interactive && stageController.result === 'idle' && (
+          <button type="button" onClick={checkAnswer} disabled={selected.size !== PROBLEM_COUNT}>
+            check selections
+          </button>
+        )}
+      </ExerciseStage>
     </div>
   );
 });
