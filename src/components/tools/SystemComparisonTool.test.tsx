@@ -44,7 +44,7 @@ describe('SystemComparisonTool text contrast', () => {
     expect(ratio).toBeGreaterThanOrEqual(NORMAL_TEXT_THRESHOLD);
   });
 
-  it('renders one stage and completes after all four inconsistencies are found', () => {
+  it('requires a successful check and preserves selections for retry', () => {
     const onComplete = vi.fn();
     render(<SystemComparisonTool interactive onComplete={onComplete} />);
 
@@ -52,10 +52,25 @@ describe('SystemComparisonTool text contrast', () => {
     fireEvent.click(screen.getAllByText('Last updated: today')[0].parentElement!);
     fireEvent.click(screen.getAllByText('View')[0].parentElement!);
     fireEvent.click(screen.getAllByText('Active')[0].parentElement!);
+    expect(screen.queryByText(/Secondary text lightness:/)).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+
+    expect(screen.getByText('Find every inconsistency before continuing. 1 remaining.')).toBeInTheDocument();
+    expect(screen.getByText(/Success badge color:/)).toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
+    expect(screen.getByText('Found 3/4 inconsistencies')).toBeInTheDocument();
     fireEvent.click(screen.getAllByText('Settings')[0].parentElement!);
+    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     expect(screen.getByText(/All inconsistencies found/)).toBeInTheDocument();
+    for (const label of ['Button color:', 'Success badge color:', 'Card surface color:', 'Secondary text lightness:']) {
+      expect(screen.getByText(label)).toBeInTheDocument();
+    }
     expect(onComplete).toHaveBeenCalledOnce();
   });
 });
