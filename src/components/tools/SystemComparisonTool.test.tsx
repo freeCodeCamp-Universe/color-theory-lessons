@@ -64,8 +64,11 @@ describe('SystemComparisonTool text contrast', () => {
     expect(onComplete).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
-    expect(screen.getByText('Found 3/4 inconsistencies')).toBeInTheDocument();
+    expect(screen.getByText('Selected 3/4 inconsistencies')).toBeInTheDocument();
+    expect(screen.queryByText(/Success badge color:/)).not.toBeInTheDocument();
     fireEvent.click(screen.getAllByText('Settings')[0].parentElement!);
+    expect(screen.getByText('Selected 4/4 inconsistencies')).toBeInTheDocument();
+    expect(screen.queryByText(/Success badge color:/)).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 

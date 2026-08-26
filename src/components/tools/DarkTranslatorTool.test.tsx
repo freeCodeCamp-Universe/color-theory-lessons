@@ -147,6 +147,8 @@ describe('DarkTranslatorTool', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     setRole('primary-text', '#767676');
+    expect(screen.getByText('Primary text / surface (4.5:1)').parentElement).not.toHaveTextContent('✓');
+    checkStage();
     expect(screen.getByText('Primary text / surface (4.5:1)').parentElement).toHaveTextContent('✓ 4.5:1');
   });
 
@@ -160,6 +162,8 @@ describe('DarkTranslatorTool', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     setRole('error', '#d2d2d2');
+    expect(screen.getByText('Success / error luminance (1.5:1)').parentElement).not.toHaveTextContent('✓');
+    checkStage();
     expect(screen.getByText('Success / error luminance (1.5:1)').parentElement).toHaveTextContent('✓ 1.5:1');
   });
 
@@ -173,6 +177,8 @@ describe('DarkTranslatorTool', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     setRole('surface', '#f3f3f3');
+    expect(screen.getByText('Surface ≠ page-bg (1.1:1)').parentElement).not.toHaveTextContent('✓');
+    checkStage();
     expect(screen.getByText('Surface ≠ page-bg (1.1:1)').parentElement).toHaveTextContent('✓ 1.1:1');
   });
 

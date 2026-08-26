@@ -27,7 +27,7 @@ describe('TextContrastLabTool', () => {
     expect(screen.getByText(result)).toBeInTheDocument();
   });
 
-  it('updates a pair from failing to passing and back to failing', () => {
+  it('keeps edits ungraded after retry until the next check', () => {
     render(<TextContrastLabTool interactive />);
 
     expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
@@ -38,13 +38,22 @@ describe('TextContrastLabTool', () => {
 
     setTextColor('#000000');
 
+    expect(screen.queryByText(/Passing pairs:/)).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Body copy' })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
     expect(screen.getByText(/Passing pairs: 1 of 3/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Body copy ✓' })).toBeInTheDocument();
 
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
+
     setTextColor('#999999');
 
-    expect(screen.getByText(/Passing pairs: 0 of 3/)).toBeInTheDocument();
+    expect(screen.queryByText(/Passing pairs:/)).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Body copy' })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+    expect(screen.getByText(/Passing pairs: 0 of 3/)).toBeInTheDocument();
   });
 
   it('completes only while all three current pairs pass', () => {

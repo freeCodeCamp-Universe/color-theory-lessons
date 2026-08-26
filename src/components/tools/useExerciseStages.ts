@@ -104,6 +104,9 @@ export function useExerciseStages({
 
   function retry() {
     if (result !== 'incorrect') return;
+    setAttemptedStageIds((current) => (
+      current.filter((stageId) => stageId !== activeStage.id)
+    ));
     setResult('idle');
     stageHeadingRef.current?.focus();
   }
