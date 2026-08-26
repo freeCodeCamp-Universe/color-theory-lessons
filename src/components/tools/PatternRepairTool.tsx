@@ -1,5 +1,8 @@
 import { memo, useState } from 'react';
+import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 
 interface Module {
   id: string;
@@ -186,20 +189,25 @@ const MODULES: Module[] = [
   },
 ];
 
-interface PatternRepairToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+const STAGES = [{
+  id: 'repair-interface-patterns',
+  title: 'Repair interface patterns',
+  instruction: 'Choose a valid non-color repair for the form, links, service statuses, and chart, then check the stage.',
+}] satisfies readonly ExerciseStageDefinition[];
 
-export const PatternRepairTool = memo(function PatternRepairTool({ interactive = false, onComplete }: PatternRepairToolProps) {
+export const PatternRepairTool = memo(function PatternRepairTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [checked, setChecked] = useState<Record<string, string[]>>(
     Object.fromEntries(MODULES.map((m) => [m.id, []])),
   );
-  const [submitted, setSubmitted] = useState(false);
-  const [completed, setCompleted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const submitted = stageController.result !== 'idle';
 
   function toggleOption(moduleId: string, option: string) {
-    if (!interactive || submitted || completed) return;
+    if (!interactive || submitted) return;
     setChecked((prev) => {
       const current = prev[moduleId];
       const next = current.includes(option) ? current.filter((o) => o !== option) : [...current, option];
@@ -208,18 +216,10 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
   }
 
   function handleCheck() {
-    if (!interactive || submitted || completed) return;
+    if (!interactive || submitted) return;
     const allRepaired = MODULES.every((mod) => mod.isValidRepair(checked[mod.id]));
-    setSubmitted(true);
-    if (allRepaired) {
-      setCompleted(true);
-      onComplete?.();
-    }
-  }
-
-  function handleRetry() {
-    if (completed) return;
-    setSubmitted(false);
+    if (allRepaired) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   const repairedCount = submitted
@@ -230,11 +230,16 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>pattern repair workshop</span>
 
-      {interactive && (
-        <p style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>
-          Select cues for each interface pattern. Repaired patterns: {repairedCount} of {MODULES.length}.
-        </p>
-      )}
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback="Some patterns still rely on color alone. Review the item feedback and try the stage again."
+        completionFeedback="All patterns are repaired. Components that use these patterns receive the same cues."
+      >
+        {interactive && (
+          <p style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>
+            Repaired patterns: {repairedCount} of {MODULES.length}.
+          </p>
+        )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         {MODULES.map((mod) => {
@@ -311,20 +316,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({ interactive =
         </button>
       )}
 
-      {interactive && submitted && !completed && (
-        <button
-          onClick={handleRetry}
-          style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'transparent', color: 'var(--secondary-foreground)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', cursor: 'pointer' }}
-        >
-          try again
-        </button>
-      )}
-
-      {completed && (
-        <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          ✓ All patterns repaired. Components that use these patterns receive the same cues.
-        </p>
-      )}
+      </ExerciseStage>
     </div>
   );
 });

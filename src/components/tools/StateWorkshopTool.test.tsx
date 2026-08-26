@@ -12,9 +12,10 @@ describe('StateWorkshopTool', () => {
     for (const checkbox of screen.getAllByRole('checkbox', { name: 'Border style' })) {
       fireEvent.click(checkbox);
     }
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     expect(onComplete).not.toHaveBeenCalled();
-    expect(screen.queryByText('Each state now has a distinct non-color treatment.')).not.toBeInTheDocument();
+    expect(screen.getByText(/Every state needs a non-color treatment/)).toBeInTheDocument();
   });
 
   it('completes when each state has a distinct label', () => {
@@ -25,7 +26,11 @@ describe('StateWorkshopTool', () => {
       fireEvent.click(screen.getByRole('checkbox', { name: `Label "${stateName}"` }));
     }
 
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+
     expect(onComplete).toHaveBeenCalledOnce();
-    expect(screen.getByText('Each state now has a distinct non-color treatment.')).toBeInTheDocument();
+    expect(screen.getByText('Each state has a distinct non-color treatment.')).toBeInTheDocument();
   });
 });

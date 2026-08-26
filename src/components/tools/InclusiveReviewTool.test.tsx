@@ -33,8 +33,12 @@ describe('InclusiveReviewTool', () => {
     expect(within(simulationCheck).getByText('Does the interface remain understandable under color vision deficiency simulation modes?')).toBeInTheDocument();
 
     fireEvent.click(within(simulationCheck).getByRole('button', { name: 'Pass' }));
+    expect(within(simulationCheck).queryByText(/chart bars become hard to distinguish/)).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
     expect(within(simulationCheck).getByText(/chart bars become hard to distinguish/)).toBeInTheDocument();
 
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     fireEvent.click(within(simulationCheck).getByRole('button', { name: 'Needs work' }));
     expect(within(simulationCheck).queryByText(/chart bars become hard to distinguish/)).not.toBeInTheDocument();
   });
@@ -48,14 +52,25 @@ describe('InclusiveReviewTool', () => {
     );
 
     screen.getAllByRole('button', { name: 'Pass' }).forEach((button) => fireEvent.click(button));
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     expect(onComplete).not.toHaveBeenCalled();
     expect(screen.queryByText(/Review complete/)).not.toBeInTheDocument();
-    expect(screen.getAllByRole('button', { name: 'Needs work' })[0]).toBeEnabled();
+    expect(screen.getAllByRole('button', { name: 'Needs work' })[0]).toBeDisabled();
 
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     screen.getAllByRole('button', { name: 'Needs work' }).forEach((button) => fireEvent.click(button));
+    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     expect(onComplete).toHaveBeenCalledOnce();
     expect(screen.getByText(/Review complete/)).toBeInTheDocument();
+  });
+
+  it('bases the evidence-review item on information shown in the mockup', () => {
+    render(<InclusiveReviewTool interactive />);
+
+    const evidenceReview = screen.getByTestId('checklist-task-testing');
+    expect(within(evidenceReview).getByText(/identify every status, chart series, and form error/)).toBeInTheDocument();
   });
 });
