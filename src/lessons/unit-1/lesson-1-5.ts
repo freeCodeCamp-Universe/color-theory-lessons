@@ -25,7 +25,7 @@ export const lesson1_5: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'Assign a visual role to each action so Submit receives the most emphasis, Save Draft remains available without competing with it, and Cancel receives the least emphasis.',
+      prompt: 'Complete one stage by assigning primary, secondary, and tertiary roles to the three actions.',
       hints: [
         'Only one action should use the filled accent treatment.',
         'An outlined treatment keeps an action visible without giving it the same emphasis as a filled accent.',

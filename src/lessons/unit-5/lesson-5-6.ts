@@ -24,7 +24,7 @@ export const lesson5_6: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'Work through the inclusive review checklist for the sample interface. Mark each item as Pass or Needs Work based on what you observe.',
+      prompt: 'Complete one review stage: inspect the sample interface, mark all five checklist items as Pass or Needs Work, then check your assessments.',
       hints: [
         'Switch through the color vision deficiency simulation modes and compare each view with the original interface.',
         'Check whether labels, icons, patterns, or text communicate the information carried by each color.',

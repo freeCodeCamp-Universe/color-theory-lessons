@@ -24,7 +24,7 @@ export const lesson5_2: LessonConfig = {
     },
   ],
   challenge: {
-    prompt: 'Adjust the input border, icon, focus ring, and toggle track until each has at least 3:1 contrast against its white background.',
+    prompt: 'Complete one repair stage: adjust the input border, icon, focus ring, and toggle track, then check that each has at least 3:1 contrast against white.',
     hints: [
       'WCAG measures non-text contrast between the visual information needed to identify a component or state and its adjacent color.',
       'Each preview uses a white background. Choose a color that the checker reports as 3:1 or higher.',

@@ -1,7 +1,10 @@
-import { memo, useState, useMemo, useRef } from 'react';
+import { memo, useState, useMemo } from 'react';
 import type { Relationship } from '../../utils/color.ts';
 import { hslToHex, getRelatedHues } from '../../utils/color.ts';
+import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 
 interface ColorWheelProps {
   baseH: number;
@@ -107,261 +110,275 @@ function ColorWheel({ baseH, relatedH, interactive, onChange }: ColorWheelProps)
   );
 }
 
-interface ColorWheelToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
+interface ColorWheelToolProps extends ExerciseToolProps {
   previewRelationship?: Relationship;
 }
 
-export const ColorWheelTool = memo(function ColorWheelTool({ interactive = true, onComplete, previewRelationship }: ColorWheelToolProps) {
+interface Palette {
+  dominant: number;
+  support: number;
+  accent: number;
+}
+
+const STAGES = [
+  {
+    id: 'build-palette',
+    title: 'build a starter palette',
+    instruction: 'Choose a relationship and base hue, then lock in the palette.',
+    nextActionLabel: 'identify the relationship →',
+  },
+  {
+    id: 'identify-relationship',
+    title: 'identify the color-wheel relationship',
+    instruction: 'Answer the question about the relationship used by your locked palette.',
+  },
+] satisfies readonly ExerciseStageDefinition[];
+
+const RELATIONSHIP_DESCRIPTION: Record<Relationship, string> = {
+  analogous: 'This tool places two related hues 30° on either side of the base.',
+  complementary: 'One hue, 180° from the base.',
+  triadic: 'Three hues spaced 120° apart.',
+};
+
+const VALIDATION: Record<Relationship, {
+  question: string;
+  choices: { id: string; label: string; isCorrect: boolean }[];
+  feedback: string;
+}> = {
+  analogous: {
+    question: 'Where are analogous hues positioned relative to the base hue?',
+    choices: [
+      { id: 'a', label: 'On either side of the base hue', isCorrect: true },
+      { id: 'b', label: 'Opposite the base hue', isCorrect: false },
+      { id: 'c', label: 'At 120° intervals from the base hue', isCorrect: false },
+    ],
+    feedback: 'Analogous hues sit 30° on either side of the base hue in this tool.',
+  },
+  complementary: {
+    question: 'Where is a complementary hue positioned relative to the base hue?',
+    choices: [
+      { id: 'a', label: '30° from the base hue', isCorrect: false },
+      { id: 'b', label: '180° from the base hue', isCorrect: true },
+      { id: 'c', label: '120° from the base hue', isCorrect: false },
+    ],
+    feedback: 'A complementary hue sits opposite the base hue, 180° away.',
+  },
+  triadic: {
+    question: 'How are the three hues in a triadic relationship spaced?',
+    choices: [
+      { id: 'a', label: '30° apart', isCorrect: false },
+      { id: 'b', label: '180° apart', isCorrect: false },
+      { id: 'c', label: '120° apart', isCorrect: true },
+    ],
+    feedback: 'A triadic relationship contains three hues spaced 120° apart.',
+  },
+};
+
+function LockedPalette({ palette, relationship }: { palette: Palette; relationship: Relationship }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
+      <div style={{ display: 'flex', gap: '4px', height: '56px' }}>
+        <div style={{ flex: 3, borderRadius: 'var(--radius-sm)', backgroundColor: hslToHex(palette.dominant, 70, 50), display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
+          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'rgba(0,0,0,0.7)' }}>dominant</span>
+        </div>
+        <div style={{ flex: 1.5, borderRadius: 'var(--radius-sm)', backgroundColor: hslToHex(palette.support, 60, 55), display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
+          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'rgba(0,0,0,0.7)' }}>support</span>
+        </div>
+        <div style={{ flex: 1, borderRadius: 'var(--radius-sm)', backgroundColor: hslToHex(palette.accent, 85, 60), display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
+          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'rgba(0,0,0,0.7)' }}>accent</span>
+        </div>
+        <div style={{ flex: 2, borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--gray-80)', display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
+          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)' }}>neutral</span>
+        </div>
+      </div>
+      <p style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>
+        Selected relationship: <strong style={{ color: 'var(--primary-foreground)' }}>{relationship}</strong>.
+      </p>
+    </div>
+  );
+}
+
+export const ColorWheelTool = memo(function ColorWheelTool({
+  interactive = true,
+  onComplete,
+  onStageChange,
+  previewRelationship,
+}: ColorWheelToolProps) {
   const [baseH, setBaseH] = useState(210);
   const [internalRelationship, setInternalRelationship] = useState<Relationship>(previewRelationship ?? 'complementary');
-  const relationship = previewRelationship ?? internalRelationship;
-  const [palette, setPalette] = useState<{ dominant: number; support: number; accent: number } | null>(null);
-  const [paletteDone, setPaletteDone] = useState(false);
+  const [palette, setPalette] = useState<Palette | null>(null);
   const [validationAnswer, setValidationAnswer] = useState<string | null>(null);
-  const [validationSubmitted, setValidationSubmitted] = useState(false);
-  const completionFiredRef = useRef(false);
-
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const relationship = previewRelationship ?? internalRelationship;
   const relatedH = getRelatedHues(baseH, relationship);
-  const controlsInteractive = interactive && !palette;
-
+  const controlsInteractive = interactive
+    && !previewRelationship
+    && stageController.activeStage.id === 'build-palette'
+    && stageController.result === 'idle';
   const baseColor = hslToHex(baseH, 70, 50);
   const relatedColors = relatedH.map((h) => hslToHex(h, 70, 50));
-
-  const relationshipDesc: Record<Relationship, string> = {
-    analogous: 'This tool places two related hues 30° on either side of the base.',
-    complementary: 'One hue, 180° from the base.',
-    triadic: 'Three hues spaced 120° apart.',
-  };
+  const validation = VALIDATION[relationship];
+  const validationCorrect = validation.choices.find(({ isCorrect }) => isCorrect)?.id === validationAnswer;
 
   function buildPalette() {
     const accent = relatedH[0];
     const support = relationship === 'complementary' ? relatedH[0] : relatedH[1];
     setPalette({ dominant: baseH, support, accent });
+    stageController.markPassed();
   }
 
-  function handleFinish() {
-    if (completionFiredRef.current) return;
-    completionFiredRef.current = true;
-    setPaletteDone(true);
-    onComplete?.();
+  function checkRelationship() {
+    if (validationCorrect) stageController.markPassed();
+    else stageController.markIncorrect();
+  }
+
+  const wheelEditor = (
+    <div style={{ display: 'flex', gap: 'var(--spacing-lg)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+      <ColorWheel baseH={baseH} relatedH={relatedH} interactive={controlsInteractive} onChange={setBaseH} />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', flex: 1, minWidth: '180px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--muted)' }}>base hue</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--yellow)' }}>{baseH}°</span>
+          </div>
+          <input
+            type="range"
+            min={0}
+            max={359}
+            value={baseH}
+            onChange={(event) => controlsInteractive && setBaseH(Number(event.target.value))}
+            disabled={!controlsInteractive}
+            style={{
+              width: '100%',
+              background: 'linear-gradient(to right, hsl(0,80%,55%), hsl(60,80%,55%), hsl(120,80%,55%), hsl(180,80%,55%), hsl(240,80%,55%), hsl(300,80%,55%), hsl(360,80%,55%))',
+              appearance: 'none',
+              WebkitAppearance: 'none',
+              height: '6px',
+              borderRadius: '3px',
+              cursor: controlsInteractive ? 'pointer' : 'not-allowed',
+            }}
+            aria-label={`Base hue: ${baseH}°`}
+          />
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>relationship</span>
+          {(['analogous', 'complementary', 'triadic'] as Relationship[]).map((option) => (
+            <button
+              key={option}
+              onClick={() => controlsInteractive && setInternalRelationship(option)}
+              disabled={!controlsInteractive}
+              style={{
+                padding: '0.4rem 0.75rem',
+                background: relationship === option ? 'var(--surface)' : 'transparent',
+                border: `1px solid ${relationship === option ? 'var(--yellow)' : 'var(--border)'}`,
+                borderRadius: 'var(--radius-sm)',
+                color: relationship === option ? 'var(--yellow)' : 'var(--secondary-foreground)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.8rem',
+                cursor: controlsInteractive ? 'pointer' : 'not-allowed',
+                textAlign: 'left',
+              }}
+            >
+              {option}
+            </button>
+          ))}
+          {previewRelationship && (
+            <p style={{ fontSize: '0.8rem', color: 'var(--muted)' }}>
+              {RELATIONSHIP_DESCRIPTION[relationship]}
+            </p>
+          )}
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>palette preview</span>
+          <div style={{ display: 'flex', gap: '4px' }}>
+            <div title={`Base: hsl(${baseH} 70% 50%)`} style={{ flex: 3, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: baseColor }} />
+            {relatedColors.map((color, index) => (
+              <div key={color} title={`Related: hsl(${relatedH[index]} 70% 50%)`} style={{ flex: 1, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: color }} />
+            ))}
+            <div style={{ flex: 1, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--gray-80)' }} title="Neutral" />
+          </div>
+          <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>base · related hues · neutral</span>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (previewRelationship) {
+    return (
+      <div className={shellStyles.shell}>
+        <span className={shellStyles.toolLabel}>color wheel explorer</span>
+        {wheelEditor}
+      </div>
+    );
   }
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>color wheel explorer</span>
-
-      <div style={{ display: 'flex', gap: 'var(--spacing-lg)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
-        <ColorWheel baseH={baseH} relatedH={relatedH} interactive={controlsInteractive} onChange={setBaseH} />
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', flex: 1, minWidth: '180px' }}>
-          {/* Base hue control */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--muted)' }}>base hue</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--yellow)' }}>{baseH}°</span>
-            </div>
-            <input
-              type="range"
-              min={0}
-              max={359}
-              value={baseH}
-              onChange={(e) => controlsInteractive && setBaseH(Number(e.target.value))}
-              disabled={!controlsInteractive}
-              style={{
-                width: '100%',
-                background: `linear-gradient(to right, hsl(0,80%,55%), hsl(60,80%,55%), hsl(120,80%,55%), hsl(180,80%,55%), hsl(240,80%,55%), hsl(300,80%,55%), hsl(360,80%,55%))`,
-                appearance: 'none',
-                WebkitAppearance: 'none',
-                height: '6px',
-                borderRadius: '3px',
-                cursor: controlsInteractive ? 'pointer' : 'not-allowed',
-              }}
-              aria-label={`Base hue: ${baseH}°`}
-            />
-          </div>
-
-          {/* Relationship selector */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>relationship</span>
-            {(['analogous', 'complementary', 'triadic'] as Relationship[]).map((r) => (
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback={<span style={{ color: 'var(--red)' }}>{validation.feedback}</span>}
+        passedFeedback={<span style={{ color: 'var(--green)' }}>✓ Palette locked.</span>}
+        completionFeedback={<span style={{ color: 'var(--green)' }}>✓ Relationship identified.</span>}
+      >
+        {stageController.activeStage.id === 'build-palette' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+            {wheelEditor}
+            {interactive && stageController.result === 'idle' && (
               <button
-                key={r}
-                onClick={() => controlsInteractive && setInternalRelationship(r)}
-                disabled={!controlsInteractive}
-                style={{
-                  padding: '0.4rem 0.75rem',
-                  background: relationship === r ? 'var(--surface)' : 'transparent',
-                  border: `1px solid ${relationship === r ? 'var(--yellow)' : 'var(--border)'}`,
-                  borderRadius: 'var(--radius-sm)',
-                  color: relationship === r ? 'var(--yellow)' : 'var(--secondary-foreground)',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.8rem',
-                  cursor: controlsInteractive ? 'pointer' : 'not-allowed',
-                  textAlign: 'left',
-                }}
+                onClick={buildPalette}
+                style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'var(--yellow)', color: 'var(--gray-90)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.85rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: 'pointer' }}
               >
-                {r}
+                lock in this palette
               </button>
-            ))}
-            <p style={{ fontSize: '0.8rem', color: 'var(--muted)' }}>{relationshipDesc[relationship]}</p>
+            )}
+            {palette && <LockedPalette palette={palette} relationship={relationship} />}
           </div>
-
-          {/* Palette preview */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>palette preview</span>
-            <div style={{ display: 'flex', gap: '4px' }}>
-              <div title={`Base: hsl(${baseH} 70% 50%)`} style={{ flex: 3, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: baseColor }} />
-              {relatedColors.map((c, i) => (
-                <div key={c} title={`Related: hsl(${relatedH[i]} 70% 50%)`} style={{ flex: 1, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: c }} />
-              ))}
-              <div style={{ flex: 1, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--gray-80)' }} title="Neutral" />
-            </div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>base · related hues · neutral</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Build palette task — hidden in preview mode */}
-      {!previewRelationship && <div style={{ borderTop: '1px solid var(--border)', paddingTop: 'var(--spacing-md)', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>build your starter palette</span>
-        <p style={{ fontSize: '0.9rem', color: 'var(--secondary-foreground)' }}>
-          Choose a relationship, adjust the base hue, then lock in your palette.
-        </p>
-        {interactive && !palette && (
-          <button
-            onClick={buildPalette}
-            style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'var(--yellow)', color: 'var(--gray-90)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.85rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: 'pointer' }}
-          >
-            lock in this palette
-          </button>
         )}
-        {palette && (
+
+        {stageController.activeStage.id === 'identify-relationship' && palette && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-            <div style={{ display: 'flex', gap: '4px', height: '56px' }}>
-              <div style={{ flex: 3, borderRadius: 'var(--radius-sm)', backgroundColor: hslToHex(palette.dominant, 70, 50), display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
-                <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'rgba(0,0,0,0.7)' }}>dominant</span>
-              </div>
-              <div style={{ flex: 1.5, borderRadius: 'var(--radius-sm)', backgroundColor: hslToHex(palette.support, 60, 55), display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
-                <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'rgba(0,0,0,0.7)' }}>support</span>
-              </div>
-              <div style={{ flex: 1, borderRadius: 'var(--radius-sm)', backgroundColor: hslToHex(palette.accent, 85, 60), display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
-                <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'rgba(0,0,0,0.7)' }}>accent</span>
-              </div>
-              <div style={{ flex: 2, borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--gray-80)', display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
-                <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)' }}>neutral</span>
-              </div>
+            <LockedPalette palette={palette} relationship={relationship} />
+            <p style={{ fontSize: '0.9rem', color: 'var(--secondary-foreground)', margin: 0 }}>{validation.question}</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              {validation.choices.map((choice) => {
+                const selected = validationAnswer === choice.id;
+                return (
+                  <button
+                    key={choice.id}
+                    disabled={stageController.result !== 'idle'}
+                    onClick={() => setValidationAnswer(choice.id)}
+                    style={{
+                      padding: '0.45rem 0.75rem',
+                      background: selected ? 'color-mix(in srgb, var(--yellow) 10%, var(--surface))' : 'var(--surface)',
+                      border: `1px solid ${selected ? 'var(--yellow)' : 'var(--border)'}`,
+                      borderRadius: 'var(--radius-sm)',
+                      color: 'var(--primary-foreground)',
+                      fontFamily: 'var(--font-sans)',
+                      fontSize: '0.85rem',
+                      textAlign: 'left',
+                      cursor: stageController.result === 'idle' ? 'pointer' : 'default',
+                    }}
+                  >
+                    {choice.label}
+                  </button>
+                );
+              })}
             </div>
-            <p style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>
-              Selected relationship: <strong style={{ color: 'var(--primary-foreground)' }}>{relationship}</strong>. The swatches are labeled by their intended roles.
-            </p>
-            {interactive && !paletteDone && (() => {
-              const VALIDATION: Record<Relationship, { question: string; choices: { id: string; label: string; isCorrect: boolean }[]; feedback: string }> = {
-                analogous: {
-                  question: 'Where are analogous hues positioned relative to the base hue?',
-                  choices: [
-                    { id: 'a', label: 'On either side of the base hue', isCorrect: true },
-                    { id: 'b', label: 'Opposite the base hue', isCorrect: false },
-                    { id: 'c', label: 'At 120° intervals from the base hue', isCorrect: false },
-                  ],
-                  feedback: 'Analogous hues sit 30° on either side of the base hue in this tool.',
-                },
-                complementary: {
-                  question: 'Where is a complementary hue positioned relative to the base hue?',
-                  choices: [
-                    { id: 'a', label: '30° from the base hue', isCorrect: false },
-                    { id: 'b', label: '180° from the base hue', isCorrect: true },
-                    { id: 'c', label: '120° from the base hue', isCorrect: false },
-                  ],
-                  feedback: 'A complementary hue sits opposite the base hue, 180° away.',
-                },
-                triadic: {
-                  question: 'How are the three hues in a triadic relationship spaced?',
-                  choices: [
-                    { id: 'a', label: '30° apart', isCorrect: false },
-                    { id: 'b', label: '180° apart', isCorrect: false },
-                    { id: 'c', label: '120° apart', isCorrect: true },
-                  ],
-                  feedback: 'A triadic relationship contains three hues spaced 120° apart.',
-                },
-              };
-              const v = VALIDATION[relationship];
-              const selected = validationAnswer;
-              const correct = v.choices.find((c) => c.isCorrect);
-              const isCorrect = validationAnswer === correct?.id;
-              return (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)', borderTop: '1px solid var(--border)', paddingTop: 'var(--spacing-sm)' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>reflect</span>
-                  <p style={{ fontSize: '0.9rem', color: 'var(--secondary-foreground)', margin: 0 }}>{v.question}</p>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    {v.choices.map((choice) => {
-                      const isSelected = selected === choice.id;
-                      const showResult = validationSubmitted && (isCorrect || isSelected);
-                      const borderColor = showResult
-                        ? choice.isCorrect ? 'var(--green)' : isSelected ? 'var(--red)' : 'var(--border)'
-                        : isSelected ? 'var(--yellow)' : 'var(--border)';
-                      const bg = showResult
-                        ? choice.isCorrect ? 'color-mix(in srgb, var(--green) 10%, var(--surface))' : isSelected ? 'color-mix(in srgb, var(--red) 10%, var(--surface))' : 'var(--surface)'
-                        : isSelected ? 'color-mix(in srgb, var(--yellow) 10%, var(--surface))' : 'var(--surface)';
-                      return (
-                        <button
-                          key={choice.id}
-                          disabled={validationSubmitted && isCorrect}
-                          onClick={() => {
-                            if (validationSubmitted && isCorrect) return;
-                            setValidationAnswer(choice.id);
-                            if (validationSubmitted && !isCorrect) setValidationSubmitted(false);
-                          }}
-                          style={{ padding: '0.45rem 0.75rem', background: bg, border: `1px solid ${borderColor}`, borderRadius: 'var(--radius-sm)', color: 'var(--primary-foreground)', fontFamily: 'var(--font-sans)', fontSize: '0.85rem', textAlign: 'left', cursor: validationSubmitted && isCorrect ? 'default' : 'pointer', transition: 'border-color 0.15s, background 0.15s' }}
-                        >
-                          {choice.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  {!validationSubmitted && (
-                    <button
-                      disabled={!selected}
-                      onClick={() => selected && setValidationSubmitted(true)}
-                      style={{ alignSelf: 'flex-start', padding: '0.4rem 1rem', background: selected ? 'var(--yellow)' : 'var(--border)', color: 'var(--gray-90)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.8rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: selected ? 'pointer' : 'not-allowed' }}
-                    >
-                      check
-                    </button>
-                  )}
-                  {validationSubmitted && (
-                    <>
-                      <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: isCorrect ? 'var(--green)' : 'var(--yellow)', margin: 0 }}>
-                        {isCorrect ? '✓ ' : '→ '}{v.feedback}
-                      </p>
-                      {isCorrect ? (
-                        <button
-                          onClick={handleFinish}
-                          style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'var(--yellow)', color: 'var(--gray-90)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.85rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: 'pointer' }}
-                        >
-                          done →
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => setValidationSubmitted(false)}
-                          style={{ alignSelf: 'flex-start', padding: '0.4rem 1rem', background: 'var(--surface)', color: 'var(--primary-foreground)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.8rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', cursor: 'pointer' }}
-                        >
-                          try again
-                        </button>
-                      )}
-                    </>
-                  )}
-                </div>
-              );
-            })()}
-            {paletteDone && (
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--green)' }}>
-                ✓ palette built. Moving on.
-              </p>
+            {interactive && stageController.result === 'idle' && (
+              <button
+                disabled={!validationAnswer}
+                onClick={checkRelationship}
+                style={{ alignSelf: 'flex-start', padding: '0.4rem 1rem', background: validationAnswer ? 'var(--yellow)' : 'var(--border)', color: 'var(--gray-90)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.8rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: validationAnswer ? 'pointer' : 'not-allowed' }}
+              >
+                check
+              </button>
             )}
           </div>
         )}
-      </div>}
+      </ExerciseStage>
     </div>
   );
 });

@@ -1,6 +1,9 @@
 import { memo, useState } from 'react';
 import { hexToHsl, hexToRgb, contrastRatioWcag } from '../../utils/color.ts';
+import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 
 interface ProblemArea {
   id: string;
@@ -24,6 +27,14 @@ const AREA_GRADIENTS: Record<string, string> = Object.fromEntries(
     return [area.id, `linear-gradient(to right, hsl(${h},${s}%,0%), hsl(${h},${s}%,50%), hsl(${h},${s}%,100%))`];
   }),
 );
+
+const STAGES = [
+  {
+    id: 'repair-contrast',
+    title: 'repair the contrast pairs',
+    instruction: 'Adjust the lightness of all three color pairs, then check their contrast.',
+  },
+] satisfies readonly ExerciseStageDefinition[];
 
 /** Compute the WCAG contrast ratio for a problem area given the current lightness value. */
 function computeRatio(area: ProblemArea, l: number): number {
@@ -50,52 +61,58 @@ function hslToApproxRgb(h: number, s: number, l: number): { r: number; g: number
   return { r: Math.round((r + m) * 255), g: Math.round((g + m) * 255), b: Math.round((b + m) * 255) };
 }
 
-interface ContrastToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
-
-export const ContrastTool = memo(function ContrastTool({ interactive = true, onComplete }: ContrastToolProps) {
+export const ContrastTool = memo(function ContrastTool({
+  interactive = true,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [lightness, setLightness] = useState<Record<string, number>>({
     heading: hexToHsl(AREAS[0].textColor).l,
     helper: hexToHsl(AREAS[1].textColor).l,
     button: hexToHsl(AREAS[2].bgColor).l,
   });
-  const [completed, setCompleted] = useState(false);
-  const [checked, setChecked] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const checked = stageController.result !== 'idle';
 
   function isFixed(area: ProblemArea) {
     return computeRatio(area, lightness[area.id]) >= area.threshold;
   }
 
   function handleChange(id: string, val: number) {
-    if (completed || !interactive) return;
+    if (checked || !interactive) return;
     setLightness((prev) => ({ ...prev, [id]: val }));
   }
 
   function handleCheck() {
     const allFixed = AREAS.every((area) => isFixed(area));
-    setChecked(true);
     if (allFixed) {
-      setCompleted(true);
-      onComplete?.();
+      stageController.markPassed();
+    } else {
+      stageController.markIncorrect();
     }
   }
 
-  function handleRetry() {
-    setChecked(false);
-  }
-
-  const failingLabels = checked && !completed
+  const failingLabels = stageController.result === 'incorrect'
     ? AREAS.filter((area) => !isFixed(area)).map((area) => area.label)
     : [];
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>contrast repair lab</span>
-      <p style={{ fontSize: '0.9rem', color: 'var(--secondary-foreground)' }}>
-        Adjust the lightness slider for each color pair, then select check.
-      </p>
+
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback={(
+          <span style={{ color: 'var(--red)' }}>
+            {failingLabels.length > 0
+              ? `Still failing: ${failingLabels.join(', ')}.`
+              : 'One or more color pairs do not pass yet.'}
+          </span>
+        )}
+        completionFeedback={(
+          <span style={{ color: 'var(--green)' }}>✓ All three color pairs passed.</span>
+        )}
+      >
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
         {AREAS.map((area) => {
@@ -177,7 +194,7 @@ export const ContrastTool = memo(function ContrastTool({ interactive = true, onC
                   min={0}
                   max={100}
                   value={l}
-                  disabled={completed || !interactive}
+                  disabled={checked || !interactive}
                   style={{
                     width: '100%',
                     background: gradient,
@@ -185,7 +202,7 @@ export const ContrastTool = memo(function ContrastTool({ interactive = true, onC
                     WebkitAppearance: 'none',
                     height: '6px',
                     borderRadius: '3px',
-                    cursor: completed ? 'not-allowed' : 'pointer',
+                    cursor: checked ? 'not-allowed' : 'pointer',
                   }}
                   onChange={(e) => handleChange(area.id, Number(e.target.value))}
                   aria-label={`Lightness for ${area.label}: ${l}%`}
@@ -196,7 +213,7 @@ export const ContrastTool = memo(function ContrastTool({ interactive = true, onC
         })}
       </div>
 
-      {interactive && !completed && !checked && (
+      {interactive && !checked && (
         <button
           onClick={handleCheck}
           style={{
@@ -216,36 +233,7 @@ export const ContrastTool = memo(function ContrastTool({ interactive = true, onC
         </button>
       )}
 
-      {checked && !completed && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--red)' }}>
-            {failingLabels.length > 0
-              ? `Still failing: ${failingLabels.join(', ')}. Select retry to continue adjusting.`
-              : 'One or more color pairs do not pass yet. Select retry to continue adjusting.'}
-          </p>
-          <button
-            onClick={handleRetry}
-            style={{
-              padding: '0.3rem 0.75rem',
-              background: 'transparent',
-              color: 'var(--secondary-foreground)',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.8rem',
-              borderRadius: 'var(--radius-sm)',
-              border: '1px solid var(--border)',
-              cursor: 'pointer',
-            }}
-          >
-            retry
-          </button>
-        </div>
-      )}
-
-      {completed && (
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--green)' }}>
-          ✓ All three color pairs passed. Good work!
-        </p>
-      )}
+      </ExerciseStage>
     </div>
   );
 });

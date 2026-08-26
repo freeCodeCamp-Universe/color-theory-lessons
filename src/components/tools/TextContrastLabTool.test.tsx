@@ -28,16 +28,17 @@ describe('TextContrastLabTool', () => {
   it('updates a pair from failing to passing and back to failing', () => {
     render(<TextContrastLabTool interactive />);
 
-    expect(screen.getByText(/0\/3 passing/)).toBeInTheDocument();
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
+    expect(screen.getByText(/Passing pairs: 0 of 3/)).toBeInTheDocument();
 
     setTextColor('#000000');
 
-    expect(screen.getByText(/1\/3 passing/)).toBeInTheDocument();
+    expect(screen.getByText(/Passing pairs: 1 of 3/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Body copy ✓' })).toBeInTheDocument();
 
     setTextColor('#999999');
 
-    expect(screen.getByText(/0\/3 passing/)).toBeInTheDocument();
+    expect(screen.getByText(/Passing pairs: 0 of 3/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Body copy' })).toBeInTheDocument();
   });
 
@@ -51,13 +52,24 @@ describe('TextContrastLabTool', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Sidebar text' }));
     setTextColor('#000000');
 
-    expect(screen.getByText(/3\/3 passing/)).toBeInTheDocument();
-    expect(screen.getByText(/All three pairs now meet the 4.5:1 threshold for normal text/)).toBeInTheDocument();
+    expect(screen.getByText(/Passing pairs: 3 of 3/)).toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+
+    expect(screen.getByText(/All three pairs meet the 4.5:1 threshold for normal text/)).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
+  });
 
-    setTextColor('#999999');
+  it('keeps an incomplete repair in the stage for retry', () => {
+    const onComplete = vi.fn();
+    render(<TextContrastLabTool interactive onComplete={onComplete} />);
 
-    expect(screen.getByText(/2\/3 passing/)).toBeInTheDocument();
-    expect(screen.queryByText(/All three pairs now meet the 4.5:1 threshold for normal text/)).not.toBeInTheDocument();
+    setTextColor('#000000');
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+
+    expect(screen.getByText(/Not all text pairs meet 4.5:1 yet/)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'try stage again' })).toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
   });
 });

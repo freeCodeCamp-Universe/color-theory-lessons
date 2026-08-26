@@ -294,14 +294,31 @@
   color: var(--primary-foreground);
 }
 
+.answerSelected {
+  border-color: var(--yellow);
+  color: var(--primary-foreground);
+}
+
 .answerChoice:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
-.answerWrong {
-  border-color: var(--red) !important;
-  color: var(--red) !important;
+.checkAnswerBtn {
+  padding: 0.35rem 0.9rem;
+  background: var(--yellow);
+  color: var(--gray-90);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.checkAnswerBtn:disabled {
+  background: var(--border);
+  cursor: not-allowed;
 }
 
 .answerFeedback {

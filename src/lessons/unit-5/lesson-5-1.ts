@@ -25,7 +25,7 @@ export const lesson5_1: LessonConfig = {
     },
   ],
   challenge: {
-    prompt: 'Fix all three text and background pairs so their normal-size text has a contrast ratio of at least 4.5:1.',
+    prompt: 'Complete one repair stage: fix all three text and background pairs, then check that their normal-size text has a contrast ratio of at least 4.5:1.',
     hints: [
       'Choose a darker text color or a lighter background color to increase the contrast of these pairs.',
       'Changing hue does not guarantee a higher contrast ratio. Check the ratio after each color change.',

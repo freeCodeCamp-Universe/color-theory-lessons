@@ -1,6 +1,9 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useState } from 'react';
 import { contrastRatioWcag, hexToRgb } from '../../utils/color.ts';
+import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 
 interface Pair {
   id: string;
@@ -34,12 +37,17 @@ function formatRatio(ratio: number, digits: number): string {
   return (Math.floor(ratio * factor) / factor).toFixed(digits);
 }
 
-interface TextContrastLabToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+const STAGES = [{
+  id: 'repair-text-contrast',
+  title: 'Repair text contrast',
+  instruction: 'Fix all three pairs so their normal text reaches a contrast ratio of at least 4.5:1, then check the stage.',
+}] satisfies readonly ExerciseStageDefinition[];
 
-export const TextContrastLabTool = memo(function TextContrastLabTool({ interactive = false, onComplete }: TextContrastLabToolProps) {
+export const TextContrastLabTool = memo(function TextContrastLabTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [activePair, setActivePair] = useState(0);
   const [textColors, setTextColors] = useState<Record<string, string>>(
     Object.fromEntries(PAIRS.map((p) => [p.id, p.defaultText])),
@@ -53,15 +61,8 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
       && isValidHex(bgColors[p.id])
       && calcRatio(textColors[p.id], bgColors[p.id]) >= p.threshold,
   ]));
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
   const completed = PAIRS.every((p) => passed[p.id]);
-  const wasCompleted = useRef(false);
-
-  useEffect(() => {
-    if (completed && !wasCompleted.current) {
-      onComplete?.();
-    }
-    wasCompleted.current = completed;
-  }, [completed, onComplete]);
 
   const pair = PAIRS[activePair];
   const textColor = textColors[pair.id];
@@ -71,13 +72,21 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
   const largePass = ratio >= 3;
 
   function handleTextChange(val: string) {
-    if (!interactive) return;
+    if (!interactive || stageController.result === 'passed') return;
     setTextColors((prev) => ({ ...prev, [pair.id]: val }));
+    stageController.retry();
   }
 
   function handleBgChange(val: string) {
-    if (!interactive) return;
+    if (!interactive || stageController.result === 'passed') return;
     setBgColors((prev) => ({ ...prev, [pair.id]: val }));
+    stageController.retry();
+  }
+
+  function checkRepairs() {
+    if (!interactive) return;
+    if (completed) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   const passedCount = Object.values(passed).filter(Boolean).length;
@@ -86,11 +95,16 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>text contrast lab</span>
 
-      {interactive && (
-        <p style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>
-          Fix all three pairs so their normal text reaches 4.5:1. ({passedCount}/{PAIRS.length} passing)
-        </p>
-      )}
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback="Not all text pairs meet 4.5:1 yet. Adjust the failing pairs and check again."
+        completionFeedback="All three pairs meet the 4.5:1 threshold for normal text."
+      >
+        {interactive && (
+          <p style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>
+            Passing pairs: {passedCount} of {PAIRS.length}.
+          </p>
+        )}
 
       {/* Pair tabs */}
       <div style={{ display: 'flex', gap: '0.25rem' }}>
@@ -175,7 +189,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
             <input
               type="text"
               value={textColor}
-              disabled={!interactive}
+              disabled={!interactive || stageController.result === 'passed'}
               onChange={(e) => handleTextChange(e.target.value)}
               style={{
                 fontFamily: 'var(--font-mono)', fontSize: '0.8rem',
@@ -194,7 +208,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
             <input
               type="text"
               value={bgColor}
-              disabled={!interactive}
+              disabled={!interactive || stageController.result === 'passed'}
               onChange={(e) => handleBgChange(e.target.value)}
               style={{
                 fontFamily: 'var(--font-mono)', fontSize: '0.8rem',
@@ -208,11 +222,22 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({ interacti
         </label>
       </div>
 
-      {completed && (
-        <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          ✓ All three pairs now meet the 4.5:1 threshold for normal text.
-        </p>
-      )}
+        {interactive && stageController.result !== 'passed' && (
+          <button
+            type="button"
+            onClick={checkRepairs}
+            style={{
+              alignSelf: 'flex-start', padding: '0.5rem 1.25rem',
+              background: 'var(--yellow)', color: 'var(--gray-90)',
+              fontFamily: 'var(--font-mono)', fontWeight: 700,
+              fontSize: '0.85rem', borderRadius: 'var(--radius-sm)',
+              border: 'none', cursor: 'pointer',
+            }}
+          >
+            check stage
+          </button>
+        )}
+      </ExerciseStage>
     </div>
   );
 });
