@@ -34,6 +34,7 @@ describe('InclusiveReviewTool', () => {
 
     fireEvent.click(within(simulationCheck).getByRole('button', { name: 'Pass' }));
     expect(within(simulationCheck).queryByText(/chart bars become hard to distinguish/)).not.toBeInTheDocument();
+    expect(simulationCheck.style.border).toBe('1px solid var(--accent-cta)');
 
     fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
     expect(within(simulationCheck).getByText(/chart bars become hard to distinguish/)).toBeInTheDocument();
@@ -41,6 +42,7 @@ describe('InclusiveReviewTool', () => {
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     fireEvent.click(within(simulationCheck).getByRole('button', { name: 'Needs work' }));
     expect(within(simulationCheck).queryByText(/chart bars become hard to distinguish/)).not.toBeInTheDocument();
+    expect(simulationCheck.style.border).toBe('1px solid var(--accent-success)');
   });
 
   it('completes only after every incorrect assessment is revised', () => {

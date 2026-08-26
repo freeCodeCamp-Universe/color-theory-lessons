@@ -35,8 +35,9 @@ describe('DarkModeStressChallenge', () => {
   it('reports failure and focuses the same contrast stage on retry', async () => {
     render(<DarkModeStressChallenge onComplete={vi.fn()} />);
     setSlider(/Text lightness/, 60);
-    expect(screen.getByText(/Not passed: Text against surface/)).toBeInTheDocument();
+    expect(screen.queryByText(/Not passed: Text against surface/)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'check contrast' }));
+    expect(screen.getByText(/Not passed: Text against surface/)).toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('not met yet');
 
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
@@ -50,6 +51,7 @@ describe('DarkModeStressChallenge', () => {
     fireEvent.click(screen.getByRole('button', { name: 'check contrast' }));
     fireEvent.click(screen.getByRole('button', { name: 'continue to action contrast' }));
     setSlider(/Action lightness/, 62);
+    fireEvent.click(screen.getByRole('button', { name: 'check contrast' }));
 
     expect(screen.getByText(/Not passed: Action against surface: 2\.9:1/)).toBeInTheDocument();
   });

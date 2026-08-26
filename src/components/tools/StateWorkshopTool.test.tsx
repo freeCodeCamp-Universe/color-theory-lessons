@@ -27,9 +27,11 @@ describe('StateWorkshopTool', () => {
     }
 
     expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
+    expect(screen.getByTestId('state-success').style.border).toBe('1px solid var(--accent-cta)');
     expect(onComplete).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
+    expect(screen.getByTestId('state-success').style.border).toBe('1px solid var(--accent-success)');
     expect(onComplete).toHaveBeenCalledOnce();
     expect(screen.getByText('Each state has a distinct non-color treatment.')).toBeInTheDocument();
   });

@@ -191,6 +191,7 @@ export function ThemeFromScratchChallenge({
     .every((check) => check.ratio >= check.target);
   const stagePassed = passedCount === activeChecks.length
     && (stageController.activeStage.id !== 'surface-separation' || completedTextChecksStillPass);
+  const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
 
   function setChannel(key: RoleKey, channel: keyof RoleHsl, value: number) {
     setRoles((previous) => ({
@@ -262,9 +263,9 @@ export function ThemeFromScratchChallenge({
           {activeChecks.map((check) => {
             const checkPassed = check.ratio >= check.target;
             return (
-              <p key={check.id} role="listitem" className={checkPassed ? styles.good : styles.bad}>
-                <span aria-hidden="true">{checkPassed ? '✓' : '✗'}</span>{' '}
-                {checkPassed ? 'Pass' : 'Not passed'}: {check.label}: {check.ratio.toFixed(2)}:1 (target: {check.target.toFixed(1)}:1)
+              <p key={check.id} role="listitem" className={showResults ? (checkPassed ? styles.good : styles.bad) : undefined}>
+                {showResults && <><span aria-hidden="true">{checkPassed ? '✓' : '✗'}</span>{' '}</>}
+                {showResults ? `${checkPassed ? 'Pass' : 'Not passed'}: ` : ''}{check.label}: {check.ratio.toFixed(2)}:1 (target: {check.target.toFixed(1)}:1)
               </p>
             );
           })}

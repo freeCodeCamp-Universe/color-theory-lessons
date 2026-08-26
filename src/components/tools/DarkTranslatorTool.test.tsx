@@ -32,6 +32,10 @@ function setPassingRoles() {
   setRole('error', '#dc2626');
 }
 
+function checkStage() {
+  fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+}
+
 describe('DarkTranslatorTool', () => {
   it.each(['success', 'error'] as const)('does not complete with an invalid %s color', (role) => {
     const onComplete = vi.fn();
@@ -40,6 +44,7 @@ describe('DarkTranslatorTool', () => {
     setRole(role, '#invalid');
     setRole(role === 'success' ? 'error' : 'success', role === 'success' ? '#dc2626' : '#14532d');
     setPassingBaseRoles();
+    checkStage();
 
     expect(screen.getByText(`Valid ${role} color`).parentElement).toHaveTextContent('✗');
     expect(screen.getByText('Success / error hues (30°)').parentElement).toHaveTextContent('✗ invalid');
@@ -54,6 +59,7 @@ describe('DarkTranslatorTool', () => {
     setRole('success', '#14532d');
     setRole('error', '#14532d');
     setPassingBaseRoles();
+    checkStage();
 
     expect(screen.getByText('Success / error luminance (1.5:1)').parentElement).toHaveTextContent('✗ 1.0:1');
     expect(screen.getByText('Success / error hues (30°)').parentElement).toHaveTextContent('✗ 0°');
@@ -68,6 +74,7 @@ describe('DarkTranslatorTool', () => {
     setRole('success', '#222222');
     setRole('error', '#14532d');
     setPassingBaseRoles();
+    checkStage();
 
     expect(screen.getByText('Valid success color').parentElement).toHaveTextContent('✓');
     expect(screen.getByText('Valid error color').parentElement).toHaveTextContent('✓');
@@ -87,6 +94,7 @@ describe('DarkTranslatorTool', () => {
     setRole(role, '#22c55e');
     setRole(role === 'success' ? 'error' : 'success', role === 'success' ? '#dc2626' : '#14532d');
     setPassingBaseRoles();
+    checkStage();
 
     expect(screen.getByText(checkLabel).parentElement).toHaveTextContent('✗');
     expect(screen.queryByText(/passes every displayed check/)).not.toBeInTheDocument();
@@ -104,6 +112,7 @@ describe('DarkTranslatorTool', () => {
     setRole('action', '#1d4ed8');
     setRole('success', '#14532d');
     setRole('error', '#dc2626');
+    checkStage();
 
     expect(screen.getByText('Primary text / surface (4.5:1)').parentElement).toHaveTextContent('✗ 2.8:1');
     expect(screen.queryByText(/passes every displayed check/)).not.toBeInTheDocument();
@@ -121,6 +130,7 @@ describe('DarkTranslatorTool', () => {
     setRole('action', '#1d4ed8');
     setRole('success', '#14532d');
     setRole('error', '#dc2626');
+    checkStage();
 
     expect(screen.getByText('Secondary text / surface (4.5:1)').parentElement).toHaveTextContent('✗ 3.0:1');
     expect(screen.queryByText(/passes every displayed check/)).not.toBeInTheDocument();
@@ -132,8 +142,10 @@ describe('DarkTranslatorTool', () => {
 
     setRole('surface', '#ffffff');
     setRole('primary-text', '#777777');
+    checkStage();
     expect(screen.getByText('Primary text / surface (4.5:1)').parentElement).toHaveTextContent('✗ 4.4:1');
 
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     setRole('primary-text', '#767676');
     expect(screen.getByText('Primary text / surface (4.5:1)').parentElement).toHaveTextContent('✓ 4.5:1');
   });
@@ -143,8 +155,10 @@ describe('DarkTranslatorTool', () => {
 
     setRole('success', '#ffffff');
     setRole('error', '#d3d3d3');
+    checkStage();
     expect(screen.getByText('Success / error luminance (1.5:1)').parentElement).toHaveTextContent('✗ 1.4:1');
 
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     setRole('error', '#d2d2d2');
     expect(screen.getByText('Success / error luminance (1.5:1)').parentElement).toHaveTextContent('✓ 1.5:1');
   });
@@ -154,8 +168,10 @@ describe('DarkTranslatorTool', () => {
 
     setRole('page-bg', '#ffffff');
     setRole('surface', '#f4f4f4');
+    checkStage();
     expect(screen.getByText('Surface ≠ page-bg (1.1:1)').parentElement).toHaveTextContent('✗ 1.0:1');
 
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     setRole('surface', '#f3f3f3');
     expect(screen.getByText('Surface ≠ page-bg (1.1:1)').parentElement).toHaveTextContent('✓ 1.1:1');
   });
@@ -167,14 +183,16 @@ describe('DarkTranslatorTool', () => {
     expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
     setPassingRoles();
 
+    expect(screen.getByText('Primary text / surface (4.5:1)').parentElement).not.toHaveTextContent('✓');
+    expect(onComplete).not.toHaveBeenCalled();
+    checkStage();
+
     expect(screen.getByText('Primary text / surface (4.5:1)').parentElement).toHaveTextContent('✓');
     expect(screen.getByText('Secondary text / surface (4.5:1)').parentElement).toHaveTextContent('✓');
     expect(screen.getByText('White / success (4.5:1)').parentElement).toHaveTextContent('✓');
     expect(screen.getByText('White / error (4.5:1)').parentElement).toHaveTextContent('✓');
     expect(screen.getByText('Success / error luminance (1.5:1)').parentElement).toHaveTextContent('✓');
     expect(screen.getByText('Success / error hues (30°)').parentElement).toHaveTextContent('✓');
-    expect(onComplete).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
     expect(screen.getByText('Your dark theme passes every displayed check. Compare the preview in both modes before continuing.')).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
   });

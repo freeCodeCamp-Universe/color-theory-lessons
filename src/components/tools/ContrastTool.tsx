@@ -119,6 +119,7 @@ export const ContrastTool = memo(function ContrastTool({
           const l = lightness[area.id];
           const ratio = computeRatio(area, l);
           const fixed = ratio >= area.threshold;
+          const showResult = stageController.attemptedStageIds.includes(stageController.activeStage.id);
 
           // Compute displayed color
           const baseHSL = area.fixBg
@@ -136,7 +137,7 @@ export const ContrastTool = memo(function ContrastTool({
               key={area.id}
               style={{
                 background: 'var(--surface)',
-                border: `1px solid ${fixed ? 'var(--green)' : 'var(--border)'}`,
+                border: `1px solid ${showResult && fixed ? 'var(--green)' : 'var(--border)'}`,
                 borderRadius: 'var(--radius-md)',
                 padding: 'var(--spacing-md)',
                 display: 'flex',
@@ -149,13 +150,13 @@ export const ContrastTool = memo(function ContrastTool({
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
                   {area.label}
                 </span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: fixed ? 'var(--green)' : 'var(--muted)' }}>
-                  {fixed ? '✓ readable' : 'adjust lightness'}
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: showResult && fixed ? 'var(--green)' : 'var(--muted)' }}>
+                  {showResult ? (fixed ? '✓ readable' : 'below target') : 'not checked'}
                 </span>
               </div>
 
               {/* Ratio display */}
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: fixed ? 'var(--green)' : 'var(--yellow)' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: showResult && fixed ? 'var(--green)' : showResult ? 'var(--yellow)' : 'var(--muted)' }}>
                 ratio: {ratio.toFixed(2)}:1. WCAG AA requires {area.threshold}:1.
               </div>
 

@@ -24,6 +24,15 @@ beforeEach(() => sessionStorage.clear());
 afterEach(() => cleanup());
 
 describe('ThemeFromScratchChallenge', () => {
+  it('waits for submission before showing pass or fail judgments', () => {
+    render(<ThemeFromScratchChallenge onComplete={vi.fn()} />);
+
+    expect(screen.queryByText(/^Pass:/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^Not passed:/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'check set text readability' }));
+    expect(screen.getAllByText(/^(Pass|Not passed):/).length).toBeGreaterThan(0);
+  });
+
   it('shows only the controls and checks for the active stage', () => {
     render(<ThemeFromScratchChallenge onComplete={vi.fn()} />);
 

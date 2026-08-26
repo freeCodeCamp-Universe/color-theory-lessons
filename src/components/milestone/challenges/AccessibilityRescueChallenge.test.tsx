@@ -34,7 +34,9 @@ describe('AccessibilityRescueChallenge', () => {
 
   it('reports failure and focuses the same repair on retry', async () => {
     render(<AccessibilityRescueChallenge onComplete={vi.fn()} />);
+    expect(screen.queryByText(/Not passed: Contrast/)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'check repair' }));
+    expect(screen.getByText(/Not passed: Contrast/)).toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('does not pass');
 
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));

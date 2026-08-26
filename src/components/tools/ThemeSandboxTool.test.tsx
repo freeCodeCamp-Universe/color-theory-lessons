@@ -30,6 +30,8 @@ describe('ThemeSandboxTool contrast requirements', () => {
     render(<ThemeSandboxTool interactive />);
     setRegressionColors();
 
+    expect(screen.getByText(/Primary text on background:/)).not.toHaveTextContent('✗');
+    fireEvent.click(screen.getByRole('button', { name: 'check theme' }));
     expect(screen.getByText('✗ Primary text on background: 1.5:1 (target: 4.5:1)')).toBeInTheDocument();
     expect(screen.getByText('✗ Primary text on surface: 1.5:1 (target: 4.5:1)')).toBeInTheDocument();
     expect(screen.getByText('✗ Secondary text on surface: 1.5:1 (target: 4.5:1)')).toBeInTheDocument();
@@ -53,9 +55,9 @@ describe('ThemeSandboxTool contrast requirements', () => {
 
     setColor('Secondary text', '#777777');
 
+    fireEvent.click(screen.getByRole('button', { name: 'check theme' }));
     expect(screen.getByText(/Secondary text on surface: 3\.2:1 \(target: 4\.5:1\)/))
       .toHaveTextContent('✗');
-    fireEvent.click(screen.getByRole('button', { name: 'check theme' }));
     expect(screen.getByRole('button', { name: 'try stage again' })).toBeInTheDocument();
   });
 
@@ -65,9 +67,9 @@ describe('ThemeSandboxTool contrast requirements', () => {
 
     setColor('Secondary text', '#999999');
 
+    fireEvent.click(screen.getByRole('button', { name: 'check theme' }));
     expect(screen.getByText(/Secondary text on surface: 5\.1:1 \(target: 4\.5:1\)/))
       .toHaveTextContent('✓');
-    fireEvent.click(screen.getByRole('button', { name: 'check theme' }));
     expect(onComplete).toHaveBeenCalledOnce();
     expect(screen.getByText('Theme complete. All five checked text pairs meet 4.5:1.')).toBeInTheDocument();
   });
@@ -79,9 +81,9 @@ describe('ThemeSandboxTool contrast requirements', () => {
     setColor('Secondary text', '#999999');
     setColor('Gradient start', '#777777');
 
+    fireEvent.click(screen.getByRole('button', { name: 'check theme' }));
     expect(screen.getByText('✗ Hero text on gradient start: 4.4:1 (target: 4.5:1)'))
       .toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'check theme' }));
 
     expect(onComplete).not.toHaveBeenCalled();
     expect(screen.getByRole('button', { name: 'try stage again' })).toBeInTheDocument();

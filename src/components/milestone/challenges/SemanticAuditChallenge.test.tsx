@@ -36,7 +36,10 @@ describe('SemanticAuditChallenge', () => {
 
   it('reports an incomplete role stage and focuses it on retry', async () => {
     render(<SemanticAuditChallenge onComplete={vi.fn()} />);
+    expect(screen.getByText('0 / 8 assigned')).toBeInTheDocument();
+    expect(screen.queryByText(/correct$/)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'check roles' }));
+    expect(screen.getByText('0 / 8 correct')).toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('Assign every role');
 
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));

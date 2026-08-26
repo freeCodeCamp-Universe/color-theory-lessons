@@ -65,12 +65,12 @@ function getHueDifference(first: string, second: string) {
   return Math.min(difference, 360 - difference);
 }
 
-function CheckRow({ label, pass, ratio }: { label: string; pass: boolean; ratio?: number }) {
+function CheckRow({ label, pass, ratio, showResult }: { label: string; pass: boolean; ratio?: number; showResult: boolean }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', padding: '0.2rem 0' }}>
       <span style={{ color: 'var(--primary-foreground)' }}>{label}</span>
-      <span style={{ color: pass ? '#22c55e' : '#ef4444', fontFamily: 'var(--font-mono)' }}>
-        {pass ? '✓' : '✗'} {ratio !== undefined ? ratio.toFixed(2) + ':1' : ''}
+      <span style={{ color: showResult ? (pass ? '#22c55e' : '#ef4444') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
+        {showResult ? (pass ? '✓ ' : '✗ ') : ''}{ratio !== undefined ? ratio.toFixed(2) + ':1' : ''}
       </span>
     </div>
   );
@@ -154,6 +154,7 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
   }
 
   const metrics = validateRoles(roles);
+  const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
 
   const {
     validRoles,
@@ -240,16 +241,16 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
         {/* Checks */}
         <div style={{ flex: '0 0 200px' }}>
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>VALIDATION</p>
-          <CheckRow label="Valid role colors" pass={validRoles} />
-          <CheckRow label="Primary text / surface" pass={primaryOk} ratio={primaryContrast} />
-          <CheckRow label="Secondary text / surface" pass={secondaryOk} ratio={secondaryContrast} />
-          <CheckRow label="Action text AAA" pass={actionOk} ratio={actionForeground.contrast} />
-          <CheckRow label="Success text AAA" pass={statusTextPasses.success} ratio={statusForegrounds.success.contrast} />
-          <CheckRow label="Warning text AAA" pass={statusTextPasses.warning} ratio={statusForegrounds.warning.contrast} />
-          <CheckRow label="Error text AAA" pass={statusTextPasses.error} ratio={statusForegrounds.error.contrast} />
-          <CheckRow label="Page / surface ≥ 1.5:1" pass={surfaceHierarchyOk} ratio={surfaceContrast} />
-          <CheckRow label="Status hues ≥ 30° apart" pass={statusHueDistinct} />
-          <CheckRow label="Status luminance ≥ 1.5:1" pass={statusLuminanceDistinct} ratio={minimumStatusLuminanceContrast} />
+          <CheckRow label="Valid role colors" pass={validRoles} showResult={showResults} />
+          <CheckRow label="Primary text / surface" pass={primaryOk} ratio={primaryContrast} showResult={showResults} />
+          <CheckRow label="Secondary text / surface" pass={secondaryOk} ratio={secondaryContrast} showResult={showResults} />
+          <CheckRow label="Action text AAA" pass={actionOk} ratio={actionForeground.contrast} showResult={showResults} />
+          <CheckRow label="Success text AAA" pass={statusTextPasses.success} ratio={statusForegrounds.success.contrast} showResult={showResults} />
+          <CheckRow label="Warning text AAA" pass={statusTextPasses.warning} ratio={statusForegrounds.warning.contrast} showResult={showResults} />
+          <CheckRow label="Error text AAA" pass={statusTextPasses.error} ratio={statusForegrounds.error.contrast} showResult={showResults} />
+          <CheckRow label="Page / surface ≥ 1.5:1" pass={surfaceHierarchyOk} ratio={surfaceContrast} showResult={showResults} />
+          <CheckRow label="Status hues ≥ 30° apart" pass={statusHueDistinct} showResult={showResults} />
+          <CheckRow label="Status luminance ≥ 1.5:1" pass={statusLuminanceDistinct} ratio={minimumStatusLuminanceContrast} showResult={showResults} />
         </div>
       </div>
 

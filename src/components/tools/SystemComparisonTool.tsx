@@ -44,11 +44,14 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
   }
 
   const remainingCount = INCONSISTENCIES.length - found.size;
+  const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
 
   const clickableStyle = (id: string): React.CSSProperties => ({
     position: 'relative',
     cursor: interactive ? 'pointer' : 'default',
-    outline: found.has(id) ? '2px solid #22c55e' : interactive ? '2px dashed #f59e0b' : 'none',
+    outline: found.has(id)
+      ? `2px solid ${showResults ? '#22c55e' : 'var(--accent-cta)'}`
+      : interactive ? '2px dashed #f59e0b' : 'none',
     outlineOffset: 2,
     borderRadius: 3,
   });
@@ -108,8 +111,8 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
             </div>
           </div>
           {interactive && (
-            <p style={{ fontSize: '0.75rem', color: found.size === INCONSISTENCIES.length ? 'var(--accent-success)' : 'var(--muted)', marginTop: '0.3rem' }}>
-              Found {found.size}/{INCONSISTENCIES.length} inconsistencies
+            <p style={{ fontSize: '0.75rem', color: showResults && found.size === INCONSISTENCIES.length ? 'var(--accent-success)' : 'var(--muted)', marginTop: '0.3rem' }}>
+              {showResults ? 'Found' : 'Selected'} {found.size}/{INCONSISTENCIES.length} inconsistencies
             </p>
           )}
         </div>

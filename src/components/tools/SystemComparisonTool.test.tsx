@@ -52,6 +52,8 @@ describe('SystemComparisonTool text contrast', () => {
     fireEvent.click(screen.getAllByText('Last updated: today')[0].parentElement!);
     fireEvent.click(screen.getAllByText('View')[0].parentElement!);
     fireEvent.click(screen.getAllByText('Active')[0].parentElement!);
+    expect(screen.getByText('Selected 3/4 inconsistencies')).toBeInTheDocument();
+    expect(screen.queryByText('Found 3/4 inconsistencies')).not.toBeInTheDocument();
     expect(screen.queryByText(/Secondary text lightness:/)).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
 

@@ -120,6 +120,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
     { label: 'White / error (4.5:1)', pass: errorOk, ratio: errorContrast },
     { label: 'Success / error luminance (1.5:1)', pass: semanticLuminanceOk, ratio: semanticContrast },
   ];
+  const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
 
   return (
     <div className={shellStyles.shell}>
@@ -208,15 +209,15 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
           {checks.map(({ label, pass, ratio }) => (
             <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', padding: '0.15rem 0' }}>
               <span style={{ color: 'var(--primary-foreground)' }}>{label}</span>
-              <span style={{ color: pass ? '#22c55e' : '#ef4444', fontFamily: 'var(--font-mono)' }}>
-                {pass ? '✓' : '✗'} {ratio === undefined ? '' : `${formatContrastRatio(ratio)}:1`}
+              <span style={{ color: showResults ? (pass ? '#22c55e' : '#ef4444') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
+                {showResults ? (pass ? '✓ ' : '✗ ') : ''}{ratio === undefined ? '' : `${formatContrastRatio(ratio)}:1`}
               </span>
             </div>
           ))}
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', padding: '0.15rem 0' }}>
             <span style={{ color: 'var(--primary-foreground)' }}>Success / error hues (30°)</span>
-            <span style={{ color: semanticHueOk ? '#22c55e' : '#ef4444', fontFamily: 'var(--font-mono)' }}>
-              {semanticHueOk ? '✓' : '✗'} {semanticHueDifference === null
+            <span style={{ color: showResults ? (semanticHueOk ? '#22c55e' : '#ef4444') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
+              {showResults ? (semanticHueOk ? '✓ ' : '✗ ') : ''}{semanticHueDifference === null
                 ? (semanticRolesValid ? 'no hue (achromatic)' : 'invalid')
                 : `${semanticHueDifference}°`}
             </span>

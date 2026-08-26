@@ -122,6 +122,7 @@ export function DarkModeStressChallenge({
     : stageId === 'surface-hierarchy'
       ? checks.hierarchyPass && checks.textPass
       : checks.actionPass;
+  const showResult = stageController.attemptedStageIds.includes(stageController.activeStage.id);
 
   function checkStage() {
     if (stagePassed) stageController.markPassed();
@@ -151,7 +152,7 @@ export function DarkModeStressChallenge({
           <div className={styles.row}>
             <label htmlFor="dark-text">Text lightness ({textL})</label>
             <input id="dark-text" type="range" min={60} max={100} value={textL} disabled={stageController.result !== 'idle'} onChange={(event) => setTextL(Number(event.target.value))} />
-            <span className={checks.textPass ? styles.good : styles.bad}>{checks.textPass ? 'Pass' : 'Not passed'}: Text against surface: {formatContrastRatio(checks.textContrast)}:1 (target: 4.5:1)</span>
+            <span className={showResult ? (checks.textPass ? styles.good : styles.bad) : undefined}>{showResult ? `${checks.textPass ? 'Pass' : 'Not passed'}: ` : ''}Text against surface: {formatContrastRatio(checks.textContrast)}:1 (target: 4.5:1)</span>
           </div>
         )}
 
@@ -159,7 +160,7 @@ export function DarkModeStressChallenge({
           <div className={styles.row}>
             <label htmlFor="dark-surface">Surface lightness ({surfaceL})</label>
             <input id="dark-surface" type="range" min={10} max={40} value={surfaceL} disabled={stageController.result !== 'idle'} onChange={(event) => setSurfaceL(Number(event.target.value))} />
-            <span className={checks.hierarchyPass ? styles.good : styles.bad}>{checks.hierarchyPass ? 'Pass' : 'Not passed'}: Surface against background: {formatContrastRatio(checks.hierarchyContrast)}:1 (exercise target: 1.2:1)</span>
+            <span className={showResult ? (checks.hierarchyPass ? styles.good : styles.bad) : undefined}>{showResult ? `${checks.hierarchyPass ? 'Pass' : 'Not passed'}: ` : ''}Surface against background: {formatContrastRatio(checks.hierarchyContrast)}:1 (exercise target: 1.2:1)</span>
           </div>
         )}
 
@@ -167,7 +168,7 @@ export function DarkModeStressChallenge({
           <div className={styles.row}>
             <label htmlFor="dark-action">Action lightness ({actionL})</label>
             <input id="dark-action" type="range" min={35} max={85} value={actionL} disabled={stageController.result !== 'idle'} onChange={(event) => setActionL(Number(event.target.value))} />
-            <span className={checks.actionPass ? styles.good : styles.bad}>{checks.actionPass ? 'Pass' : 'Not passed'}: Action against surface: {formatContrastRatio(checks.actionContrast)}:1 (target: 3.0:1)</span>
+            <span className={showResult ? (checks.actionPass ? styles.good : styles.bad) : undefined}>{showResult ? `${checks.actionPass ? 'Pass' : 'Not passed'}: ` : ''}Action against surface: {formatContrastRatio(checks.actionContrast)}:1 (target: 3.0:1)</span>
           </div>
         )}
 

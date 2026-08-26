@@ -15,6 +15,10 @@ describe('ComponentCheckerTool contrast threshold', () => {
       target: { value: color },
     });
 
+    expect(screen.queryByText(result)).not.toBeInTheDocument();
+    expect(screen.queryByText(count)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+
     expect(screen.getByText(result)).toBeInTheDocument();
     expect(screen.getByText(count)).toBeInTheDocument();
   });
@@ -33,11 +37,12 @@ describe('ComponentCheckerTool stages', () => {
       });
     }
 
-    expect(screen.getByText(/Passing components: 4 of 4/)).toBeInTheDocument();
+    expect(screen.queryByText(/Passing components: 4 of 4/)).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
+    expect(screen.getByText(/Passing components: 4 of 4/)).toBeInTheDocument();
     expect(screen.getByText(/All four components have at least 3:1 contrast/)).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
   });
