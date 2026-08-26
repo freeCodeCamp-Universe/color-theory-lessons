@@ -111,19 +111,19 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
       break;
 
     case 'additive-sort':
-      tool = <AdditiveSortTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <AdditiveSortTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'rgb-mixer':
-      tool = <RGBMixerTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <RGBMixerTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'mismatch-explainer':
-      tool = <MismatchExplainerTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <MismatchExplainerTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'background-shift':
-      tool = <BackgroundShiftTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <BackgroundShiftTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'format-reveal':
@@ -249,7 +249,7 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
       break;
 
     case 'logic-fixer':
-      tool = <LogicFixerTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <LogicFixerTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     default: {

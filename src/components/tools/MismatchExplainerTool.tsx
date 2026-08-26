@@ -1,34 +1,27 @@
-import { memo, useState, useEffect, useRef } from 'react';
+import { memo, useState } from 'react';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
+import { useExerciseStages } from './useExerciseStages.ts';
 
-interface Reason {
-  id: string;
-  label: string;
-  isCorrect: boolean;
-}
+interface Reason { id: string; label: string; isCorrect: boolean }
+interface Scenario { id: string; title: string; description: string; screenColor: string; reasons: Reason[] }
 
-interface Scenario {
-  title: string;
-  description: string;
-  screenColor: string;
-  reasons: Reason[];
-}
-
-const SCENARIOS: Scenario[] = [
+const SCENARIOS: readonly Scenario[] = [
   {
-    title: 'Website button vs printed brochure',
+    id: 'brochure-blue', title: 'Website button vs printed brochure',
     description: 'A designer chose a vivid blue for their primary button. The printed brochure version looks duller.',
     screenColor: '#1a5fe8',
     reasons: [
       { id: 'a', label: 'The screen emits light, while the printed ink reflects light from the surroundings.', isCorrect: true },
-      { id: 'b', label: 'The brochure\'s printer, inks, and paper may have a gamut that does not include the screen blue.', isCorrect: true },
+      { id: 'b', label: 'The brochure’s printer, inks, and paper may have a gamut that does not include the screen blue.', isCorrect: true },
       { id: 'c', label: 'A duller print proves that the designer chose the wrong blue.', isCorrect: false },
       { id: 'd', label: 'Printed colors always look the same as screen colors under good lighting.', isCorrect: false },
     ],
   },
   {
-    title: 'Brand green on screen vs painted wall',
-    description: 'A brand\'s signature green looks consistent across two phones but different on a freshly painted wall sample.',
+    id: 'painted-wall-green', title: 'Brand green on screen vs painted wall',
+    description: 'A brand’s signature green looks consistent across two phones but different on a freshly painted wall sample.',
     screenColor: '#00b450',
     reasons: [
       { id: 'a', label: 'Paint pigments absorb and reflect incoming light, while phone screens emit light from RGB subpixels.', isCorrect: true },
@@ -38,8 +31,8 @@ const SCENARIOS: Scenario[] = [
     ],
   },
   {
-    title: 'App accent vs product packaging',
-    description: 'A vivid orange used as the app\'s accent color arrives on printed packaging looking less saturated and slightly brownish.',
+    id: 'packaging-orange', title: 'App accent vs product packaging',
+    description: 'A vivid orange used as the app’s accent color arrives on printed packaging looking less saturated and slightly brownish.',
     screenColor: '#e85a10',
     reasons: [
       { id: 'a', label: 'A brownish result proves that the printer made a calibration error.', isCorrect: false },
@@ -50,230 +43,83 @@ const SCENARIOS: Scenario[] = [
   },
 ];
 
-function printFilter(): string {
-  // Returns a CSS filter string that simulates print desaturation/brightness loss
-  // We use this on a div rather than the color itself
-  return 'saturate(0.58) brightness(0.78)';
-}
+const STAGES: readonly ExerciseStageDefinition[] = SCENARIOS.map((scenario) => ({
+  id: scenario.id,
+  title: scenario.title,
+  instruction: 'Select every factor that could explain the difference.',
+  nextActionLabel: 'next stage →',
+}));
 
-interface MismatchExplainerToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
-
-export const MismatchExplainerTool = memo(function MismatchExplainerTool({ interactive = true, onComplete }: MismatchExplainerToolProps) {
-  const [scenarioIdx, setScenarioIdx] = useState(0);
-  const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [checked, setChecked] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => () => { if (timerRef.current !== null) clearTimeout(timerRef.current); }, []);
-
-  const scenario = SCENARIOS[scenarioIdx];
-  const correctIds = new Set(scenario.reasons.filter((r) => r.isCorrect).map((r) => r.id));
-
+export const MismatchExplainerTool = memo(function MismatchExplainerTool({
+  interactive = true, onComplete, onStageChange,
+}: ExerciseToolProps) {
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const scenario = SCENARIOS.find(({ id }) => id === stageController.activeStage.id) ?? SCENARIOS[0];
+  const [selections, setSelections] = useState<Record<string, Set<string>>>({});
+  const selected = selections[scenario.id] ?? new Set<string>();
+  const correctIds = new Set(scenario.reasons.filter(({ isCorrect }) => isCorrect).map(({ id }) => id));
   const allCorrectSelected = [...correctIds].every((id) => selected.has(id));
   const noWrongSelected = [...selected].every((id) => correctIds.has(id));
   const isPerfect = allCorrectSelected && noWrongSelected;
 
   function toggleReason(id: string) {
-    if (checked || !interactive) return;
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) { next.delete(id); } else { next.add(id); }
-      return next;
-    });
+    if (stageController.result !== 'idle' || !interactive) return;
+    const next = new Set(selected);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    setSelections((current) => ({ ...current, [scenario.id]: next }));
   }
 
   function handleCheck() {
     if (selected.size === 0) return;
-    setChecked(true);
-    if (isPerfect) {
-      if (scenarioIdx === SCENARIOS.length - 1) {
-        timerRef.current = setTimeout(() => onComplete?.(), 600);
-      }
-    }
+    if (isPerfect) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
-  function handleNext() {
-    setScenarioIdx((i) => i + 1);
-    setSelected(new Set());
-    setChecked(false);
-  }
-
-  function handleRetry() {
-    setSelected(new Set());
-    setChecked(false);
-  }
+  const incorrectFeedback = allCorrectSelected
+    ? 'The correct factors are selected, but at least one incorrect factor is also selected.'
+    : 'At least one factor that explains the mismatch is missing.';
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>screen vs material</span>
-
-      {/* Color comparison — always visible */}
-      <div style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: '110px' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>on screen</span>
-          <div style={{ height: '60px', borderRadius: 'var(--radius-sm)', backgroundColor: scenario.screenColor, border: '1px solid rgba(255,255,255,0.08)' }} />
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)' }}>emits light</span>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: '110px' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>material simulation</span>
-          <div style={{ height: '60px', borderRadius: 'var(--radius-sm)', backgroundColor: scenario.screenColor, filter: printFilter(), border: '1px solid rgba(0,0,0,0.08)' }} />
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)' }}>reflects light</span>
-        </div>
-      </div>
-
-      {/* Scenario + reasons — only when interactive */}
       {interactive && (
-        <>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--yellow)' }}>
-              scenario {scenarioIdx + 1} of {SCENARIOS.length}: {scenario.title}
-            </span>
-            <p style={{ fontSize: '0.9rem', color: 'var(--secondary-foreground)', margin: 0 }}>
-              {scenario.description}
-            </p>
+        <ExerciseStage
+          controller={stageController}
+          incorrectFeedback={incorrectFeedback}
+          passedFeedback="✓ The relevant factors are selected."
+          completionFeedback="✓ All three screen-to-material mismatches are explained."
+        >
+          <div style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: '110px' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>on screen</span>
+              <div style={{ height: '60px', borderRadius: 'var(--radius-sm)', backgroundColor: scenario.screenColor, border: '1px solid rgba(255,255,255,0.08)' }} />
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)' }}>emits light</span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: '110px' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>material simulation</span>
+              <div style={{ height: '60px', borderRadius: 'var(--radius-sm)', backgroundColor: scenario.screenColor, filter: 'saturate(0.58) brightness(0.78)', border: '1px solid rgba(0,0,0,0.08)' }} />
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)' }}>reflects light</span>
+            </div>
           </div>
-
+          <p style={{ fontSize: '0.9rem', color: 'var(--secondary-foreground)', margin: 0 }}>{scenario.description}</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
-              which factors could explain the difference? select all that apply
-            </span>
             {scenario.reasons.map((reason) => {
               const isSelected = selected.has(reason.id);
-              const showResult = checked;
-              const correct = reason.isCorrect;
-              const borderColor = showResult
-                ? correct && isSelected ? 'var(--green)'
-                : correct && !isSelected ? 'color-mix(in srgb, var(--green) 50%, var(--border))'
-                : !correct && isSelected ? 'var(--red)'
-                : 'var(--border)'
-                : isSelected ? 'var(--yellow)' : 'var(--border)';
-              const bg = showResult
-                ? correct && isSelected ? 'color-mix(in srgb, var(--green) 10%, var(--surface))'
-                : !correct && isSelected ? 'color-mix(in srgb, var(--red) 10%, var(--surface))'
-                : 'var(--surface)'
-                : isSelected ? 'color-mix(in srgb, var(--yellow) 10%, var(--surface))' : 'var(--surface)';
-
               return (
                 <button
-                  key={reason.id}
-                  onClick={() => toggleReason(reason.id)}
-                  disabled={checked}
-                  style={{
-                    padding: 'var(--spacing-sm) var(--spacing-md)',
-                    background: bg,
-                    border: `1px solid ${borderColor}`,
-                    borderRadius: 'var(--radius-sm)',
-                    color: 'var(--primary-foreground)',
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: '0.875rem',
-                    textAlign: 'left',
-                    cursor: checked ? 'default' : 'pointer',
-                    display: 'flex',
-                    gap: 'var(--spacing-sm)',
-                    alignItems: 'center',
-                    transition: 'border-color 0.15s ease, background 0.15s ease',
-                  }}
+                  key={reason.id} type="button" onClick={() => toggleReason(reason.id)}
+                  disabled={stageController.result !== 'idle'} aria-pressed={isSelected}
+                  style={{ padding: 'var(--spacing-sm) var(--spacing-md)', background: isSelected ? 'color-mix(in srgb, var(--yellow) 10%, var(--surface))' : 'var(--surface)', border: `1px solid ${isSelected ? 'var(--yellow)' : 'var(--border)'}`, borderRadius: 'var(--radius-sm)', color: 'var(--primary-foreground)', fontFamily: 'var(--font-sans)', fontSize: '0.875rem', textAlign: 'left' }}
                 >
-                  <span style={{
-                    width: '16px',
-                    height: '16px',
-                    borderRadius: '3px',
-                    border: `1px solid ${isSelected ? 'var(--yellow)' : 'var(--border)'}`,
-                    background: isSelected ? 'var(--yellow)' : 'transparent',
-                    flexShrink: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '0.65rem',
-                    color: 'var(--gray-90)',
-                  }}>
-                    {isSelected ? '✓' : ''}
-                  </span>
-                  <span style={{ flex: 1 }}>{reason.label}</span>
-                  {showResult && (
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: correct ? 'var(--green)' : isSelected ? 'var(--red)' : 'var(--muted)', flexShrink: 0 }}>
-                      {correct ? (isSelected ? '✓' : 'missed') : (isSelected ? '✗' : '')}
-                    </span>
-                  )}
+                  {reason.label}
                 </button>
               );
             })}
           </div>
-
-          {/* Result message */}
-          {checked && (
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: isPerfect ? 'var(--green)' : 'var(--yellow)', margin: 0 }}>
-              {isPerfect
-                ? '✓ exactly right.'
-                : allCorrectSelected
-                ? 'You got the right ones but also selected some incorrect reasons.'
-                : 'You missed some correct reasons.'}
-            </p>
+          {stageController.result === 'idle' && (
+            <button type="button" onClick={handleCheck} disabled={selected.size === 0} style={{ alignSelf: 'flex-start' }}>check stage</button>
           )}
-
-          {/* Actions */}
-          {!checked && (
-            <button
-              onClick={handleCheck}
-              disabled={selected.size === 0}
-              style={{
-                alignSelf: 'flex-start',
-                padding: '0.5rem 1.25rem',
-                background: selected.size > 0 ? 'var(--yellow)' : 'var(--border)',
-                color: 'var(--gray-90)',
-                fontFamily: 'var(--font-mono)',
-                fontWeight: 700,
-                fontSize: '0.85rem',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                cursor: selected.size > 0 ? 'pointer' : 'not-allowed',
-              }}
-            >
-              check
-            </button>
-          )}
-
-          {checked && isPerfect && scenarioIdx < SCENARIOS.length - 1 && (
-            <button
-              onClick={handleNext}
-              style={{
-                alignSelf: 'flex-start',
-                padding: '0.5rem 1.25rem',
-                background: 'var(--yellow)',
-                color: 'var(--gray-90)',
-                fontFamily: 'var(--font-mono)',
-                fontWeight: 700,
-                fontSize: '0.85rem',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              next scenario →
-            </button>
-          )}
-
-          {checked && !isPerfect && (
-            <button
-              onClick={handleRetry}
-              style={{
-                alignSelf: 'flex-start',
-                padding: '0.4rem 0.9rem',
-                background: 'transparent',
-                color: 'var(--secondary-foreground)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.8rem',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border)',
-                cursor: 'pointer',
-              }}
-            >
-              try again
-            </button>
-          )}
-        </>
+        </ExerciseStage>
       )}
     </div>
   );
