@@ -31,6 +31,7 @@ export function ExerciseStage({
     advance,
   } = controller;
   const instructionId = `exercise-stage-${activeStage.id}-instruction`;
+  const positionId = `exercise-stage-${activeStage.id}-position`;
 
   function handleRetry() {
     onRetry?.();
@@ -53,14 +54,14 @@ export function ExerciseStage({
           />
         ))}
       </div>
-      <p className={styles.position}>Stage {activeStage.position} of {activeStage.total}</p>
+      <p id={positionId} className={styles.position}>Stage {activeStage.position} of {activeStage.total}</p>
 
       <section className={styles.stagePanel}>
         <h2
           ref={stageHeadingRef}
           className={styles.title}
           tabIndex={-1}
-          aria-describedby={instructionId}
+          aria-describedby={`${positionId} ${instructionId}`}
         >
           {activeStage.title}
         </h2>

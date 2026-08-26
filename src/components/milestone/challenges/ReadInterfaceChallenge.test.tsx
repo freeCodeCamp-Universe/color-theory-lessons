@@ -1,95 +1,64 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ReadInterfaceChallenge } from './ReadInterfaceChallenge.tsx';
 
-const correctAnswers = [
-  'focal',
-  'low-contrast',
-  'competing-accent',
-  'readable-text',
-  'section-separator',
-];
+const CORRECT_ANSWERS = ['focal', 'low-contrast', 'competing-accent', 'readable-text', 'section-separator'];
 
-function answerChallenge(answers: string[]) {
-  const selects = screen.getAllByRole('combobox');
-  answers.forEach((answer, index) => fireEvent.change(selects[index], { target: { value: answer } }));
+function answerClassifications(answers: string[]) {
+  answers.forEach((answer, index) => {
+    fireEvent.change(screen.getAllByRole('combobox')[index], { target: { value: answer } });
+  });
 }
 
 beforeEach(() => sessionStorage.clear());
 afterEach(() => cleanup());
 
 describe('ReadInterfaceChallenge', () => {
-  it('requires all five classifications before checking the answers', () => {
-    render(<ReadInterfaceChallenge onComplete={vi.fn()} />);
-    const checkButton = screen.getByRole('button', { name: 'check answers' });
-
-    expect(checkButton).toBeDisabled();
-    answerChallenge(correctAnswers.slice(0, 4));
-    expect(checkButton).toBeDisabled();
-
-    fireEvent.change(screen.getAllByRole('combobox')[4], { target: { value: correctAnswers[4] } });
-    expect(checkButton).toBeEnabled();
-  });
-
-  it('places the native classification controls in keyboard order', async () => {
-    const user = userEvent.setup();
+  it('renders one named classification stage', () => {
     render(<ReadInterfaceChallenge onComplete={vi.fn()} />);
 
-    await user.tab();
-    expect(screen.getByRole('combobox', { name: 'Green “Try it free” button' })).toHaveFocus();
-    await user.tab();
-    expect(screen.getByRole('combobox', { name: 'Navigation links on blue header' })).toHaveFocus();
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Classify interface regions' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'check classifications' })).toBeDisabled();
   });
 
-  it('reports a failed attempt without completing the challenge', () => {
+  it('reports failure and returns focus to a cleared classification stage on retry', async () => {
     const onComplete = vi.fn();
     render(<ReadInterfaceChallenge onComplete={onComplete} />);
-    answerChallenge([...correctAnswers.slice(0, 3), 'focal', 'focal']);
+    answerClassifications([...CORRECT_ANSWERS.slice(0, 3), 'focal', 'focal']);
 
-    fireEvent.click(screen.getByRole('button', { name: 'check answers' }));
-
+    fireEvent.click(screen.getByRole('button', { name: 'check classifications' }));
     expect(screen.getByRole('status')).toHaveTextContent('3 of 5 correct');
-    expect(screen.getByRole('button', { name: 'try again' })).toBeEnabled();
     expect(onComplete).not.toHaveBeenCalled();
-  });
 
-  it('clears every classification on retry', () => {
-    render(<ReadInterfaceChallenge onComplete={vi.fn()} />);
-    answerChallenge([...correctAnswers.slice(0, 3), 'focal', 'focal']);
-    fireEvent.click(screen.getByRole('button', { name: 'check answers' }));
-    fireEvent.click(screen.getByRole('button', { name: 'try again' }));
-
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
+    await waitFor(() => expect(screen.getByRole('heading', { name: 'Classify interface regions' })).toHaveFocus());
     for (const select of screen.getAllByRole('combobox')) expect(select).toHaveValue('');
-    expect(screen.getByText('0 / 5 answered')).toBeInTheDocument();
   });
 
-  it('completes only after at least four correct answers', () => {
+  it('completes after the single stage passes', () => {
     const onComplete = vi.fn();
     render(<ReadInterfaceChallenge onComplete={onComplete} />);
-    answerChallenge([...correctAnswers.slice(0, 4), 'focal']);
+    answerClassifications([...CORRECT_ANSWERS.slice(0, 4), 'focal']);
 
-    fireEvent.click(screen.getByRole('button', { name: 'check answers' }));
-    expect(screen.getByRole('status')).toHaveTextContent('4 of 5 correct');
-    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'check classifications' }));
 
-    fireEvent.click(screen.getByRole('button', { name: 'finish challenge' }));
+    expect(screen.getByRole('status')).toHaveTextContent('Interface classification complete');
     expect(onComplete).toHaveBeenCalledOnce();
   });
 
-  it('restores classifications and submitted feedback after a reload', async () => {
-    const first = render(
-      <ReadInterfaceChallenge onComplete={vi.fn()} sessionKey="milestone-1:1" />,
-    );
-    answerChallenge([...correctAnswers.slice(0, 4), 'focal']);
-    fireEvent.click(screen.getByRole('button', { name: 'check answers' }));
-
+  it('restores an in-progress classification attempt', async () => {
+    const sessionKey = 'milestone-1:1';
+    const first = render(<ReadInterfaceChallenge onComplete={vi.fn()} sessionKey={sessionKey} />);
+    answerClassifications(CORRECT_ANSWERS.slice(0, 2));
     await waitFor(() => expect(sessionStorage.length).toBe(1));
-    first.unmount();
-    render(<ReadInterfaceChallenge onComplete={vi.fn()} sessionKey="milestone-1:1" />);
 
-    expect(screen.getByRole('status')).toHaveTextContent('4 of 5 correct');
-    expect(screen.getByRole('button', { name: 'finish challenge' })).toBeEnabled();
+    first.unmount();
+    render(<ReadInterfaceChallenge onComplete={vi.fn()} sessionKey={sessionKey} />);
+
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
     expect(screen.getAllByRole('combobox')[0]).toHaveValue('focal');
+    expect(screen.getAllByRole('combobox')[1]).toHaveValue('low-contrast');
+    expect(screen.getByText('2 / 5 answered')).toBeInTheDocument();
   });
 });

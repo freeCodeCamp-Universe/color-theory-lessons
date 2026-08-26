@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { THEME_FROM_SCRATCH_SESSION_PREFIX } from '../../../state/persistence.ts';
 import { contrastRatioWcag, hexToRgb, hslToHex } from '../../../utils/color.ts';
+import { ExerciseStage } from '../../tools/ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseStageResult } from '../../tools/exercise-stage.ts';
+import { useExerciseStages } from '../../tools/useExerciseStages.ts';
 import styles from './ThemeFromScratchChallenge.module.css';
-
-interface ThemeFromScratchChallengeProps {
-  onComplete: () => void;
-  sessionKey?: string;
-}
+import type { MilestoneChallengeProps, StoredMilestoneStage } from './milestone-stage.ts';
+import { restoreMilestoneStage } from './milestone-stage.ts';
 
 type RoleKey = 'bg' | 'surface' | 'primaryText' | 'secondaryText' | 'accent';
 
@@ -16,7 +16,7 @@ interface RoleHsl {
   l: number;
 }
 
-interface ThemeFromScratchSession {
+interface ThemeFromScratchSession extends StoredMilestoneStage {
   version: 1;
   roles: Record<RoleKey, RoleHsl>;
 }
@@ -51,6 +51,38 @@ const DEFAULTS: Record<RoleKey, RoleHsl> = {
   accent: { h: BASE_HUE, s: 82, l: 44 },
 };
 
+const STAGES: readonly ExerciseStageDefinition[] = [
+  {
+    id: 'text-readability',
+    title: 'Set text readability',
+    instruction: 'Adjust the background, surface, and text roles until all three text pairs reach 4.5:1.',
+    nextActionLabel: 'continue to surface separation',
+  },
+  {
+    id: 'surface-separation',
+    title: 'Separate the surface',
+    instruction: 'Adjust the background, surface, and text roles until the surface reaches the 1.2:1 exercise target and the text remains readable.',
+    nextActionLabel: 'continue to accent visibility',
+  },
+  {
+    id: 'accent-visibility',
+    title: 'Set accent visibility',
+    instruction: 'Adjust the accent until it separates from the surface and keeps its text readable.',
+  },
+];
+
+const STAGE_ROLE_KEYS: Record<string, RoleKey[]> = {
+  'text-readability': ['bg', 'surface', 'primaryText', 'secondaryText'],
+  'surface-separation': ['bg', 'surface', 'primaryText', 'secondaryText'],
+  'accent-visibility': ['accent'],
+};
+
+const STAGE_CHECK_IDS: Record<string, string[]> = {
+  'text-readability': ['primary-background', 'primary-surface', 'secondary-surface'],
+  'surface-separation': ['surface-background'],
+  'accent-visibility': ['accent-surface', 'primary-accent'],
+};
+
 function ratio(a: string, b: string): number {
   return contrastRatioWcag(hexToRgb(a), hexToRgb(b));
 }
@@ -60,7 +92,12 @@ function validChannel(value: unknown, maximum: number): value is number {
 }
 
 function loadSession(sessionKey?: string): ThemeFromScratchSession {
-  const fallback: ThemeFromScratchSession = { version: 1, roles: DEFAULTS };
+  const fallback: ThemeFromScratchSession = {
+    version: 1,
+    roles: DEFAULTS,
+    activeStageId: STAGES[0].id,
+    stageResult: 'idle',
+  };
   if (!sessionKey) return fallback;
 
   try {
@@ -85,7 +122,7 @@ function loadSession(sessionKey?: string): ThemeFromScratchSession {
       }
     }
 
-    return { version: 1, roles };
+    return { version: 1, roles, ...restoreMilestoneStage(saved, STAGES) };
   } catch {
     return fallback;
   }
@@ -103,14 +140,29 @@ function saveSession(sessionKey: string | undefined, session: ThemeFromScratchSe
   }
 }
 
-export function ThemeFromScratchChallenge({ onComplete, sessionKey }: ThemeFromScratchChallengeProps) {
+export function ThemeFromScratchChallenge({
+  onComplete,
+  sessionKey,
+  onStageChange,
+}: MilestoneChallengeProps) {
   const [initialSession] = useState(() => loadSession(sessionKey));
   const [roles, setRoles] = useState<Record<RoleKey, RoleHsl>>(initialSession.roles);
-  const completionSent = useRef(false);
+  const stageController = useExerciseStages({
+    stages: STAGES,
+    onComplete,
+    onStageChange,
+    initialStageId: initialSession.activeStageId as string,
+    initialResult: initialSession.stageResult as ExerciseStageResult,
+  });
 
   useEffect(() => {
-    saveSession(sessionKey, { version: 1, roles });
-  }, [roles, sessionKey]);
+    saveSession(sessionKey, {
+      version: 1,
+      roles,
+      activeStageId: stageController.activeStage.id,
+      stageResult: stageController.result,
+    });
+  }, [roles, sessionKey, stageController.activeStage.id, stageController.result]);
 
   const hex = useMemo(() => ({
     bg: hslToHex(roles.bg.h, roles.bg.s, roles.bg.l),
@@ -121,46 +173,24 @@ export function ThemeFromScratchChallenge({ onComplete, sessionKey }: ThemeFromS
   }), [roles]);
 
   const checks = useMemo<ThemeCheck[]>(() => [
-    {
-      id: 'primary-background',
-      label: 'Primary text on background',
-      ratio: ratio(hex.primaryText, hex.bg),
-      target: TEXT_CONTRAST_TARGET,
-    },
-    {
-      id: 'primary-surface',
-      label: 'Primary text on surface',
-      ratio: ratio(hex.primaryText, hex.surface),
-      target: TEXT_CONTRAST_TARGET,
-    },
-    {
-      id: 'secondary-surface',
-      label: 'Secondary text on surface',
-      ratio: ratio(hex.secondaryText, hex.surface),
-      target: TEXT_CONTRAST_TARGET,
-    },
-    {
-      id: 'surface-background',
-      label: 'Surface against background',
-      ratio: ratio(hex.surface, hex.bg),
-      target: SURFACE_SEPARATION_TARGET,
-    },
-    {
-      id: 'accent-surface',
-      label: 'Accent against surface',
-      ratio: ratio(hex.accent, hex.surface),
-      target: ACCENT_SEPARATION_TARGET,
-    },
-    {
-      id: 'primary-accent',
-      label: 'Primary text on accent',
-      ratio: ratio(hex.primaryText, hex.accent),
-      target: TEXT_CONTRAST_TARGET,
-    },
+    { id: 'primary-background', label: 'Primary text on background', ratio: ratio(hex.primaryText, hex.bg), target: TEXT_CONTRAST_TARGET },
+    { id: 'primary-surface', label: 'Primary text on surface', ratio: ratio(hex.primaryText, hex.surface), target: TEXT_CONTRAST_TARGET },
+    { id: 'secondary-surface', label: 'Secondary text on surface', ratio: ratio(hex.secondaryText, hex.surface), target: TEXT_CONTRAST_TARGET },
+    { id: 'surface-background', label: 'Surface against background', ratio: ratio(hex.surface, hex.bg), target: SURFACE_SEPARATION_TARGET },
+    { id: 'accent-surface', label: 'Accent against surface', ratio: ratio(hex.accent, hex.surface), target: ACCENT_SEPARATION_TARGET },
+    { id: 'primary-accent', label: 'Primary text on accent', ratio: ratio(hex.primaryText, hex.accent), target: TEXT_CONTRAST_TARGET },
   ], [hex]);
 
-  const passedCount = checks.filter((check) => check.ratio >= check.target).length;
-  const passed = passedCount === checks.length;
+  const activeChecks = checks.filter((check) => (
+    STAGE_CHECK_IDS[stageController.activeStage.id].includes(check.id)
+  ));
+  const activeRoleKeys = STAGE_ROLE_KEYS[stageController.activeStage.id];
+  const passedCount = activeChecks.filter((check) => check.ratio >= check.target).length;
+  const completedTextChecksStillPass = checks
+    .filter((check) => STAGE_CHECK_IDS['text-readability'].includes(check.id))
+    .every((check) => check.ratio >= check.target);
+  const stagePassed = passedCount === activeChecks.length
+    && (stageController.activeStage.id !== 'surface-separation' || completedTextChecksStillPass);
 
   function setChannel(key: RoleKey, channel: keyof RoleHsl, value: number) {
     setRoles((previous) => ({
@@ -169,10 +199,9 @@ export function ThemeFromScratchChallenge({ onComplete, sessionKey }: ThemeFromS
     }));
   }
 
-  function handleComplete() {
-    if (!passed || completionSent.current) return;
-    completionSent.current = true;
-    onComplete();
+  function checkThemeStage() {
+    if (stagePassed) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   return (
@@ -182,96 +211,73 @@ export function ThemeFromScratchChallenge({ onComplete, sessionKey }: ThemeFromS
         <span className={styles.brand}>Starting hue: {BASE_HUE}°</span>
       </div>
 
-      <div className={styles.grid}>
-        {ROLE_KEYS.map((key) => (
-          <fieldset key={key} className={styles.roleCard}>
-            <legend className={styles.roleTop}>
-              <span>{ROLE_LABELS[key]}</span>
-              <code>{hex[key].toUpperCase()}</code>
-            </legend>
-            <div className={styles.sliderRow}>
-              <label htmlFor={`${key}-h`}>Hue</label>
-              <input
-                id={`${key}-h`}
-                type="range"
-                min={0}
-                max={360}
-                value={roles[key].h}
-                aria-label={`${ROLE_LABELS[key]} hue`}
-                onChange={(event) => setChannel(key, 'h', Number(event.target.value))}
-              />
-              <span className={styles.sliderValue} aria-hidden="true">{roles[key].h}°</span>
-            </div>
-            <div className={styles.sliderRow}>
-              <label htmlFor={`${key}-s`}>Saturation</label>
-              <input
-                id={`${key}-s`}
-                type="range"
-                min={0}
-                max={100}
-                value={roles[key].s}
-                aria-label={`${ROLE_LABELS[key]} saturation`}
-                onChange={(event) => setChannel(key, 's', Number(event.target.value))}
-              />
-              <span className={styles.sliderValue} aria-hidden="true">{roles[key].s}%</span>
-            </div>
-            <div className={styles.sliderRow}>
-              <label htmlFor={`${key}-l`}>Lightness</label>
-              <input
-                id={`${key}-l`}
-                type="range"
-                min={0}
-                max={100}
-                value={roles[key].l}
-                aria-label={`${ROLE_LABELS[key]} lightness`}
-                onChange={(event) => setChannel(key, 'l', Number(event.target.value))}
-              />
-              <span className={styles.sliderValue} aria-hidden="true">{roles[key].l}%</span>
-            </div>
-          </fieldset>
-        ))}
-      </div>
-
-      <div className={styles.preview} style={{ backgroundColor: hex.bg }}>
-        <p className={styles.backgroundText} style={{ color: hex.primaryText }}>
-          Page background
-        </p>
-        <div className={styles.previewCard} style={{ backgroundColor: hex.surface }}>
-          <p className={styles.previewTitle} style={{ color: hex.primaryText }}>Palette preview</p>
-          <p className={styles.previewBody} style={{ color: hex.secondaryText }}>
-            Secondary text supports the primary heading.
-          </p>
-          <span
-            className={styles.previewButton}
-            style={{ backgroundColor: hex.accent, color: hex.primaryText }}
-            aria-hidden="true"
-          >
-            Primary action
-          </span>
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback={stageController.activeStage.id === 'surface-separation' && !completedTextChecksStillPass
+          ? 'The surface meets its target only when the completed text checks also remain at 4.5:1.'
+          : `${passedCount} of ${activeChecks.length} checks pass. Adjust this stage and try again.`}
+        passedFeedback={`All ${activeChecks.length} checks in this stage pass. Next action: ${stageController.activeStage.nextActionLabel}.`}
+        completionFeedback="Both accent checks pass. Theme challenge complete."
+      >
+        <div className={styles.grid}>
+          {activeRoleKeys.map((key) => (
+            <fieldset key={key} className={styles.roleCard} disabled={stageController.result !== 'idle'}>
+              <legend className={styles.roleTop}>
+                <span>{ROLE_LABELS[key]}</span>
+                <code>{hex[key].toUpperCase()}</code>
+              </legend>
+              {(['h', 's', 'l'] as const).map((channel) => {
+                const channelLabel = channel === 'h' ? 'Hue' : channel === 's' ? 'Saturation' : 'Lightness';
+                const suffix = channel === 'h' ? '°' : '%';
+                return (
+                  <div key={channel} className={styles.sliderRow}>
+                    <label htmlFor={`${key}-${channel}`}>{channelLabel}</label>
+                    <input
+                      id={`${key}-${channel}`}
+                      type="range"
+                      min={0}
+                      max={channel === 'h' ? 360 : 100}
+                      value={roles[key][channel]}
+                      aria-label={`${ROLE_LABELS[key]} ${channelLabel.toLowerCase()}`}
+                      onChange={(event) => setChannel(key, channel, Number(event.target.value))}
+                    />
+                    <span className={styles.sliderValue} aria-hidden="true">{roles[key][channel]}{suffix}</span>
+                  </div>
+                );
+              })}
+            </fieldset>
+          ))}
         </div>
-      </div>
 
-      <div className={styles.checks} role="list" aria-label="Theme checks">
-        {checks.map((check) => {
-          const checkPassed = check.ratio >= check.target;
-          return (
-            <p key={check.id} role="listitem" className={checkPassed ? styles.good : styles.bad}>
-              <span aria-hidden="true">{checkPassed ? '✓' : '✗'}</span>{' '}
-              {checkPassed ? 'Pass' : 'Not passed'}: {check.label}: {check.ratio.toFixed(2)}:1 (target: {check.target.toFixed(1)}:1)
-            </p>
-          );
-        })}
-      </div>
+        <div className={styles.preview} style={{ backgroundColor: hex.bg }}>
+          <p className={styles.backgroundText} style={{ color: hex.primaryText }}>Page background</p>
+          <div className={styles.previewCard} style={{ backgroundColor: hex.surface }}>
+            <p className={styles.previewTitle} style={{ color: hex.primaryText }}>Palette preview</p>
+            <p className={styles.previewBody} style={{ color: hex.secondaryText }}>Secondary text supports the primary heading.</p>
+            <span className={styles.previewButton} style={{ backgroundColor: hex.accent, color: hex.primaryText }} aria-hidden="true">Primary action</span>
+          </div>
+        </div>
 
-      <p className={styles.result} role="status" aria-live="polite">
-        {passed ? 'All six theme checks pass.' : `${passedCount} of 6 theme checks pass.`}
-      </p>
+        <div className={styles.checks} role="list" aria-label="Current stage checks">
+          {activeChecks.map((check) => {
+            const checkPassed = check.ratio >= check.target;
+            return (
+              <p key={check.id} role="listitem" className={checkPassed ? styles.good : styles.bad}>
+                <span aria-hidden="true">{checkPassed ? '✓' : '✗'}</span>{' '}
+                {checkPassed ? 'Pass' : 'Not passed'}: {check.label}: {check.ratio.toFixed(2)}:1 (target: {check.target.toFixed(1)}:1)
+              </p>
+            );
+          })}
+        </div>
 
-      <div className={styles.actions}>
-        <button type="button" className={styles.button} disabled={!passed} onClick={handleComplete}>
-          finish challenge
-        </button>
-      </div>
+        {stageController.result === 'idle' && (
+          <div className={styles.actions}>
+            <button type="button" className={styles.button} onClick={checkThemeStage}>
+              check {stageController.activeStage.title.toLowerCase()}
+            </button>
+          </div>
+        )}
+      </ExerciseStage>
     </div>
   );
 }

@@ -383,7 +383,7 @@ describe('MilestonePlayer', () => {
 
       fireEvent.click(screen.getByRole('button', { name: 'complete test challenge' }));
       expect(screen.getByText('4 of 4 points earned')).toBeInTheDocument();
-      expect(screen.getByText('Your text, surface, and accent color pairs passed all six checks.')).toBeInTheDocument();
+      expect(screen.getByText('Your theme passed the text readability, surface separation, and accent visibility stages.')).toBeInTheDocument();
       fireEvent.click(screen.getByRole('button', { name: 'next part →' }));
 
       for (let index = 0; index < 3; index += 1) {
@@ -424,7 +424,7 @@ describe('MilestonePlayer', () => {
 
       fireEvent.click(screen.getByRole('button', { name: 'complete test challenge' }));
       expect(screen.getByText('4 of 4 points earned')).toBeInTheDocument();
-      expect(screen.getByText('You found all three color-only designs and selected a label, icon, or pattern for each one.')).toBeInTheDocument();
+      expect(screen.getByText('You identified all three color-only designs and chose a valid non-color repair for each one.')).toBeInTheDocument();
       fireEvent.click(screen.getByRole('button', { name: 'next part →' }));
 
       for (let index = 0; index < 3; index += 1) {
@@ -465,7 +465,7 @@ describe('MilestonePlayer', () => {
 
       fireEvent.click(screen.getByRole('button', { name: 'complete test challenge' }));
       expect(screen.getByText('4 of 4 points earned')).toBeInTheDocument();
-      expect(screen.getByText('All four repairs pass: body text contrast, a required-field cue, a visible focus indicator, and settings icon contrast.')).toBeInTheDocument();
+      expect(screen.getByText('You passed all four repair stages: body text, required-field cue, focus indicator, and icon contrast.')).toBeInTheDocument();
       fireEvent.click(screen.getByRole('button', { name: 'next part →' }));
 
       for (let index = 0; index < 4; index += 1) {

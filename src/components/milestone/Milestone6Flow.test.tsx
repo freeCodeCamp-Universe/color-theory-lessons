@@ -41,23 +41,33 @@ function completeSemanticAudit() {
     fireEvent.click(screen.getByRole('button', { name: `Select swatch ${hex}` }));
     fireEvent.click(screen.getByRole('button', { name: new RegExp(`^${role}:`) }));
   }
+  fireEvent.click(screen.getByRole('button', { name: 'check roles' }));
+  fireEvent.click(screen.getByRole('button', { name: 'continue to conflict identification' }));
   fireEvent.change(screen.getByRole('combobox', { name: 'Which role issue exists in this set?' }), {
     target: { value: 'warning-error-too-close' },
   });
-  fireEvent.click(screen.getByRole('button', { name: 'finish challenge' }));
+  fireEvent.click(screen.getByRole('button', { name: 'check conflict' }));
 }
 
 function completeDarkThemeRepair() {
-  fireEvent.change(screen.getByRole('slider', { name: /Text lightness/ }), {
-    target: { value: '100' },
-  });
-  fireEvent.change(screen.getByRole('slider', { name: /Surface lightness/ }), {
-    target: { value: '20' },
-  });
+  if (screen.queryByRole('slider', { name: /Text lightness/ })) {
+    fireEvent.change(screen.getByRole('slider', { name: /Text lightness/ }), {
+      target: { value: '100' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'check contrast' }));
+    fireEvent.click(screen.getByRole('button', { name: 'continue to surface hierarchy' }));
+  }
+  if (screen.queryByRole('slider', { name: /Surface lightness/ })) {
+    fireEvent.change(screen.getByRole('slider', { name: /Surface lightness/ }), {
+      target: { value: '20' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'check contrast' }));
+    fireEvent.click(screen.getByRole('button', { name: 'continue to action contrast' }));
+  }
   fireEvent.change(screen.getByRole('slider', { name: /Action lightness/ }), {
     target: { value: '70' },
   });
-  fireEvent.click(screen.getByRole('button', { name: 'finish challenge' }));
+  fireEvent.click(screen.getByRole('button', { name: 'check contrast' }));
 }
 
 function completeBothChallenges() {
@@ -101,7 +111,7 @@ describe('Milestone 6 rendered flow', () => {
 
     expect(screen.getByText('Part 1 of 3: Semantic Audit')).toBeInTheDocument();
     expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1');
-    expect(screen.getByRole('button', { name: 'finish challenge' })).toBeDisabled();
+    expect(screen.getByText('Stage 1 of 2')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'next part →' })).not.toBeInTheDocument();
 
     completeSemanticAudit();
@@ -111,11 +121,11 @@ describe('Milestone 6 rendered flow', () => {
     fireEvent.click(screen.getByRole('button', { name: 'next part →' }));
     expect(screen.getByText('Part 2 of 3: Dark Theme Repair')).toBeInTheDocument();
     expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '2');
-    expect(screen.getByRole('button', { name: 'finish challenge' })).toBeDisabled();
+    expect(screen.getByText('Stage 1 of 3')).toBeInTheDocument();
 
     completeDarkThemeRepair();
     expect(screen.getByText('3 of 3 points earned')).toBeInTheDocument();
-    expect(screen.getByText('The text, card surface, and action color meet all three contrast targets.')).toBeInTheDocument();
+    expect(screen.getByText('The text, card surface, and action passed their three contrast stages.')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'next part →' }));
     expect(screen.getByRole('group', { name: /A product uses its success color/ })).toBeInTheDocument();
@@ -146,6 +156,11 @@ describe('Milestone 6 rendered flow', () => {
     const first = renderMilestone6();
     completeSemanticAudit();
     fireEvent.click(screen.getByRole('button', { name: 'next part →' }));
+    fireEvent.change(screen.getByRole('slider', { name: /Text lightness/ }), {
+      target: { value: '100' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'check contrast' }));
+    fireEvent.click(screen.getByRole('button', { name: 'continue to surface hierarchy' }));
     fireEvent.change(screen.getByRole('slider', { name: /Surface lightness/ }), {
       target: { value: '20' },
     });
@@ -187,15 +202,15 @@ describe('Milestone 6 rendered flow', () => {
     expect(screen.getByText('Part 1 of 3: Semantic Audit')).toBeInTheDocument();
     expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1');
     expect(screen.getByText('0 / 8 correct')).toBeInTheDocument();
-    expect(screen.getByRole('combobox', { name: 'Which role issue exists in this set?' })).toHaveValue('');
-    expect(screen.getByRole('button', { name: 'finish challenge' })).toBeDisabled();
+    expect(screen.queryByRole('combobox', { name: 'Which role issue exists in this set?' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'check roles' })).toBeEnabled();
     expect(screen.queryByText(/of 10 points/)).not.toBeInTheDocument();
     expect(screen.getByTestId('completed-milestones')).toHaveTextContent('');
 
     completeSemanticAudit();
     fireEvent.click(screen.getByRole('button', { name: 'next part →' }));
     expect(screen.getByRole('slider', { name: /Text lightness/ })).toHaveValue('70');
-    expect(screen.getByRole('slider', { name: /Surface lightness/ })).toHaveValue('12');
-    expect(screen.getByRole('slider', { name: /Action lightness/ })).toHaveValue('40');
-  });
+    expect(screen.queryByRole('slider', { name: /Surface lightness/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole('slider', { name: /Action lightness/ })).not.toBeInTheDocument();
+  }, 10_000);
 });

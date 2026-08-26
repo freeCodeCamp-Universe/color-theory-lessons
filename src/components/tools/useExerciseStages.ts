@@ -10,6 +10,8 @@ interface UseExerciseStagesOptions {
   stages: readonly ExerciseStageDefinition[];
   onStageChange?: ExerciseStageChangeHandler;
   onComplete?: () => void;
+  initialStageId?: string;
+  initialResult?: ExerciseStageResult;
 }
 
 /**
@@ -20,6 +22,8 @@ export function useExerciseStages({
   stages,
   onStageChange,
   onComplete,
+  initialStageId,
+  initialResult = 'idle',
 }: UseExerciseStagesOptions): ExerciseStageController {
   if (stages.length === 0) {
     throw new Error('An exercise must define at least one stage.');
@@ -28,12 +32,22 @@ export function useExerciseStages({
     throw new Error('Exercise stage IDs must be unique.');
   }
 
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [completedStageIds, setCompletedStageIds] = useState<string[]>([]);
-  const [result, setResult] = useState<ExerciseStageResult>('idle');
+  const initialActiveIndex = Math.max(
+    0,
+    stages.findIndex(({ id }) => id === initialStageId),
+  );
+  const [activeIndex, setActiveIndex] = useState(initialActiveIndex);
+  const [completedStageIds, setCompletedStageIds] = useState<string[]>(() => (
+    stages
+      .slice(0, initialActiveIndex + Number(initialResult === 'passed'))
+      .map(({ id }) => id)
+  ));
+  const [result, setResult] = useState<ExerciseStageResult>(initialResult);
   const stageHeadingRef = useRef<HTMLHeadingElement>(null);
-  const previousStageId = useRef(stages[0].id);
-  const completionReported = useRef(false);
+  const previousStageId = useRef(stages[initialActiveIndex].id);
+  const completionReported = useRef(
+    initialResult === 'passed' && initialActiveIndex === stages.length - 1,
+  );
   const onStageChangeRef = useRef(onStageChange);
   const onCompleteRef = useRef(onComplete);
 
@@ -79,7 +93,9 @@ export function useExerciseStages({
   }
 
   function retry() {
-    if (result === 'incorrect') setResult('idle');
+    if (result !== 'incorrect') return;
+    setResult('idle');
+    stageHeadingRef.current?.focus();
   }
 
   function advance() {

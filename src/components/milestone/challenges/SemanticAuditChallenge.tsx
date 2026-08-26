@@ -1,21 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { SEMANTIC_AUDIT_SESSION_PREFIX } from '../../../state/persistence.ts';
+import { ExerciseStage } from '../../tools/ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseStageResult } from '../../tools/exercise-stage.ts';
+import { useExerciseStages } from '../../tools/useExerciseStages.ts';
 import styles from './SemanticAuditChallenge.module.css';
+import type { MilestoneChallengeProps, StoredMilestoneStage } from './milestone-stage.ts';
+import { restoreMilestoneStage } from './milestone-stage.ts';
 
-interface SemanticAuditChallengeProps {
-  onComplete: () => void;
-  sessionKey?: string;
-}
-
-type Role =
-  | 'page-bg'
-  | 'surface'
-  | 'primary-text'
-  | 'secondary-text'
-  | 'action'
-  | 'success'
-  | 'warning'
-  | 'error';
+type Role = 'page-bg' | 'surface' | 'primary-text' | 'secondary-text' | 'action' | 'success' | 'warning' | 'error';
 
 interface Swatch {
   id: string;
@@ -35,21 +27,17 @@ const SWATCHES: Swatch[] = [
 ];
 
 const ROLE_LABELS: Record<Role, string> = {
-  'page-bg': 'Page background',
-  surface: 'Surface',
-  'primary-text': 'Primary text',
-  'secondary-text': 'Secondary text',
-  action: 'Action',
-  success: 'Success',
-  warning: 'Warning',
-  error: 'Error',
+  'page-bg': 'Page background', surface: 'Surface', 'primary-text': 'Primary text',
+  'secondary-text': 'Secondary text', action: 'Action', success: 'Success', warning: 'Warning', error: 'Error',
 };
-
-const PROBLEM_ANSWER = 'warning-error-too-close';
-
 const ROLES = Object.keys(ROLE_LABELS) as Role[];
+const PROBLEM_ANSWER = 'warning-error-too-close';
+const STAGES: readonly ExerciseStageDefinition[] = [
+  { id: 'assign-roles', title: 'Assign semantic roles', instruction: 'Assign every swatch to a role. At least seven assignments must be correct.', nextActionLabel: 'continue to conflict identification' },
+  { id: 'identify-conflict', title: 'Identify the palette conflict', instruction: 'Inspect the palette and identify the role pair with weak separation.' },
+];
 
-interface SemanticAuditSession {
+interface SemanticAuditSession extends StoredMilestoneStage {
   version: 1;
   activeSwatch: string | null;
   assignments: Partial<Record<Role, string>>;
@@ -61,11 +49,12 @@ const DEFAULT_SESSION: SemanticAuditSession = {
   activeSwatch: null,
   assignments: {},
   problem: '',
+  activeStageId: STAGES[0].id,
+  stageResult: 'idle',
 };
 
 function loadSession(sessionKey?: string): SemanticAuditSession {
   if (!sessionKey) return DEFAULT_SESSION;
-
   try {
     const stored = sessionStorage.getItem(`${SEMANTIC_AUDIT_SESSION_PREFIX}${sessionKey}`);
     if (stored === null) return DEFAULT_SESSION;
@@ -77,10 +66,7 @@ function loadSession(sessionKey?: string): SemanticAuditSession {
     if (typeof saved.assignments === 'object' && saved.assignments !== null) {
       for (const role of ROLES) {
         const swatchId = saved.assignments[role];
-        if (
-          typeof swatchId === 'string'
-          && SWATCHES.some((swatch) => swatch.id === swatchId)
-        ) {
+        if (typeof swatchId === 'string' && SWATCHES.some((swatch) => swatch.id === swatchId)) {
           assignments[role] = swatchId;
         }
       }
@@ -88,12 +74,10 @@ function loadSession(sessionKey?: string): SemanticAuditSession {
 
     return {
       version: 1,
-      activeSwatch: typeof saved.activeSwatch === 'string'
-        && SWATCHES.some((swatch) => swatch.id === saved.activeSwatch)
-        ? saved.activeSwatch
-        : null,
+      activeSwatch: typeof saved.activeSwatch === 'string' && SWATCHES.some((swatch) => swatch.id === saved.activeSwatch) ? saved.activeSwatch : null,
       assignments,
       problem: typeof saved.problem === 'string' ? saved.problem : '',
+      ...restoreMilestoneStage(saved, STAGES),
     };
   } catch {
     return DEFAULT_SESSION;
@@ -103,120 +87,135 @@ function loadSession(sessionKey?: string): SemanticAuditSession {
 function saveSession(sessionKey: string | undefined, session: SemanticAuditSession) {
   if (!sessionKey) return;
   try {
-    sessionStorage.setItem(
-      `${SEMANTIC_AUDIT_SESSION_PREFIX}${sessionKey}`,
-      JSON.stringify(session),
-    );
+    sessionStorage.setItem(`${SEMANTIC_AUDIT_SESSION_PREFIX}${sessionKey}`, JSON.stringify(session));
   } catch {
     // Continue without per-tab challenge persistence when storage is unavailable.
   }
 }
 
-export function SemanticAuditChallenge({ onComplete, sessionKey }: SemanticAuditChallengeProps) {
+export function SemanticAuditChallenge({
+  onComplete,
+  sessionKey,
+  onStageChange,
+}: MilestoneChallengeProps) {
   const [initialSession] = useState(() => loadSession(sessionKey));
   const [activeSwatch, setActiveSwatch] = useState<string | null>(initialSession.activeSwatch);
   const [assignments, setAssignments] = useState<Partial<Record<Role, string>>>(initialSession.assignments);
   const [problem, setProblem] = useState(initialSession.problem);
-  const completionSent = useRef(false);
+  const stageController = useExerciseStages({
+    stages: STAGES,
+    onComplete,
+    onStageChange,
+    initialStageId: initialSession.activeStageId as string,
+    initialResult: initialSession.stageResult as ExerciseStageResult,
+  });
 
   useEffect(() => {
-    saveSession(sessionKey, { version: 1, activeSwatch, assignments, problem });
-  }, [activeSwatch, assignments, problem, sessionKey]);
+    saveSession(sessionKey, {
+      version: 1,
+      activeSwatch,
+      assignments,
+      problem,
+      activeStageId: stageController.activeStage.id,
+      stageResult: stageController.result,
+    });
+  }, [activeSwatch, assignments, problem, sessionKey, stageController.activeStage.id, stageController.result]);
 
-  const correctCount = useMemo(() => {
-    return ROLES.reduce((acc, role) => {
-      const selectedId = assignments[role];
-      const swatch = SWATCHES.find((candidate) => candidate.id === selectedId);
-      return swatch?.role === role ? acc + 1 : acc;
-    }, 0);
-  }, [assignments]);
-
-  const labelsAssigned = ROLES.every((role) => !!assignments[role]);
-  const rolePass = correctCount >= 7;
-  const problemPass = problem === PROBLEM_ANSWER;
-  const passed = labelsAssigned && rolePass && problemPass;
+  const correctCount = useMemo(() => ROLES.reduce((count, role) => {
+    const swatch = SWATCHES.find((candidate) => candidate.id === assignments[role]);
+    return count + Number(swatch?.role === role);
+  }, 0), [assignments]);
+  const labelsAssigned = ROLES.every((role) => Boolean(assignments[role]));
+  const isAssignmentStage = stageController.activeStage.id === 'assign-roles';
+  const stagePassed = isAssignmentStage
+    ? labelsAssigned && correctCount >= 7
+    : problem === PROBLEM_ANSWER;
 
   function assignActiveSwatch(role: Role) {
-    if (!activeSwatch) return;
+    if (!activeSwatch || stageController.result !== 'idle') return;
     setAssignments((previous) => ({ ...previous, [role]: activeSwatch }));
   }
 
-  function handleComplete() {
-    if (!passed || completionSent.current) return;
-    completionSent.current = true;
-    onComplete();
+  function checkStage() {
+    if (stagePassed) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   return (
     <div className={styles.panel}>
-      <div className={styles.header}>
-        <span>Assign semantic roles</span>
-        <span>{correctCount} / 8 correct</span>
-      </div>
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback={isAssignmentStage
+          ? `${correctCount} of 8 assignments are correct. Assign every role with at least seven correct.`
+          : 'That is not the weak role pair in this palette.'}
+        passedFeedback={`${correctCount} of 8 role assignments are correct. Next action: continue to conflict identification.`}
+        completionFeedback="The warning and error colors have weak luminance separation. Challenge complete."
+      >
+        <div className={styles.header}>
+          <span>{isAssignmentStage ? 'Assign semantic roles' : 'Inspect semantic conflicts'}</span>
+          {isAssignmentStage && <span>{correctCount} / 8 correct</span>}
+        </div>
 
-      <div className={styles.swatches}>
-        {SWATCHES.map((swatch) => (
-          <button
-            key={swatch.id}
-            type="button"
-            className={`${styles.swatch} ${activeSwatch === swatch.id ? styles.active : ''}`}
-            onClick={() => setActiveSwatch(swatch.id)}
-            aria-label={`Select swatch ${swatch.hex}`}
-            aria-pressed={activeSwatch === swatch.id}
-          >
-            <span className={styles.color} style={{ backgroundColor: swatch.hex }} />
-            <code>{swatch.hex.toUpperCase()}</code>
-          </button>
-        ))}
-      </div>
+        <div className={styles.swatches}>
+          {SWATCHES.map((swatch) => isAssignmentStage ? (
+            <button
+              key={swatch.id}
+              type="button"
+              className={`${styles.swatch} ${activeSwatch === swatch.id ? styles.active : ''}`}
+              onClick={() => setActiveSwatch(swatch.id)}
+              aria-label={`Select swatch ${swatch.hex}`}
+              aria-pressed={activeSwatch === swatch.id}
+              disabled={stageController.result !== 'idle'}
+            >
+              <span className={styles.color} style={{ backgroundColor: swatch.hex }} />
+              <code>{swatch.hex.toUpperCase()}</code>
+            </button>
+          ) : (
+            <div key={swatch.id} className={styles.swatch}>
+              <span className={styles.color} style={{ backgroundColor: swatch.hex }} />
+              <code>{swatch.hex.toUpperCase()}</code>
+            </div>
+          ))}
+        </div>
 
-      <div className={styles.roles}>
-        {ROLES.map((role) => (
-          <button
-            key={role}
-            type="button"
-            className={styles.role}
-            onClick={() => assignActiveSwatch(role)}
-            disabled={!activeSwatch}
-            aria-label={`${ROLE_LABELS[role]}: ${assignments[role]
-              ? SWATCHES.find((swatch) => swatch.id === assignments[role])?.hex.toUpperCase()
-              : 'unassigned'}`}
-          >
-            <span>{ROLE_LABELS[role]}</span>
-            <code>{assignments[role] ? SWATCHES.find((swatch) => swatch.id === assignments[role])?.hex.toUpperCase() : 'unassigned'}</code>
-          </button>
-        ))}
-      </div>
+        {isAssignmentStage ? (
+          <>
+            <div className={styles.roles}>
+              {ROLES.map((role) => (
+                <button
+                  key={role}
+                  type="button"
+                  className={styles.role}
+                  onClick={() => assignActiveSwatch(role)}
+                  disabled={!activeSwatch || stageController.result !== 'idle'}
+                  aria-label={`${ROLE_LABELS[role]}: ${assignments[role] ? SWATCHES.find((swatch) => swatch.id === assignments[role])?.hex.toUpperCase() : 'unassigned'}`}
+                >
+                  <span>{ROLE_LABELS[role]}</span>
+                  <code>{assignments[role] ? SWATCHES.find((swatch) => swatch.id === assignments[role])?.hex.toUpperCase() : 'unassigned'}</code>
+                </button>
+              ))}
+            </div>
+            <p className={styles.help}>Select a swatch first, then click a role label to assign it.</p>
+          </>
+        ) : (
+          <div className={styles.problem}>
+            <label htmlFor="semantic-role-problem">Which role issue exists in this set?</label>
+            <select id="semantic-role-problem" value={problem} disabled={stageController.result !== 'idle'} onChange={(event) => setProblem(event.target.value)}>
+              <option value="">Choose issue...</option>
+              <option value="warning-error-too-close">Warning and error have too little luminance contrast</option>
+              <option value="surface-too-bright">Page background and surface have the same lightness</option>
+              <option value="action-too-muted">Action and success use the same hue</option>
+              <option value="success-too-dark">Primary and secondary text use the same color value</option>
+            </select>
+          </div>
+        )}
 
-      <p className={styles.help}>
-        Select a swatch first, then click a role label to assign it.
-      </p>
-
-      <div className={styles.problem}>
-        <label htmlFor="semantic-role-problem">Which role issue exists in this set?</label>
-        <select id="semantic-role-problem" value={problem} onChange={(event) => setProblem(event.target.value)}>
-          <option value="">Choose issue...</option>
-          <option value="warning-error-too-close">Warning and error have too little luminance contrast</option>
-          <option value="surface-too-bright">Page background and surface have the same lightness</option>
-          <option value="action-too-muted">Action and success use the same hue</option>
-          <option value="success-too-dark">Primary and secondary text use the same color value</option>
-        </select>
-      </div>
-
-      <div className={styles.status} role="status" aria-live="polite" aria-atomic="true">
-        <p className={rolePass && labelsAssigned ? styles.good : styles.bad}>
-          {rolePass && labelsAssigned ? 'Pass' : 'Not passed'}: Assign a swatch to every role with at least seven correct.
-        </p>
-        <p className={problemPass ? styles.good : styles.bad}>
-          {problemPass ? 'Pass' : 'Not passed'}: Identify the color conflict in the palette.
-        </p>
-      </div>
-
-      <div className={styles.actions}>
-        <button type="button" className={styles.button} disabled={!passed} onClick={handleComplete}>
-          finish challenge
-        </button>
-      </div>
+        {stageController.result === 'idle' && (
+          <div className={styles.actions}>
+            <button type="button" className={styles.button} onClick={checkStage}>check {isAssignmentStage ? 'roles' : 'conflict'}</button>
+          </div>
+        )}
+      </ExerciseStage>
     </div>
   );
 }
