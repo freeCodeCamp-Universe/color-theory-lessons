@@ -29,7 +29,7 @@ export const lesson4_3: LessonConfig = {
   ],
   challenge: {
       prompt:
-        'Switch the interface gallery through all four simulation modes. Explore each one and identify which elements become hard to distinguish.',
+        'Complete one simulation-review stage by comparing the original interface with all four simulation modes.',
       hints: [
         'Start with Deuteranopia and compare the status indicators. Which ones look similar?',
         'The complete achromatopsia simulation removes hue differences. Which elements still communicate their meaning?',

@@ -26,7 +26,7 @@ export const lesson4_4: LessonConfig = {
   ],
   challenge: {
       prompt:
-        'Review the six interface examples. Select the three that use hue as the only visual cue carrying meaning.',
+        'Complete one evaluation stage: review six interface examples, select the three that use hue as the only visual cue, and check your answer.',
       hints: [
         'If the hues were hard to distinguish, which examples would lose the information they communicate?',
         'The other three examples pair hue with a label, icon, underline, border, or font weight.',
