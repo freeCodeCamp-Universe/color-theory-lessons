@@ -85,10 +85,6 @@ export const HSLSliderTool = memo(function HSLSliderTool({
     else stageController.markIncorrect();
   }
 
-  function handleRetry() {
-    setCurrent({ ...target.start });
-  }
-
   function handleAdvance() {
     const nextTarget = TARGETS[stageController.activeStage.position];
     if (nextTarget) setCurrent({ ...nextTarget.start });
@@ -181,7 +177,6 @@ export const HSLSliderTool = memo(function HSLSliderTool({
         incorrectFeedback={<span style={{ color: 'var(--red)' }}>No match yet. Try this stage again.</span>}
         passedFeedback={<span style={{ color: 'var(--green)' }}>✓ Target matched.</span>}
         completionFeedback={<span style={{ color: 'var(--green)' }}>✓ All three dimensions matched.</span>}
-        onRetry={handleRetry}
       >
       <div className={styles.root}>
         <div style={{ display: 'flex', gap: 'var(--spacing-lg)', flexWrap: 'wrap', alignItems: 'flex-start' }}>

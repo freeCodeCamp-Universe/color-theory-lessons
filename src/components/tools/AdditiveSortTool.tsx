@@ -146,10 +146,6 @@ export const AdditiveSortTool = memo(function AdditiveSortTool({
     else stageController.markIncorrect();
   }
 
-  function handleRetry() {
-    setAssignments(Object.fromEntries(ITEMS.map((item) => [item.id, ''])));
-  }
-
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>additive vs subtractive</span>
@@ -166,7 +162,6 @@ export const AdditiveSortTool = memo(function AdditiveSortTool({
           controller={stageController}
           incorrectFeedback={`${correctCount} / ${ITEMS.length} correct. Review the incorrect answers.`}
           completionFeedback={`✓ ${correctCount} / ${ITEMS.length} correct. Color models sorted.`}
-          onRetry={handleRetry}
         >
           <div style={{ borderTop: '1px solid var(--border)', paddingTop: 'var(--spacing-md)', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
@@ -199,6 +194,7 @@ export const AdditiveSortTool = memo(function AdditiveSortTool({
                             key={model}
                             onClick={() => assign(item.id, model)}
                             disabled={checked}
+                            aria-pressed={active}
                             style={{
                               flex: 1,
                               padding: '0.25rem 0.4rem',

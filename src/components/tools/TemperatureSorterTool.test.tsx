@@ -90,6 +90,11 @@ describe('TemperatureSorterTool stages', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     for (const [label, answer] of Object.entries(GOAL_ANSWERS)) {
+      expect(screen.getByRole('combobox', { name: `Palette direction for ${label}` })).toHaveValue(
+        answer === 'warm' ? 'cool' : 'warm',
+      );
+    }
+    for (const [label, answer] of Object.entries(GOAL_ANSWERS)) {
       fireEvent.change(screen.getByRole('combobox', { name: `Palette direction for ${label}` }), {
         target: { value: answer },
       });

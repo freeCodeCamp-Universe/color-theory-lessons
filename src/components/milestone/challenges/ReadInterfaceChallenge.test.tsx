@@ -22,7 +22,7 @@ describe('ReadInterfaceChallenge', () => {
     expect(screen.getByRole('button', { name: 'check classifications' })).toBeDisabled();
   });
 
-  it('reports failure and returns focus to a cleared classification stage on retry', async () => {
+  it('reports failure and preserves classifications on retry', async () => {
     const onComplete = vi.fn();
     render(<ReadInterfaceChallenge onComplete={onComplete} />);
     answerClassifications([...CORRECT_ANSWERS.slice(0, 3), 'focal', 'focal']);
@@ -33,7 +33,11 @@ describe('ReadInterfaceChallenge', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     await waitFor(() => expect(screen.getByRole('heading', { name: 'Classify interface regions' })).toHaveFocus());
-    for (const select of screen.getAllByRole('combobox')) expect(select).toHaveValue('');
+    const attemptedAnswers = [...CORRECT_ANSWERS.slice(0, 3), 'focal', 'focal'];
+    screen.getAllByRole('combobox').forEach((select, index) => {
+      expect(select).toHaveValue(attemptedAnswers[index]);
+    });
+    expect(screen.getByText('5 / 5 answered')).toBeInTheDocument();
   });
 
   it('completes after the single stage passes', () => {

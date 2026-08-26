@@ -39,6 +39,9 @@ describe('Unit 2 exercise stages', () => {
     fireEvent.click(screen.getByRole('button', { name: 'check answers' }));
     expect(onComplete).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
+    for (const label of ['Phone screen', 'Watercolor painting', 'LED billboard', 'Oil painting', 'Printed magazine', 'Laptop display', 'Printed flyer', 'Projector beam']) {
+      expect(within(screen.getByText(label).parentElement as HTMLElement).getByRole('button', { name: 'subtractive' })).toHaveAttribute('aria-pressed', 'true');
+    }
 
     const answers = {
       'Phone screen': 'additive', 'Watercolor painting': 'subtractive', 'LED billboard': 'additive',

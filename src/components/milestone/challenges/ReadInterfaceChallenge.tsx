@@ -135,7 +135,6 @@ export function ReadInterfaceChallenge({
         controller={stageController}
         incorrectFeedback={`${correctCount} of 5 correct. You need at least 4 correct.`}
         completionFeedback={`${correctCount} of 5 correct. Interface classification complete.`}
-        onRetry={() => setAnswers({})}
       >
         <div className={styles.meta}>
           <span>Label 5 interface regions</span>
