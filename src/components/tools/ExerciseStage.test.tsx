@@ -28,7 +28,7 @@ function TestExercise({
     <ExerciseStage
       controller={controller}
       incorrectFeedback="Incorrect result"
-      passedFeedback="Passed result"
+      passedFeedback="Passed result. Next action: next stage."
       completionFeedback="Exercise complete"
     >
       <p>{controller.activeStage.id} answers</p>
@@ -87,8 +87,9 @@ describe('exercise-stage contract', () => {
     }));
     fireEvent.click(screen.getByRole('button', { name: 'pass stage' }));
     expect(onComplete).not.toHaveBeenCalled();
-    expect(screen.getByRole('status')).toHaveTextContent('Passed result');
-    expect(screen.getByRole('status')).toHaveTextContent('Next action: next stage.');
+    expect(screen.getByRole('status')).toHaveTextContent(
+      /^Passed result\. Next action: next stage\.$/,
+    );
     fireEvent.click(screen.getByRole('button', { name: 'next stage' }));
 
     const secondHeading = screen.getByRole('heading', { name: 'Second task' });

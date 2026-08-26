@@ -148,7 +148,7 @@ export function SemanticAuditChallenge({
         incorrectFeedback={isAssignmentStage
           ? `${correctCount} of 8 assignments are correct. Assign every role with at least seven correct.`
           : 'That is not the weak role pair in this palette.'}
-        passedFeedback={`${correctCount} of 8 role assignments are correct.`}
+        passedFeedback={`${correctCount} of 8 role assignments are correct. Next action: continue to conflict identification.`}
         completionFeedback="The warning and error colors have weak luminance separation. Challenge complete."
       >
         <div className={styles.header}>

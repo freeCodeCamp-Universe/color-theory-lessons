@@ -71,11 +71,7 @@ export function ExerciseStage({
 
         <div className={styles.result} role="status" aria-live="polite" aria-atomic="true">
           {result === 'incorrect' && incorrectFeedback}
-          {result === 'passed' && (isFinalStage ? completionFeedback : (
-            <>
-              {passedFeedback} Next action: {activeStage.nextActionLabel ?? 'next stage'}.
-            </>
-          ))}
+          {result === 'passed' && (isFinalStage ? completionFeedback : passedFeedback)}
         </div>
 
         {result === 'incorrect' && (

@@ -216,7 +216,7 @@ export function ThemeFromScratchChallenge({
         incorrectFeedback={stageController.activeStage.id === 'surface-separation' && !completedTextChecksStillPass
           ? 'The surface meets its target only when the completed text checks also remain at 4.5:1.'
           : `${passedCount} of ${activeChecks.length} checks pass. Adjust this stage and try again.`}
-        passedFeedback={`All ${activeChecks.length} checks in this stage pass.`}
+        passedFeedback={`All ${activeChecks.length} checks in this stage pass. Next action: ${stageController.activeStage.nextActionLabel}.`}
         completionFeedback="Both accent checks pass. Theme challenge complete."
       >
         <div className={styles.grid}>

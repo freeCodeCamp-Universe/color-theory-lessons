@@ -137,7 +137,7 @@ export function DarkModeStressChallenge({
         incorrectFeedback={stageId === 'surface-hierarchy' && !checks.textPass
           ? 'The surface meets its target only when the completed text check also remains at 4.5:1.'
           : 'This contrast target is not met yet. Adjust the control and try again.'}
-        passedFeedback="This dark-theme contrast target passes."
+        passedFeedback={`This dark-theme contrast target passes. Next action: ${stageController.activeStage.nextActionLabel}.`}
         completionFeedback="The action reaches 3:1 against the surface. All three checks are complete."
       >
         <div className={styles.preview} style={{ backgroundColor: checks.bg }}>

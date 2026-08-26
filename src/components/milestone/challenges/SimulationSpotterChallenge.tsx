@@ -189,7 +189,7 @@ export function SimulationSpotterChallenge({
           : invalidFixes.length > 0
             ? 'One or more repairs still rely on color or do not identify the meaning.'
             : 'Choose one repair for each example.'}
-        passedFeedback="All three color-only examples are identified."
+        passedFeedback="All three color-only examples are identified. Next action: continue to repairs."
         completionFeedback="All three examples have a valid non-color repair. Challenge complete."
       >
         {isIdentifyStage && (

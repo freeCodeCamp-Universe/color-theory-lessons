@@ -165,7 +165,7 @@ export function ChannelPredictionChallenge({
       <ExerciseStage
         controller={stageController}
         incorrectFeedback={`${currentScore} of 4 correct. You need at least 3 correct in this stage.`}
-        passedFeedback={`${currentScore} of 4 dominant-channel predictions are correct.`}
+        passedFeedback={`${currentScore} of 4 dominant-channel predictions are correct. Next action: continue to additive mixes.`}
         completionFeedback={`${currentScore} of 4 additive-mix predictions are correct. Challenge complete.`}
         onRetry={resetCurrentStage}
       >

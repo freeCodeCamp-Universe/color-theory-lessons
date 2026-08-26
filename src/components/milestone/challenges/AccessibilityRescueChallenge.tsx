@@ -133,7 +133,7 @@ export function AccessibilityRescueChallenge({
       <ExerciseStage
         controller={stageController}
         incorrectFeedback="This repair does not pass its target yet. Adjust it and try again."
-        passedFeedback="This accessibility repair passes."
+        passedFeedback={`This accessibility repair passes. Next action: ${stageController.activeStage.nextActionLabel}.`}
         completionFeedback="The icon reaches 3:1 contrast. All four repairs are complete."
       >
         {stageController.activeStage.id === 'body-text-contrast' && (
