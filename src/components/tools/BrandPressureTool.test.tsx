@@ -111,6 +111,17 @@ describe('BrandPressureTool contrast validation', () => {
     ).toHaveTextContent('✗ 3.6:1');
   });
 
+  it('uses the theme-aware danger role for failed live checks', () => {
+    render(<BrandPressureTool interactive />);
+
+    setSurface('#666666');
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+
+    const result = screen.getByText('Primary text / card surface (4.5:1)')
+      .parentElement?.lastElementChild as HTMLElement;
+    expect(result.style.color).toBe('var(--accent-danger)');
+  });
+
   it('does not display a failing card contrast ratio as 4.5:1', () => {
     render(<BrandPressureTool interactive />);
 

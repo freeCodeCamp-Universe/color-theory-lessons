@@ -169,26 +169,6 @@ button {
   background: none;
 }
 
-/* Learner controls follow the app type system; authored lesson visuals opt out. */
-:is(button, select, textarea, label, option):not(
-  [data-authored-visual] *,
-  [class*='mockup'] *,
-  [class*='preview'] *,
-  [class*='Preview'] *
-) {
-  font-family: var(--font-sans) !important;
-  font-size: 1rem !important;
-}
-
-:is(input:not([type='color']):not([type='range'])):not(
-  [data-authored-visual] *,
-  [class*='mockup'] *,
-  [class*='preview'] *,
-  [class*='Preview'] *
-) {
-  font-size: 1rem !important;
-}
-
 button:disabled,
 input:disabled,
 select:disabled,

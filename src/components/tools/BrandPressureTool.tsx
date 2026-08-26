@@ -82,7 +82,11 @@ export const BrandPressureTool = memo(function BrandPressureTool({
   const pt = isValidHex(roles['primary-text']) ? roles['primary-text'] : '#1c1917';
   const div = isValidHex(roles['neutral-divider']) ? roles['neutral-divider'] : '#e2e8f0';
 
-  const meterColor = pressure < 40 ? '#22c55e' : pressure < 60 ? '#f59e0b' : '#ef4444';
+  const meterColor = pressure < 40
+    ? 'var(--accent-success)'
+    : pressure < 60
+      ? 'var(--accent-warning)'
+      : 'var(--accent-danger)';
   const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
 
   return (
@@ -125,7 +129,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.78rem',
                     background: 'var(--surface, #1e293b)', color: 'var(--primary-foreground)',
-                    border: `1px solid ${isValidHex(val) ? 'var(--border)' : '#ef4444'}`,
+                    border: `1px solid ${isValidHex(val) ? 'var(--border)' : 'var(--accent-danger)'}`,
                     borderRadius: 3, padding: '0.15rem 0.3rem', width: 90,
                   }}
                 />
@@ -135,9 +139,9 @@ export const BrandPressureTool = memo(function BrandPressureTool({
         </div>
 
         {/* Preview */}
-        <div data-authored-visual style={{ flex: '1 1 180px', minWidth: 160 }}>
+        <div style={{ flex: '1 1 180px', minWidth: 160 }}>
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>PREVIEW</p>
-          <div style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
+          <div data-authored-visual style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
             <div style={{ color: pt, fontWeight: 600, fontSize: '0.85rem', marginBottom: '0.3rem' }}>Dashboard</div>
             <div style={{ background: surf, borderRadius: 4, padding: '0.4rem 0.5rem', border: `1px solid ${div}`, marginBottom: '0.4rem' }}>
               <div style={{ color: pt, fontSize: '0.8rem' }}>Recent activity</div>
@@ -171,7 +175,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({
           ].map(({ label, pass, ratio }) => (
             <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', padding: '0.2rem 0' }}>
               <span style={{ color: 'var(--primary-foreground)' }}>{label}</span>
-              <span style={{ color: showResults ? (pass ? '#22c55e' : '#ef4444') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
+              <span style={{ color: showResults ? (pass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
                 {showResults ? (pass ? '✓ ' : '✗ ') : ''}{formatContrastRatio(ratio)}:1
               </span>
             </div>

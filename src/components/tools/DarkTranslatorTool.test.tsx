@@ -37,6 +37,22 @@ function checkStage() {
 }
 
 describe('DarkTranslatorTool', () => {
+  it('uses theme-aware semantic roles for live check results', () => {
+    render(<DarkTranslatorTool interactive />);
+
+    setPassingBaseRoles();
+    setRole('success', '#22c55e');
+    setRole('error', '#dc2626');
+    checkStage();
+
+    const passingResult = screen.getByText('Valid success color')
+      .parentElement?.lastElementChild as HTMLElement;
+    const failingResult = screen.getByText('White / success (4.5:1)')
+      .parentElement?.lastElementChild as HTMLElement;
+    expect(passingResult.style.color).toBe('var(--accent-success)');
+    expect(failingResult.style.color).toBe('var(--accent-danger)');
+  });
+
   it.each(['success', 'error'] as const)('does not complete with an invalid %s color', (role) => {
     const onComplete = vi.fn();
     render(<DarkTranslatorTool interactive onComplete={onComplete} />);

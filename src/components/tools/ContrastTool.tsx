@@ -162,6 +162,7 @@ export const ContrastTool = memo(function ContrastTool({
 
               {/* Preview */}
               <div
+                data-authored-visual
                 style={{
                   background: bgColor,
                   borderRadius: 'var(--radius-sm)',

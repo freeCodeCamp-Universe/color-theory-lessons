@@ -141,7 +141,7 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
   if (previewMockup) {
     return (
       <div className={styles.previewFrame}>
-        <div className={`${styles.mockup} ${previewMockup === 'purposeful' ? styles.mockupGood : styles.mockupBad}`}>
+        <div data-authored-visual className={`${styles.mockup} ${previewMockup === 'purposeful' ? styles.mockupGood : styles.mockupBad}`}>
           <div className={styles.nav}>
             <span className={styles.navLogo}>color-theory-course$</span>
             <span className={styles.navLink}>settings</span>
@@ -186,7 +186,7 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
       <div>
         {/* Purposeful mockup — interactive */}
         <div className={styles.panel}>
-          <div className={`${styles.mockup} ${styles.mockupGood}`}>
+          <div data-authored-visual className={`${styles.mockup} ${styles.mockupGood}`}>
             <div
               className={`${styles.nav} ${interactive ? styles.region : ''} ${results['nav'] === true ? styles.regionSolved : activeId === 'nav' ? styles.regionActive : ''}`}
               onClick={() => interactive && handleRegionClick('nav')}

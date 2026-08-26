@@ -96,7 +96,7 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({
               }}
             >
               {/* State preview */}
-              <div style={{
+              <div data-authored-visual style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.35rem',

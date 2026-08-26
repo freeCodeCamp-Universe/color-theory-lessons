@@ -49,6 +49,17 @@ describe('RoleBuilderTool', () => {
     expect(onComplete).not.toHaveBeenCalled();
   });
 
+  it('uses the theme-aware danger role for failed validation text', () => {
+    render(<RoleBuilderTool interactive />);
+
+    setRole('primary-text', '#101827');
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+
+    const result = screen.getByText('Secondary text / surface')
+      .parentElement?.lastElementChild as HTMLElement;
+    expect(result.style.color).toBe('var(--accent-danger)');
+  });
+
   it('checks primary text against the card surface', () => {
     const onComplete = vi.fn();
     render(<RoleBuilderTool interactive onComplete={onComplete} />);

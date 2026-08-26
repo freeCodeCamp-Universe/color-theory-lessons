@@ -101,7 +101,7 @@ export const VisionCardsTool = memo(function VisionCardsTool({
   const cards = (
     <>
       {interactive && (
-        <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.6rem' }}>
+        <p style={{ fontSize: '1rem', color: 'var(--muted)', marginBottom: '0.6rem' }}>
           {everExpanded.filter(Boolean).length}/{CARDS.length} cards explored
         </p>
       )}
@@ -142,12 +142,12 @@ export const VisionCardsTool = memo(function VisionCardsTool({
                   width: 12, height: 12, borderRadius: '50%',
                   background: card.tint, flexShrink: 0, border: '1px solid var(--border)',
                 }} />
-                <strong style={{ fontSize: '0.85rem', flex: 1 }}>{card.name}</strong>
+                <strong style={{ fontSize: '1rem', flex: 1 }}>{card.name}</strong>
                 {wasSeen && !isOpen && (
-                  <span style={{ fontSize: '0.72rem', color: 'var(--accent-success)' }}>✓</span>
+                  <span style={{ fontSize: '1rem', color: 'var(--accent-success)' }}>✓</span>
                 )}
                 {interactive && (
-                  <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>
+                  <span style={{ fontSize: '1rem', color: 'var(--muted)' }}>
                     {isOpen ? '▲' : '▼'}
                   </span>
                 )}
@@ -158,13 +158,13 @@ export const VisionCardsTool = memo(function VisionCardsTool({
                   padding: '0 0.75rem 0.65rem',
                   background: `color-mix(in srgb, ${card.tint} 5%, var(--surface))`,
                 }}>
-                  <p style={{ fontSize: '0.82rem', lineHeight: 1.6, marginBottom: '0.35rem' }}>
+                  <p style={{ fontSize: '1rem', lineHeight: 1.6, marginBottom: '0.35rem' }}>
                     {card.description}
                   </p>
-                  <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.25rem' }}>
+                  <p style={{ fontSize: '1rem', color: 'var(--muted)', marginBottom: '0.25rem' }}>
                     <strong>Common risk:</strong> {card.risk}
                   </p>
-                  <p style={{ fontSize: '0.78rem', color: 'var(--muted)', margin: 0 }}>
+                  <p style={{ fontSize: '1rem', color: 'var(--muted)', margin: 0 }}>
                     <strong>Color effects:</strong> {card.colorEffect}
                   </p>
                 </div>
@@ -181,7 +181,7 @@ export const VisionCardsTool = memo(function VisionCardsTool({
       <span className={shellStyles.toolLabel}>vision types</span>
 
       {!interactive && (
-        <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.75rem' }}>
+        <p style={{ fontSize: '1rem', color: 'var(--muted)', marginBottom: '0.75rem' }}>
           Review the expanded cards to learn about each type of color vision deficiency.
         </p>
       )}

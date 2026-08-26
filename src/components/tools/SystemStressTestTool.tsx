@@ -261,7 +261,9 @@ export const SystemStressTestTool = memo(function SystemStressTestTool({
         ))}
       </div>
 
-      <ContextPreview context={context} />
+      <div data-authored-visual style={{ display: 'contents' }}>
+        <ContextPreview context={context} />
+      </div>
 
       <div style={{ display: 'grid', gap: '0.5rem' }}>
         {FINDINGS.map(finding => {

@@ -146,7 +146,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
       </div>
 
       {/* Compact mockup reference */}
-      <div data-testid="inclusive-review-mockup" style={{
+      <div data-authored-visual data-testid="inclusive-review-mockup" style={{
         border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)',
         overflow: 'hidden', marginBottom: '0.75rem', fontSize: '0.72rem', filter: simulationFilter,
       }}>

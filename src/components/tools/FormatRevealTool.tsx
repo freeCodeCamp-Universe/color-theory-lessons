@@ -180,7 +180,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
               : `Select each colored element. ${remaining} remaining.`}
           </p>
 
-          <div className={styles.mockup}>
+          <div data-authored-visual className={styles.mockup}>
             {/* Nav */}
             <div
               className={`${styles.nav} ${selectedId === 'nav-bg' ? styles.selected : ''} ${revealed.has('nav-bg') ? styles.visited : ''}`}

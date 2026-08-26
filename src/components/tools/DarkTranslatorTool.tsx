@@ -164,7 +164,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.72rem',
                     background: 'var(--surface, #1e293b)', color: 'var(--primary-foreground)',
-                    border: `1px solid ${isValidHex(val) ? 'var(--border)' : '#ef4444'}`,
+                    border: `1px solid ${isValidHex(val) ? 'var(--border)' : 'var(--accent-danger)'}`,
                     borderRadius: 3, padding: '0.15rem 0.3rem', width: 80,
                   }}
                 />
@@ -209,14 +209,14 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
           {checks.map(({ label, pass, ratio }) => (
             <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', padding: '0.15rem 0' }}>
               <span style={{ color: 'var(--primary-foreground)' }}>{label}</span>
-              <span style={{ color: showResults ? (pass ? '#22c55e' : '#ef4444') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
+              <span style={{ color: showResults ? (pass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
                 {showResults ? (pass ? '✓ ' : '✗ ') : ''}{ratio === undefined ? '' : `${formatContrastRatio(ratio)}:1`}
               </span>
             </div>
           ))}
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', padding: '0.15rem 0' }}>
             <span style={{ color: 'var(--primary-foreground)' }}>Success / error hues (30°)</span>
-            <span style={{ color: showResults ? (semanticHueOk ? '#22c55e' : '#ef4444') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
+            <span style={{ color: showResults ? (semanticHueOk ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
               {showResults ? (semanticHueOk ? '✓ ' : '✗ ') : ''}{semanticHueDifference === null
                 ? (semanticRolesValid ? 'no hue (achromatic)' : 'invalid')
                 : `${semanticHueDifference}°`}

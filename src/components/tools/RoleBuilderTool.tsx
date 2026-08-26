@@ -69,7 +69,7 @@ function CheckRow({ label, pass, ratio, showResult }: { label: string; pass: boo
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', padding: '0.2rem 0' }}>
       <span style={{ color: 'var(--primary-foreground)' }}>{label}</span>
-      <span style={{ color: showResult ? (pass ? '#22c55e' : '#ef4444') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
+      <span style={{ color: showResult ? (pass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
         {showResult ? (pass ? '✓ ' : '✗ ') : ''}{ratio !== undefined ? ratio.toFixed(2) + ':1' : ''}
       </span>
     </div>
@@ -210,7 +210,7 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.78rem',
                     background: 'var(--surface)', color: 'var(--primary-foreground)',
-                    border: `1px solid ${isValidHex(val) ? 'var(--border)' : '#ef4444'}`,
+                    border: `1px solid ${isValidHex(val) ? 'var(--border)' : 'var(--accent-danger)'}`,
                     borderRadius: 3, padding: '0.15rem 0.3rem', width: 90,
                   }}
                 />
@@ -220,9 +220,9 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
         </div>
 
         {/* Preview */}
-        <div data-authored-visual style={{ flex: '1 1 200px', minWidth: 180 }}>
+        <div style={{ flex: '1 1 200px', minWidth: 180 }}>
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>LIVE PREVIEW</p>
-          <div style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
+          <div data-authored-visual style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
             <div style={{ background: surf, borderRadius: 4, padding: '0.5rem', marginBottom: '0.5rem', border: '1px solid #e5e7eb' }}>
               <div style={{ color: pt, fontWeight: 600, fontSize: '0.85rem' }}>Card Title</div>
               <div style={{ color: st, fontSize: '0.75rem' }}>Supporting information</div>

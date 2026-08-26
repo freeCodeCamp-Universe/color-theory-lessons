@@ -9,6 +9,32 @@
   min-height: 400px;
 }
 
+/*
+ * Tool UI follows the 18px application floor. Lesson authors can preserve the
+ * scale of an instructional mock by giving its root data-authored-visual.
+ */
+.shell :where([style*='font-size: 0.']):not(
+  [data-authored-visual],
+  [data-authored-visual] *
+) {
+  font-size: 1rem !important;
+}
+
+.shell :where(button, select, textarea, label, option):not(
+  [data-authored-visual],
+  [data-authored-visual] *
+) {
+  font-family: var(--font-sans) !important;
+  font-size: 1rem !important;
+}
+
+.shell :where(input:not([type='color']):not([type='range'])):not(
+  [data-authored-visual],
+  [data-authored-visual] *
+) {
+  font-size: 1rem !important;
+}
+
 .toolLabel {
   font-size: 1rem;
   color: var(--muted);

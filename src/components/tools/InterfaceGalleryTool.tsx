@@ -101,7 +101,7 @@ export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({
       </div>
 
       {/* Mockup panel with filter applied */}
-      <div style={{ filter: currentFilter, borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid var(--border)' }}>
+      <div data-authored-visual style={{ filter: currentFilter, borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid var(--border)' }}>
         {/* Nav */}
         <div style={{ background: '#1e3a5f', padding: '0.5rem 0.75rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <span style={{ color: '#4da6ff', fontSize: '0.8rem', fontWeight: 600 }}>Dashboard</span>

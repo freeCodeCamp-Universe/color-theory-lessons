@@ -19,8 +19,8 @@
 }
 
 .instruction {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
   color: var(--accent-warning);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -187,14 +187,14 @@
 }
 
 .elementLabel {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
   color: var(--primary-foreground);
   font-weight: 600;
 }
 
 .elementDesc {
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--secondary-foreground);
   line-height: 1.45;
 }
@@ -218,7 +218,7 @@
 
 .formatName {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 1rem;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.07em;
@@ -226,21 +226,21 @@
 
 .formatValue {
   font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--accent-warning);
   letter-spacing: 0.03em;
 }
 
 .formatNote {
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--secondary-foreground);
   line-height: 1.4;
   margin-top: 2px;
 }
 
 .formatFooter {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
   color: var(--muted);
   text-align: center;
   border-top: 1px solid var(--border);
@@ -266,7 +266,7 @@
 }
 
 .emptyText {
-  font-size: 0.88rem;
+  font-size: 1rem;
   color: var(--muted);
   line-height: 1.5;
   max-width: 26ch;

@@ -232,7 +232,7 @@ export const ColorOnlyDetectorTool = memo(function ColorOnlyDetectorTool({
                 <p style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '0.4rem', color: 'var(--primary-foreground)' }}>
                   {example.name}
                 </p>
-                <div style={{ marginBottom: '0.4rem' }}>{example.visual}</div>
+                <div data-authored-visual style={{ marginBottom: '0.4rem' }}>{example.visual}</div>
                 {interactive && (
                   <button
                     type="button"

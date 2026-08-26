@@ -261,7 +261,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({
               </div>
 
               {/* Before / After */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '0.5rem' }}>
+              <div data-authored-visual style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '0.5rem' }}>
                 <div>
                   <p style={{ fontSize: '0.62rem', color: 'var(--muted)', marginBottom: '0.2rem', fontFamily: 'var(--font-mono)', textTransform: 'uppercase' }}>Before</p>
                   <div style={{ background: '#ffffff', borderRadius: 'var(--radius-sm)', padding: '0.5rem', border: '1px solid #eee', minHeight: 60 }}>

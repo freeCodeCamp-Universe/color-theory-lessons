@@ -166,7 +166,7 @@ export const TokenMapTool = memo(function TokenMapTool({
       </div>
 
       {/* Mini interface preview */}
-      <div style={{
+      <div data-authored-visual style={{
         background: derived.find((d) => d.name === '--color-surface')!.color,
         border: `1px solid ${derived.find((d) => d.name === '--color-border')!.color}`,
         borderRadius: 'var(--radius-sm)', padding: '0.6rem', marginBottom: '0.75rem',

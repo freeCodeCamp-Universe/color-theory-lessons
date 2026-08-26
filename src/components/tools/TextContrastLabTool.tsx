@@ -133,6 +133,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
 
       {/* Preview */}
       <div
+        data-authored-visual
         style={{
           background: isValidHex(bgColor) ? bgColor : '#ffffff',
           borderRadius: 'var(--radius-sm)',

@@ -134,7 +134,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
       >
 
       {/* Preview */}
-      <div style={{
+      <div data-authored-visual style={{
         position: 'relative', width: '100%', height: 120, borderRadius: 'var(--radius-md)',
         background: ctx.bgColor, marginBottom: '0.75rem', overflow: 'hidden',
         border: '1px solid var(--border)',
