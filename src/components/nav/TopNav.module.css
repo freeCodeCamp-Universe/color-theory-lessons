@@ -25,6 +25,10 @@
   opacity: 0.85;
 }
 
+.shortLogo {
+  display: none;
+}
+
 .links {
   display: flex;
   align-items: center;
@@ -41,7 +45,7 @@
   line-height: 1;
   color: var(--secondary-foreground);
   background: none;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   cursor: pointer;
 }
@@ -68,6 +72,14 @@
 }
 
 @media (max-width: 500px) {
+  .fullLogo {
+    display: none;
+  }
+
+  .shortLogo {
+    display: inline;
+  }
+
   .links {
     display: none;
   }

@@ -97,7 +97,7 @@ export function HomePage() {
                   </div>
                   <div className={styles.unitMeta}>
                     {complete ? (
-                      <span className={styles.unitBadge} style={{ color: 'var(--green)', borderColor: 'var(--green)' }}>
+                      <span className={styles.unitBadge} style={{ color: 'var(--accent-success)', borderColor: 'var(--accent-success)' }}>
                         ✓ done
                       </span>
                     ) : started ? (

@@ -7,8 +7,8 @@
 
 .prompt {
   font-family: var(--font-mono);
-  font-size: 0.85rem;
-  color: var(--green);
+  font-size: 1rem;
+  color: var(--accent-success);
 }
 
 .title {
@@ -31,7 +31,7 @@
   padding: 0.6rem 1.25rem;
   background-color: var(--accent-cta);
   color: var(--cta-foreground);
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 700;
   border-radius: var(--radius-sm);
   text-decoration: none;
@@ -50,8 +50,7 @@
 }
 
 .unitsHeading {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -73,12 +72,16 @@
   border-radius: var(--radius-md);
 }
 
+.unitCard[role='button'] {
+  border-color: var(--border-strong);
+}
+
 .unitExpanded {
   border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
 .unitComplete {
-  border-color: color-mix(in srgb, var(--green) 40%, var(--border));
+  border-color: color-mix(in srgb, var(--accent-success) 40%, var(--border));
 }
 
 .unitMeta {
@@ -90,13 +93,12 @@
 }
 
 .expandChevron {
-  font-size: 0.65rem;
+  font-size: 1rem;
   color: var(--muted);
 }
 
 .unitBadge {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   padding: 2px 8px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -104,9 +106,8 @@
 }
 
 .unitStart {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--blue);
+  font-size: 1rem;
+  color: var(--accent-link);
   text-decoration: none;
 }
 
@@ -116,7 +117,7 @@
 
 .unitIndex {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--muted);
   width: 2ch;
   flex-shrink: 0;
@@ -134,7 +135,7 @@
 }
 
 .unitDesc {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--secondary-foreground);
 }
 
@@ -159,7 +160,7 @@
 
 .lessonNum {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--muted);
   width: 2ch;
   flex-shrink: 0;
@@ -167,13 +168,12 @@
 
 .lessonName {
   flex: 1;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--secondary-foreground);
 }
 
 .lessonContinue {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--accent-warning);
   text-decoration: none;
   flex-shrink: 0;
@@ -184,8 +184,7 @@
 }
 
 .lessonRedo {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--muted);
   text-decoration: none;
   flex-shrink: 0;
@@ -201,8 +200,7 @@
 }
 
 .lessonLockedLabel {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--muted);
   flex-shrink: 0;
 }
@@ -215,7 +213,7 @@
 
 .milestoneIcon {
   color: var(--accent-warning);
-  font-size: 0.7rem;
+  font-size: 1rem;
   width: auto;
 }
 
@@ -228,9 +226,8 @@
 .resetBtn {
   background: transparent;
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  border: 1px solid var(--border);
+  font-size: 1rem;
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   padding: 0.4rem 0.9rem;
   cursor: pointer;
@@ -240,4 +237,38 @@
 .resetBtn:hover {
   color: var(--accent-danger);
   border-color: var(--accent-danger);
+}
+
+@media (max-width: 500px) {
+  .unitCard {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    padding: var(--spacing-md);
+  }
+
+  .unitInfo {
+    min-width: 0;
+  }
+
+  .unitMeta {
+    grid-column: 2;
+    margin-left: 0;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .lessonRow {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .lessonContinue,
+  .lessonRedo,
+  .lessonLockedLabel {
+    grid-column: 2;
+    justify-self: start;
+  }
 }

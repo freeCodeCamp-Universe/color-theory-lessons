@@ -61,8 +61,7 @@
 }
 
 .unitLabel {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -89,7 +88,7 @@
 }
 
 .progressDot.done {
-  background-color: var(--green);
+  background-color: var(--accent-success);
 }
 
 .progressDot.current {
@@ -116,7 +115,7 @@
 
 .stepNumber {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--accent-warning);
 }
 
@@ -135,7 +134,7 @@
   padding: 0.5rem 1.25rem;
   background-color: var(--accent-cta);
   color: var(--cta-foreground);
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 700;
   border-radius: var(--radius-sm);
   border: none;
@@ -151,9 +150,8 @@
   padding: 0.5rem 1rem;
   background-color: transparent;
   color: var(--secondary-foreground);
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  border: 1px solid var(--border);
+  font-size: 1rem;
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: border-color 0.15s ease, color 0.15s ease;
@@ -170,7 +168,7 @@
 }
 
 .btnSecondary:disabled:hover {
-  border-color: var(--border);
+  border-color: var(--disabled);
   color: var(--secondary-foreground);
 }
 
@@ -188,14 +186,13 @@
 }
 
 .hintsLabel {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--muted);
   text-transform: uppercase;
 }
 
 .hint {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--secondary-foreground);
   padding-left: var(--spacing-sm);
   border-left: 2px solid var(--border);
@@ -215,9 +212,8 @@
 
 /* ── Quiz panel ───────────────────────────────────────────────────────── */
 .quizHeader {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--blue);
+  font-size: 1rem;
+  color: var(--accent-link);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -239,11 +235,11 @@
   gap: var(--spacing-sm);
   padding: 0.65rem var(--spacing-md);
   background-color: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   cursor: pointer;
   text-align: left;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--primary-foreground);
   transition: border-color 0.15s ease, background-color 0.15s ease;
   width: 100%;
@@ -261,25 +257,25 @@
 }
 
 .choice.correct {
-  border-color: var(--green);
-  background-color: color-mix(in srgb, var(--green) 12%, var(--surface));
+  border-color: var(--accent-success);
+  background-color: color-mix(in srgb, var(--accent-success) 12%, var(--surface));
 }
 
 .choice.incorrect {
-  border-color: var(--red);
-  background-color: color-mix(in srgb, var(--red) 12%, var(--surface));
+  border-color: var(--accent-danger);
+  background-color: color-mix(in srgb, var(--accent-danger) 12%, var(--surface));
 }
 
 .choiceKey {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--muted);
   flex-shrink: 0;
   padding-top: 1px;
 }
 
 .explanation {
-  font-size: 0.88rem;
+  font-size: 1rem;
   color: var(--secondary-foreground);
   margin-top: var(--spacing-xs);
   padding: var(--spacing-sm) var(--spacing-md);
@@ -299,8 +295,7 @@
 }
 
 .panelExampleLabel {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 1rem;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -335,7 +330,7 @@
 
 .swatchLabel {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 1rem;
   color: var(--muted);
   text-align: center;
   max-width: 64px;
@@ -353,12 +348,11 @@
 }
 
 .completeBadge {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   padding: var(--spacing-xs) var(--spacing-md);
-  background-color: color-mix(in srgb, var(--green) 15%, var(--surface));
-  border: 1px solid var(--green);
-  color: var(--green);
+  background-color: color-mix(in srgb, var(--accent-success) 15%, var(--surface));
+  border: 1px solid var(--accent-success);
+  color: var(--accent-success);
   border-radius: var(--radius-sm);
 }
 

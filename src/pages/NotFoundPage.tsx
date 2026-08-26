@@ -13,8 +13,7 @@ export function NotFoundPage() {
       padding: '2rem',
     }}>
       <span style={{
-        fontFamily: 'var(--font-mono)',
-        fontSize: '0.75rem',
+        fontSize: '1rem',
         textTransform: 'uppercase',
         letterSpacing: '0.1em',
         color: 'var(--muted)',
@@ -22,7 +21,6 @@ export function NotFoundPage() {
         404
       </span>
       <h1 style={{
-        fontFamily: 'var(--font-mono)',
         fontSize: '1.5rem',
         color: 'var(--primary-foreground)',
         margin: 0,
@@ -31,7 +29,7 @@ export function NotFoundPage() {
       </h1>
       <p style={{
         color: 'var(--secondary-foreground)',
-        fontSize: '0.9rem',
+        fontSize: '1rem',
         margin: 0,
         maxWidth: '360px',
       }}>
@@ -41,9 +39,8 @@ export function NotFoundPage() {
         to="/"
         style={{
           marginTop: '0.5rem',
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.85rem',
-          color: 'var(--accent-cta)',
+          fontSize: '1rem',
+          color: 'var(--accent-link)',
           textDecoration: 'none',
         }}
       >

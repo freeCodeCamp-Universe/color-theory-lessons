@@ -30,8 +30,7 @@
 }
 
 .unitLabel {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -44,14 +43,13 @@
 
 .milestoneDescription {
   color: var(--secondary-foreground);
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.5;
 }
 
 .estimatedTime {
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
 }
 
 /* ── Part progress dots ──────────────────────────────────────────────── */
@@ -70,7 +68,7 @@
 }
 
 .progressDot.done {
-  background-color: var(--green);
+  background-color: var(--accent-success);
 }
 
 .progressDot.current {
@@ -92,16 +90,14 @@
 }
 
 .partLabel {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 1rem;
   color: var(--accent-warning);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .questionCounter {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--muted);
 }
 
@@ -151,11 +147,11 @@
   gap: var(--spacing-sm);
   padding: 0.65rem var(--spacing-md);
   background-color: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   cursor: pointer;
   text-align: left;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--primary-foreground);
   transition: border-color 0.15s ease, background-color 0.15s ease;
   width: 100%;
@@ -182,18 +178,18 @@
 }
 
 .choice.correct {
-  border-color: var(--green);
-  background-color: color-mix(in srgb, var(--green) 12%, var(--surface));
+  border-color: var(--accent-success);
+  background-color: color-mix(in srgb, var(--accent-success) 12%, var(--surface));
 }
 
 .choice.incorrect {
-  border-color: var(--red);
-  background-color: color-mix(in srgb, var(--red) 12%, var(--surface));
+  border-color: var(--accent-danger);
+  background-color: color-mix(in srgb, var(--accent-danger) 12%, var(--surface));
 }
 
 .choiceKey {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--muted);
   flex-shrink: 0;
   padding-top: 1px;
@@ -212,7 +208,7 @@
 }
 
 .explanation {
-  font-size: 0.88rem;
+  font-size: 1rem;
   color: var(--secondary-foreground);
   padding: var(--spacing-sm) var(--spacing-md);
   background-color: var(--primary-background);
@@ -232,7 +228,7 @@
   padding: 0.5rem 1.25rem;
   background-color: var(--accent-cta);
   color: var(--cta-foreground);
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 700;
   border-radius: var(--radius-sm);
   border: none;
@@ -256,9 +252,8 @@
   padding: 0.5rem 1rem;
   background-color: transparent;
   color: var(--secondary-foreground);
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  border: 1px solid var(--border);
+  font-size: 1rem;
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: border-color 0.15s ease, color 0.15s ease;
@@ -283,12 +278,11 @@
 }
 
 .partSummaryBadge {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   padding: var(--spacing-xs) var(--spacing-md);
-  background-color: color-mix(in srgb, var(--blue) 15%, var(--surface));
-  border: 1px solid var(--blue);
-  color: var(--blue);
+  background-color: color-mix(in srgb, var(--accent-link) 15%, var(--surface));
+  border: 1px solid var(--accent-link);
+  color: var(--accent-link);
   border-radius: var(--radius-sm);
 }
 
@@ -319,16 +313,15 @@
 }
 
 .completeBadge {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--radius-sm);
 }
 
 .completeBadgePassed {
-  background-color: color-mix(in srgb, var(--green) 15%, var(--surface));
-  border: 1px solid var(--green);
-  color: var(--green);
+  background-color: color-mix(in srgb, var(--accent-success) 15%, var(--surface));
+  border: 1px solid var(--accent-success);
+  color: var(--accent-success);
 }
 
 .completeBadgeFailed {
@@ -345,7 +338,7 @@
 .completeScore {
   color: var(--secondary-foreground);
   max-width: 36ch;
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.5;
 }
 
@@ -374,8 +367,7 @@
 }
 
 .contextCardLabel {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 1rem;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -387,7 +379,7 @@
 }
 
 .contextCardDesc {
-  font-size: 0.92rem;
+  font-size: 1rem;
   line-height: 1.6;
   color: var(--secondary-foreground);
 }
@@ -405,8 +397,7 @@
 }
 
 .swatchLabel {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -428,7 +419,7 @@
 }
 
 .swatchHint {
-  font-size: 0.88rem;
+  font-size: 1rem;
   color: var(--secondary-foreground);
   text-align: center;
   max-width: 32ch;

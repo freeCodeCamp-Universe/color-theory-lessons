@@ -19,7 +19,8 @@ export function TopNav() {
   return (
     <nav className={styles.nav} aria-label="Main navigation">
       <NavLink to="/" end className={styles.logo} onClick={() => setMenuOpen(false)}>
-        color-theory-course$
+        <span className={styles.fullLogo}>color-theory-course$</span>
+        <span className={styles.shortLogo}>color$</span>
       </NavLink>
       <ul className={styles.links}>
         {NAV_ITEMS.map((item) => (

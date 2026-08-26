@@ -35,7 +35,7 @@
   --line-height-base: 1.5;
 
   /* Layout */
-  --header-height: 48px;
+  --header-height: 38px;
   --max-content-width: 900px;
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
@@ -90,11 +90,12 @@
   --secondary-foreground: var(--gray-75);
   --primary-foreground: var(--gray-90);
 
-  --yellow: var(--yellow-dark);
-  --blue: var(--blue-dark);
-  --green: var(--green-dark);
-  --red: var(--red-dark);
-  --purple: var(--purple-dark);
+  /* Legacy visual tokens stay fixed so authored lesson mocks do not change. */
+  --yellow: var(--yellow-light);
+  --blue: var(--blue-light);
+  --green: var(--green-light);
+  --red: var(--red-light);
+  --purple: var(--purple-light);
 
   --accent-cta: var(--yellow-gold);
   --cta-foreground: var(--gray-90);
@@ -175,9 +176,9 @@ textarea:disabled {
   cursor: not-allowed;
 }
 
-input:not([type='color']):not([type='range']),
-select,
-textarea {
+input:not([type='color']):not([type='range']):not(:disabled),
+select:not(:disabled),
+textarea:not(:disabled) {
   border-color: var(--border-strong);
 }
 

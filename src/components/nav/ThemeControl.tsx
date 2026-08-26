@@ -19,9 +19,9 @@ export function ThemeControl() {
         })}
         aria-label="Theme preference"
       >
-        <option value="dark">Dark theme</option>
-        <option value="light">Light theme</option>
-        <option value="system">System theme</option>
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+        <option value="system">System</option>
       </select>
     </label>
   );

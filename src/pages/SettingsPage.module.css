@@ -9,7 +9,6 @@
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--primary-foreground);
-  font-family: var(--font-mono);
 }
 
 .section {
@@ -23,8 +22,7 @@
 }
 
 .sectionHeading {
-  font-size: 0.85rem;
-  font-family: var(--font-mono);
+  font-size: 1rem;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -32,17 +30,16 @@
 }
 
 .sectionDesc {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--secondary-foreground);
   margin: 0;
 }
 
 .resetBtn {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 1rem;
   padding: var(--spacing-sm) var(--spacing-md);
   background: transparent;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   color: var(--secondary-foreground);
   cursor: pointer;
@@ -61,11 +58,10 @@
 }
 
 .cancelBtn {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 1rem;
   padding: var(--spacing-sm) var(--spacing-md);
   background: transparent;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   color: var(--muted);
   cursor: pointer;

@@ -92,8 +92,8 @@
   align-self: flex-start;
   margin-top: var(--spacing-xs);
   padding: 0.35rem 0.9rem;
-  background-color: var(--accent-cta);
-  color: var(--cta-foreground);
+  background-color: var(--yellow);
+  color: var(--gray-90);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;

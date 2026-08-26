@@ -57,7 +57,7 @@ export function LessonPage() {
 
   if (isLoading) {
     return (
-      <p style={{ color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>
+      <p style={{ color: 'var(--muted)', fontSize: '1rem' }}>
         loading lesson...
       </p>
     );
@@ -66,7 +66,7 @@ export function LessonPage() {
   if (!lesson) {
     return (
       <div>
-        <p style={{ color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>
+        <p style={{ color: 'var(--muted)', fontSize: '1rem' }}>
           lesson not found: {lessonId}
         </p>
         <Link to="/" style={{ marginTop: '1rem', display: 'inline-block' }}>
@@ -79,7 +79,7 @@ export function LessonPage() {
   return (
     <Suspense
       fallback={
-        <p style={{ color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>
+        <p style={{ color: 'var(--muted)', fontSize: '1rem' }}>
           loading lesson player...
         </p>
       }
