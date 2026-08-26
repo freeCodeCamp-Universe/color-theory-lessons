@@ -26,7 +26,7 @@ export const lesson3_5: LessonConfig = {
   ],
   challenge: {
       prompt:
-        'Explore the role colors and hero gradient. Set the primary and secondary text colors so all three contrast checks pass, then submit the theme.',
+        'Complete one theme-building stage by adjusting the role colors and hero gradient until all five text contrast checks pass.',
       hints: [
         'Choose the background and surface colors first. They provide the backdrop for the text and border colors.',
         'Check the primary text ratios against both the background and the surface.',

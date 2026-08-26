@@ -1,6 +1,9 @@
-import { memo, useState, useEffect, useRef } from 'react';
+import { memo, useState } from 'react';
 import type { RGB } from '../../utils/color.ts';
 import { rgbToHex, parseHex, rgbString, colorDistance } from '../../utils/color.ts';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 import shellStyles from './ToolShell.module.css';
 import styles from './HexRgbEditorTool.module.css';
 
@@ -36,22 +39,24 @@ const CHANNELS: { key: keyof RGB; label: string; trackColor: string }[] = [
 
 // ─── Component ────────────────────────────────────────────────────────────
 
-interface HexRgbEditorToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+const STAGES: readonly ExerciseStageDefinition[] = TARGETS.map((target) => ({
+  id: target.name.replaceAll(' ', '-'),
+  title: `Match ${target.name}`,
+  instruction: `Use the HEX input to match the ${target.name} target.`,
+  nextActionLabel: 'next target',
+}));
 
-export const HexRgbEditorTool = memo(function HexRgbEditorTool({ interactive = true, onComplete }: HexRgbEditorToolProps) {
+export const HexRgbEditorTool = memo(function HexRgbEditorTool({
+  interactive = true,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [current, setCurrent] = useState<RGB>({ r: 99, g: 102, b: 241 });
   const [hexInput, setHexInput] = useState<string>(rgbToHex({ r: 99, g: 102, b: 241 }));
   const [hexError, setHexError] = useState(false);
 
-  // challenge state
-  const [targetIdx, setTargetIdx] = useState(0);
-  const [checked, setChecked] = useState(false);
-  const [allDone, setAllDone] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => () => { if (timerRef.current !== null) clearTimeout(timerRef.current); }, []);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const targetIdx = stageController.activeStage.position - 1;
 
   const target = TARGETS[targetIdx];
   const isClose = colorDistance(current, target.rgb) <= MATCH_THRESHOLD;
@@ -64,8 +69,8 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({ interactive = t
     setHexError(false);
   }
 
-  // Sliders disabled during challenge — learner must use HEX input to match targets
-  const slidersLocked = interactive && !allDone;
+  // Sliders are disabled during the challenge because learners must match targets with the HEX input.
+  const slidersLocked = interactive;
 
   function handleSlider(key: keyof RGB, val: number) {
     if (!interactive || slidersLocked) return;
@@ -85,7 +90,7 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({ interactive = t
   }
 
   function handlePreset(rgb: RGB) {
-    if (!interactive || (checked && !allDone)) return;
+    if (!interactive || stageController.result !== 'idle') return;
     applyRgb(rgb);
   }
 
@@ -93,25 +98,8 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({ interactive = t
 
   function handleCheck() {
     if (!interactive) return;
-    setChecked(true);
-    if (isClose) {
-      const next = targetIdx + 1;
-      if (next < TARGETS.length) {
-        timerRef.current = setTimeout(() => {
-          setTargetIdx(next);
-          setChecked(false);
-        }, 800);
-      } else {
-        timerRef.current = setTimeout(() => {
-          setAllDone(true);
-          onComplete?.();
-        }, 800);
-      }
-    }
-  }
-
-  function handleRetry() {
-    setChecked(false);
+    if (isClose) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   // ─── Render ───────────────────────────────────────────────────────────────
@@ -120,7 +108,13 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({ interactive = t
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>HEX / RGB dual editor</span>
 
-      <div className={styles.root}>
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback="That HEX value is not close enough to the target. Try this stage again."
+        passedFeedback="Target matched. Continue to the next target."
+        completionFeedback="All three HEX targets matched."
+      >
+        <div className={styles.root}>
 
         {/* ─ Swatches ─ */}
         <div className={styles.swatchRow}>
@@ -139,14 +133,14 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({ interactive = t
           {/* Challenge target */}
           <div className={styles.swatchBox}>
             <span className={styles.swatchLabel}>
-              {allDone ? 'done' : `target ${targetIdx + 1} of ${TARGETS.length}`}
+              target color
             </span>
             <div
               className={styles.swatch}
               style={{ backgroundColor: interactive ? rgbString(target.rgb) : 'transparent' }}
             />
             <span className={styles.swatchValue}>
-              {interactive && !allDone ? target.name : (allDone ? 'all matched ✓' : 'no target')}
+              {interactive ? target.name : 'no target'}
             </span>
           </div>
         </div>
@@ -159,7 +153,7 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({ interactive = t
             type="text"
             value={hexInput}
             maxLength={7}
-            disabled={!interactive}
+            disabled={!interactive || stageController.result !== 'idle'}
             onChange={(e) => handleHexChange(e.target.value)}
             aria-label="HEX color input"
             spellCheck={false}
@@ -221,38 +215,15 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({ interactive = t
         </div>
 
         {/* ─ Challenge check / feedback ─ */}
-        {interactive && !allDone && (
+        {interactive && stageController.result === 'idle' && (
           <>
-            {!checked ? (
               <button className={styles.checkBtn} onClick={handleCheck}>
                 check match
               </button>
-            ) : (
-              <div className={styles.matchRow}>
-                {isClose ? (
-                  <span className={styles.matchPass}>✓ matched; loading next target…</span>
-                ) : (
-                  <>
-                    <span className={styles.matchFail}>not close enough yet</span>
-                    <button className={styles.checkBtn} onClick={handleRetry}>
-                      retry
-                    </button>
-                  </>
-                )}
-              </div>
-            )}
-            <span className={styles.progress}>
-              {targetIdx + 1} / {TARGETS.length} targets
-            </span>
           </>
         )}
-
-        {allDone && (
-          <div className={styles.matchRow}>
-            <span className={styles.matchPass}>✓ all three targets matched</span>
-          </div>
-        )}
-      </div>
+        </div>
+      </ExerciseStage>
     </div>
   );
 });

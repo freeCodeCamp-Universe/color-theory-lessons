@@ -1,5 +1,8 @@
-import { memo, useState, useRef } from 'react';
+import { memo, useState } from 'react';
 import { contrastRatioWcag } from '../../utils/color.ts';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 import shellStyles from './ToolShell.module.css';
 
 interface OverlayContext {
@@ -80,17 +83,22 @@ function formatContrastRatio(ratio: number): string {
   return (Math.floor(ratio * 10) / 10).toFixed(1);
 }
 
-interface AlphaLayerToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+const STAGES: readonly ExerciseStageDefinition[] = CONTEXTS.map((context) => ({
+  id: context.id,
+  title: context.label,
+  instruction: context.description,
+  nextActionLabel: 'next overlay',
+}));
 
-export const AlphaLayerTool = memo(function AlphaLayerTool({ interactive = false, onComplete }: AlphaLayerToolProps) {
-  const [ctxIdx, setCtxIdx] = useState(0);
+export const AlphaLayerTool = memo(function AlphaLayerTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [alpha, setAlpha] = useState(0.5);
   const [isDark, setIsDark] = useState(true);
-  const [completed, setCompleted] = useState<boolean[]>(CONTEXTS.map(() => false));
-  const doneRef = useRef(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const ctxIdx = stageController.activeStage.position - 1;
 
   const ctx = CONTEXTS[ctxIdx];
   const fgR = isDark ? 0 : 255;
@@ -103,53 +111,27 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({ interactive = false
     ? contrastRatioWcag(IMAGE_TEXT_COLOR, blendedRgb)
     : null;
   const imageTextPassesContrast = imageTextContrast !== null && imageTextContrast >= IMAGE_TEXT_CONTRAST_TARGET;
-  const allDone = completed.every(Boolean);
+  const inputsDisabled = !interactive || stageController.result !== 'idle';
 
   function checkOverlay() {
-    if (!interactive || doneRef.current) return;
+    if (!interactive || stageController.result !== 'idle') return;
     const colorMatch = isDark === ctx.targetColorDark;
     const alphaInRange = alpha >= ctx.targetAlphaMin && alpha <= ctx.targetAlphaMax;
     const passesContextCheck = ctx.id === 'image' ? imageTextPassesContrast : alphaInRange;
-    if (colorMatch && passesContextCheck) {
-      const next = [...completed];
-      next[ctxIdx] = true;
-      setCompleted(next);
-      if (next.every(Boolean)) {
-        doneRef.current = true;
-        onComplete?.();
-      } else {
-        const nextUndone = next.findIndex((c) => !c);
-        if (nextUndone !== -1) setCtxIdx(nextUndone);
-      }
-    }
+    if (colorMatch && passesContextCheck) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>layer stack simulator</span>
 
-      {/* Context selector */}
-      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
-        {CONTEXTS.map((c, i) => (
-          <button
-            key={c.id}
-            onClick={() => interactive && setCtxIdx(i)}
-            disabled={!interactive}
-            style={{
-              padding: '0.3rem 0.6rem',
-              fontSize: '0.78rem',
-              fontFamily: 'var(--font-mono)',
-              background: i === ctxIdx ? 'var(--surface)' : 'transparent',
-              color: completed[i] ? 'var(--green)' : i === ctxIdx ? 'var(--primary-foreground)' : 'var(--muted)',
-              border: `1px solid ${i === ctxIdx ? 'var(--border)' : 'transparent'}`,
-              borderRadius: 'var(--radius-sm)',
-              cursor: interactive ? 'pointer' : 'default',
-            }}
-          >
-            {completed[i] ? '✓ ' : ''}{c.label}
-          </button>
-        ))}
-      </div>
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback="The overlay does not meet this context's requirements. Try this stage again."
+        passedFeedback="Overlay complete. Continue to the next context."
+        completionFeedback="All four overlay contexts completed."
+      >
 
       {/* Preview */}
       <div style={{
@@ -208,14 +190,14 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({ interactive = false
         <label style={{ fontSize: '0.82rem', display: 'block', marginBottom: '0.3rem' }}>
           Alpha: {alpha.toFixed(2)}
           <input type="range" min={0} max={100} value={Math.round(alpha * 100)}
-            disabled={!interactive || allDone}
+            disabled={inputsDisabled}
             onChange={(e) => setAlpha(Number(e.target.value) / 100)}
             style={{ width: '100%', accentColor: 'var(--yellow)' }}
             aria-label={`Alpha: ${(alpha * 100).toFixed(0)} percent`}
           />
         </label>
         <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.3rem' }}>
-          <button onClick={() => interactive && setIsDark(true)} disabled={!interactive || allDone}
+          <button onClick={() => interactive && setIsDark(true)} disabled={inputsDisabled}
             style={{
               padding: '0.3rem 0.6rem', fontSize: '0.78rem', fontFamily: 'var(--font-mono)',
               background: isDark ? '#222' : 'transparent', color: isDark ? '#fff' : 'var(--muted)',
@@ -224,7 +206,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({ interactive = false
             }}>
             dark overlay
           </button>
-          <button onClick={() => interactive && setIsDark(false)} disabled={!interactive || allDone}
+          <button onClick={() => interactive && setIsDark(false)} disabled={inputsDisabled}
             style={{
               padding: '0.3rem 0.6rem', fontSize: '0.78rem', fontFamily: 'var(--font-mono)',
               background: !isDark ? '#eee' : 'transparent', color: !isDark ? '#111' : 'var(--muted)',
@@ -237,11 +219,8 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({ interactive = false
       </div>
 
       {/* Task info and check */}
-      {interactive && !allDone && (
+      {interactive && stageController.result === 'idle' && (
         <div style={{ borderTop: '1px solid var(--border)', paddingTop: '0.6rem', marginTop: '0.5rem' }}>
-          <p style={{ fontSize: '0.82rem', color: 'var(--muted)', marginBottom: '0.4rem' }}>
-            {ctx.description}
-          </p>
           <button onClick={checkOverlay} style={{
             padding: '0.4rem 1rem', background: 'var(--yellow)', color: '#111',
             border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer',
@@ -252,11 +231,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({ interactive = false
         </div>
       )}
 
-      {allDone && (
-        <p style={{ color: 'var(--green)', fontSize: '0.85rem', marginTop: '0.75rem' }}>
-          All overlay contexts completed. The foreground color, alpha, and background combine to produce each result.
-        </p>
-      )}
+      </ExerciseStage>
     </div>
   );
 });

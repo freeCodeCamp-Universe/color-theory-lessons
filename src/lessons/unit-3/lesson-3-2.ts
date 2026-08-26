@@ -26,11 +26,14 @@ export const lesson3_2: LessonConfig = {
   ],
   challenge: {
     prompt:
-      'Use the HEX input to match three target UI colors. Enter a three-digit or six-digit value and compare the current color with each target.',
+      'Complete three stages with the HEX input: match link blue, then error red, then the light gray surface.',
     hints: [
       'In a six-digit value, the first pair controls red, the second controls green, and the third controls blue.',
       'HEX channel values run from 00 to FF. Raise a pair to add more of that channel.',
-      'In a six-digit value, repeat the same pair three times for a neutral color.',
+      {
+        stageId: 'light-gray-surface',
+        text: 'In a six-digit value, repeat the same pair three times for a neutral color.',
+      },
     ],
   },
   quizItems: [

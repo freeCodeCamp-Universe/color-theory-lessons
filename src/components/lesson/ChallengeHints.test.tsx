@@ -1,5 +1,7 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
+import { lesson3_4 } from '../../lessons/unit-3/lesson-3-4.ts';
+import { lesson3_6 } from '../../lessons/unit-3/lesson-3-6.ts';
 import type { ChallengeHint } from '../../types/lesson.ts';
 import { ChallengeHints } from './ChallengeHints.tsx';
 
@@ -72,5 +74,50 @@ describe('ChallengeHints', () => {
     );
     expect(screen.queryByText('Try this')).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'show hint' })).toBeInTheDocument();
+  });
+
+  it('hides Unit 3 hints assigned to later stages', () => {
+    const view = render(
+      <ChallengeHints
+        hints={lesson3_4.challenge.hints}
+        activeStageId="scrim"
+        resetKey="u3-l4:0"
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'show hint' }));
+    expect(screen.getByText(
+      'Try a dark overlay between 40% and 60% opacity. It should dim the background while leaving it visible.',
+    )).toBeInTheDocument();
+    expect(screen.queryByText(/Try a light overlay between 10% and 20% opacity/))
+      .not.toBeInTheDocument();
+    expect(screen.queryByText(/Choose a dark overlay between 45% and 80% opacity/))
+      .not.toBeInTheDocument();
+
+    view.rerender(
+      <ChallengeHints
+        hints={lesson3_6.challenge.hints}
+        activeStageId="adjust-token-system"
+        resetKey="u3-l6:0"
+      />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'show hint' }));
+    expect(screen.getByText('Changing the base controls updates every role color derived from them.'))
+      .toBeInTheDocument();
+    expect(screen.queryByText(/A raw value is a color code/)).not.toBeInTheDocument();
+
+    view.rerender(
+      <ChallengeHints
+        hints={lesson3_6.challenge.hints}
+        activeStageId="classify-token-names"
+        resetKey="u3-l6:0"
+      />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'show hint' }));
+    expect(screen.getByText(
+      'A raw value is a color code such as #1E40AF. A palette token name identifies a color family and step. A role token name identifies how a color is used.',
+    )).toBeInTheDocument();
+    expect(screen.queryByText('Changing the base controls updates every role color derived from them.'))
+      .not.toBeInTheDocument();
   });
 });

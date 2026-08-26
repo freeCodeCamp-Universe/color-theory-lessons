@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { hexToRgb, hslToHex } from '../../utils/color.ts';
 import { FormatRevealTool } from './FormatRevealTool.tsx';
 
@@ -29,6 +29,21 @@ function parseHslString(value: string) {
 }
 
 describe('FormatRevealTool', () => {
+  it('uses one named stage and completes after every element is explored', () => {
+    const onComplete = vi.fn();
+    render(<FormatRevealTool onComplete={onComplete} />);
+
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Explore interface color formats' })).toBeInTheDocument();
+
+    for (const label of ELEMENT_LABELS) {
+      fireEvent.click(screen.getByLabelText(label));
+    }
+
+    expect(onComplete).toHaveBeenCalledOnce();
+    expect(screen.getByText(/Format exploration complete/)).toBeInTheDocument();
+  });
+
   it('displays HSL values that round-trip to the source RGB for every color', () => {
     render(<FormatRevealTool />);
 

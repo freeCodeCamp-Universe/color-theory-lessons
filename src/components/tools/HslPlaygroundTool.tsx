@@ -1,6 +1,9 @@
 import { memo, useState } from 'react';
 import { hslToHex, hexToRgb } from '../../utils/color.ts';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { HUE_MAX, HueWheel } from './HueWheel.tsx';
+import { useExerciseStages } from './useExerciseStages.ts';
 import shellStyles from './ToolShell.module.css';
 
 interface Target {
@@ -27,18 +30,23 @@ function hueClose(a: number, b: number, range: number): boolean {
   return d <= range || 360 - d <= range;
 }
 
-interface HslPlaygroundToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+const STAGES: readonly ExerciseStageDefinition[] = TARGETS.map((target) => ({
+  id: target.label.toLowerCase().replaceAll(' ', '-'),
+  title: `Match ${target.label.toLowerCase()}`,
+  instruction: `Adjust hue, saturation, and lightness to match the ${target.label.toLowerCase()} target.`,
+  nextActionLabel: 'next target',
+}));
 
-export const HslPlaygroundTool = memo(function HslPlaygroundTool({ interactive = false, onComplete }: HslPlaygroundToolProps) {
+export const HslPlaygroundTool = memo(function HslPlaygroundTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [h, setH] = useState(200);
   const [s, setS] = useState(50);
   const [l, setL] = useState(50);
-  const [targetIdx, setTargetIdx] = useState(0);
-  const [matched, setMatched] = useState<boolean[]>(TARGETS.map(() => false));
-  const [completed, setCompleted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const targetIdx = stageController.activeStage.position - 1;
 
   const hex = hslToHex(h, s, l);
   const rgb = hexToRgb(hex);
@@ -48,35 +56,24 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({ interactive =
   const targetHex = hslToHex(target.h, target.s, target.l);
 
   function checkMatch() {
-    if (!interactive || completed) return;
+    if (!interactive || stageController.result !== 'idle') return;
     if (
       hueClose(h, target.h, TOLERANCE) &&
       isClose(s, target.s, TOLERANCE) &&
       isClose(l, target.l, TOLERANCE)
     ) {
-      const next = [...matched];
-      next[targetIdx] = true;
-      setMatched(next);
-      if (next.every(Boolean)) {
-        setCompleted(true);
-        onComplete?.();
-      } else {
-        const nextUnmatched = next.findIndex((m) => !m);
-        if (nextUnmatched !== -1) setTargetIdx(nextUnmatched);
-      }
-    }
+      stageController.markPassed();
+    } else stageController.markIncorrect();
   }
 
-  const allDone = matched.every(Boolean);
+  const inputsDisabled = !interactive || stageController.result !== 'idle';
 
-  return (
-    <div className={shellStyles.shell}>
-      <span className={shellStyles.toolLabel}>hsl playground</span>
-
-      <div style={{ display: 'flex', gap: 'var(--spacing-lg)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+  const playground = (
+    <>
+        <div style={{ display: 'flex', gap: 'var(--spacing-lg)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
         <HueWheel
           hue={h}
-          interactive={interactive && !allDone}
+          interactive={!inputsDisabled}
           onChange={setH}
         />
         <div style={{ flex: 1, minWidth: '180px' }}>
@@ -97,7 +94,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({ interactive =
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginBottom: '1rem' }}>
             <label style={{ fontSize: '0.82rem' }}>
               Hue: {h}°
-              <input type="range" min={0} max={HUE_MAX} value={h} disabled={!interactive || allDone}
+              <input type="range" min={0} max={HUE_MAX} value={h} disabled={inputsDisabled}
                 onChange={(e) => setH(Number(e.target.value))}
                 style={{ width: '100%', accentColor: 'var(--yellow)' }}
                 aria-label={`Hue: ${h} degrees`}
@@ -105,7 +102,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({ interactive =
             </label>
             <label style={{ fontSize: '0.82rem' }}>
               Saturation: {s}%
-              <input type="range" min={0} max={100} value={s} disabled={!interactive || allDone}
+              <input type="range" min={0} max={100} value={s} disabled={inputsDisabled}
                 onChange={(e) => setS(Number(e.target.value))}
                 style={{ width: '100%', accentColor: 'var(--yellow)' }}
                 aria-label={`Saturation: ${s} percent`}
@@ -113,7 +110,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({ interactive =
             </label>
             <label style={{ fontSize: '0.82rem' }}>
               Lightness: {l}%
-              <input type="range" min={0} max={100} value={l} disabled={!interactive || allDone}
+              <input type="range" min={0} max={100} value={l} disabled={inputsDisabled}
                 onChange={(e) => setL(Number(e.target.value))}
                 style={{ width: '100%', accentColor: 'var(--yellow)' }}
                 aria-label={`Lightness: ${l} percent`}
@@ -124,10 +121,10 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({ interactive =
       </div>
 
       {/* Target area */}
-      {interactive && !allDone && (
+      {interactive && stageController.result === 'idle' && (
         <div style={{ borderTop: '1px solid var(--border)', paddingTop: '0.75rem' }}>
           <p style={{ fontSize: '0.82rem', color: 'var(--muted)', marginBottom: '0.5rem' }}>
-            Target {targetIdx + 1}/{TARGETS.length}: <strong style={{ color: 'var(--primary-foreground)' }}>{target.label}</strong>
+            Current target: <strong style={{ color: 'var(--primary-foreground)' }}>{target.label}</strong>
           </p>
           <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
             <div style={{
@@ -142,23 +139,25 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({ interactive =
               check match
             </button>
           </div>
-          <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.5rem' }}>
-            {TARGETS.map((t, i) => (
-              <span key={t.label} style={{
-                fontSize: '0.78rem', color: matched[i] ? 'var(--green)' : 'var(--muted)',
-              }}>
-                {matched[i] ? '✓' : '○'} {t.label}
-              </span>
-            ))}
-          </div>
         </div>
       )}
+    </>
+  );
 
-      {allDone && (
-        <p style={{ color: 'var(--green)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          All three targets matched. The HSL, HEX, and RGB readouts describe the same final color.
-        </p>
-      )}
+  return (
+    <div className={shellStyles.shell}>
+      <span className={shellStyles.toolLabel}>hsl playground</span>
+
+      {interactive ? (
+        <ExerciseStage
+          controller={stageController}
+          incorrectFeedback="The color is outside the target range. Try this stage again."
+          passedFeedback="Target matched. Continue to the next target."
+          completionFeedback="All three HSL targets matched."
+        >
+          {playground}
+        </ExerciseStage>
+      ) : playground}
     </div>
   );
 });

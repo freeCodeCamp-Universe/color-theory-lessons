@@ -1,9 +1,18 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { AlphaLayerTool } from './AlphaLayerTool.tsx';
 
-function selectImageOverlayContext() {
-  fireEvent.click(screen.getByRole('button', { name: 'Image text overlay' }));
+function passCurrentStage() {
+  fireEvent.click(screen.getByRole('button', { name: 'check' }));
+  fireEvent.click(screen.getByRole('button', { name: 'next overlay' }));
+}
+
+function advanceToImageOverlay() {
+  passCurrentStage();
+  fireEvent.click(screen.getByRole('button', { name: 'light overlay' }));
+  setAlpha(10);
+  passCurrentStage();
+  fireEvent.click(screen.getByRole('button', { name: 'dark overlay' }));
 }
 
 function setAlpha(value: number) {
@@ -13,30 +22,50 @@ function setAlpha(value: number) {
 afterEach(cleanup);
 
 describe('AlphaLayerTool image text overlay context', () => {
+  it('presents the four contexts as ordered stages', () => {
+    render(<AlphaLayerTool interactive />);
+
+    expect(screen.getByText('Stage 1 of 4')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Modal scrim' })).toBeInTheDocument();
+    expect(screen.queryByText('Card hover')).not.toBeInTheDocument();
+
+    passCurrentStage();
+    expect(screen.getByText('Stage 2 of 4')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Card hover' })).toBeInTheDocument();
+  });
+
   it('fails completion without rounding a below-target contrast ratio up to the target', () => {
     render(<AlphaLayerTool interactive />);
 
-    selectImageOverlayContext();
+    advanceToImageOverlay();
     setAlpha(23);
     expect(screen.getByText('Text contrast:').parentElement).toHaveTextContent(
       'Text contrast: 4.4:1 (target: 4.5:1)',
     );
     fireEvent.click(screen.getByRole('button', { name: 'check' }));
 
-    expect(screen.getByRole('button', { name: 'Image text overlay' })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /✓\s*Image text overlay/ })).not.toBeInTheDocument();
+    expect(screen.getByText('Stage 3 of 4')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'try stage again' })).toBeInTheDocument();
   });
 
-  it('passes completion when composited background meets contrast target even below old alpha range', () => {
-    render(<AlphaLayerTool interactive />);
+  it('completes after all four overlay stages pass', () => {
+    const onComplete = vi.fn();
+    render(<AlphaLayerTool interactive onComplete={onComplete} />);
 
-    selectImageOverlayContext();
+    advanceToImageOverlay();
     setAlpha(25);
     expect(screen.getByText('Text contrast:').parentElement).toHaveTextContent(
       /Text contrast:\s+\d+\.\d:1 \(target: 4\.5:1\)/,
     );
     fireEvent.click(screen.getByRole('button', { name: 'check' }));
+    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'next overlay' }));
 
-    expect(screen.getByRole('button', { name: /✓\s*Image text overlay/ })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'light overlay' }));
+    setAlpha(40);
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+
+    expect(onComplete).toHaveBeenCalledOnce();
+    expect(screen.getByText('All four overlay contexts completed.')).toBeInTheDocument();
   });
 });

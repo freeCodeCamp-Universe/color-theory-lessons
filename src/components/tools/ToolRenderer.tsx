@@ -127,27 +127,63 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
       break;
 
     case 'format-reveal':
-      tool = <FormatRevealTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <FormatRevealTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'hex-rgb-editor':
-      tool = <HexRgbEditorTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <HexRgbEditorTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'hsl-playground':
-      tool = <HslPlaygroundTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <HslPlaygroundTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'alpha-layer':
-      tool = <AlphaLayerTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <AlphaLayerTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'theme-sandbox':
-      tool = <ThemeSandboxTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <ThemeSandboxTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'token-map':
-      tool = <TokenMapTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <TokenMapTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'color-space-lab':
