@@ -1,11 +1,9 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useState } from 'react';
 import { hexToHsl, hexToRgb, contrastRatioWcag } from '../../utils/color.ts';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
-
-interface DarkTranslatorToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+import { useExerciseStages } from './useExerciseStages.ts';
 
 type RoleKey = 'page-bg' | 'surface' | 'primary-text' | 'secondary-text' | 'action' | 'success' | 'error';
 
@@ -33,6 +31,12 @@ const DARK_DEFAULTS: Record<RoleKey, string> = {
   'error': '#dc2626',
 };
 
+const STAGES: readonly ExerciseStageDefinition[] = [{
+  id: 'translate-dark-theme',
+  title: 'Translate the theme to dark mode',
+  instruction: 'Choose dark-theme values for all seven roles, compare both previews, and make every displayed check pass.',
+}];
+
 function getContrast(fg: string, bg: string): number {
   if (!isValidHex(fg) || !isValidHex(bg)) return 1;
   try { return contrastRatioWcag(hexToRgb(fg), hexToRgb(bg)); } catch { return 1; }
@@ -53,15 +57,21 @@ function getHueDifference(first: string, second: string) {
   return Math.min(difference, 360 - difference);
 }
 
-export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive = false, onComplete }: DarkTranslatorToolProps) {
+export const DarkTranslatorTool = memo(function DarkTranslatorTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [dark, setDark] = useState<Record<RoleKey, string>>(DARK_DEFAULTS);
   const [preview, setPreview] = useState<'light' | 'dark'>('light');
   const [hasInteracted, setHasInteracted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
   function update(key: RoleKey, val: string) {
-    if (!interactive) return;
+    if (!interactive || stageController.result === 'passed') return;
     setHasInteracted(true);
     setDark(prev => ({ ...prev, [key]: val }));
+    stageController.retry();
   }
 
   const d = dark;
@@ -89,16 +99,6 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive
     && semanticContrast >= STATUS_LUMINANCE_CONTRAST_MINIMUM;
   const allPass = primaryOk && secondaryOk && surfaceOk && actionOk
     && semanticRolesValid && successOk && errorOk && semanticHueOk && semanticLuminanceOk;
-  const completed = interactive && hasInteracted && allPass;
-  const wasCompleted = useRef(false);
-
-  useEffect(() => {
-    if (completed && !wasCompleted.current) {
-      onComplete?.();
-    }
-    wasCompleted.current = completed;
-  }, [completed, onComplete]);
-
   const roles = preview === 'light' ? LIGHT_THEME : dark;
   const bg = isValidHex(roles['page-bg']) ? roles['page-bg'] : '#1e293b';
   const surf = isValidHex(roles['surface']) ? roles['surface'] : '#334155';
@@ -125,6 +125,11 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>dark translator</span>
 
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback="One or more dark-theme checks still fail. Adjust the role values and try the stage again."
+        completionFeedback="Your dark theme passes every displayed check. Compare the preview in both modes before continuing."
+      >
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         {/* Light theme (read-only) */}
         <div style={{ flex: '0 0 200px' }}>
@@ -153,7 +158,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive
                   type="text"
                   value={val}
                   onChange={e => update(key, e.target.value)}
-                  disabled={!interactive}
+                  disabled={!interactive || stageController.result === 'passed'}
                   maxLength={7}
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.72rem',
@@ -219,11 +224,16 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({ interactive
         </div>
       </div>
 
-      {completed && (
-        <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          Your dark theme passes every displayed check. Compare the preview in both modes before continuing.
-        </p>
+      {interactive && stageController.result !== 'passed' && (
+        <button
+          type="button"
+          disabled={!hasInteracted}
+          onClick={() => allPass ? stageController.markPassed() : stageController.markIncorrect()}
+        >
+          check stage
+        </button>
       )}
+      </ExerciseStage>
     </div>
   );
 });

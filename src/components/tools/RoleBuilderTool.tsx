@@ -1,11 +1,9 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useState } from 'react';
 import { hexToRgb, contrastRatioWcag, hexToHsl } from '../../utils/color.ts';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
-
-interface RoleBuilderToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+import { useExerciseStages } from './useExerciseStages.ts';
 
 type RoleKey = 'page-bg' | 'surface' | 'primary-text' | 'secondary-text' | 'action' | 'success' | 'warning' | 'error';
 
@@ -37,6 +35,12 @@ const ROLE_LABELS: Record<RoleKey, string> = {
   'warning': 'warning',
   'error': 'error',
 };
+
+const STAGES: readonly ExerciseStageDefinition[] = [{
+  id: 'build-role-system',
+  title: 'Build the semantic color roles',
+  instruction: 'Assign all eight roles so the preview passes every text, surface, and status-color check.',
+}];
 
 function getContrast(fg: string, bg: string): number {
   try { return contrastRatioWcag(hexToRgb(fg), hexToRgb(bg)); } catch { return 1; }
@@ -133,26 +137,23 @@ function validateRoles(roles: Record<RoleKey, string>) {
   };
 }
 
-export const RoleBuilderTool = memo(function RoleBuilderTool({ interactive = false, onComplete }: RoleBuilderToolProps) {
+export const RoleBuilderTool = memo(function RoleBuilderTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [roles, setRoles] = useState<Record<RoleKey, string>>(DEFAULTS);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
   function update(key: RoleKey, val: string) {
-    if (!interactive) return;
+    if (!interactive || stageController.result === 'passed') return;
     setHasInteracted(true);
     setRoles((prev) => ({ ...prev, [key]: val }));
+    stageController.retry();
   }
 
   const metrics = validateRoles(roles);
-  const completed = hasInteracted && metrics.allPass;
-  const wasCompleted = useRef(false);
-
-  useEffect(() => {
-    if (completed && !wasCompleted.current) {
-      onComplete?.();
-    }
-    wasCompleted.current = completed;
-  }, [completed, onComplete]);
 
   const {
     validRoles,
@@ -184,6 +185,11 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({ interactive = fal
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>role builder</span>
 
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback="One or more role checks still fail. Adjust the role values and try the stage again."
+        completionFeedback="All color-role checks pass. The preview keeps labels and icons so meaning never depends on color alone."
+      >
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         {/* Inputs */}
         <div style={{ flex: '0 0 220px' }}>
@@ -198,7 +204,7 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({ interactive = fal
                   type="text"
                   value={val}
                   onChange={(e) => update(roleKey, e.target.value)}
-                  disabled={!interactive}
+                  disabled={!interactive || stageController.result === 'passed'}
                   maxLength={7}
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.78rem',
@@ -247,11 +253,16 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({ interactive = fal
         </div>
       </div>
 
-      {completed && (
-        <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          All color-role checks pass. The preview keeps labels and icons so meaning never depends on color alone.
-        </p>
+      {interactive && stageController.result !== 'passed' && (
+        <button
+          type="button"
+          disabled={!hasInteracted}
+          onClick={() => metrics.allPass ? stageController.markPassed() : stageController.markIncorrect()}
+        >
+          check stage
+        </button>
       )}
+      </ExerciseStage>
     </div>
   );
 });

@@ -7,7 +7,10 @@ import {
 } from './color-space-lab-data.ts';
 import type { DisplayP3Sample } from './color-space-lab-data.ts';
 import styles from './ColorSpaceLabTool.module.css';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
+import { useExerciseStages } from './useExerciseStages.ts';
 
 interface SortItem {
   label: string;
@@ -28,22 +31,35 @@ const SORT_ITEMS: SortItem[] = [
 
 type GamutAnswer = 'maps' | 'within';
 
-interface ColorSpaceLabToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
-
 type PreviewProperties = CSSProperties & {
   '--p3-color': string;
   '--srgb-fallback': string;
 };
 
-export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive = false, onComplete }: ColorSpaceLabToolProps) {
+const STAGES: readonly ExerciseStageDefinition[] = [
+  {
+    id: 'classify-color-terms',
+    title: 'Classify the color terms',
+    instruction: 'Sort each item as a raw value, semantic role, or usage context.',
+    nextActionLabel: 'classify gamut mapping',
+  },
+  {
+    id: 'classify-gamut-mapping',
+    title: 'Classify the gamut samples',
+    instruction: 'Decide whether each Display P3 sample needs gamut mapping for sRGB output.',
+  },
+];
+
+export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [accentIdx, setAccentIdx] = useState(0);
   const [sortAnswers, setSortAnswers] = useState<Record<string, string>>({});
   const [gamutAnswers, setGamutAnswers] = useState<Record<string, string>>({});
-  const [challengeChecked, setChallengeChecked] = useState(false);
-  const [completed, setCompleted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const activeStageId = stageController.activeStage.id;
 
   const accent = DISPLAY_P3_SAMPLES[accentIdx];
   const rgb = hexToRgb(accent.srgbFallback);
@@ -59,18 +75,18 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
   }
 
   function checkChallenge() {
-    if (!interactive || completed) return;
-    setChallengeChecked(true);
+    if (!interactive || stageController.result === 'passed') return;
 
     const sortIsCorrect = SORT_ITEMS.every((item) => sortAnswers[item.label] === item.category);
     const gamutIsCorrect = DISPLAY_P3_SAMPLES.every(
       (sample) => gamutAnswers[sample.id] === expectedGamutAnswer(sample),
     );
 
-    if (sortIsCorrect && gamutIsCorrect) {
-      setCompleted(true);
-      onComplete?.();
-    }
+    const stageIsCorrect = activeStageId === 'classify-color-terms'
+      ? sortIsCorrect
+      : gamutIsCorrect;
+    if (stageIsCorrect) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   const sortCorrectCount = SORT_ITEMS.filter(
@@ -84,6 +100,14 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>color space lab</span>
 
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback={activeStageId === 'classify-color-terms'
+          ? `Correct classifications: ${sortCorrectCount}/${SORT_ITEMS.length}.`
+          : `Correct gamut decisions: ${gamutCorrectCount}/${DISPLAY_P3_SAMPLES.length}.`}
+        passedFeedback="Every term is classified by its role in the color system."
+        completionFeedback="The P3 samples outside sRGB are marked for gamut mapping."
+      >
       <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
         {DISPLAY_P3_SAMPLES.map((sample, index) => (
           <button
@@ -140,11 +164,13 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
       <div style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', marginBottom: '0.75rem' }}>
         <div><span style={{ color: 'var(--muted)' }}>Display P3</span> {accent.p3}</div>
         <div><span style={{ color: 'var(--muted)' }}>sRGB fallback</span> {accent.srgbFallback}</div>
-        <div style={{ color: outsideSrgb ? 'var(--yellow)' : 'var(--green)', marginTop: '0.2rem' }}>
-          {outsideSrgb
-            ? 'Outside sRGB: this sample needs gamut mapping for sRGB output.'
-            : 'Inside sRGB: this sample can be represented in both color spaces.'}
-        </div>
+        {(!interactive || (activeStageId === 'classify-gamut-mapping' && stageController.result === 'passed')) && (
+          <div style={{ color: outsideSrgb ? 'var(--yellow)' : 'var(--green)', marginTop: '0.2rem' }}>
+            {outsideSrgb
+              ? 'Outside sRGB: this sample needs gamut mapping for sRGB output.'
+              : 'Inside sRGB: this sample can be represented in both color spaces.'}
+          </div>
+        )}
       </div>
 
       <div style={{ marginBottom: '0.75rem' }}>
@@ -203,13 +229,11 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
 
       {interactive && (
         <div style={{ borderTop: '1px solid var(--border)', paddingTop: '0.6rem' }}>
-          <p style={{ fontSize: '0.82rem', color: 'var(--muted)', marginBottom: '0.4rem' }}>
-            1. Classify each item as a raw value, semantic role, or usage context.
-          </p>
+          {activeStageId === 'classify-color-terms' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginBottom: '0.75rem' }}>
             {SORT_ITEMS.map((item) => {
               const answer = sortAnswers[item.label] ?? '';
-              const isWrong = challengeChecked && answer !== item.category;
+              const isWrong = stageController.result === 'incorrect' && answer !== item.category;
               return (
                 <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <code style={{
@@ -221,11 +245,14 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
                   </code>
                   <select
                     value={answer}
-                    disabled={completed}
-                    onChange={(event) => setSortAnswers((previous) => ({
-                      ...previous,
-                      [item.label]: event.target.value,
-                    }))}
+                    disabled={stageController.result === 'passed'}
+                    onChange={(event) => {
+                      setSortAnswers((previous) => ({
+                        ...previous,
+                        [item.label]: event.target.value,
+                      }));
+                      stageController.retry();
+                    }}
                     style={{
                       fontSize: '0.75rem',
                       fontFamily: 'var(--font-mono)',
@@ -246,14 +273,13 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
               );
             })}
           </div>
+          )}
 
-          <p style={{ fontSize: '0.82rem', color: 'var(--muted)', marginBottom: '0.4rem' }}>
-            2. Decide whether each Display P3 sample needs gamut mapping for sRGB output.
-          </p>
+          {activeStageId === 'classify-gamut-mapping' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginBottom: '0.5rem' }}>
             {DISPLAY_P3_SAMPLES.map((sample) => {
               const answer = gamutAnswers[sample.id] ?? '';
-              const isWrong = challengeChecked && answer !== expectedGamutAnswer(sample);
+              const isWrong = stageController.result === 'incorrect' && answer !== expectedGamutAnswer(sample);
               return (
                 <div key={sample.id} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <code style={{
@@ -265,11 +291,14 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
                   </code>
                   <select
                     value={answer}
-                    disabled={completed}
-                    onChange={(event) => setGamutAnswers((previous) => ({
-                      ...previous,
-                      [sample.id]: event.target.value,
-                    }))}
+                    disabled={stageController.result === 'passed'}
+                    onChange={(event) => {
+                      setGamutAnswers((previous) => ({
+                        ...previous,
+                        [sample.id]: event.target.value,
+                      }));
+                      stageController.retry();
+                    }}
                     style={{
                       fontSize: '0.75rem',
                       fontFamily: 'var(--font-mono)',
@@ -289,8 +318,9 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
               );
             })}
           </div>
+          )}
 
-          {!completed && (
+          {stageController.result !== 'passed' && (
             <button onClick={checkChallenge} style={{
               padding: '0.4rem 1rem',
               background: 'var(--yellow)',
@@ -301,23 +331,12 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({ interactive =
               fontFamily: 'var(--font-mono)',
               fontSize: '0.82rem',
             }}>
-              check challenge
+              check stage
             </button>
-          )}
-
-          {challengeChecked && !completed && (
-            <p style={{ fontSize: '0.78rem', color: 'var(--red)', marginTop: '0.3rem' }}>
-              Correct classifications: {sortCorrectCount}/{SORT_ITEMS.length}. Correct gamut decisions: {gamutCorrectCount}/{DISPLAY_P3_SAMPLES.length}.
-            </p>
           )}
         </div>
       )}
-
-      {completed && (
-        <p style={{ color: 'var(--green)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          Both tasks are correct. The P3 samples outside sRGB require gamut mapping for sRGB output.
-        </p>
-      )}
+      </ExerciseStage>
     </div>
   );
 });

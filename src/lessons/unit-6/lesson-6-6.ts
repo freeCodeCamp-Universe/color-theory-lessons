@@ -24,12 +24,24 @@ export const lesson6_6: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'Sort each item as a raw value, semantic role, or usage context. Then decide whether each Display P3 sample needs gamut mapping for sRGB output.',
+      prompt: 'Complete two stages in order: classify the color terms, then classify the Display P3 samples by their sRGB gamut-mapping needs.',
       hints: [
-        'A raw value is a specific number like #0B57D0 or rgb(34 34 34).',
-        'A semantic role is a token name like --color-text-primary or --color-success-bg.',
-        'A usage context identifies where the color appears or how it is rendered: a wide-gamut display, a Canvas chart fill, or an SVG icon fill.',
-        'Use the gamut result under each sample to decide whether it needs mapping for sRGB output.',
+        {
+          stageId: 'classify-color-terms',
+          text: 'A raw value is a specific number like #0B57D0 or rgb(34 34 34).',
+        },
+        {
+          stageId: 'classify-color-terms',
+          text: 'A semantic role is a token name like --color-text-primary or --color-success-bg.',
+        },
+        {
+          stageId: 'classify-color-terms',
+          text: 'A usage context identifies where the color appears or how it is rendered: a wide-gamut display, a Canvas chart fill, or an SVG icon fill.',
+        },
+        {
+          stageId: 'classify-gamut-mapping',
+          text: 'Vivid orange, bright green, and deep pink extend outside sRGB. Soft blue and muted coral remain within sRGB.',
+        },
       ],
   },
   quizItems: [

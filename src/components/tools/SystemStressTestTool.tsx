@@ -1,12 +1,10 @@
 import { memo, useState } from 'react';
 import { simulateDeuteranopia } from '../../utils/color.ts';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
 import styles from './SystemStressTestTool.module.css';
-
-interface SystemStressTestToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+import { useExerciseStages } from './useExerciseStages.ts';
 
 type ContextId = 'light' | 'dark' | 'chart' | 'alerts' | 'simulation';
 type FindingId = 'placeholder' | 'dark-warning' | 'chart-series' | 'alert-cues';
@@ -81,6 +79,20 @@ const INITIAL_CLASSIFICATIONS: FindingClassifications = {
   'chart-series': '',
   'alert-cues': '',
 };
+
+const STAGES: readonly ExerciseStageDefinition[] = [
+  {
+    id: 'find-system-weaknesses',
+    title: 'Find the system weaknesses',
+    instruction: 'Inspect all five contexts and mark each color-system weakness you find.',
+    nextActionLabel: 'classify the findings',
+  },
+  {
+    id: 'classify-system-weaknesses',
+    title: 'Classify the findings',
+    instruction: 'Classify each finding as role drift, a missing role, or a token override.',
+  },
+];
 
 const COLORS = {
   light: { background: '#f9fafb', surface: '#ffffff', text: '#111827', action: '#1e40af' },
@@ -175,41 +187,58 @@ function ContextPreview({ context }: { context: ContextId }) {
   );
 }
 
-export const SystemStressTestTool = memo(function SystemStressTestTool({ interactive = false, onComplete }: SystemStressTestToolProps) {
+export const SystemStressTestTool = memo(function SystemStressTestTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [context, setContext] = useState<ContextId>('light');
   const [selections, setSelections] = useState<FindingSelections>(INITIAL_SELECTIONS);
   const [classifications, setClassifications] = useState<FindingClassifications>(INITIAL_CLASSIFICATIONS);
-  const [submitted, setSubmitted] = useState(false);
-  const [completed, setCompleted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const activeStageId = stageController.activeStage.id;
 
-  const incompleteFindings = FINDINGS.filter(finding => !selections[finding.id] || !classifications[finding.id]);
+  const unselectedFindings = FINDINGS.filter(finding => !selections[finding.id]);
+  const incompleteClassifications = FINDINGS.filter(finding => !classifications[finding.id]);
   const incorrectFindings = FINDINGS.filter(finding => selections[finding.id] && classifications[finding.id] && classifications[finding.id] !== finding.expectedClassification);
 
   function updateSelection(id: FindingId, selected: boolean) {
-    if (!interactive || completed) return;
+    if (!interactive || activeStageId !== 'find-system-weaknesses' || stageController.result === 'passed') return;
     setSelections(previous => ({ ...previous, [id]: selected }));
-    setSubmitted(false);
+    stageController.retry();
   }
 
   function updateClassification(id: FindingId, classification: Classification | '') {
-    if (!interactive || completed) return;
+    if (!interactive || activeStageId !== 'classify-system-weaknesses' || stageController.result === 'passed') return;
     setClassifications(previous => ({ ...previous, [id]: classification }));
-    setSubmitted(false);
+    stageController.retry();
   }
 
   function checkAudit() {
-    if (!interactive || completed) return;
-    setSubmitted(true);
-    if (incompleteFindings.length === 0 && incorrectFindings.length === 0) {
-      setCompleted(true);
-      onComplete?.();
-    }
+    if (!interactive || stageController.result === 'passed') return;
+    const stageIsCorrect = activeStageId === 'find-system-weaknesses'
+      ? unselectedFindings.length === 0
+      : incompleteClassifications.length === 0 && incorrectFindings.length === 0;
+    if (stageIsCorrect) stageController.markPassed();
+    else stageController.markIncorrect();
   }
+
+  const incorrectFeedback = activeStageId === 'find-system-weaknesses'
+    ? `Find every weakness before continuing. ${unselectedFindings.length} remaining.`
+    : incompleteClassifications.length > 0
+      ? `Classify every finding. ${incompleteClassifications.length} remaining.`
+      : `${incorrectFindings.length} ${incorrectFindings.length === 1 ? 'classification is' : 'classifications are'} incorrect. Review the feedback and try again.`;
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>system stress test</span>
 
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback={incorrectFeedback}
+        passedFeedback="All four weaknesses found across the five preview contexts."
+        completionFeedback="Stress test complete. You found and classified all four system weaknesses."
+      >
       <div aria-label="Preview context" role="group" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
         {CONTEXTS.map(item => (
           <button
@@ -237,19 +266,23 @@ export const SystemStressTestTool = memo(function SystemStressTestTool({ interac
       <div style={{ display: 'grid', gap: '0.5rem' }}>
         {FINDINGS.map(finding => {
           const selected = selections[finding.id];
-          const incorrect = submitted && selected && classifications[finding.id] && classifications[finding.id] !== finding.expectedClassification;
+          const incorrect = stageController.result === 'incorrect'
+            && classifications[finding.id]
+            && classifications[finding.id] !== finding.expectedClassification;
           return (
             <fieldset key={finding.id} style={{ border: '1px solid var(--border)', borderRadius: 4, margin: 0, padding: '0.55rem' }}>
               <legend style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', fontWeight: 600, padding: '0 0.25rem' }}>{finding.context}</legend>
+              {activeStageId === 'find-system-weaknesses' ? (
               <label style={{ alignItems: 'start', display: 'flex', fontSize: '0.78rem', gap: '0.4rem' }}>
-                <input checked={selected} disabled={!interactive || completed} onChange={event => updateSelection(finding.id, event.target.checked)} type="checkbox" />
+                <input checked={selected} disabled={!interactive || stageController.result === 'passed'} onChange={event => updateSelection(finding.id, event.target.checked)} type="checkbox" />
                 Mark “{finding.label}” as a weakness
               </label>
+              ) : (
               <label style={{ display: 'grid', fontSize: '0.75rem', gap: '0.2rem', marginTop: '0.45rem' }}>
                 Classification for {finding.label}
                 <select
                   aria-label={`Classification for ${finding.label}`}
-                  disabled={!interactive || !selected || completed}
+                  disabled={!interactive || stageController.result === 'passed'}
                   onChange={event => updateClassification(finding.id, event.target.value as Classification | '')}
                   value={classifications[finding.id]}
                 >
@@ -257,27 +290,15 @@ export const SystemStressTestTool = memo(function SystemStressTestTool({ interac
                   {CLASSIFICATIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </select>
               </label>
+              )}
               {incorrect && <p role="alert" style={{ color: 'var(--accent-danger)', fontSize: '0.72rem', margin: '0.4rem 0 0' }}>Incorrect classification. {finding.explanation}</p>}
             </fieldset>
           );
         })}
       </div>
 
-      {interactive && !completed && <button onClick={checkAudit}>Check findings</button>}
-
-      {submitted && incompleteFindings.length > 0 && (
-        <p role="alert" style={{ color: 'var(--accent-danger)', fontSize: '0.82rem', margin: 0 }}>
-          Complete every finding and classification. {incompleteFindings.length} remaining.
-        </p>
-      )}
-
-      {submitted && incompleteFindings.length === 0 && incorrectFindings.length > 0 && (
-        <p role="alert" style={{ color: 'var(--accent-danger)', fontSize: '0.82rem', margin: 0 }}>
-          {incorrectFindings.length} {incorrectFindings.length === 1 ? 'classification is' : 'classifications are'} incorrect. Review the feedback and try again.
-        </p>
-      )}
-
-      {completed && <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', margin: 0 }}>Stress test complete. You found and classified all four system weaknesses.</p>}
+      {interactive && stageController.result !== 'passed' && <button onClick={checkAudit}>check stage</button>}
+      </ExerciseStage>
     </div>
   );
 });

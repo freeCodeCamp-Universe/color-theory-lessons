@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { contrastRatio, hexToRgb } from '../../utils/color.ts';
+import { contrastRatioWcag, hexToRgb } from '../../utils/color.ts';
 import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
@@ -87,10 +87,14 @@ function isValidHex(hex: string): boolean {
 
 function calcRatio(hex: string): number {
   try {
-    return contrastRatio(hexToRgb(hex), WHITE);
+    return contrastRatioWcag(hexToRgb(hex), WHITE);
   } catch {
     return 1;
   }
+}
+
+function formatRatio(ratio: number): string {
+  return (Math.floor(ratio * 100) / 100).toFixed(2);
 }
 
 const STAGES = [{
@@ -163,7 +167,7 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
                   {comp.label}
                 </span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: pass ? 'var(--accent-success)' : 'var(--accent-danger)' }}>
-                  {ratio.toFixed(2)}:1, {pass ? 'PASS' : 'FAIL'}
+                  {formatRatio(ratio)}:1, {pass ? 'PASS' : 'FAIL'}
                 </span>
               </div>
 

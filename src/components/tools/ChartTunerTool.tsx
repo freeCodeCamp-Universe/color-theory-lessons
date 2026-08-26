@@ -1,11 +1,9 @@
 import { memo, useState } from 'react';
 import { hexToRgb, colorDistance, simulateDeuteranopia } from '../../utils/color.ts';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
-
-interface ChartTunerToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+import { useExerciseStages } from './useExerciseStages.ts';
 
 const SERIES = ['Revenue', 'Expenses', 'Profit', 'Forecast'];
 
@@ -35,6 +33,26 @@ const PATTERN_OPTIONS = [
 type Pattern = typeof PATTERN_OPTIONS[number]['value'];
 
 const DEFAULT_PATTERNS: Pattern[] = SERIES.map(() => 'diagonal');
+
+const STAGES: readonly ExerciseStageDefinition[] = [
+  {
+    id: 'tune-series-colors',
+    title: 'Tune the series colors',
+    instruction: 'Choose four series colors that meet the tool\'s difference threshold in the normal and deuteranopia views.',
+    nextActionLabel: 'assign series patterns',
+  },
+  {
+    id: 'assign-series-patterns',
+    title: 'Assign the series patterns',
+    instruction: 'Give each series a different pattern so the chart does not rely on color alone.',
+    nextActionLabel: 'inspect the data table',
+  },
+  {
+    id: 'inspect-data-table',
+    title: 'Inspect the chart data',
+    instruction: 'Show the data table and confirm that it identifies each month, series, value, color, and pattern.',
+  },
+];
 
 function patternStyle(pattern: Pattern, color: string) {
   const base = { backgroundColor: color };
@@ -160,31 +178,32 @@ function isValidHex(h: string) { return /^#[0-9a-fA-F]{6}$/.test(h); }
  * It simulates deuteranopia (green-blindness) and calculates the perceptual 
  * distance between series to ensure they are distinguishable.
  */
-export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false, onComplete }: ChartTunerToolProps) {
+export const ChartTunerTool = memo(function ChartTunerTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [colors, setColors] = useState<string[]>(DEFAULTS);
   const [patterns, setPatterns] = useState<Pattern[]>(DEFAULT_PATTERNS);
   const [simulated, setSimulated] = useState(false);
   const [showDataTable, setShowDataTable] = useState(false);
-  const [completed, setCompleted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const activeStageId = stageController.activeStage.id;
 
   function update(i: number, val: string) {
-    if (!interactive || completed) return;
+    if (!interactive || activeStageId !== 'tune-series-colors' || stageController.result === 'passed') return;
     const next = [...colors];
     next[i] = val;
     setColors(next);
+    stageController.retry();
   }
 
   function updatePattern(i: number, pattern: Pattern) {
-    if (!interactive || completed) return;
+    if (!interactive || activeStageId !== 'assign-series-patterns' || stageController.result === 'passed') return;
     const next = [...patterns];
     next[i] = pattern;
     setPatterns(next);
-  }
-
-  function complete() {
-    if (completed || !readyToComplete) return;
-    setCompleted(true);
-    onComplete?.();
+    stageController.retry();
   }
 
   const simColors = colors.map(simulateDeuteranopia);
@@ -192,12 +211,40 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
   const weakSimulated = getWeakPairs(simColors);
   const paletteIsReady = weakNormal.length === 0 && weakSimulated.length === 0;
   const patternsAreDistinct = new Set(patterns).size === SERIES.length;
-  const readyToComplete = paletteIsReady && patternsAreDistinct && showDataTable;
+
+  function checkStage() {
+    if (activeStageId === 'tune-series-colors' && paletteIsReady) {
+      stageController.markPassed();
+    } else if (activeStageId === 'assign-series-patterns' && patternsAreDistinct) {
+      stageController.markPassed();
+    } else if (activeStageId === 'inspect-data-table' && showDataTable) {
+      stageController.markPassed();
+    } else {
+      stageController.markIncorrect();
+    }
+  }
+
+  const incorrectFeedback = activeStageId === 'tune-series-colors'
+    ? `Some series remain below the tool's difference threshold: ${[
+      ...weakNormal.map(([a, b]) => `${SERIES[a]}/${SERIES[b]} in normal view`),
+      ...weakSimulated.map(([a, b]) => `${SERIES[a]}/${SERIES[b]} under simulation`),
+    ].join('; ')}.`
+    : activeStageId === 'assign-series-patterns'
+      ? 'Each series needs a different pattern.'
+      : 'Show the chart data table before checking this stage.';
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>chart tuner</span>
 
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback={incorrectFeedback}
+        passedFeedback={activeStageId === 'tune-series-colors'
+          ? "The colors meet the tool's difference threshold in both views."
+          : 'Each series has a distinct pattern.'}
+        completionFeedback="The data table identifies every chart value, color, and pattern."
+      >
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
         <button
           onClick={() => setSimulated(false)}
@@ -225,32 +272,33 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
 
       <ChartBars colors={colors} patterns={patterns} simulated={simulated} />
 
-      <div role="group" aria-label="Series color and pattern controls" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '0.5rem', marginTop: '0.75rem' }}>
+      {activeStageId !== 'inspect-data-table' && (
+      <div role="group" aria-label={activeStageId === 'tune-series-colors' ? 'Series color controls' : 'Series pattern controls'} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '0.5rem', marginTop: '0.75rem' }}>
         {SERIES.map((name, i) => (
           <div
             key={name}
             style={{ display: 'grid', gridTemplateColumns: '32px 1fr', gap: '0.3rem 0.5rem', alignItems: 'center', padding: '0.5rem', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)' }}
           >
-            {interactive && (
+            {interactive && activeStageId === 'tune-series-colors' && (
               <input
                 id={`chart-color-${i}`}
                 type="color"
                 value={isValidHex(colors[i]) ? colors[i] : '#000000'}
-                disabled={completed}
+                disabled={stageController.result === 'passed'}
                 onChange={e => update(i, e.target.value)}
-                style={{ gridRow: '1 / span 2', width: 32, height: 32, padding: 0, border: '1px solid var(--border)', borderRadius: 4, cursor: completed ? 'not-allowed' : 'pointer', background: 'transparent' }}
+                style={{ gridRow: '1 / span 2', width: 32, height: 32, padding: 0, border: '1px solid var(--border)', borderRadius: 4, cursor: stageController.result === 'passed' ? 'not-allowed' : 'pointer', background: 'transparent' }}
                 aria-label={`Change ${name} color`}
               />
             )}
-            <label htmlFor={interactive ? `chart-color-${i}` : undefined} style={{ color: 'var(--primary-foreground)', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700 }}>{name}</label>
+            <label htmlFor={interactive && activeStageId === 'tune-series-colors' ? `chart-color-${i}` : undefined} style={{ color: 'var(--primary-foreground)', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700 }}>{name}</label>
             <span style={{ color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: '0.68rem' }}>
-              {interactive ? `Change color · ${colors[i].toUpperCase()}` : (simulated ? simColors[i] : colors[i]).toUpperCase()}
+              {activeStageId === 'tune-series-colors' ? `Change color · ${colors[i].toUpperCase()}` : colors[i].toUpperCase()}
             </span>
-            {interactive ? (
+            {interactive && activeStageId === 'assign-series-patterns' ? (
               <select
                 aria-label={`Pattern for ${name}`}
                 value={patterns[i]}
-                disabled={completed}
+                disabled={stageController.result === 'passed'}
                 onChange={(event) => updatePattern(i, event.target.value as Pattern)}
                 style={{ gridColumn: '1 / -1', width: '100%', fontFamily: 'var(--font-mono)', fontSize: '0.68rem', padding: '0.25rem', color: 'var(--primary-foreground)', background: 'var(--primary-background)', border: '1px solid var(--border)', borderRadius: 4 }}
               >
@@ -258,64 +306,43 @@ export const ChartTunerTool = memo(function ChartTunerTool({ interactive = false
                   <option key={option.value} value={option.value}>{option.label}</option>
                 ))}
               </select>
-            ) : (
+            ) : activeStageId === 'assign-series-patterns' ? (
               <span style={{ gridColumn: '1 / -1', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: '0.68rem' }}>
                 {patternLabel(patterns[i])}
               </span>
-            )}
+            ) : null}
           </div>
         ))}
       </div>
+      )}
 
-      {interactive && (
+      {interactive && activeStageId === 'inspect-data-table' && (
         <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.75rem', fontSize: '0.78rem', color: 'var(--primary-foreground)' }}>
           <input
             type="checkbox"
             checked={showDataTable}
-            disabled={completed}
-            onChange={(event) => setShowDataTable(event.target.checked)}
+            disabled={stageController.result === 'passed'}
+            onChange={(event) => {
+              setShowDataTable(event.target.checked);
+              stageController.retry();
+            }}
           />
           Show the chart data table
         </label>
       )}
 
-      {showDataTable && <ChartDataTable colors={colors} patterns={patterns} simulated={simulated} />}
+      {activeStageId === 'inspect-data-table' && showDataTable && <ChartDataTable colors={colors} patterns={patterns} simulated={simulated} />}
 
-      {interactive && (
-        <div style={{ marginTop: '0.5rem', fontSize: '0.78rem', color: 'var(--muted)' }}>
-          {!paletteIsReady ? (
-            <span style={{ color: 'var(--accent-cta)' }}>
-              ⚠ Below the tool's difference threshold: {[
-                ...weakNormal.map(([a, b]) => `${SERIES[a]}/${SERIES[b]} in normal view`),
-                ...weakSimulated.map(([a, b]) => `${SERIES[a]}/${SERIES[b]} under simulation`),
-              ].join('; ')}
-            </span>
-          ) : !patternsAreDistinct ? (
-            <span style={{ color: 'var(--accent-cta)' }}>The colors meet the tool's difference threshold in both views. Assign a different pattern to each series.</span>
-          ) : !showDataTable ? (
-            <span style={{ color: 'var(--accent-cta)' }}>The colors and patterns meet the tool's criteria. Show the data table to inspect each bar.</span>
-          ) : (
-            <span style={{ color: 'var(--accent-success)' }}>✓ The colors and patterns meet the tool's criteria, and the data table identifies every bar</span>
-          )}
-        </div>
-      )}
-
-      {interactive && (
+      {interactive && stageController.result !== 'passed' && (
         <button
           type="button"
-          disabled={!readyToComplete || completed}
-          onClick={complete}
-          style={{ marginTop: '0.75rem', padding: '0.4rem 0.75rem', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700, color: readyToComplete ? '#000' : 'var(--muted)', background: readyToComplete ? 'var(--accent-cta)' : 'var(--border)', border: 'none', borderRadius: 'var(--radius-sm)', cursor: readyToComplete ? 'pointer' : 'not-allowed' }}
+          onClick={checkStage}
+          style={{ marginTop: '0.75rem', padding: '0.4rem 0.75rem', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700 }}
         >
-          Complete chart
+          check stage
         </button>
       )}
-
-      {completed && (
-        <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          The colors meet the tool's difference threshold in normal view and the deuteranopia simulation. Each series has a distinct pattern, and the data table identifies every bar.
-        </p>
-      )}
+      </ExerciseStage>
     </div>
   );
 });
