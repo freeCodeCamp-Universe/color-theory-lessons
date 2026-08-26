@@ -2,7 +2,7 @@
 
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { contrastRatioWcag, hexToRgb } from './utils/color.ts';
+import { contrastRatioWcag, hexToRgb, type RGB } from './utils/color.ts';
 
 const css = readFileSync('src/index.css', 'utf8');
 
@@ -32,6 +32,27 @@ function ratio(theme: Record<string, string>, foreground: string, background: st
   return contrastRatioWcag(
     hexToRgb(resolveColor(theme, foreground)),
     hexToRgb(resolveColor(theme, background)),
+  );
+}
+
+function mix(foreground: RGB, background: RGB, foregroundPercentage: number): RGB {
+  return {
+    r: foreground.r * foregroundPercentage + background.r * (1 - foregroundPercentage),
+    g: foreground.g * foregroundPercentage + background.g * (1 - foregroundPercentage),
+    b: foreground.b * foregroundPercentage + background.b * (1 - foregroundPercentage),
+  };
+}
+
+function badgeRatio(
+  theme: Record<string, string>,
+  foreground: string,
+  foregroundPercentage: number,
+): number {
+  const foregroundRgb = hexToRgb(resolveColor(theme, foreground));
+  const surfaceRgb = hexToRgb(resolveColor(theme, 'surface'));
+  return contrastRatioWcag(
+    foregroundRgb,
+    mix(foregroundRgb, surfaceRgb, foregroundPercentage),
   );
 }
 
@@ -77,6 +98,18 @@ describe.each([
 
   it('keeps selected text at AAA', () => {
     expect(ratio(theme, 'selection-foreground', 'selection-background')).toBeGreaterThanOrEqual(7);
+  });
+
+  it.each([
+    ['accent-link', 'badge-link-background', 6],
+    ['accent-success', 'badge-success-background', 6],
+    ['accent-warning', 'badge-warning-background', 6],
+    ['accent-danger', 'badge-danger-background', 5],
+  ] as const)('%s reaches AAA on its rendered %s tint', (foreground, background, percentage) => {
+    expect(dark[background]).toBe(
+      `color-mix(in srgb, var(--${foreground}) ${percentage}%, var(--surface))`,
+    );
+    expect(badgeRatio(theme, foreground, percentage / 100)).toBeGreaterThanOrEqual(7);
   });
 });
 

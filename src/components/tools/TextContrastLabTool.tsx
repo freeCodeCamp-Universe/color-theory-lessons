@@ -162,8 +162,8 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
           fontSize: '0.75rem', padding: '0.3rem 0.65rem',
           borderRadius: 'var(--radius-sm)',
           background: showResults && normalPass
-            ? 'color-mix(in srgb, var(--accent-success) 12%, transparent)'
-            : showResults ? 'color-mix(in srgb, var(--accent-danger) 12%, transparent)' : 'transparent',
+            ? 'var(--badge-success-background)'
+            : showResults ? 'var(--badge-danger-background)' : 'transparent',
           border: `1px solid ${showResults ? (normalPass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--border)'}`,
           color: showResults ? (normalPass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)',
         }}>
@@ -173,8 +173,8 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
           fontSize: '0.75rem', padding: '0.3rem 0.65rem',
           borderRadius: 'var(--radius-sm)',
           background: showResults && largePass
-            ? 'color-mix(in srgb, var(--accent-success) 12%, transparent)'
-            : showResults ? 'color-mix(in srgb, var(--accent-danger) 12%, transparent)' : 'transparent',
+            ? 'var(--badge-success-background)'
+            : showResults ? 'var(--badge-danger-background)' : 'transparent',
           border: `1px solid ${showResults ? (largePass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--border)'}`,
           color: showResults ? (largePass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)',
         }}>

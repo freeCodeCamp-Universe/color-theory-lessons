@@ -55,7 +55,7 @@
 .flagged {
   border-color: var(--accent-warning);
   color: var(--accent-warning);
-  background: color-mix(in srgb, var(--accent-warning) 10%, var(--surface));
+  background: var(--badge-warning-background);
 }
 
 .swatches {

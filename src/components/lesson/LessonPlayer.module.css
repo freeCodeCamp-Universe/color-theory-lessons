@@ -350,7 +350,7 @@
 .completeBadge {
   font-size: 1rem;
   padding: var(--spacing-xs) var(--spacing-md);
-  background-color: color-mix(in srgb, var(--accent-success) 15%, var(--surface));
+  background-color: var(--badge-success-background);
   border: 1px solid var(--accent-success);
   color: var(--accent-success);
   border-radius: var(--radius-sm);

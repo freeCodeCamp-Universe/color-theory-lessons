@@ -280,7 +280,7 @@
 .partSummaryBadge {
   font-size: 1rem;
   padding: var(--spacing-xs) var(--spacing-md);
-  background-color: color-mix(in srgb, var(--accent-link) 15%, var(--surface));
+  background-color: var(--badge-link-background);
   border: 1px solid var(--accent-link);
   color: var(--accent-link);
   border-radius: var(--radius-sm);
@@ -319,13 +319,13 @@
 }
 
 .completeBadgePassed {
-  background-color: color-mix(in srgb, var(--accent-success) 15%, var(--surface));
+  background-color: var(--badge-success-background);
   border: 1px solid var(--accent-success);
   color: var(--accent-success);
 }
 
 .completeBadgeFailed {
-  background-color: color-mix(in srgb, var(--accent-warning) 15%, var(--surface));
+  background-color: var(--badge-warning-background);
   border: 1px solid var(--accent-warning);
   color: var(--accent-warning);
 }
