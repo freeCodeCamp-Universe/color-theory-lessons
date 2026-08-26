@@ -44,8 +44,31 @@ describe('ThemeFromScratchChallenge', () => {
 
     passTextStage();
     expect(screen.getByText('Stage 2 of 3')).toBeInTheDocument();
-    expect(screen.getAllByRole('group')).toHaveLength(1);
-    expect(screen.queryByRole('slider', { name: 'Background lightness' })).not.toBeInTheDocument();
+    expect(screen.getAllByRole('group')).toHaveLength(4);
+    expect(screen.getByRole('slider', { name: 'Background lightness' })).toBeInTheDocument();
+  });
+
+  it('lets the learner repair a Stage 1 theme that cannot pass surface separation as saved', () => {
+    render(<ThemeFromScratchChallenge onComplete={vi.fn()} />);
+
+    for (const role of ['Background', 'Surface', 'Primary text', 'Secondary text']) {
+      setSlider(`${role} saturation`, 0);
+    }
+    setSlider('Background lightness', 46);
+    setSlider('Surface lightness', 46);
+    setSlider('Primary text lightness', 0);
+    setSlider('Secondary text lightness', 100);
+    fireEvent.click(screen.getByRole('button', { name: 'check set text readability' }));
+    fireEvent.click(screen.getByRole('button', { name: 'continue to surface separation' }));
+
+    setSlider('Background lightness', 0);
+    setSlider('Surface lightness', 14);
+    setSlider('Primary text lightness', 95);
+    setSlider('Secondary text lightness', 80);
+    fireEvent.click(screen.getByRole('button', { name: 'check separate the surface' }));
+
+    expect(screen.getByRole('status')).toHaveTextContent('All 1 checks in this stage pass.');
+    expect(screen.getByRole('button', { name: 'continue to accent visibility' })).toBeEnabled();
   });
 
   it('completes only after text, surface, and accent stages pass', () => {

@@ -61,7 +61,7 @@ const STAGES: readonly ExerciseStageDefinition[] = [
   {
     id: 'surface-separation',
     title: 'Separate the surface',
-    instruction: 'Adjust the background and surface until they reach the 1.2:1 exercise target.',
+    instruction: 'Adjust the background, surface, and text roles until the surface reaches the 1.2:1 exercise target and the text remains readable.',
     nextActionLabel: 'continue to accent visibility',
   },
   {
@@ -73,7 +73,7 @@ const STAGES: readonly ExerciseStageDefinition[] = [
 
 const STAGE_ROLE_KEYS: Record<string, RoleKey[]> = {
   'text-readability': ['bg', 'surface', 'primaryText', 'secondaryText'],
-  'surface-separation': ['surface'],
+  'surface-separation': ['bg', 'surface', 'primaryText', 'secondaryText'],
   'accent-visibility': ['accent'],
 };
 
