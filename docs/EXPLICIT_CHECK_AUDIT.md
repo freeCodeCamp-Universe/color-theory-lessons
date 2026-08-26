@@ -9,12 +9,12 @@ An evaluative activity passes this audit when selection and editing do not compl
 | Activity | Tool | Classification | Result |
 |---|---|---|---|
 | Unit 1 Lesson 1 | `before-after` color-function variant | Evaluative | Already compliant |
-| Unit 1 Lesson 2 | `slider-explore` | Evaluative | Already compliant |
+| Unit 1 Lesson 2 | `slider-explore` | Evaluative | Updated: retry preserves the learner's slider position |
 | Unit 1 Lesson 3 | `contrast-checker` | Evaluative | Updated: pass and fail judgments now wait for Check |
-| Unit 1 Lesson 4 | `temperature-sorter` | Evaluative | Already compliant |
+| Unit 1 Lesson 4 | `temperature-sorter` | Evaluative | Updated: retry preserves both sets of classifications |
 | Unit 1 Lesson 5 | `before-after` hierarchy variant | Evaluative | Already compliant |
 | Unit 1 Lesson 6 | `color-wheel` | Mixed exploration and evaluation | Already compliant: palette construction uses an explicit lock action, and relationship identification uses Check |
-| Unit 2 Lesson 1 | `additive-sort` | Evaluative | Already compliant |
+| Unit 2 Lesson 1 | `additive-sort` | Evaluative | Updated: retry preserves all sorting assignments |
 | Unit 2 Lesson 2 | `rgb-mixer` | Evaluative | Already compliant |
 | Unit 2 Lesson 3 | `logic-fixer` | Evaluative | Already compliant |
 | Unit 2 Lesson 4 | `mismatch-explainer` | Evaluative | Already compliant |
@@ -35,7 +35,7 @@ An evaluative activity passes this audit when selection and editing do not compl
 | Unit 5 Lesson 4 | `pattern-repair` | Evaluative | Already compliant |
 | Unit 5 Lesson 5 | `audit-flow` | Evaluative | Already compliant |
 | Unit 5 Lesson 6 | `inclusive-review` | Evaluative | Updated: selected assessments no longer receive correctness styling before Check |
-| Unit 6 Lesson 1 | `system-comparison` | Evaluative | Updated: selected inconsistencies use neutral selection wording and styling before Check |
+| Unit 6 Lesson 1 | `system-comparison` | Evaluative | Updated: targets have no identifying outline, title, or pointer styling before selection, and selected inconsistencies remain neutral before Check |
 | Unit 6 Lesson 2 | `role-builder` | Evaluative | Updated: validation judgments now wait for Check |
 | Unit 6 Lesson 3 | `brand-pressure` | Evaluative | Updated: contrast and pressure judgments now wait for Check |
 | Unit 6 Lesson 4 | `dark-translator` | Evaluative | Updated: validation judgments now wait for Check |
@@ -47,8 +47,8 @@ An evaluative activity passes this audit when selection and editing do not compl
 
 | Activity | Classification | Result |
 |---|---|---|
-| Milestone 1 `read-interface` | Evaluative | Already compliant |
-| Milestone 2 `channel-prediction` | Evaluative | Already compliant |
+| Milestone 1 `read-interface` | Evaluative | Updated: retry preserves all interface classifications |
+| Milestone 2 `channel-prediction` | Evaluative | Updated: retry preserves predictions in both stages |
 | Milestone 3 `theme-from-scratch` | Evaluative | Updated: stage judgments now wait for Check |
 | Milestone 4 `simulation-spotter` | Evaluative | Already compliant |
 | Milestone 5 `accessibility-rescue` | Evaluative | Updated: repair judgments now wait for Check |
@@ -58,4 +58,4 @@ An evaluative activity passes this audit when selection and editing do not compl
 
 ## Shared behavior
 
-The shared stage controller records which stage IDs have received a submitted attempt. Tools can therefore keep raw measurements visible while withholding pass or fail judgments before the first Check. After a failed attempt, retry preserves the learner's inputs and the feedback already earned for that stage. A later stage starts without grading feedback until its own first submission.
+The shared stage controller records which stage IDs have received a submitted attempt. Tools can therefore keep raw measurements visible while withholding pass or fail judgments before the first Check. After a failed attempt, retry preserves the learner's inputs but clears grading judgments and feedback until the next Check. A later stage also starts without grading feedback until its own first submission.
