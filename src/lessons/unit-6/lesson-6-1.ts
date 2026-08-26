@@ -14,7 +14,7 @@ export const lesson6_1: LessonConfig = {
     { text: 'The comparison tool shows two versions of the same interface: one with ad-hoc color choices and one that uses defined color roles. Click each highlighted area in the ad-hoc version to compare its value with the corresponding role.' },
   ],
   challenge: {
-      prompt: 'Find every visual inconsistency in the ad-hoc interface. For each one, the tool will show which role assignment would make the two versions consistent.',
+      prompt: 'Complete one stage: find every visual inconsistency in the ad-hoc interface. For each one, the tool will show which role assignment would make the two versions consistent.',
       hints: [
         'Compare the primary action, success badge, card backgrounds, and secondary text in the two versions.',
         'Each highlighted area in the ad-hoc version uses a different value from the corresponding role in the consistent version.',

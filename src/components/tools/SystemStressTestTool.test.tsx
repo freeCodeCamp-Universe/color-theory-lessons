@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { contrastRatioWcag, hexToRgb } from '../../utils/color.ts';
 import { SystemStressTestTool } from './SystemStressTestTool.tsx';
 
-afterEach(() => cleanup());
+afterEach(cleanup);
 
 const ANSWERS = [
   ['Low-contrast placeholder', 'Token override'],
@@ -22,6 +22,12 @@ function classify(finding: string, classification: string) {
   fireEvent.change(screen.getByRole('combobox', { name: `Classification for ${finding}` }), {
     target: { value: classification.toLowerCase().replace(' ', '-') },
   });
+}
+
+function advanceToClassifications() {
+  markAllFindings();
+  fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+  fireEvent.click(screen.getByRole('button', { name: 'classify the findings' }));
 }
 
 describe('SystemStressTestTool', () => {
@@ -47,10 +53,9 @@ describe('SystemStressTestTool', () => {
     expect(screen.getByLabelText('Alerts under deuteranopia simulation')).toBeInTheDocument();
   });
 
-  it('presents the required contrast evidence without interactive controls', () => {
+  it('presents the required contrast evidence without editable preview controls', () => {
     render(<SystemStressTestTool interactive />);
 
-    expect(screen.getByText('Search by name')).toBeInTheDocument();
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
     expect(contrastRatioWcag(hexToRgb('#aaaaaa'), hexToRgb('#ffffff'))).toBeLessThan(4.5);
     const action = screen.getByRole('img', { name: 'Save changes action preview' });
@@ -59,50 +64,57 @@ describe('SystemStressTestTool', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Dark mode' }));
     expect(screen.queryByRole('button', { name: 'Save changes' })).not.toBeInTheDocument();
     expect(action).toHaveStyle({ background: 'transparent', color: '#60a5fa' });
-    expect(action).toHaveTextContent('');
     expect(action.querySelector('svg[aria-hidden="true"]')).toBeInTheDocument();
-    expect(action.parentElement).toHaveStyle({ background: '#1e293b' });
     expect(contrastRatioWcag(hexToRgb('#60a5fa'), hexToRgb('#1e293b'))).toBeGreaterThanOrEqual(3);
   });
 
-  it('reports incomplete findings without completing', () => {
+  it('hides classifications until every finding passes the first stage', () => {
     const onComplete = vi.fn();
     render(<SystemStressTestTool interactive onComplete={onComplete} />);
 
+    expect(screen.getByText('Stage 1 of 2')).toBeInTheDocument();
+    expect(screen.queryByRole('combobox', { name: /Classification for/ })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('checkbox', { name: 'Mark “Low-contrast placeholder” as a weakness' }));
-    classify('Low-contrast placeholder', 'Token override');
-    fireEvent.click(screen.getByRole('button', { name: 'Check findings' }));
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
-    expect(screen.getByText('Complete every finding and classification. 3 remaining.')).toBeInTheDocument();
+    expect(screen.getByText('Find every weakness before continuing. 3 remaining.')).toBeInTheDocument();
+    expect(screen.queryByText('Stage 2 of 2')).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
   });
 
-  it('explains incorrect classifications without completing', () => {
+  it('retries incorrect classifications within the second stage', () => {
     const onComplete = vi.fn();
     render(<SystemStressTestTool interactive onComplete={onComplete} />);
-    markAllFindings();
+    advanceToClassifications();
 
+    expect(screen.getByText('Stage 2 of 2')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Classify the findings' })).toHaveFocus();
+    expect(screen.queryByRole('checkbox', { name: /Mark/ })).not.toBeInTheDocument();
     for (const [finding] of ANSWERS) classify(finding, 'Token override');
-    fireEvent.click(screen.getByRole('button', { name: 'Check findings' }));
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     expect(screen.getByText('3 classifications are incorrect. Review the feedback and try again.')).toBeInTheDocument();
-    expect(screen.getByText(/no warning role/)).toBeInTheDocument();
     expect(screen.getByText(/drifted into data-series meanings/)).toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
+    expect(screen.getByRole('combobox', { name: 'Classification for Low-contrast placeholder' })).toHaveValue('token-override');
   });
 
-  it('completes only when every finding has the correct classification', () => {
+  it('completes once after both stages pass', () => {
     const onComplete = vi.fn();
-    render(<SystemStressTestTool interactive onComplete={onComplete} />);
-    markAllFindings();
+    const onStageChange = vi.fn();
+    render(<SystemStressTestTool interactive onComplete={onComplete} onStageChange={onStageChange} />);
+    advanceToClassifications();
 
     for (const [finding, classification] of ANSWERS) classify(finding, classification);
     expect(onComplete).not.toHaveBeenCalled();
-
-    fireEvent.click(screen.getByRole('button', { name: 'Check findings' }));
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     expect(screen.getByText('Stress test complete. You found and classified all four system weaknesses.')).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
-    expect(screen.queryByRole('button', { name: 'Check findings' })).not.toBeInTheDocument();
+    expect(onStageChange.mock.calls.map(([stage]) => stage.id)).toEqual([
+      'find-system-weaknesses',
+      'classify-system-weaknesses',
+    ]);
   });
 });

@@ -14,7 +14,7 @@ export const lesson6_2: LessonConfig = {
     { text: 'In the role builder, assign colors to each semantic role. The live preview applies them to a card, an action, and three status badges. Text labels and icons keep each status identifiable without color, while the colors reinforce its semantic role.' },
   ],
   challenge: {
-      prompt: 'Assign colors to every semantic role. Create visible surface hierarchy, readable text, and status colors that differ in both hue and luminance. Labels and icons remain as non-color status cues.',
+      prompt: 'Complete one stage: assign colors to every semantic role. Create visible surface hierarchy, readable text, and status colors that differ in both hue and luminance. Labels and icons remain as non-color status cues.',
       hints: [
         'Start with the page and card surfaces. Their contrast must reach the exercise threshold of 1.5:1.',
         'Action and status text must reach the WCAG AAA contrast ratio of 7:1. The preview chooses black or white text, whichever has more contrast.',

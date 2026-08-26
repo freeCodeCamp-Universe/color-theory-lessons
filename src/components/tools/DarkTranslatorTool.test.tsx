@@ -164,6 +164,7 @@ describe('DarkTranslatorTool', () => {
     const onComplete = vi.fn();
     render(<DarkTranslatorTool interactive onComplete={onComplete} />);
 
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
     setPassingRoles();
 
     expect(screen.getByText('Primary text / surface (4.5:1)').parentElement).toHaveTextContent('✓');
@@ -172,20 +173,24 @@ describe('DarkTranslatorTool', () => {
     expect(screen.getByText('White / error (4.5:1)').parentElement).toHaveTextContent('✓');
     expect(screen.getByText('Success / error luminance (1.5:1)').parentElement).toHaveTextContent('✓');
     expect(screen.getByText('Success / error hues (30°)').parentElement).toHaveTextContent('✓');
+    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
     expect(screen.getByText('Your dark theme passes every displayed check. Compare the preview in both modes before continuing.')).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
   });
 
-  it('clears completion when a semantic role becomes invalid', () => {
+  it('keeps a completed stage locked and reports completion once', () => {
     const onComplete = vi.fn();
     render(<DarkTranslatorTool interactive onComplete={onComplete} />);
 
     setPassingRoles();
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
     expect(screen.getByText(/passes every displayed check/)).toBeInTheDocument();
+    expect(screen.getAllByRole('textbox').every(input => input.hasAttribute('disabled'))).toBe(true);
 
     setRole('error', '#invalid');
 
-    expect(screen.queryByText(/passes every displayed check/)).not.toBeInTheDocument();
+    expect(screen.getByText(/passes every displayed check/)).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
   });
 });

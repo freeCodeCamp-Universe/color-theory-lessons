@@ -1,10 +1,8 @@
 import { memo, useState } from 'react';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
-
-interface SystemComparisonToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+import { useExerciseStages } from './useExerciseStages.ts';
 
 const SYSTEM_COLORS = {
   surface: '#f3f4f6',
@@ -20,24 +18,32 @@ const INCONSISTENCIES = [
   { id: 'text-weight', label: 'Secondary text lightness', explanation: 'The first card uses #9ca3af instead of the system\'s #4b5563 secondary-text color. Assign secondary text in both cards to the secondary-text role.' },
 ];
 
-export const SystemComparisonTool = memo(function SystemComparisonTool({ interactive = false, onComplete }: SystemComparisonToolProps) {
+const STAGES: readonly ExerciseStageDefinition[] = [{
+  id: 'find-inconsistencies',
+  title: 'Find the system inconsistencies',
+  instruction: 'Inspect the ad-hoc interface and find all four elements that do not use the system roles shown in the consistent version.',
+}];
+
+export const SystemComparisonTool = memo(function SystemComparisonTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [found, setFound] = useState<Set<string>>(new Set());
-  const [revealed, setRevealed] = useState<string | null>(null);
-  const [completed, setCompleted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
   function handleClick(id: string) {
-    if (!interactive) return;
-    setRevealed(id);
-    setFound((prev) => {
-      const next = new Set(prev);
-      next.add(id);
-      if (next.size === INCONSISTENCIES.length && !completed) {
-        setCompleted(true);
-        onComplete?.();
-      }
+    if (!interactive || stageController.result === 'passed') return;
+    setFound((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
+    stageController.retry();
   }
+
+  const remainingCount = INCONSISTENCIES.length - found.size;
 
   const clickableStyle = (id: string): React.CSSProperties => ({
     position: 'relative',
@@ -51,6 +57,11 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({ interac
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>system comparison</span>
 
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback={`Find every inconsistency before continuing. ${remainingCount} remaining.`}
+        completionFeedback="All inconsistencies found. The consistent version assigns each highlighted element to its defined color role."
+      >
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         {/* Ad-hoc mockup */}
         <div style={{ flex: '1 1 220px', minWidth: 200 }}>
@@ -125,18 +136,28 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({ interac
       </div>
 
       {/* Explanation panel */}
-      {revealed && (
+      {stageController.result !== 'idle' && found.size > 0 && (
         <div style={{ background: 'var(--surface, #1e293b)', border: '1px solid var(--border)', borderRadius: 4, padding: '0.6rem 0.75rem', fontSize: '0.82rem' }}>
-          <strong style={{ color: 'var(--accent-cta)' }}>{INCONSISTENCIES.find(i => i.id === revealed)?.label}:</strong>{' '}
-          <span style={{ color: 'var(--primary-foreground)' }}>{INCONSISTENCIES.find(i => i.id === revealed)?.explanation}</span>
+          {INCONSISTENCIES.filter(({ id }) => found.has(id)).map((inconsistency) => (
+            <p key={inconsistency.id} style={{ margin: '0.25rem 0' }}>
+              <strong style={{ color: 'var(--accent-cta)' }}>{inconsistency.label}:</strong>{' '}
+              <span style={{ color: 'var(--primary-foreground)' }}>{inconsistency.explanation}</span>
+            </p>
+          ))}
         </div>
       )}
 
-      {completed && (
-        <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          All inconsistencies found. The consistent version assigns each highlighted element to its defined color role.
-        </p>
+      {interactive && stageController.result !== 'passed' && (
+        <button
+          type="button"
+          onClick={() => remainingCount === 0
+            ? stageController.markPassed()
+            : stageController.markIncorrect()}
+        >
+          check stage
+        </button>
       )}
+      </ExerciseStage>
     </div>
   );
 });

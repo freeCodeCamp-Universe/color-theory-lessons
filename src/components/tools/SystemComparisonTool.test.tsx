@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, it } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { contrastRatioWcag } from '../../utils/color.ts';
 import type { RGB } from '../../utils/color.ts';
 import { SystemComparisonTool } from './SystemComparisonTool.tsx';
@@ -42,5 +42,35 @@ describe('SystemComparisonTool text contrast', () => {
     );
 
     expect(ratio).toBeGreaterThanOrEqual(NORMAL_TEXT_THRESHOLD);
+  });
+
+  it('requires a successful check and preserves selections for retry', () => {
+    const onComplete = vi.fn();
+    render(<SystemComparisonTool interactive onComplete={onComplete} />);
+
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
+    fireEvent.click(screen.getAllByText('Last updated: today')[0].parentElement!);
+    fireEvent.click(screen.getAllByText('View')[0].parentElement!);
+    fireEvent.click(screen.getAllByText('Active')[0].parentElement!);
+    expect(screen.queryByText(/Secondary text lightness:/)).not.toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+
+    expect(screen.getByText('Find every inconsistency before continuing. 1 remaining.')).toBeInTheDocument();
+    expect(screen.getByText(/Success badge color:/)).toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
+    expect(screen.getByText('Found 3/4 inconsistencies')).toBeInTheDocument();
+    fireEvent.click(screen.getAllByText('Settings')[0].parentElement!);
+    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+
+    expect(screen.getByText(/All inconsistencies found/)).toBeInTheDocument();
+    for (const label of ['Button color:', 'Success badge color:', 'Card surface color:', 'Secondary text lightness:']) {
+      expect(screen.getByText(label)).toBeInTheDocument();
+    }
+    expect(onComplete).toHaveBeenCalledOnce();
   });
 });

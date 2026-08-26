@@ -187,7 +187,13 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
       break;
 
     case 'color-space-lab':
-      tool = <ColorSpaceLabTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <ColorSpaceLabTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'eye-diagram':
@@ -261,27 +267,27 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
       break;
 
     case 'system-comparison':
-      tool = <SystemComparisonTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <SystemComparisonTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'role-builder':
-      tool = <RoleBuilderTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <RoleBuilderTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'brand-pressure':
-      tool = <BrandPressureTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <BrandPressureTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'dark-translator':
-      tool = <DarkTranslatorTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <DarkTranslatorTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'chart-tuner':
-      tool = <ChartTunerTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <ChartTunerTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'system-stress':
-      tool = <SystemStressTestTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <SystemStressTestTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'logic-fixer':
