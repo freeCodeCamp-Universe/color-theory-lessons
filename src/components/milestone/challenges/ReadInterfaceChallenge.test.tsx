@@ -14,6 +14,13 @@ beforeEach(() => sessionStorage.clear());
 afterEach(() => cleanup());
 
 describe('ReadInterfaceChallenge', () => {
+  it('keeps the instructional interface inside an authored visual boundary', () => {
+    render(<ReadInterfaceChallenge onComplete={vi.fn()} />);
+
+    expect(screen.getByText('interface mockup').closest('[data-authored-visual]'))
+      .toBeInTheDocument();
+  });
+
   it('renders one named classification stage', () => {
     render(<ReadInterfaceChallenge onComplete={vi.fn()} />);
 

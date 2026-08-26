@@ -10,15 +10,23 @@
 
 .header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  gap: var(--spacing-sm);
+  font-family: var(--font-sans);
+  font-size: 1rem;
 }
 
 .swatches {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--spacing-xs);
+}
+
+@media (max-width: 700px) {
+  .swatches {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .swatch {
@@ -30,7 +38,7 @@
   flex-direction: column;
   gap: 4px;
   align-items: center;
-  font-size: 0.68rem;
+  font-size: 1rem;
   color: var(--secondary-foreground);
 }
 
@@ -57,7 +65,7 @@
 }
 
 .role {
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   background: var(--surface);
   color: var(--primary-foreground);
@@ -65,38 +73,40 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.72rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
 }
 
 .role code {
   color: var(--muted);
-  font-size: 0.66rem;
+  font-size: 1rem;
 }
 
 .problem {
   display: grid;
   gap: 6px;
-  font-size: 0.78rem;
+  font-size: 1rem;
 }
 
 .help {
-  font-size: 0.72rem;
+  font-size: 1rem;
   color: var(--muted);
 }
 
 .problem select {
   background: var(--primary-background);
   color: var(--primary-foreground);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   padding: 0.35rem;
-  font-size: 0.74rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
 }
 
 .status {
   display: grid;
   gap: 2px;
-  font-size: 0.74rem;
+  font-size: 1rem;
 }
 
 .good { color: var(--accent-success); }
@@ -110,10 +120,11 @@
 .button {
   background: var(--accent-cta);
   color: var(--cta-foreground);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   padding: 0.48rem 0.9rem;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
   font-weight: 700;
 }
 

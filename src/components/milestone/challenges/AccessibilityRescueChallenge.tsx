@@ -139,7 +139,7 @@ export function AccessibilityRescueChallenge({
       >
         {stageController.activeStage.id === 'body-text-contrast' && (
           <section className={styles.block}>
-            <p className={styles.sample} style={{ color: checks.textColor, backgroundColor: '#f5f7fb' }}>This paragraph starts below the required contrast ratio.</p>
+            <p data-authored-visual className={styles.sample} style={{ color: checks.textColor, backgroundColor: '#f5f7fb' }}>This paragraph starts below the required contrast ratio.</p>
             <label className={styles.sliderLabel}>
               Text lightness: {textLightness}
               <input type="range" min={20} max={70} value={textLightness} disabled={stageController.result !== 'idle'} onChange={(event) => setTextLightness(Number(event.target.value))} />
@@ -168,7 +168,7 @@ export function AccessibilityRescueChallenge({
         {stageController.activeStage.id === 'focus-indicator' && (
           <section className={styles.block}>
             <div className={styles.row}>
-              <button type="button" className={`${styles.fakeButton} ${focusVisible ? styles.focusOn : ''}`}>Submit</button>
+              <button data-authored-visual type="button" className={`${styles.fakeButton} ${focusVisible ? styles.focusOn : ''}`}>Submit</button>
               <button type="button" className={styles.toggle} aria-pressed={focusVisible} disabled={stageController.result !== 'idle'} onClick={() => setFocusVisible((previous) => !previous)}>
                 {focusVisible ? 'remove focus indicator' : 'add focus indicator'}
               </button>

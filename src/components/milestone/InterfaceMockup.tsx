@@ -16,7 +16,7 @@ import styles from './InterfaceMockup.module.css';
  */
 export function InterfaceMockup() {
   return (
-    <div className={styles.mockup}>
+    <div data-authored-visual className={styles.mockup}>
       <span className={styles.mockupBadge}>interface mockup</span>
 
       {/* Navigation */}

@@ -10,19 +10,21 @@
 
 .header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  gap: var(--spacing-sm);
+  font-family: var(--font-sans);
+  font-size: 1rem;
 }
 
 .toggle {
   padding: 0.35rem 0.65rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   color: var(--accent-link);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
 }
 
 .list {
@@ -42,11 +44,11 @@
 }
 
 .flag {
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   padding: 0.2rem 0.35rem;
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
   color: var(--secondary-foreground);
 }
 
@@ -70,7 +72,7 @@
 }
 
 .label {
-  font-size: 0.78rem;
+  font-size: 1rem;
 }
 
 .select {
@@ -78,9 +80,10 @@
   width: 100%;
   background: var(--primary-background);
   color: var(--primary-foreground);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
-  font-size: 0.74rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
   padding: 0.3rem;
 }
 
@@ -92,11 +95,11 @@
 .status {
   display: grid;
   gap: 2px;
-  font-size: 0.76rem;
+  font-size: 1rem;
 }
 
 .help {
-  font-size: 0.72rem;
+  font-size: 1rem;
   color: var(--muted);
 }
 
@@ -111,10 +114,11 @@
 .button {
   background: var(--accent-cta);
   color: var(--cta-foreground);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   padding: 0.5rem 0.9rem;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
   font-weight: 700;
 }
 
