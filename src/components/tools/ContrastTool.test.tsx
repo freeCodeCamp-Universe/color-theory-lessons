@@ -31,6 +31,18 @@ function ratioPattern(ratio: string): RegExp {
 }
 
 describe('ContrastTool', () => {
+  it('reports the three-pair repair as one named stage', () => {
+    const onStageChange = vi.fn();
+    render(<ContrastTool onStageChange={onStageChange} />);
+
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
+    expect(onStageChange).toHaveBeenLastCalledWith(expect.objectContaining({
+      id: 'repair-contrast',
+      position: 1,
+      total: 1,
+    }));
+  });
+
   describe('completion', () => {
     it('calls onComplete when all three areas reach the WCAG AA threshold', () => {
       const onComplete = vi.fn();
@@ -176,9 +188,10 @@ describe('ContrastTool', () => {
       fireEvent.click(screen.getByRole('button', { name: 'check' }));
 
       expect(
-        screen.getByText(
-          'Still failing: Submit button. Select retry to continue adjusting.',
-        ),
+        screen.getByRole('status'),
+      ).toHaveTextContent('Still failing: Submit button.');
+      expect(
+        screen.getByRole('button', { name: 'try stage again' }),
       ).toBeInTheDocument();
     });
   });

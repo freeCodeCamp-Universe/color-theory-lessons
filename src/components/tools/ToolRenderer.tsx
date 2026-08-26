@@ -65,6 +65,7 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
           variant={lesson.id === 'u1-l5' ? 'hierarchy' : 'color-function'}
           interactive={true}
           onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
         />
       );
       break;
@@ -80,7 +81,13 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
       break;
 
     case 'contrast-checker':
-      tool = <ContrastTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <ContrastTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'temperature-sorter':
@@ -94,23 +101,29 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
       break;
 
     case 'color-wheel':
-      tool = <ColorWheelTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <ColorWheelTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'additive-sort':
-      tool = <AdditiveSortTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <AdditiveSortTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'rgb-mixer':
-      tool = <RGBMixerTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <RGBMixerTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'mismatch-explainer':
-      tool = <MismatchExplainerTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <MismatchExplainerTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'background-shift':
-      tool = <BackgroundShiftTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <BackgroundShiftTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'format-reveal':
@@ -182,19 +195,19 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
       break;
 
     case 'state-workshop':
-      tool = <StateWorkshopTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <StateWorkshopTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'inclusive-review':
-      tool = <InclusiveReviewTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <InclusiveReviewTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'text-contrast-lab':
-      tool = <TextContrastLabTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <TextContrastLabTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'component-checker':
-      tool = <ComponentCheckerTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <ComponentCheckerTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'audit-flow':
@@ -208,7 +221,7 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
       break;
 
     case 'pattern-repair':
-      tool = <PatternRepairTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <PatternRepairTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     case 'system-comparison':
@@ -236,7 +249,7 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
       break;
 
     case 'logic-fixer':
-      tool = <LogicFixerTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = <LogicFixerTool interactive={true} onComplete={onChallengeComplete} onStageChange={onStageChange} />;
       break;
 
     default: {

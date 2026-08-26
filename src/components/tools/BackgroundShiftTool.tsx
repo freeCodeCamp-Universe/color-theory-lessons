@@ -1,5 +1,8 @@
 import { memo, useState } from 'react';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
+import { useExerciseStages } from './useExerciseStages.ts';
 
 /* ── Pixel zoom explorer ─────────────────────────────────────────────── */
 
@@ -134,6 +137,7 @@ function PixelZoomExplorer({ interactive }: { interactive: boolean }) {
 /* ── Background-shift challenge ─────────────────────────────────────── */
 
 interface Scenario {
+  id: string;
   accentHex: string;
   accentLabel: string;
   choices: { id: string; label: string; isCorrect: boolean; explanation: string }[];
@@ -141,6 +145,7 @@ interface Scenario {
 
 const SCENARIOS: Scenario[] = [
   {
+    id: 'vivid-blue',
     accentHex: '#3b82f6',
     accentLabel: 'vivid blue',
     choices: [
@@ -171,6 +176,7 @@ const SCENARIOS: Scenario[] = [
     ],
   },
   {
+    id: 'vivid-orange',
     accentHex: '#ea580c',
     accentLabel: 'vivid orange',
     choices: [
@@ -201,6 +207,7 @@ const SCENARIOS: Scenario[] = [
     ],
   },
   {
+    id: 'vivid-green',
     accentHex: '#16a34a',
     accentLabel: 'vivid green',
     choices: [
@@ -234,43 +241,34 @@ const SCENARIOS: Scenario[] = [
 
 /* ── Main tool ──────────────────────────────────────────────────────── */
 
-interface BackgroundShiftToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+const STAGES: readonly ExerciseStageDefinition[] = SCENARIOS.map((scenario) => ({
+  id: scenario.id,
+  title: `Compare ${scenario.accentLabel} backgrounds`,
+  instruction: 'Compare the unchanged accent on both backgrounds, then choose the explanation for its stronger appearance.',
+  nextActionLabel: 'next stage →',
+}));
 
-export const BackgroundShiftTool = memo(function BackgroundShiftTool({ interactive = true, onComplete }: BackgroundShiftToolProps) {
-  const [scenarioIdx, setScenarioIdx] = useState(0);
-  const [selected, setSelected] = useState<string | null>(null);
-  const [submitted, setSubmitted] = useState(false);
+export const BackgroundShiftTool = memo(function BackgroundShiftTool({
+  interactive = true, onComplete, onStageChange,
+}: ExerciseToolProps) {
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const [selections, setSelections] = useState<Record<string, string | null>>({});
 
-  const scenario = SCENARIOS[scenarioIdx];
+  const scenario = SCENARIOS.find(({ id }) => id === stageController.activeStage.id) ?? SCENARIOS[0];
+  const selected = selections[scenario.id] ?? null;
+  const submitted = stageController.result !== 'idle';
   const chosen = scenario.choices.find((c) => c.id === selected);
   const isCorrect = chosen?.isCorrect ?? false;
 
   function handleSelect(id: string) {
-    if (submitted || !interactive) return;
-    setSelected(id);
+    if (stageController.result !== 'idle' || !interactive) return;
+    setSelections((current) => ({ ...current, [scenario.id]: id }));
   }
 
   function handleSubmit() {
-    if (!selected || submitted) return;
-    setSubmitted(true);
-  }
-
-  function handleNext() {
-    if (scenarioIdx < SCENARIOS.length - 1) {
-      setScenarioIdx((i) => i + 1);
-      setSelected(null);
-      setSubmitted(false);
-    } else {
-      onComplete?.();
-    }
-  }
-
-  function handleRetry() {
-    setSelected(null);
-    setSubmitted(false);
+    if (!selected || stageController.result === 'passed') return;
+    if (isCorrect) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   return (
@@ -282,36 +280,12 @@ export const BackgroundShiftTool = memo(function BackgroundShiftTool({ interacti
 
       {/* Background shift challenge — only when interactive */}
       {interactive && (
-        <>
-          <div
-            style={{
-              borderTop: '1px solid var(--border)',
-              paddingTop: 'var(--spacing-md)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 'var(--spacing-xs)',
-            }}
-          >
-            <span
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                color: 'var(--yellow)',
-              }}
-            >
-              scenario {scenarioIdx + 1} of {SCENARIOS.length}: {scenario.accentLabel}
-            </span>
-            <span
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.72rem',
-                color: 'var(--muted)',
-                textTransform: 'uppercase',
-              }}
-            >
-              same accent, two backgrounds
-            </span>
-          </div>
+        <ExerciseStage
+          controller={stageController}
+          incorrectFeedback={chosen?.explanation}
+          passedFeedback={chosen?.explanation}
+          completionFeedback="✓ All three background comparisons explained."
+        >
 
           {/* Side-by-side background comparison */}
           <div style={{ display: 'flex', gap: 'var(--spacing-sm)' }}>
@@ -396,7 +370,7 @@ export const BackgroundShiftTool = memo(function BackgroundShiftTool({ interacti
                 <button
                   key={choice.id}
                   onClick={() => handleSelect(choice.id)}
-                  disabled={submitted && !choice.isCorrect && selected !== choice.id}
+                  disabled={submitted}
                   style={{
                     padding: 'var(--spacing-sm) var(--spacing-md)',
                     background: bg,
@@ -406,7 +380,7 @@ export const BackgroundShiftTool = memo(function BackgroundShiftTool({ interacti
                     fontFamily: 'var(--font-sans)',
                     fontSize: '0.875rem',
                     textAlign: 'left',
-                    cursor: submitted && !choice.isCorrect && selected !== choice.id ? 'default' : 'pointer',
+                    cursor: submitted ? 'default' : 'pointer',
                     transition: 'border-color 0.15s ease, background 0.15s ease',
                   }}
                 >
@@ -419,28 +393,8 @@ export const BackgroundShiftTool = memo(function BackgroundShiftTool({ interacti
             })}
           </div>
 
-          {/* Explanation after submit */}
-          {submitted && chosen?.explanation && (
-            <p
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.8rem',
-                color: isCorrect ? 'var(--green)' : 'var(--muted)',
-                margin: 0,
-                padding: 'var(--spacing-sm)',
-                background: isCorrect
-                  ? 'color-mix(in srgb, var(--green) 6%, var(--surface))'
-                  : 'color-mix(in srgb, var(--red) 6%, var(--surface))',
-                borderRadius: 'var(--radius-sm)',
-                border: `1px solid ${isCorrect ? 'color-mix(in srgb, var(--green) 30%, var(--border))' : 'color-mix(in srgb, var(--red) 30%, var(--border))'}`,
-              }}
-            >
-              {chosen.explanation}
-            </p>
-          )}
-
           {/* Actions */}
-          {!submitted && (
+          {stageController.result === 'idle' && (
             <button
               onClick={handleSubmit}
               disabled={!selected}
@@ -461,45 +415,7 @@ export const BackgroundShiftTool = memo(function BackgroundShiftTool({ interacti
             </button>
           )}
 
-          {submitted && isCorrect && (
-            <button
-              onClick={handleNext}
-              style={{
-                alignSelf: 'flex-start',
-                padding: '0.5rem 1.25rem',
-                background: 'var(--yellow)',
-                color: 'var(--gray-90)',
-                fontFamily: 'var(--font-mono)',
-                fontWeight: 700,
-                fontSize: '0.85rem',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              {scenarioIdx < SCENARIOS.length - 1 ? 'next scenario →' : 'finish challenge →'}
-            </button>
-          )}
-
-          {submitted && !isCorrect && (
-            <button
-              onClick={handleRetry}
-              style={{
-                alignSelf: 'flex-start',
-                padding: '0.4rem 0.9rem',
-                background: 'transparent',
-                color: 'var(--secondary-foreground)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.8rem',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border)',
-                cursor: 'pointer',
-              }}
-            >
-              try again
-            </button>
-          )}
-        </>
+        </ExerciseStage>
       )}
     </div>
   );

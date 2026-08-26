@@ -1,5 +1,8 @@
 import { memo, useState } from 'react';
+import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 
 type Assessment = 'pass' | 'needs-work' | null;
 type SimulationMode = 'normal' | 'deuteranopia' | 'protanopia' | 'tritanopia' | 'achromatopsia';
@@ -52,8 +55,8 @@ const CHECKLIST: ChecklistItem[] = [
   },
   {
     id: 'task-testing',
-    label: 'Task-based testing',
-    detail: 'Can a user complete the main task without relying on hue?',
+    label: 'Evidence review',
+    detail: 'Can a user identify every status, chart series, and form error without relying on hue?',
     correctAnswer: 'needs-work',
   },
   {
@@ -70,27 +73,34 @@ const CHECKLIST: ChecklistItem[] = [
   },
 ];
 
-interface InclusiveReviewToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+const STAGES = [{
+  id: 'assess-inclusive-evidence',
+  title: 'Assess inclusive design evidence',
+  instruction: 'Inspect the mockup and simulation modes, assess all five checks, then submit the stage.',
+}] satisfies readonly ExerciseStageDefinition[];
 
-export const InclusiveReviewTool = memo(function InclusiveReviewTool({ interactive = false, onComplete }: InclusiveReviewToolProps) {
+export const InclusiveReviewTool = memo(function InclusiveReviewTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [simulationMode, setSimulationMode] = useState<SimulationMode>('normal');
   const [answers, setAnswers] = useState<Record<string, Assessment>>(
     Object.fromEntries(CHECKLIST.map((c) => [c.id, null])),
   );
-  const [completed, setCompleted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const submitted = stageController.result !== 'idle';
 
   function setAnswer(id: string, value: Assessment) {
-    if (!interactive || completed) return;
-    const next = { ...answers, [id]: value };
-    setAnswers(next);
-    const allCorrect = CHECKLIST.every((item) => next[item.id] === item.correctAnswer);
-    if (allCorrect) {
-      setCompleted(true);
-      onComplete?.();
-    }
+    if (!interactive || submitted) return;
+    setAnswers((current) => ({ ...current, [id]: value }));
+  }
+
+  function checkReview() {
+    if (!interactive || submitted) return;
+    const allCorrect = CHECKLIST.every((item) => answers[item.id] === item.correctAnswer);
+    if (allCorrect) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   const answeredCount = Object.values(answers).filter((a) => a !== null).length;
@@ -100,6 +110,12 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({ interacti
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>inclusive review</span>
       <div dangerouslySetInnerHTML={{ __html: SIMULATION_FILTERS }} />
+
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback="One or more assessments do not match the mockup evidence. Review the item feedback and try the stage again."
+        completionFeedback="Review complete. The mockup needs work on all five checks."
+      >
 
       <div
         role="group"
@@ -179,7 +195,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({ interacti
                 {(['pass', 'needs-work'] as Assessment[]).map((opt) => (
                   <button
                     key={opt!}
-                    disabled={!interactive || completed}
+                    disabled={!interactive || submitted}
                     onClick={() => setAnswer(item.id, opt)}
                     style={{
                       padding: '0.2rem 0.5rem',
@@ -192,7 +208,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({ interacti
                           : 'color-mix(in srgb, var(--accent-cta) 20%, transparent)'
                         : 'transparent',
                       borderRadius: 'var(--radius-sm)',
-                      cursor: interactive && !completed ? 'pointer' : 'default',
+                      cursor: interactive && !submitted ? 'pointer' : 'default',
                       color: answer === opt ? 'var(--primary-foreground)' : 'var(--muted)',
                     }}
                   >
@@ -200,11 +216,13 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({ interacti
                   </button>
                 ))}
               </div>
-              {answer && !isCorrect && (
+              {stageController.result === 'incorrect' && answer && !isCorrect && (
                 <p style={{ fontSize: '0.7rem', color: 'var(--accent-cta)', marginTop: '0.25rem', margin: '0.25rem 0 0' }}>
                   {item.id === 'simulation'
-                    ? 'The chart bars become hard to distinguish under color vision deficiency simulation and have no labels or patterns. Choose "Needs work".'
-                    : 'This mockup does not meet this check. Choose "Needs work".'}
+                    ? 'The chart bars become hard to distinguish under color vision deficiency simulation and have no labels or patterns.'
+                    : item.id === 'task-testing'
+                      ? 'The chart has no series labels, and the form error has no text message.'
+                      : 'The mockup does not provide the evidence required to pass this check.'}
                 </p>
               )}
             </div>
@@ -212,17 +230,28 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({ interacti
         })}
       </div>
 
-      {interactive && !completed && (
+      {interactive && stageController.result !== 'passed' && (
         <p style={{ fontSize: '0.75rem', color: 'var(--muted)', marginTop: '0.4rem' }}>
           {answeredCount}/{CHECKLIST.length} items assessed
         </p>
       )}
 
-      {completed && (
-        <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          Review complete. This mockup needs work on all five checks. Its chart relies on color, and its input shows an error border without a message.
-        </p>
+      {interactive && stageController.result === 'idle' && (
+        <button
+          type="button"
+          onClick={checkReview}
+          style={{
+            alignSelf: 'flex-start', padding: '0.5rem 1.25rem',
+            background: 'var(--yellow)', color: 'var(--gray-90)',
+            fontFamily: 'var(--font-mono)', fontWeight: 700,
+            fontSize: '0.85rem', borderRadius: 'var(--radius-sm)',
+            border: 'none', cursor: 'pointer',
+          }}
+        >
+          check stage
+        </button>
       )}
+      </ExerciseStage>
     </div>
   );
 });
