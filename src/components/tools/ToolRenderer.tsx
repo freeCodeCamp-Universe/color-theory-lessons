@@ -155,19 +155,43 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
       break;
 
     case 'eye-diagram':
-      tool = <EyeDiagramTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <EyeDiagramTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'vision-cards':
-      tool = <VisionCardsTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <VisionCardsTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'interface-gallery':
-      tool = <InterfaceGalleryTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <InterfaceGalleryTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'color-only-detector':
-      tool = <ColorOnlyDetectorTool interactive={true} onComplete={onChallengeComplete} />;
+      tool = (
+        <ColorOnlyDetectorTool
+          interactive={true}
+          onComplete={onChallengeComplete}
+          onStageChange={onStageChange}
+        />
+      );
       break;
 
     case 'state-workshop':

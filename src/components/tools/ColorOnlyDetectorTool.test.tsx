@@ -1,53 +1,53 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ColorOnlyDetectorTool } from './ColorOnlyDetectorTool.tsx';
 
 afterEach(() => cleanup());
 
-function selectExample(name: string) {
-  const example = screen.getByText(name).parentElement;
+function getExampleCard(name: string) {
+  const card = screen.getByText(name).parentElement;
+  if (!card) throw new Error(`Could not find the ${name} example`);
+  return card;
+}
 
-  if (!example) {
-    throw new Error(`Could not find the ${name} example`);
-  }
-
-  fireEvent.click(example);
+async function selectExample(name: string, user: ReturnType<typeof userEvent.setup>) {
+  await user.click(within(getExampleCard(name)).getByRole('button', { name: 'select example' }));
 }
 
 describe('ColorOnlyDetectorTool', () => {
-  it('shows three hue-only examples and three examples with non-color cues', () => {
+  it('renders the six examples in one evaluative stage', () => {
     render(<ColorOnlyDetectorTool interactive />);
 
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Sample input')).toBeInTheDocument();
     expect(screen.getByText('Series A')).toBeInTheDocument();
-    expect(screen.getByText('Series B')).toBeInTheDocument();
-    expect(screen.getByText('Series C')).toBeInTheDocument();
-
-    for (const name of ['Link text', 'Error message', 'Selected tab']) {
-      selectExample(name);
-    }
-
-    expect(screen.getByText(/This link also has an underline/)).toBeInTheDocument();
-    expect(screen.getByText(/The icon and message identify the error/)).toBeInTheDocument();
-    expect(screen.getByText(/Bold text and a bottom border identify the selected tab/)).toBeInTheDocument();
-    expect(screen.getByText(/0\/3 found/)).toBeInTheDocument();
-    expect(screen.queryByText(/You found all three examples that rely on hue alone/)).not.toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: 'select example' })).toHaveLength(6);
+    expect(screen.queryByText(/This link also has an underline/)).not.toBeInTheDocument();
   });
 
-  it('completes after selecting the same three hue-only examples', () => {
+  it('keeps an incorrect submission in the stage and completes after a corrected retry', async () => {
+    const user = userEvent.setup();
     const onComplete = vi.fn();
     render(<ColorOnlyDetectorTool interactive onComplete={onComplete} />);
 
-    selectExample('Status dots');
-    selectExample('Form validation');
-
-    expect(screen.getByText(/2\/3 found/)).toBeInTheDocument();
+    await selectExample('Status dots', user);
+    await selectExample('Form validation', user);
+    await selectExample('Link text', user);
     expect(onComplete).not.toHaveBeenCalled();
 
-    selectExample('Chart series');
+    await user.click(screen.getByRole('button', { name: 'check selections' }));
 
-    expect(screen.getByText(/3\/3 found/)).toBeInTheDocument();
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
+    expect(screen.getByText(/This link also has an underline/)).toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole('button', { name: 'try stage again' }));
+    await user.click(within(getExampleCard('Link text')).getByRole('button', { name: 'selected' }));
+    await selectExample('Chart series', user);
+    await user.click(screen.getByRole('button', { name: 'check selections' }));
+
     expect(screen.getByText(/You found all three examples that rely on hue alone/)).toBeInTheDocument();
-    expect(onComplete).toHaveBeenCalledOnce();
+    expect(onComplete).toHaveBeenCalledTimes(1);
   });
 });

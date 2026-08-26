@@ -1,5 +1,8 @@
 import { memo, useState } from 'react';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
+import { useExerciseStages } from './useExerciseStages.ts';
 
 interface CardData {
   name: string;
@@ -60,21 +63,30 @@ const CARDS: CardData[] = [
   },
 ];
 
-interface VisionCardsToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
+interface VisionCardsToolProps extends ExerciseToolProps {
   previewExpandedNames?: string[];
 }
 
-export const VisionCardsTool = memo(function VisionCardsTool({ interactive = false, onComplete, previewExpandedNames }: VisionCardsToolProps) {
+const STAGES: readonly ExerciseStageDefinition[] = [{
+  id: 'explore-vision-types',
+  title: 'Explore color vision types',
+  instruction: 'Open all six cards and review each color effect and design risk.',
+}];
+
+export const VisionCardsTool = memo(function VisionCardsTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+  previewExpandedNames,
+}: VisionCardsToolProps) {
   const [expanded, setExpanded] = useState<boolean[]>(
     CARDS.map((c) => previewExpandedNames?.includes(c.name) ?? false)
   );
   const [everExpanded, setEverExpanded] = useState<boolean[]>(CARDS.map(() => false));
-  const [completed, setCompleted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
   function toggleCard(idx: number) {
-    if (!interactive) return;
+    if (!interactive || stageController.result === 'passed') return;
     const nextExpanded = [...expanded];
     nextExpanded[idx] = !nextExpanded[idx];
     setExpanded(nextExpanded);
@@ -83,21 +95,14 @@ export const VisionCardsTool = memo(function VisionCardsTool({ interactive = fal
     nextEver[idx] = true;
     setEverExpanded(nextEver);
 
-    if (nextEver.every(Boolean) && !completed) {
-      setCompleted(true);
-      onComplete?.();
-    }
+    if (nextEver.every(Boolean)) stageController.markPassed();
   }
 
-  const allExplored = everExpanded.every(Boolean);
-
-  return (
-    <div className={shellStyles.shell}>
-      <span className={shellStyles.toolLabel}>vision types</span>
-
-      {!interactive && (
-        <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.75rem' }}>
-          Review the expanded cards to learn about each type of color vision deficiency.
+  const cards = (
+    <>
+      {interactive && (
+        <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.6rem' }}>
+          {everExpanded.filter(Boolean).length}/{CARDS.length} cards explored
         </p>
       )}
 
@@ -115,8 +120,10 @@ export const VisionCardsTool = memo(function VisionCardsTool({ interactive = fal
               }}
             >
               <button
+                type="button"
                 onClick={() => toggleCard(idx)}
-                disabled={!interactive}
+                disabled={!interactive || stageController.result === 'passed'}
+                aria-expanded={isOpen}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -166,12 +173,27 @@ export const VisionCardsTool = memo(function VisionCardsTool({ interactive = fal
           );
         })}
       </div>
+    </>
+  );
 
-      {allExplored && (
-        <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          All six cards explored. Check that your designs do not rely on color alone.
+  return (
+    <div className={shellStyles.shell}>
+      <span className={shellStyles.toolLabel}>vision types</span>
+
+      {!interactive && (
+        <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.75rem' }}>
+          Review the expanded cards to learn about each type of color vision deficiency.
         </p>
       )}
+
+      {interactive ? (
+        <ExerciseStage
+          controller={stageController}
+          completionFeedback="All six cards explored. Check that your designs do not rely on color alone."
+        >
+          {cards}
+        </ExerciseStage>
+      ) : cards}
     </div>
   );
 });

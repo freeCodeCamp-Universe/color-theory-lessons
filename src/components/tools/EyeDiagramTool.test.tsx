@@ -1,63 +1,45 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { EyeDiagramTool } from './EyeDiagramTool.tsx';
 
 afterEach(() => cleanup());
 
-describe('EyeDiagramTool completion flow', () => {
-  it('completes when a learner advances through every step with next step', () => {
+describe('EyeDiagramTool stage flow', () => {
+  it('reveals the visual pathway in order and completes after the final stage passes', async () => {
+    const user = userEvent.setup();
     const onComplete = vi.fn();
+    const onStageChange = vi.fn();
 
-    render(<EyeDiagramTool interactive={true} onComplete={onComplete} />);
+    render(
+      <EyeDiagramTool
+        interactive
+        onComplete={onComplete}
+        onStageChange={onStageChange}
+      />,
+    );
 
-    fireEvent.click(screen.getByRole('button', { name: /next step/i }));
-    fireEvent.click(screen.getByRole('button', { name: /next step/i }));
-    fireEvent.click(screen.getByRole('button', { name: /next step/i }));
+    expect(screen.getByText('Stage 1 of 4')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Light from the screen' })).toBeInTheDocument();
+    expect(screen.queryByText(/The cornea and lens focus incoming light/)).not.toBeInTheDocument();
+
+    for (const position of [2, 3, 4]) {
+      await user.click(screen.getByRole('button', { name: 'mark stage reviewed' }));
+      expect(onComplete).not.toHaveBeenCalled();
+      await user.click(screen.getByRole('button', { name: 'next pathway stage' }));
+      expect(screen.getByText(`Stage ${position} of 4`)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 2 })).toHaveFocus();
+    }
+
+    await user.click(screen.getByRole('button', { name: 'finish pathway' }));
 
     expect(onComplete).toHaveBeenCalledTimes(1);
-    expect(screen.getByText(/You explored the full visual pathway from the screen to the brain/i)).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /next step/i })).toBeNull();
-  });
-
-  it('focuses the available pathway card and activates it with Enter', async () => {
-    const user = userEvent.setup();
-
-    render(<EyeDiagramTool interactive={true} />);
-
-    const availableStep = screen.getByRole('button', { name: 'The eye receives light' });
-    await user.tab();
-
-    expect(availableStep).toHaveFocus();
-
-    await user.keyboard('{Enter}');
-
-    expect(screen.getByRole('button', { name: /The eye receives light/ })).toHaveAttribute('aria-current', 'step');
-    expect(screen.getByText(/The cornea and lens focus incoming light onto the retina/)).toBeInTheDocument();
-  });
-
-  it('activates the available pathway card with Space', async () => {
-    const user = userEvent.setup();
-
-    render(<EyeDiagramTool interactive={true} />);
-
-    await user.tab();
-    await user.keyboard(' ');
-
-    expect(screen.getByRole('button', { name: /The eye receives light/ })).toHaveAttribute('aria-current', 'step');
-  });
-
-  it('keeps current, completed, and locked pathway cards noninteractive', async () => {
-    const user = userEvent.setup();
-
-    render(<EyeDiagramTool interactive={true} />);
-
-    expect(screen.getByRole('button', { name: /Light from the screen, current step/ })).toBeDisabled();
-    expect(screen.getByRole('button', { name: /The retina processes signals, locked/ })).toBeDisabled();
-
-    await user.click(screen.getByRole('button', { name: 'The eye receives light' }));
-
-    expect(screen.getByRole('button', { name: /Light from the screen, completed/ })).toBeDisabled();
-    expect(screen.getByRole('button', { name: /The eye receives light, current step/ })).toBeDisabled();
+    expect(screen.getByText(/You explored the full visual pathway from the screen to the brain/)).toBeInTheDocument();
+    expect(onStageChange.mock.calls.map(([stage]) => stage.id)).toEqual([
+      'screen-light',
+      'eye-receives-light',
+      'retina-processes-signals',
+      'brain-interprets-signals',
+    ]);
   });
 });
