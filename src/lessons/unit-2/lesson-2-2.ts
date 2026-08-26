@@ -28,11 +28,18 @@ export const lesson2_2: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'Recreate each target color with the R, G, and B sliders. First predict which channels should be high, low, or close to equal.',
+      prompt: 'This exercise has ten stages. For each of five target colors, first predict the relative RGB channel levels, then match the color with the sliders.',
       hints: [
-        'Warm pink needs the most red, some blue, and less green.',
-        'For pale sky blue, keep blue highest, green next, and red lowest. Use the same order at lower values for dark navy.',
-        'Keep the channels close together for soft gray. Warning yellow needs high red and green with little blue.',
+        { stageId: 'predict-warm-pink', text: 'Warm pink needs the most red, some blue, and less green.' },
+        { stageId: 'match-warm-pink', text: 'Warm pink needs the most red, some blue, and less green.' },
+        { stageId: 'predict-pale-sky-blue', text: 'For pale sky blue, keep blue highest, green next, and red lowest.' },
+        { stageId: 'match-pale-sky-blue', text: 'For pale sky blue, keep blue highest, green next, and red lowest.' },
+        { stageId: 'predict-soft-gray', text: 'Keep the channels close together for soft gray.' },
+        { stageId: 'match-soft-gray', text: 'Keep the channels close together for soft gray.' },
+        { stageId: 'predict-warning-yellow', text: 'Warning yellow needs high red and green with little blue.' },
+        { stageId: 'match-warning-yellow', text: 'Warning yellow needs high red and green with little blue.' },
+        { stageId: 'predict-dark-navy', text: 'For dark navy, keep blue highest, green next, and red lowest at low values.' },
+        { stageId: 'match-dark-navy', text: 'For dark navy, keep blue highest, green next, and red lowest at low values.' },
       ],
   },
   quizItems: [

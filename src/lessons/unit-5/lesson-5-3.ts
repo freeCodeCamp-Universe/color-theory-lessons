@@ -24,7 +24,7 @@ export const lesson5_3: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'Give each semantic state a different non-color treatment. Turn on an icon, label, or border style for every state, and make sure no two treatments match.',
+      prompt: 'Complete one repair stage: give every semantic state a non-color treatment, then check that no two treatments match.',
       hints: [
         'Toggle at least one of the three cues (icon, label, border) for each state card.',
         'If two states use the same border style, add an icon or label to distinguish them.',

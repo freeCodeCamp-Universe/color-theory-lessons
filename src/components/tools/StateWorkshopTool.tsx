@@ -1,5 +1,8 @@
 import { memo, useState } from 'react';
+import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import { useExerciseStages } from './useExerciseStages.ts';
 
 interface StateConfig {
   name: string;
@@ -18,10 +21,11 @@ const STATES: StateConfig[] = [
 
 type CueKey = 'icon' | 'label' | 'border';
 
-interface StateWorkshopToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
+const STAGES = [{
+  id: 'repair-semantic-states',
+  title: 'Repair semantic states',
+  instruction: 'Give every state a distinct non-color treatment with icons, labels, or border styles, then check the stage.',
+}] satisfies readonly ExerciseStageDefinition[];
 
 function hasDistinctNonColorTreatments(cues: Record<string, Record<CueKey, boolean>>) {
   const treatments = STATES.map((state) => {
@@ -36,36 +40,42 @@ function hasDistinctNonColorTreatments(cues: Record<string, Record<CueKey, boole
   return treatments.every(Boolean) && new Set(treatments).size === STATES.length;
 }
 
-export const StateWorkshopTool = memo(function StateWorkshopTool({ interactive = false, onComplete }: StateWorkshopToolProps) {
+export const StateWorkshopTool = memo(function StateWorkshopTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const [cues, setCues] = useState<Record<string, Record<CueKey, boolean>>>(
     Object.fromEntries(STATES.map((s) => [s.name, { icon: false, label: false, border: false }])),
   );
-  const [completed, setCompleted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
   function toggleCue(stateName: string, cue: CueKey) {
-    if (!interactive || completed) return;
+    if (!interactive || stageController.result === 'passed') return;
     setCues((prev) => {
-      const next = {
+      return {
         ...prev,
         [stateName]: { ...prev[stateName], [cue]: !prev[stateName][cue] },
       };
-      if (hasDistinctNonColorTreatments(next) && !completed) {
-        setCompleted(true);
-        onComplete?.();
-      }
-      return next;
     });
+    stageController.retry();
+  }
+
+  function checkStates() {
+    if (!interactive) return;
+    if (hasDistinctNonColorTreatments(cues)) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>state workshop</span>
 
-      {interactive && (
-        <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.6rem' }}>
-          Give each state a different non-color treatment using an icon, label, or border style.
-        </p>
-      )}
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback="Every state needs a non-color treatment, and no two treatments can match. Change the cues and check again."
+        completionFeedback="Each state has a distinct non-color treatment."
+      >
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
         {STATES.map((state) => {
@@ -133,7 +143,7 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({ interactive =
                     <input
                       type="checkbox"
                       checked={stateCues[cue]}
-                      disabled={!interactive || completed}
+                      disabled={!interactive || stageController.result === 'passed'}
                       onChange={() => toggleCue(state.name, cue)}
                       style={{ accentColor: state.color }}
                     />
@@ -146,11 +156,22 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({ interactive =
         })}
       </div>
 
-      {completed && (
-        <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-          Each state now has a distinct non-color treatment.
-        </p>
-      )}
+        {interactive && stageController.result !== 'passed' && (
+          <button
+            type="button"
+            onClick={checkStates}
+            style={{
+              alignSelf: 'flex-start', padding: '0.5rem 1.25rem',
+              background: 'var(--yellow)', color: 'var(--gray-90)',
+              fontFamily: 'var(--font-mono)', fontWeight: 700,
+              fontSize: '0.85rem', borderRadius: 'var(--radius-sm)',
+              border: 'none', cursor: 'pointer',
+            }}
+          >
+            check stage
+          </button>
+        )}
+      </ExerciseStage>
     </div>
   );
 });

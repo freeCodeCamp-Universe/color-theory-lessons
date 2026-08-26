@@ -12,6 +12,7 @@ describe('PatternRepairTool', () => {
   it('does not reveal repair requirements before checking', () => {
     render(<PatternRepairTool interactive />);
 
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
     expect(screen.queryByText('not checked')).not.toBeInTheDocument();
     expect(screen.queryByText(/needs error text/)).not.toBeInTheDocument();
     expect(screen.queryByText(/needs direct labels/)).not.toBeInTheDocument();
@@ -158,7 +159,7 @@ describe('PatternRepairTool', () => {
     expect(valueLabels).toBeChecked();
     expect(valueLabels).toBeDisabled();
 
-    fireEvent.click(screen.getByRole('button', { name: 'try again' }));
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
 
     expect(valueLabels).toBeChecked();
     expect(valueLabels).toBeEnabled();
@@ -182,13 +183,13 @@ describe('PatternRepairTool', () => {
     expect(screen.getByText(/Repaired patterns: 2 of 4/)).toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
 
-    fireEvent.click(screen.getByRole('button', { name: 'try again' }));
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     selectOption('Add error message text');
     selectOption('Add direct labels');
     fireEvent.click(screen.getByRole('button', { name: 'check repairs' }));
 
     expect(screen.getByText(/Repaired patterns: 4 of 4/)).toBeInTheDocument();
-    expect(screen.getByText(/All patterns repaired/)).toBeInTheDocument();
+    expect(screen.getByText(/All patterns are repaired/)).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
   });
 });
