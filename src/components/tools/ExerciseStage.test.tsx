@@ -49,12 +49,12 @@ describe('exercise-stage contract', () => {
     expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Only task' })).toHaveAttribute(
       'aria-describedby',
-      'exercise-stage-only-task-instruction',
+      'exercise-stage-only-task-position exercise-stage-only-task-instruction',
     );
     expect(screen.getByText('Complete the only task.')).toBeInTheDocument();
   });
 
-  it('supports failure and retry without advancing or completing', () => {
+  it('supports failure and retry focus without advancing or completing', () => {
     const onComplete = vi.fn();
     render(<TestExercise stages={MULTI_STAGE} onComplete={onComplete} />);
 
@@ -66,6 +66,7 @@ describe('exercise-stage contract', () => {
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     expect(screen.getByRole('status')).toBeEmptyDOMElement();
     expect(screen.getByRole('button', { name: 'pass stage' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'First task' })).toHaveFocus();
   });
 
   it('reports stable IDs, focuses the new stage, and completes only after the final pass', async () => {
@@ -87,6 +88,7 @@ describe('exercise-stage contract', () => {
     fireEvent.click(screen.getByRole('button', { name: 'pass stage' }));
     expect(onComplete).not.toHaveBeenCalled();
     expect(screen.getByRole('status')).toHaveTextContent('Passed result');
+    expect(screen.getByRole('status')).toHaveTextContent('Next action: next stage.');
     fireEvent.click(screen.getByRole('button', { name: 'next stage' }));
 
     const secondHeading = screen.getByRole('heading', { name: 'Second task' });

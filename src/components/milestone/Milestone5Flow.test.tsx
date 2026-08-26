@@ -29,12 +29,18 @@ function completeAccessibilityRescue() {
   fireEvent.change(screen.getByRole('slider', { name: /Text lightness/ }), {
     target: { value: '20' },
   });
+  fireEvent.click(screen.getByRole('button', { name: 'check repair' }));
+  fireEvent.click(screen.getByRole('button', { name: 'continue to required-field cue' }));
   fireEvent.click(screen.getByRole('button', { name: 'add icon and text cue' }));
+  fireEvent.click(screen.getByRole('button', { name: 'check repair' }));
+  fireEvent.click(screen.getByRole('button', { name: 'continue to focus indicator' }));
   fireEvent.click(screen.getByRole('button', { name: 'add focus indicator' }));
+  fireEvent.click(screen.getByRole('button', { name: 'check repair' }));
+  fireEvent.click(screen.getByRole('button', { name: 'continue to icon contrast' }));
   fireEvent.change(screen.getByRole('slider', { name: /Icon lightness/ }), {
     target: { value: '20' },
   });
-  fireEvent.click(screen.getByRole('button', { name: 'finish challenge' }));
+  fireEvent.click(screen.getByRole('button', { name: 'check repair' }));
   fireEvent.click(screen.getByRole('button', { name: 'next part →' }));
 }
 
@@ -91,9 +97,9 @@ describe('Milestone 5 rendered flow', () => {
     fireEvent.click(screen.getByRole('button', { name: 'retry milestone' }));
 
     expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1');
-    expect(screen.getByRole('status')).toHaveTextContent('0 of 4 fixed');
+    expect(screen.getByText('Stage 1 of 4')).toBeInTheDocument();
     expect(screen.getByRole('slider', { name: /Text lightness/ })).toHaveValue('55');
-    expect(screen.getByRole('button', { name: 'finish challenge' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'check repair' })).toBeEnabled();
     expect(screen.queryByText(/of 8 points/)).not.toBeInTheDocument();
   });
 });

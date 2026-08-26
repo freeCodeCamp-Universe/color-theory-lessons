@@ -6,11 +6,13 @@ import { ReadInterfaceChallenge } from './challenges/ReadInterfaceChallenge.tsx'
 import { SemanticAuditChallenge } from './challenges/SemanticAuditChallenge.tsx';
 import { SimulationSpotterChallenge } from './challenges/SimulationSpotterChallenge.tsx';
 import { ThemeFromScratchChallenge } from './challenges/ThemeFromScratchChallenge.tsx';
+import type { ExerciseStageChangeHandler } from '../tools/exercise-stage.ts';
 
 interface ChallengeRendererProps {
   challengeType: MilestoneChallengeType;
   onComplete: () => void;
   sessionKey?: string;
+  onStageChange?: ExerciseStageChangeHandler;
 }
 
 function UnimplementedChallenge({ challengeType }: { challengeType: MilestoneChallengeType }) {
@@ -24,22 +26,29 @@ function UnimplementedChallenge({ challengeType }: { challengeType: MilestoneCha
   );
 }
 
-export function ChallengeRenderer({ challengeType, onComplete, sessionKey }: ChallengeRendererProps) {
+export function ChallengeRenderer({
+  challengeType,
+  onComplete,
+  sessionKey,
+  onStageChange,
+}: ChallengeRendererProps) {
+  const challengeProps = { onComplete, sessionKey, onStageChange };
+
   switch (challengeType) {
     case 'read-interface':
-      return <ReadInterfaceChallenge onComplete={onComplete} sessionKey={sessionKey} />;
+      return <ReadInterfaceChallenge {...challengeProps} />;
     case 'channel-prediction':
-      return <ChannelPredictionChallenge onComplete={onComplete} sessionKey={sessionKey} />;
+      return <ChannelPredictionChallenge {...challengeProps} />;
     case 'theme-from-scratch':
-      return <ThemeFromScratchChallenge onComplete={onComplete} sessionKey={sessionKey} />;
+      return <ThemeFromScratchChallenge {...challengeProps} />;
     case 'simulation-spotter':
-      return <SimulationSpotterChallenge onComplete={onComplete} sessionKey={sessionKey} />;
+      return <SimulationSpotterChallenge {...challengeProps} />;
     case 'accessibility-rescue':
-      return <AccessibilityRescueChallenge onComplete={onComplete} sessionKey={sessionKey} />;
+      return <AccessibilityRescueChallenge {...challengeProps} />;
     case 'semantic-audit':
-      return <SemanticAuditChallenge onComplete={onComplete} sessionKey={sessionKey} />;
+      return <SemanticAuditChallenge {...challengeProps} />;
     case 'dark-mode-stress':
-      return <DarkModeStressChallenge onComplete={onComplete} sessionKey={sessionKey} />;
+      return <DarkModeStressChallenge {...challengeProps} />;
     default:
       return <UnimplementedChallenge challengeType={challengeType} />;
   }

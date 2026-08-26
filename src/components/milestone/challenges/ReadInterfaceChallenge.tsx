@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { READ_INTERFACE_SESSION_PREFIX } from '../../../state/persistence.ts';
+import { ExerciseStage } from '../../tools/ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseStageResult } from '../../tools/exercise-stage.ts';
+import { useExerciseStages } from '../../tools/useExerciseStages.ts';
 import styles from './ReadInterfaceChallenge.module.css';
+import type { MilestoneChallengeProps, StoredMilestoneStage } from './milestone-stage.ts';
+import { restoreMilestoneStage } from './milestone-stage.ts';
 import { InterfaceMockup } from '../InterfaceMockup.tsx';
-
-interface ReadInterfaceChallengeProps {
-  onComplete: () => void;
-  sessionKey?: string;
-}
 
 type RoleId = 'focal' | 'low-contrast' | 'competing-accent' | 'readable-text' | 'section-separator';
 
@@ -33,15 +33,24 @@ const TARGETS: Target[] = [
 ];
 
 const MIN_TO_PASS = 4;
+const STAGES: readonly ExerciseStageDefinition[] = [{
+  id: 'classify-interface-regions',
+  title: 'Classify interface regions',
+  instruction: 'Assign a color role to each region, then check your classifications.',
+}];
 
-interface ReadInterfaceSession {
+interface ReadInterfaceSession extends StoredMilestoneStage {
   version: 1;
   answers: Record<string, RoleId | ''>;
-  submitted: boolean;
 }
 
 function loadSession(sessionKey?: string): ReadInterfaceSession {
-  const fallback: ReadInterfaceSession = { version: 1, answers: {}, submitted: false };
+  const fallback: ReadInterfaceSession = {
+    version: 1,
+    answers: {},
+    activeStageId: STAGES[0].id,
+    stageResult: 'idle',
+  };
   if (!sessionKey) return fallback;
 
   try {
@@ -60,8 +69,14 @@ function loadSession(sessionKey?: string): ReadInterfaceSession {
       }
     }
 
+    const stage = restoreMilestoneStage(saved, STAGES);
     const allAnswered = TARGETS.every((target) => answers[target.id]);
-    return { version: 1, answers, submitted: saved.submitted === true && allAnswered };
+    return {
+      version: 1,
+      answers,
+      ...stage,
+      stageResult: allAnswered ? stage.stageResult : 'idle',
+    };
   } catch {
     return fallback;
   }
@@ -76,100 +91,105 @@ function saveSession(sessionKey: string | undefined, session: ReadInterfaceSessi
   }
 }
 
-export function ReadInterfaceChallenge({ onComplete, sessionKey }: ReadInterfaceChallengeProps) {
+export function ReadInterfaceChallenge({
+  onComplete,
+  sessionKey,
+  onStageChange,
+}: MilestoneChallengeProps) {
   const [initialSession] = useState(() => loadSession(sessionKey));
   const [answers, setAnswers] = useState<Record<string, RoleId | ''>>(initialSession.answers);
-  const [submitted, setSubmitted] = useState(initialSession.submitted);
+  const stageController = useExerciseStages({
+    stages: STAGES,
+    onComplete,
+    onStageChange,
+    initialStageId: initialSession.activeStageId as string,
+    initialResult: initialSession.stageResult as ExerciseStageResult,
+  });
 
   useEffect(() => {
-    saveSession(sessionKey, { version: 1, answers, submitted });
-  }, [answers, sessionKey, submitted]);
+    saveSession(sessionKey, {
+      version: 1,
+      answers,
+      activeStageId: stageController.activeStage.id,
+      stageResult: stageController.result,
+    });
+  }, [answers, sessionKey, stageController.activeStage.id, stageController.result]);
 
-  const correctCount = useMemo(() => {
-    return TARGETS.reduce((acc, target) => {
-      return answers[target.id] === target.correctRole ? acc + 1 : acc;
-    }, 0);
-  }, [answers]);
-
+  const correctCount = useMemo(() => TARGETS.reduce((count, target) => (
+    count + Number(answers[target.id] === target.correctRole)
+  ), 0), [answers]);
   const allAnswered = TARGETS.every((target) => answers[target.id]);
   const passed = correctCount >= MIN_TO_PASS;
-  const answeredCount = TARGETS.filter((target) => answers[target.id]).length;
 
-  function handleAction() {
-    if (!submitted) {
-      if (allAnswered) setSubmitted(true);
-      return;
-    }
-
-    if (passed) {
-      onComplete();
-      return;
-    }
-
-    setAnswers({});
-    setSubmitted(false);
+  function checkAnswers() {
+    if (!allAnswered) return;
+    if (passed) stageController.markPassed();
+    else stageController.markIncorrect();
   }
 
   return (
     <div className={styles.panel}>
       <InterfaceMockup />
 
-      <div className={styles.meta}>
-        <span>Label 5 interface regions</span>
-        <span className={styles.score}>
-          {submitted ? `${correctCount} / 5 correct` : `${answeredCount} / 5 answered`}
-        </span>
-      </div>
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback={`${correctCount} of 5 correct. You need at least 4 correct.`}
+        completionFeedback={`${correctCount} of 5 correct. Interface classification complete.`}
+        onRetry={() => setAnswers({})}
+      >
+        <div className={styles.meta}>
+          <span>Label 5 interface regions</span>
+          <span className={styles.score}>
+            {stageController.result === 'idle'
+              ? `${TARGETS.filter((target) => answers[target.id]).length} / 5 answered`
+              : `${correctCount} / 5 correct`}
+          </span>
+        </div>
 
-      <div className={styles.grid}>
-        {TARGETS.map((target) => {
-          const selected = answers[target.id] ?? '';
-          const isCorrect = submitted && selected === target.correctRole;
-          const isWrong = submitted && selected !== target.correctRole;
-          return (
-            <label key={target.id} className={styles.row}>
-              <span className={styles.label}>{target.label}</span>
-              <select
-                className={styles.select}
-                value={selected}
-                onChange={(event) => {
-                  const value = event.target.value as RoleId | '';
-                  setAnswers((prev) => ({ ...prev, [target.id]: value }));
-                }}
-                disabled={submitted}
-                aria-invalid={isWrong || undefined}
-              >
-                <option value="">Choose role...</option>
-                {ROLE_OPTIONS.map((role) => (
-                  <option key={role.id} value={role.id}>{role.label}</option>
-                ))}
-              </select>
-              <span className={`${styles.hint} ${isCorrect ? styles.good : isWrong ? styles.bad : ''}`}>
-                {isCorrect ? 'Correct role.' : isWrong ? 'Try another role.' : ''}
-              </span>
-            </label>
-          );
-        })}
-      </div>
+        <div className={styles.grid}>
+          {TARGETS.map((target) => {
+            const selected = answers[target.id] ?? '';
+            const isCorrect = stageController.result !== 'idle' && selected === target.correctRole;
+            const isWrong = stageController.result !== 'idle' && selected !== target.correctRole;
+            return (
+              <label key={target.id} className={styles.row}>
+                <span className={styles.label}>{target.label}</span>
+                <select
+                  className={styles.select}
+                  value={selected}
+                  onChange={(event) => {
+                    const value = event.target.value as RoleId | '';
+                    setAnswers((previous) => ({ ...previous, [target.id]: value }));
+                  }}
+                  disabled={stageController.result !== 'idle'}
+                  aria-invalid={isWrong || undefined}
+                >
+                  <option value="">Choose role...</option>
+                  {ROLE_OPTIONS.map((role) => (
+                    <option key={role.id} value={role.id}>{role.label}</option>
+                  ))}
+                </select>
+                <span className={`${styles.hint} ${isCorrect ? styles.good : isWrong ? styles.bad : ''}`}>
+                  {isCorrect ? 'Correct role.' : isWrong ? 'Try another role.' : ''}
+                </span>
+              </label>
+            );
+          })}
+        </div>
 
-      {submitted && (
-        <p className={styles.result} role="status" aria-live="polite">
-          {passed
-            ? `${correctCount} of 5 correct. You can finish the challenge.`
-            : `${correctCount} of 5 correct. You need at least 4 correct. Try again.`}
-        </p>
-      )}
-
-      <div className={styles.actions}>
-        <button
-          type="button"
-          className={styles.button}
-          onClick={handleAction}
-          disabled={!submitted && !allAnswered}
-        >
-          {!submitted ? 'check answers' : passed ? 'finish challenge' : 'try again'}
-        </button>
-      </div>
+        {stageController.result === 'idle' && (
+          <div className={styles.actions}>
+            <button
+              type="button"
+              className={styles.button}
+              onClick={checkAnswers}
+              disabled={!allAnswered}
+            >
+              check classifications
+            </button>
+          </div>
+        )}
+      </ExerciseStage>
     </div>
   );
 }

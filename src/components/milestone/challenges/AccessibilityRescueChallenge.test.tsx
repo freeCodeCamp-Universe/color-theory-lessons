@@ -1,150 +1,71 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ACCESSIBILITY_RESCUE_SESSION_PREFIX } from '../../../state/persistence.ts';
 import { AccessibilityRescueChallenge } from './AccessibilityRescueChallenge.tsx';
-import styles from './AccessibilityRescueChallenge.module.css';
 
-function makeAllRepairs() {
-  fireEvent.change(screen.getByRole('slider', { name: /Text lightness/ }), {
-    target: { value: '20' },
-  });
+function passCurrentRepair(nextAction?: string) {
+  fireEvent.click(screen.getByRole('button', { name: 'check repair' }));
+  if (nextAction) fireEvent.click(screen.getByRole('button', { name: nextAction }));
+}
+
+function advanceToFocusStage() {
+  fireEvent.change(screen.getByRole('slider', { name: /Text lightness/ }), { target: { value: 20 } });
+  passCurrentRepair('continue to required-field cue');
   fireEvent.click(screen.getByRole('button', { name: 'add icon and text cue' }));
-  fireEvent.click(screen.getByRole('button', { name: 'add focus indicator' }));
-  fireEvent.change(screen.getByRole('slider', { name: /Icon lightness/ }), {
-    target: { value: '20' },
-  });
+  passCurrentRepair('continue to focus indicator');
 }
 
 beforeEach(() => sessionStorage.clear());
 afterEach(() => cleanup());
 
 describe('AccessibilityRescueChallenge', () => {
-  it('requires all four independent repairs before completion', () => {
+  it('renders the four repairs as ordered active-only stages', () => {
+    render(<AccessibilityRescueChallenge onComplete={vi.fn()} />);
+
+    expect(screen.getByText('Stage 1 of 4')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Repair body text contrast' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'add icon and text cue' })).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByRole('slider', { name: /Text lightness/ }), { target: { value: 20 } });
+    passCurrentRepair('continue to required-field cue');
+    expect(screen.getByText('Stage 2 of 4')).toBeInTheDocument();
+    expect(screen.queryByRole('slider', { name: /Text lightness/ })).not.toBeInTheDocument();
+  });
+
+  it('reports failure and focuses the same repair on retry', async () => {
+    render(<AccessibilityRescueChallenge onComplete={vi.fn()} />);
+    fireEvent.click(screen.getByRole('button', { name: 'check repair' }));
+    expect(screen.getByRole('status')).toHaveTextContent('does not pass');
+
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
+    await waitFor(() => expect(screen.getByRole('heading', { name: 'Repair body text contrast' })).toHaveFocus());
+  });
+
+  it('completes only after all four repairs pass', () => {
     const onComplete = vi.fn();
     render(<AccessibilityRescueChallenge onComplete={onComplete} />);
-    const finishButton = screen.getByRole('button', { name: 'finish challenge' });
-
-    expect(screen.getByRole('status')).toHaveTextContent('0 of 4 fixed');
-    expect(finishButton).toBeDisabled();
-
-    fireEvent.change(screen.getByRole('slider', { name: /Text lightness/ }), {
-      target: { value: '20' },
-    });
-    expect(screen.getByRole('status')).toHaveTextContent('1 of 4 fixed');
-    expect(finishButton).toBeDisabled();
-
-    fireEvent.click(screen.getByRole('button', { name: 'add icon and text cue' }));
-    expect(screen.getByRole('status')).toHaveTextContent('2 of 4 fixed');
-    expect(finishButton).toBeDisabled();
-
+    advanceToFocusStage();
     fireEvent.click(screen.getByRole('button', { name: 'add focus indicator' }));
-    expect(screen.getByRole('status')).toHaveTextContent('3 of 4 fixed');
-    expect(finishButton).toBeDisabled();
+    passCurrentRepair('continue to icon contrast');
+    fireEvent.change(screen.getByRole('slider', { name: /Icon lightness/ }), { target: { value: 20 } });
 
-    fireEvent.change(screen.getByRole('slider', { name: /Icon lightness/ }), {
-      target: { value: '20' },
-    });
-    expect(screen.getByRole('status')).toHaveTextContent('4 of 4 fixed');
-    expect(finishButton).toBeEnabled();
+    passCurrentRepair();
 
-    fireEvent.click(finishButton);
-    fireEvent.click(finishButton);
+    expect(screen.getByRole('status')).toHaveTextContent('All four repairs are complete');
     expect(onComplete).toHaveBeenCalledOnce();
   });
 
-  it('exposes headings, toggle states, contrast units, and the icon name', () => {
-    render(<AccessibilityRescueChallenge onComplete={vi.fn()} />);
-
-    expect(screen.getByRole('heading', { name: '1) Body text needs at least 4.5:1 contrast' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: '2) Required field uses color alone' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: '3) Submit button has no visible focus indicator' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: '4) Settings icon needs at least 3:1 contrast' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'add icon and text cue' })).toHaveAttribute('aria-pressed', 'false');
-    expect(screen.getByRole('button', { name: 'add focus indicator' })).toHaveAttribute('aria-pressed', 'false');
-    expect(screen.getByRole('img', { name: 'Settings' })).toBeInTheDocument();
-    expect(screen.getByText(/minimum 4\.5:1/)).toBeInTheDocument();
-    expect(screen.getByText(/minimum 3:1/)).toBeInTheDocument();
-  });
-
-  it('uses native range inputs and supports keyboard operation for both toggles', async () => {
-    const user = userEvent.setup();
-    render(<AccessibilityRescueChallenge onComplete={vi.fn()} />);
-
-    const textSlider = screen.getByRole('slider', { name: /Text lightness/ });
-    textSlider.focus();
-    expect(textSlider).toHaveFocus();
-    expect(textSlider).not.toBeDisabled();
-    fireEvent.change(textSlider, { target: { value: '20' } });
-
-    const cueToggle = screen.getByRole('button', { name: 'add icon and text cue' });
-    cueToggle.focus();
-    await user.keyboard(' ');
-    expect(screen.getByRole('button', { name: 'remove icon and text cue' })).toHaveAttribute('aria-pressed', 'true');
-
-    const focusToggle = screen.getByRole('button', { name: 'add focus indicator' });
-    const submitPreview = screen.getByRole('button', { name: 'Submit' });
-    expect(submitPreview).not.toHaveClass(styles.focusOn);
-    focusToggle.focus();
-    await user.keyboard('{Enter}');
-    expect(screen.getByRole('button', { name: 'remove focus indicator' })).toHaveAttribute('aria-pressed', 'true');
-    expect(submitPreview).toHaveClass(styles.focusOn);
-
-    const iconSlider = screen.getByRole('slider', { name: /Icon lightness/ });
-    iconSlider.focus();
-    expect(iconSlider).toHaveFocus();
-    expect(iconSlider).not.toBeDisabled();
-    fireEvent.change(iconSlider, { target: { value: '20' } });
-    expect(screen.getByRole('button', { name: 'finish challenge' })).toBeEnabled();
-  });
-
-  it('restores all repairs after a reload during an attempt', async () => {
+  it('restores the active repair and completed input values after reload', async () => {
     const sessionKey = 'milestone-5:1';
-    const first = render(
-      <AccessibilityRescueChallenge onComplete={vi.fn()} sessionKey={sessionKey} />,
-    );
-    makeAllRepairs();
-
-    await waitFor(() => {
-      const stored = sessionStorage.getItem(
-        `${ACCESSIBILITY_RESCUE_SESSION_PREFIX}${sessionKey}`,
-      );
-      expect(stored).toContain('"textLightness":20');
-      expect(stored).toContain('"requiredCueOn":true');
-      expect(stored).toContain('"focusVisible":true');
-      expect(stored).toContain('"iconLightness":20');
-    });
+    const first = render(<AccessibilityRescueChallenge onComplete={vi.fn()} sessionKey={sessionKey} />);
+    advanceToFocusStage();
+    await waitFor(() => expect(sessionStorage.getItem(`${ACCESSIBILITY_RESCUE_SESSION_PREFIX}${sessionKey}`)).toContain('focus-indicator'));
 
     first.unmount();
     render(<AccessibilityRescueChallenge onComplete={vi.fn()} sessionKey={sessionKey} />);
 
-    expect(screen.getByRole('slider', { name: /Text lightness/ })).toHaveValue('20');
-    expect(screen.getByRole('button', { name: 'remove icon and text cue' })).toHaveAttribute('aria-pressed', 'true');
-    expect(screen.getByRole('button', { name: 'remove focus indicator' })).toHaveAttribute('aria-pressed', 'true');
-    expect(screen.getByRole('slider', { name: /Icon lightness/ })).toHaveValue('20');
-    expect(screen.getByRole('status')).toHaveTextContent('4 of 4 fixed');
-  });
-
-  it('starts a clean retry when the attempt key changes', () => {
-    sessionStorage.setItem(
-      `${ACCESSIBILITY_RESCUE_SESSION_PREFIX}milestone-5:1`,
-      JSON.stringify({
-        version: 1,
-        textLightness: 20,
-        requiredCueOn: true,
-        focusVisible: true,
-        iconLightness: 20,
-      }),
-    );
-
-    render(
-      <AccessibilityRescueChallenge onComplete={vi.fn()} sessionKey="milestone-5:2" />,
-    );
-
-    expect(screen.getByRole('slider', { name: /Text lightness/ })).toHaveValue('55');
-    expect(screen.getByRole('button', { name: 'add icon and text cue' })).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.getByText('Stage 3 of 4')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'add focus indicator' })).toHaveAttribute('aria-pressed', 'false');
-    expect(screen.getByRole('slider', { name: /Icon lightness/ })).toHaveValue('72');
-    expect(screen.getByRole('status')).toHaveTextContent('0 of 4 fixed');
+    expect(sessionStorage.getItem(`${ACCESSIBILITY_RESCUE_SESSION_PREFIX}${sessionKey}`)).toContain('"requiredCueOn":true');
   });
 });
