@@ -31,6 +31,7 @@ export interface ExerciseStageController {
   stages: readonly ExerciseStageDefinition[];
   activeStage: ActiveExerciseStage;
   completedStageIds: readonly string[];
+  attemptedStageIds: readonly string[];
   result: ExerciseStageResult;
   isFinalStage: boolean;
   stageHeadingRef: RefObject<HTMLHeadingElement | null>;

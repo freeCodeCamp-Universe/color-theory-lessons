@@ -42,6 +42,9 @@ export function useExerciseStages({
       .slice(0, initialActiveIndex + Number(initialResult === 'passed'))
       .map(({ id }) => id)
   ));
+  const [attemptedStageIds, setAttemptedStageIds] = useState<string[]>(() => (
+    initialResult === 'idle' ? [] : [stages[initialActiveIndex].id]
+  ));
   const [result, setResult] = useState<ExerciseStageResult>(initialResult);
   const stageHeadingRef = useRef<HTMLHeadingElement>(null);
   const previousStageId = useRef(stages[initialActiveIndex].id);
@@ -75,13 +78,20 @@ export function useExerciseStages({
   }, [activeStage]);
 
   function markIncorrect() {
-    if (result !== 'passed') setResult('incorrect');
+    if (result === 'passed') return;
+    setAttemptedStageIds((current) => (
+      current.includes(activeStage.id) ? current : [...current, activeStage.id]
+    ));
+    setResult('incorrect');
   }
 
   function markPassed() {
     if (result === 'passed') return;
 
     setResult('passed');
+    setAttemptedStageIds((current) => (
+      current.includes(activeStage.id) ? current : [...current, activeStage.id]
+    ));
     setCompletedStageIds((current) => (
       current.includes(activeStage.id) ? current : [...current, activeStage.id]
     ));
@@ -94,6 +104,9 @@ export function useExerciseStages({
 
   function retry() {
     if (result !== 'incorrect') return;
+    setAttemptedStageIds((current) => (
+      current.filter((stageId) => stageId !== activeStage.id)
+    ));
     setResult('idle');
     stageHeadingRef.current?.focus();
   }
@@ -108,6 +121,7 @@ export function useExerciseStages({
     stages,
     activeStage,
     completedStageIds,
+    attemptedStageIds,
     result,
     isFinalStage: activeIndex === stages.length - 1,
     stageHeadingRef,

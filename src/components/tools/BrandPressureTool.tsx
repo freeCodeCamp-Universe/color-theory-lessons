@@ -83,6 +83,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({
   const div = isValidHex(roles['neutral-divider']) ? roles['neutral-divider'] : '#e2e8f0';
 
   const meterColor = pressure < 40 ? '#22c55e' : pressure < 60 ? '#f59e0b' : '#ef4444';
+  const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
 
   return (
     <div className={shellStyles.shell}>
@@ -170,18 +171,18 @@ export const BrandPressureTool = memo(function BrandPressureTool({
           ].map(({ label, pass, ratio }) => (
             <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', padding: '0.2rem 0' }}>
               <span style={{ color: 'var(--primary-foreground)' }}>{label}</span>
-              <span style={{ color: pass ? '#22c55e' : '#ef4444', fontFamily: 'var(--font-mono)' }}>
-                {pass ? '✓' : '✗'} {formatContrastRatio(ratio)}:1
+              <span style={{ color: showResults ? (pass ? '#22c55e' : '#ef4444') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
+                {showResults ? (pass ? '✓ ' : '✗ ') : ''}{formatContrastRatio(ratio)}:1
               </span>
             </div>
           ))}
           <div style={{ marginTop: '0.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem' }}>
               <span style={{ color: 'var(--primary-foreground)' }}>Brand pressure</span>
-              <span style={{ color: meterColor, fontFamily: 'var(--font-mono)' }}>{pressureOk ? '✓' : '✗'} {pressure}%</span>
+              <span style={{ color: showResults ? meterColor : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>{showResults ? (pressureOk ? '✓ ' : '✗ ') : ''}{pressure}%</span>
             </div>
             <div style={{ background: 'var(--border)', borderRadius: 99, height: 6, marginTop: '0.25rem', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${Math.min(pressure, 100)}%`, background: meterColor, borderRadius: 99, transition: 'width 0.3s' }} />
+              <div style={{ height: '100%', width: `${Math.min(pressure, 100)}%`, background: showResults ? meterColor : 'var(--muted)', borderRadius: 99, transition: 'width 0.3s' }} />
             </div>
             <div style={{ fontSize: '0.7rem', color: 'var(--muted)', marginTop: '0.2rem' }}>Activity target: under 40%</div>
           </div>

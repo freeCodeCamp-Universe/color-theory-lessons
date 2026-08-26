@@ -122,6 +122,7 @@ export function AccessibilityRescueChallenge({
   }, [focusVisible, iconLightness, requiredCueOn, textLightness]);
 
   const stagePassed = checks[stageController.activeStage.id as keyof typeof checks] === true;
+  const showResult = stageController.attemptedStageIds.includes(stageController.activeStage.id);
 
   function checkRepair() {
     if (stagePassed) stageController.markPassed();
@@ -143,7 +144,9 @@ export function AccessibilityRescueChallenge({
               Text lightness: {textLightness}
               <input type="range" min={20} max={70} value={textLightness} disabled={stageController.result !== 'idle'} onChange={(event) => setTextLightness(Number(event.target.value))} />
             </label>
-            <p className={checks['body-text-contrast'] ? styles.good : styles.bad}>Contrast: {checks.textContrast.toFixed(2)}:1 (minimum 4.5:1)</p>
+            <p className={showResult ? (checks['body-text-contrast'] ? styles.good : styles.bad) : undefined}>
+              {showResult ? (checks['body-text-contrast'] ? 'Pass: ' : 'Not passed: ') : ''}Contrast: {checks.textContrast.toFixed(2)}:1 (minimum 4.5:1)
+            </p>
           </section>
         )}
 
@@ -156,7 +159,9 @@ export function AccessibilityRescueChallenge({
               </button>
             </div>
             {requiredCueOn && <p className={styles.note}>! Required field</p>}
-            <p className={requiredCueOn ? styles.good : styles.bad}>{requiredCueOn ? 'Non-color cue added.' : 'Still color-only.'}</p>
+            <p className={showResult ? (requiredCueOn ? styles.good : styles.bad) : undefined}>
+              {showResult ? (requiredCueOn ? 'Pass: non-color cue added.' : 'Not passed: still color-only.') : `Current cue: ${requiredCueOn ? 'icon and text' : 'color only'}.`}
+            </p>
           </section>
         )}
 
@@ -168,7 +173,9 @@ export function AccessibilityRescueChallenge({
                 {focusVisible ? 'remove focus indicator' : 'add focus indicator'}
               </button>
             </div>
-            <p className={focusVisible ? styles.good : styles.bad}>{focusVisible ? 'Focus indicator is visible.' : 'Focus indicator missing.'}</p>
+            <p className={showResult ? (focusVisible ? styles.good : styles.bad) : undefined}>
+              {showResult ? (focusVisible ? 'Pass: focus indicator is visible.' : 'Not passed: focus indicator missing.') : `Current focus indicator: ${focusVisible ? 'visible' : 'none'}.`}
+            </p>
           </section>
         )}
 
@@ -181,7 +188,9 @@ export function AccessibilityRescueChallenge({
               Icon lightness: {iconLightness}
               <input type="range" min={20} max={90} value={iconLightness} disabled={stageController.result !== 'idle'} onChange={(event) => setIconLightness(Number(event.target.value))} />
             </label>
-            <p className={checks['icon-contrast'] ? styles.good : styles.bad}>Contrast: {checks.iconContrast.toFixed(2)}:1 (minimum 3:1)</p>
+            <p className={showResult ? (checks['icon-contrast'] ? styles.good : styles.bad) : undefined}>
+              {showResult ? (checks['icon-contrast'] ? 'Pass: ' : 'Not passed: ') : ''}Contrast: {checks.iconContrast.toFixed(2)}:1 (minimum 3:1)
+            </p>
           </section>
         )}
 

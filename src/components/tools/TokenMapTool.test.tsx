@@ -48,7 +48,8 @@ describe('TokenMapTool', () => {
 
     classifyAllItems();
 
-    expect(screen.getByRole('button', { name: 'check (9/9 correct)' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'check classifications (9/9 selected)' })).toBeInTheDocument();
+    expect(document.body).not.toHaveTextContent('9/9 correct');
   });
 
   it('completes after the learner sets a valid base and classifies every item', () => {
@@ -70,13 +71,13 @@ describe('TokenMapTool', () => {
       screen.getByRole('combobox', { name: 'Category for #0B57D0' }),
       { target: { value: 'palette' } },
     );
-    fireEvent.click(screen.getByRole('button', { name: 'check (0/9 correct)' }));
+    fireEvent.click(screen.getByRole('button', { name: 'check classifications (1/9 selected)' }));
     expect(screen.getByText('0 of 9 classifications are correct. Try this stage again.')).toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
 
     classifyAllItems();
-    fireEvent.click(screen.getByRole('button', { name: 'check (9/9 correct)' }));
+    fireEvent.click(screen.getByRole('button', { name: 'check classifications (9/9 selected)' }));
 
     expect(onComplete).toHaveBeenCalledOnce();
     expect(

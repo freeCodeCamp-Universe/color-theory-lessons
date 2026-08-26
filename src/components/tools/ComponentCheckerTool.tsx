@@ -124,6 +124,7 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
   }
 
   const passedCount = Object.values(passed).filter(Boolean).length;
+  const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
 
   function checkRepairs() {
     if (!interactive) return;
@@ -140,7 +141,7 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
         incorrectFeedback="Not all components meet 3:1 yet. Adjust the failing colors and check again."
         completionFeedback="All four components have at least 3:1 contrast against white."
       >
-        {interactive && (
+        {interactive && showResults && (
           <p style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>
             Passing components: {passedCount} of {COMPONENTS.length}.
           </p>
@@ -156,18 +157,18 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
             <div
               key={comp.id}
               style={{
-                border: `1px solid ${pass ? 'var(--accent-success)' : 'var(--border)'}`,
+                border: `1px solid ${showResults && pass ? 'var(--accent-success)' : 'var(--border)'}`,
                 borderRadius: 'var(--radius-md)',
                 padding: '0.65rem',
-                background: pass ? 'color-mix(in srgb, var(--accent-success) 6%, transparent)' : 'transparent',
+                background: showResults && pass ? 'color-mix(in srgb, var(--accent-success) 6%, transparent)' : 'transparent',
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
                   {comp.label}
                 </span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: pass ? 'var(--accent-success)' : 'var(--accent-danger)' }}>
-                  {formatRatio(ratio)}:1, {pass ? 'PASS' : 'FAIL'}
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: showResults ? (pass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)' }}>
+                  {formatRatio(ratio)}:1{showResults ? `, ${pass ? 'PASS' : 'FAIL'}` : ''}
                 </span>
               </div>
 

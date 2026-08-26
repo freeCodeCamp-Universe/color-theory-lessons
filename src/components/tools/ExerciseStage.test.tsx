@@ -32,6 +32,7 @@ function TestExercise({
       completionFeedback="Exercise complete"
     >
       <p>{controller.activeStage.id} answers</p>
+      <p>{controller.attemptedStageIds.includes(controller.activeStage.id) ? 'Stage attempted' : 'Stage not attempted'}</p>
       {controller.result === 'idle' && (
         <>
           <button onClick={controller.markIncorrect}>fail stage</button>
@@ -58,12 +59,15 @@ describe('exercise-stage contract', () => {
     const onComplete = vi.fn();
     render(<TestExercise stages={MULTI_STAGE} onComplete={onComplete} />);
 
+    expect(screen.getByText('Stage not attempted')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'fail stage' }));
+    expect(screen.getByText('Stage attempted')).toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('Incorrect result');
     expect(screen.getByText('Stage 1 of 2')).toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
+    expect(screen.getByText('Stage not attempted')).toBeInTheDocument();
     expect(screen.getByRole('status')).toBeEmptyDOMElement();
     expect(screen.getByRole('button', { name: 'pass stage' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'First task' })).toHaveFocus();

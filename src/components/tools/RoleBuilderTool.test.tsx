@@ -36,11 +36,14 @@ describe('RoleBuilderTool', () => {
     render(<RoleBuilderTool interactive onComplete={onComplete} />);
 
     expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
+    expect(screen.getByText('Secondary text / surface').parentElement).not.toHaveTextContent('✗');
+
+    setRole('primary-text', '#101827');
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+
     expect(screen.getByText('Secondary text / surface').parentElement).toHaveTextContent('✗');
     expect(screen.getByText('Page / surface ≥ 1.5:1').parentElement).toHaveTextContent('✗');
     expect(screen.getByText('Status luminance ≥ 1.5:1').parentElement).toHaveTextContent('✗');
-
-    setRole('primary-text', '#101827');
 
     expect(screen.queryByText(/All color-role checks pass/)).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
@@ -52,6 +55,7 @@ describe('RoleBuilderTool', () => {
 
     setRole('primary-text', '#777777');
     setRole('page-bg', '#000000');
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     expect(screen.getByText('Primary text / surface').parentElement).toHaveTextContent('✗ 4.48:1');
     expect(onComplete).not.toHaveBeenCalled();
@@ -62,6 +66,7 @@ describe('RoleBuilderTool', () => {
     render(<RoleBuilderTool interactive onComplete={onComplete} />);
 
     setRole('success', '#invalid');
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     expect(screen.getByText('Valid role colors').parentElement).toHaveTextContent('✗');
     expect(onComplete).not.toHaveBeenCalled();
@@ -73,6 +78,7 @@ describe('RoleBuilderTool', () => {
 
     setRole('success', '#facc15');
     setRole('warning', '#facc15');
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     expect(screen.getByText('Status hues ≥ 30° apart').parentElement).toHaveTextContent('✗');
     expect(screen.getByText('Status luminance ≥ 1.5:1').parentElement).toHaveTextContent('✗ 1.00:1');
@@ -85,6 +91,7 @@ describe('RoleBuilderTool', () => {
 
     setRole('success', '#000000');
     setRole('error', '#0000ff');
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     expect(screen.getByText('Status hues ≥ 30° apart').parentElement).toHaveTextContent('✗');
     expect(screen.getByText('Status luminance ≥ 1.5:1').parentElement).toHaveTextContent('✓ 2.44:1');
@@ -96,6 +103,7 @@ describe('RoleBuilderTool', () => {
     render(<RoleBuilderTool interactive onComplete={onComplete} />);
 
     setRole('page-bg', '#ffffff');
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     expect(screen.getByText('Page / surface ≥ 1.5:1').parentElement).toHaveTextContent('✗ 1.00:1');
     expect(onComplete).not.toHaveBeenCalled();
@@ -107,6 +115,7 @@ describe('RoleBuilderTool', () => {
 
     setRole('action', '#777777');
     setRole('success', '#777777');
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     expect(screen.getByText('Action text AAA').parentElement).toHaveTextContent('✗ 4.69:1');
     expect(screen.getByText('Success text AAA').parentElement).toHaveTextContent('✗ 4.69:1');

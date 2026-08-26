@@ -90,6 +90,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
   }
 
   const passedCount = Object.values(passed).filter(Boolean).length;
+  const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
 
   return (
     <div className={shellStyles.shell}>
@@ -100,7 +101,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
         incorrectFeedback="Not all text pairs meet 4.5:1 yet. Adjust the failing pairs and check again."
         completionFeedback="All three pairs meet the 4.5:1 threshold for normal text."
       >
-        {interactive && (
+        {interactive && showResults && (
           <p style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>
             Passing pairs: {passedCount} of {PAIRS.length}.
           </p>
@@ -116,16 +117,16 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
               padding: '0.3rem 0.65rem',
               fontSize: '0.75rem',
               borderRadius: 'var(--radius-sm)',
-              border: `1px solid ${passed[p.id] ? 'var(--accent-success)' : activePair === i ? 'var(--accent-cta)' : 'var(--border)'}`,
+              border: `1px solid ${showResults && passed[p.id] ? 'var(--accent-success)' : activePair === i ? 'var(--accent-cta)' : 'var(--border)'}`,
               background: activePair === i
                 ? 'color-mix(in srgb, var(--accent-cta) 15%, transparent)'
                 : 'transparent',
-              color: passed[p.id] ? 'var(--accent-success)' : 'var(--primary-foreground)',
+              color: showResults && passed[p.id] ? 'var(--accent-success)' : 'var(--primary-foreground)',
               cursor: interactive ? 'pointer' : 'default',
               fontFamily: 'var(--font-mono)',
             }}
           >
-            {p.label} {passed[p.id] ? '✓' : ''}
+            {p.label} {showResults && passed[p.id] ? '✓' : ''}
           </button>
         ))}
       </div>
@@ -159,24 +160,24 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
         <div style={{
           fontSize: '0.75rem', padding: '0.3rem 0.65rem',
           borderRadius: 'var(--radius-sm)',
-          background: normalPass
+          background: showResults && normalPass
             ? 'color-mix(in srgb, var(--accent-success) 12%, transparent)'
-            : 'color-mix(in srgb, var(--accent-danger) 12%, transparent)',
-          border: `1px solid ${normalPass ? 'var(--accent-success)' : 'var(--accent-danger)'}`,
-          color: normalPass ? 'var(--accent-success)' : 'var(--accent-danger)',
+            : showResults ? 'color-mix(in srgb, var(--accent-danger) 12%, transparent)' : 'transparent',
+          border: `1px solid ${showResults ? (normalPass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--border)'}`,
+          color: showResults ? (normalPass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)',
         }}>
-          Normal text (≥4.5:1): {normalPass ? 'PASS' : 'FAIL'}
+          Normal text (≥4.5:1){showResults ? `: ${normalPass ? 'PASS' : 'FAIL'}` : ''}
         </div>
         <div style={{
           fontSize: '0.75rem', padding: '0.3rem 0.65rem',
           borderRadius: 'var(--radius-sm)',
-          background: largePass
+          background: showResults && largePass
             ? 'color-mix(in srgb, var(--accent-success) 12%, transparent)'
-            : 'color-mix(in srgb, var(--accent-danger) 12%, transparent)',
-          border: `1px solid ${largePass ? 'var(--accent-success)' : 'var(--accent-danger)'}`,
-          color: largePass ? 'var(--accent-success)' : 'var(--accent-danger)',
+            : showResults ? 'color-mix(in srgb, var(--accent-danger) 12%, transparent)' : 'transparent',
+          border: `1px solid ${showResults ? (largePass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--border)'}`,
+          color: showResults ? (largePass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)',
         }}>
-          Large text (≥3:1): {largePass ? 'PASS' : 'FAIL'}
+          Large text (≥3:1){showResults ? `: ${largePass ? 'PASS' : 'FAIL'}` : ''}
         </div>
       </div>
 

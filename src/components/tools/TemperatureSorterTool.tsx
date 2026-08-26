@@ -77,12 +77,10 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({
   }
 
   function handleRetrySwatches() {
-    setSwatchAnswers(Object.fromEntries(SWATCHES.map((s) => [s.id, ''])));
     setSwatchesChecked(false);
   }
 
   function handleRetryGoals() {
-    setGoalAnswers(Object.fromEntries(INTERFACE_GOALS.map((g) => [g.id, ''])));
     setGoalsChecked(false);
   }
 

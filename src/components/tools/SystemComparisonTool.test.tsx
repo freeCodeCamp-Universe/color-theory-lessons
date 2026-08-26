@@ -49,9 +49,17 @@ describe('SystemComparisonTool text contrast', () => {
     render(<SystemComparisonTool interactive onComplete={onComplete} />);
 
     expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
-    fireEvent.click(screen.getAllByText('Last updated: today')[0].parentElement!);
-    fireEvent.click(screen.getAllByText('View')[0].parentElement!);
+    const adHocSecondaryText = screen.getAllByText('Last updated: today')[0].parentElement!;
+    const adHocButton = screen.getAllByText('View')[0].parentElement!;
+    expect(adHocSecondaryText).toHaveStyle({ cursor: 'default', outline: 'none' });
+    expect(adHocButton).toHaveStyle({ cursor: 'default', outline: 'none' });
+    expect(adHocSecondaryText).not.toHaveAttribute('title');
+    expect(adHocButton).not.toHaveAttribute('title');
+    fireEvent.click(adHocSecondaryText);
+    fireEvent.click(adHocButton);
     fireEvent.click(screen.getAllByText('Active')[0].parentElement!);
+    expect(screen.getByText('Selected 3/4 inconsistencies')).toBeInTheDocument();
+    expect(screen.queryByText('Found 3/4 inconsistencies')).not.toBeInTheDocument();
     expect(screen.queryByText(/Secondary text lightness:/)).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
 
@@ -62,8 +70,11 @@ describe('SystemComparisonTool text contrast', () => {
     expect(onComplete).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
-    expect(screen.getByText('Found 3/4 inconsistencies')).toBeInTheDocument();
+    expect(screen.getByText('Selected 3/4 inconsistencies')).toBeInTheDocument();
+    expect(screen.queryByText(/Success badge color:/)).not.toBeInTheDocument();
     fireEvent.click(screen.getAllByText('Settings')[0].parentElement!);
+    expect(screen.getByText('Selected 4/4 inconsistencies')).toBeInTheDocument();
+    expect(screen.queryByText(/Success badge color:/)).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 

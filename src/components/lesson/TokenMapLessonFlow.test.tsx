@@ -50,7 +50,7 @@ describe('Lesson 3.6 Token Map flow', () => {
       });
     }
 
-    fireEvent.click(screen.getByRole('button', { name: 'check (9/9 correct)' }));
+    fireEvent.click(screen.getByRole('button', { name: 'check classifications (9/9 selected)' }));
 
     expect(screen.getByRole('button', { name: 'take the quiz →' })).toBeInTheDocument();
   });

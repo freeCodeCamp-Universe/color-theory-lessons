@@ -201,7 +201,7 @@ describe('Milestone 6 rendered flow', () => {
 
     expect(screen.getByText('Part 1 of 3: Semantic Audit')).toBeInTheDocument();
     expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1');
-    expect(screen.getByText('0 / 8 correct')).toBeInTheDocument();
+    expect(screen.getByText('0 / 8 assigned')).toBeInTheDocument();
     expect(screen.queryByRole('combobox', { name: 'Which role issue exists in this set?' })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'check roles' })).toBeEnabled();
     expect(screen.queryByText(/of 10 points/)).not.toBeInTheDocument();

@@ -49,6 +49,7 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({
     Object.fromEntries(STATES.map((s) => [s.name, { icon: false, label: false, border: false }])),
   );
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const stagePassed = stageController.result === 'passed';
 
   function toggleCue(stateName: string, cue: CueKey) {
     if (!interactive || stageController.result === 'passed') return;
@@ -84,11 +85,12 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({
           return (
             <div
               key={state.name}
+              data-testid={`state-${state.name.toLowerCase()}`}
               style={{
                 padding: '0.65rem',
                 borderRadius: 'var(--radius-md)',
-                border: `1px solid ${hasAnyCue ? 'var(--accent-success)' : 'var(--border)'}`,
-                background: hasAnyCue
+                border: `1px solid ${stagePassed ? 'var(--accent-success)' : hasAnyCue ? 'var(--accent-cta)' : 'var(--border)'}`,
+                background: stagePassed
                   ? 'color-mix(in srgb, var(--accent-success) 5%, transparent)'
                   : 'transparent',
               }}

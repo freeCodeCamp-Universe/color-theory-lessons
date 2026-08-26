@@ -125,8 +125,10 @@ export function SemanticAuditChallenge({
     const swatch = SWATCHES.find((candidate) => candidate.id === assignments[role]);
     return count + Number(swatch?.role === role);
   }, 0), [assignments]);
+  const assignedCount = ROLES.filter((role) => assignments[role]).length;
   const labelsAssigned = ROLES.every((role) => Boolean(assignments[role]));
   const isAssignmentStage = stageController.activeStage.id === 'assign-roles';
+  const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
   const stagePassed = isAssignmentStage
     ? labelsAssigned && correctCount >= 7
     : problem === PROBLEM_ANSWER;
@@ -153,7 +155,9 @@ export function SemanticAuditChallenge({
       >
         <div className={styles.header}>
           <span>{isAssignmentStage ? 'Assign semantic roles' : 'Inspect semantic conflicts'}</span>
-          {isAssignmentStage && <span>{correctCount} / 8 correct</span>}
+          {isAssignmentStage && (
+            <span>{showResults ? `${correctCount} / 8 correct` : `${assignedCount} / 8 assigned`}</span>
+          )}
         </div>
 
         <div className={styles.swatches}>

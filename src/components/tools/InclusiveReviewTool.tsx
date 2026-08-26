@@ -174,6 +174,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
         {CHECKLIST.map((item) => {
           const answer = answers[item.id];
           const isCorrect = answer === item.correctAnswer;
+          const showResult = stageController.attemptedStageIds.includes(stageController.activeStage.id);
           return (
             <div
               key={item.id}
@@ -181,9 +182,9 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
               style={{
                 padding: '0.5rem 0.65rem',
                 borderRadius: 'var(--radius-sm)',
-                border: `1px solid ${answer ? (isCorrect ? 'var(--accent-success)' : 'var(--accent-cta)') : 'var(--border)'}`,
+                border: `1px solid ${answer ? (showResult && isCorrect ? 'var(--accent-success)' : 'var(--accent-cta)') : 'var(--border)'}`,
                 background: answer
-                  ? isCorrect
+                  ? showResult && isCorrect
                     ? 'color-mix(in srgb, var(--accent-success) 6%, transparent)'
                     : 'color-mix(in srgb, var(--accent-cta) 6%, transparent)'
                   : 'transparent',
@@ -201,10 +202,14 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
                       padding: '0.2rem 0.5rem',
                       fontSize: '0.72rem',
                       fontFamily: 'var(--font-mono)',
-                      border: `1px solid ${answer === opt ? (opt === 'pass' ? 'var(--accent-success)' : 'var(--accent-cta)') : 'var(--border)'}`,
+                      border: `1px solid ${answer === opt
+                        ? showResult
+                          ? isCorrect ? 'var(--accent-success)' : 'var(--accent-danger)'
+                          : 'var(--accent-cta)'
+                        : 'var(--border)'}`,
                       background: answer === opt
-                        ? opt === 'pass'
-                          ? 'color-mix(in srgb, var(--accent-success) 20%, transparent)'
+                        ? showResult
+                          ? `color-mix(in srgb, ${isCorrect ? 'var(--accent-success)' : 'var(--accent-danger)'} 20%, transparent)`
                           : 'color-mix(in srgb, var(--accent-cta) 20%, transparent)'
                         : 'transparent',
                       borderRadius: 'var(--radius-sm)',

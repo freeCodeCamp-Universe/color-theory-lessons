@@ -100,6 +100,7 @@ export const TokenMapTool = memo(function TokenMapTool({
   }
 
   const sortCorrectCount = SORT_ITEMS.filter((item) => sortAnswers[item.label] === item.category).length;
+  const sortAnsweredCount = SORT_ITEMS.filter((item) => sortAnswers[item.label]).length;
 
   return (
     <div className={shellStyles.shell}>
@@ -253,7 +254,7 @@ export const TokenMapTool = memo(function TokenMapTool({
               border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer',
               fontFamily: 'var(--font-mono)', fontSize: '0.82rem',
             }}>
-              check ({sortCorrectCount}/{SORT_ITEMS.length} correct)
+              check classifications ({sortAnsweredCount}/{SORT_ITEMS.length} selected)
             </button>
           )}
 

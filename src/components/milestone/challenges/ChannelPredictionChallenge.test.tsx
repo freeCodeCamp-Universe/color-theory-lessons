@@ -36,6 +36,12 @@ describe('ChannelPredictionChallenge', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     await waitFor(() => expect(screen.getByRole('heading', { name: 'Predict dominant channels' })).toHaveFocus());
+    ['B', 'G', 'G', 'R'].forEach((answer, index) => {
+      const round = screen.getByRole('heading', { name: `Round ${index + 1}` }).closest('section');
+      if (!round) throw new Error(`Round ${index + 1} was not rendered`);
+      expect(within(round).getByRole('button', { name: answer })).toHaveAttribute('aria-pressed', 'true');
+    });
+    expect(screen.getByText('4 / 4 answered')).toBeInTheDocument();
     answerCurrentStage(CHANNELS);
     fireEvent.click(screen.getByRole('button', { name: 'check channels' }));
     fireEvent.click(screen.getByRole('button', { name: 'continue to additive mixes' }));

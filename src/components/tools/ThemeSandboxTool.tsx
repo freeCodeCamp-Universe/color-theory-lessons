@@ -77,6 +77,17 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
     && secOnSurf >= TEXT_CONTRAST_TARGET
     && heroOnGradStart >= TEXT_CONTRAST_TARGET
     && heroOnGradEnd >= TEXT_CONTRAST_TARGET;
+  const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
+
+  function resultColor(passes: boolean) {
+    if (!showResults) return 'var(--muted)';
+    return passes ? 'var(--green)' : 'var(--red)';
+  }
+
+  function resultSymbol(passes: boolean) {
+    if (!showResults) return '';
+    return passes ? '✓ ' : '✗ ';
+  }
 
   return (
     <div className={shellStyles.shell}>
@@ -171,20 +182,20 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
 
       {/* Contrast readout */}
       <div style={{ fontSize: '0.78rem', fontFamily: 'var(--font-mono)', marginBottom: '0.5rem' }}>
-        <div style={{ color: priOnBg >= TEXT_CONTRAST_TARGET ? 'var(--green)' : 'var(--red)' }}>
-          {priOnBg >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Primary text on background: {formatContrastRatio(priOnBg)}:1 (target: 4.5:1)
+        <div style={{ color: resultColor(priOnBg >= TEXT_CONTRAST_TARGET) }}>
+          {resultSymbol(priOnBg >= TEXT_CONTRAST_TARGET)}Primary text on background: {formatContrastRatio(priOnBg)}:1 (target: 4.5:1)
         </div>
-        <div style={{ color: priOnSurf >= TEXT_CONTRAST_TARGET ? 'var(--green)' : 'var(--red)' }}>
-          {priOnSurf >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Primary text on surface: {formatContrastRatio(priOnSurf)}:1 (target: 4.5:1)
+        <div style={{ color: resultColor(priOnSurf >= TEXT_CONTRAST_TARGET) }}>
+          {resultSymbol(priOnSurf >= TEXT_CONTRAST_TARGET)}Primary text on surface: {formatContrastRatio(priOnSurf)}:1 (target: 4.5:1)
         </div>
-        <div style={{ color: secOnSurf >= TEXT_CONTRAST_TARGET ? 'var(--green)' : 'var(--red)' }}>
-          {secOnSurf >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Secondary text on surface: {formatContrastRatio(secOnSurf)}:1 (target: 4.5:1)
+        <div style={{ color: resultColor(secOnSurf >= TEXT_CONTRAST_TARGET) }}>
+          {resultSymbol(secOnSurf >= TEXT_CONTRAST_TARGET)}Secondary text on surface: {formatContrastRatio(secOnSurf)}:1 (target: 4.5:1)
         </div>
-        <div style={{ color: heroOnGradStart >= TEXT_CONTRAST_TARGET ? 'var(--green)' : 'var(--red)' }}>
-          {heroOnGradStart >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Hero text on gradient start: {formatContrastRatio(heroOnGradStart)}:1 (target: 4.5:1)
+        <div style={{ color: resultColor(heroOnGradStart >= TEXT_CONTRAST_TARGET) }}>
+          {resultSymbol(heroOnGradStart >= TEXT_CONTRAST_TARGET)}Hero text on gradient start: {formatContrastRatio(heroOnGradStart)}:1 (target: 4.5:1)
         </div>
-        <div style={{ color: heroOnGradEnd >= TEXT_CONTRAST_TARGET ? 'var(--green)' : 'var(--red)' }}>
-          {heroOnGradEnd >= TEXT_CONTRAST_TARGET ? '✓' : '✗'} Hero text on gradient end: {formatContrastRatio(heroOnGradEnd)}:1 (target: 4.5:1)
+        <div style={{ color: resultColor(heroOnGradEnd >= TEXT_CONTRAST_TARGET) }}>
+          {resultSymbol(heroOnGradEnd >= TEXT_CONTRAST_TARGET)}Hero text on gradient end: {formatContrastRatio(heroOnGradEnd)}:1 (target: 4.5:1)
         </div>
       </div>
 

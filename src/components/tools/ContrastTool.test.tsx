@@ -134,13 +134,19 @@ describe('ContrastTool', () => {
         fireEvent.change(slider, { target: { value: below.lightness } });
         expect(screen.getByText(ratioPattern(below.ratio))).toBeInTheDocument();
         expect(screen.queryByText('✓ readable')).not.toBeInTheDocument();
+        fireEvent.click(screen.getByRole('button', { name: 'check' }));
+        expect(screen.getAllByText('below target').length).toBeGreaterThan(0);
+        fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
 
         fireEvent.change(slider, { target: { value: firstPassing.lightness } });
         expect(screen.getByText(ratioPattern(firstPassing.ratio))).toBeInTheDocument();
+        fireEvent.click(screen.getByRole('button', { name: 'check' }));
         expect(screen.getAllByText('✓ readable')).toHaveLength(1);
+        fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
 
         fireEvent.change(slider, { target: { value: above.lightness } });
         expect(screen.getByText(ratioPattern(above.ratio))).toBeInTheDocument();
+        fireEvent.click(screen.getByRole('button', { name: 'check' }));
         expect(screen.getAllByText('✓ readable')).toHaveLength(1);
       },
     );

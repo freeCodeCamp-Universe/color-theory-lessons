@@ -44,11 +44,14 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
   }
 
   const remainingCount = INCONSISTENCIES.length - found.size;
+  const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
 
   const clickableStyle = (id: string): React.CSSProperties => ({
     position: 'relative',
-    cursor: interactive ? 'pointer' : 'default',
-    outline: found.has(id) ? '2px solid #22c55e' : interactive ? '2px dashed #f59e0b' : 'none',
+    cursor: 'default',
+    outline: found.has(id)
+      ? `2px solid ${showResults ? '#22c55e' : 'var(--accent-cta)'}`
+      : 'none',
     outlineOffset: 2,
     borderRadius: 3,
   });
@@ -78,19 +81,18 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
               <div
                 style={clickableStyle('text-weight')}
                 onClick={() => handleClick('text-weight')}
-                title={interactive ? 'Click to inspect' : undefined}
               >
                 <div style={{ color: '#9ca3af', fontSize: '0.75rem' }}>Last updated: today</div>
               </div>
               <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.4rem', alignItems: 'center' }}>
                 {/* Inconsistency 1: different blue than header */}
-                <div style={clickableStyle('btn-color')} onClick={() => handleClick('btn-color')} title={interactive ? 'Click to inspect' : undefined}>
+                <div style={clickableStyle('btn-color')} onClick={() => handleClick('btn-color')}>
                   <div style={{ background: '#3b82f6', color: '#fff', padding: '0.2rem 0.5rem', borderRadius: 4, fontSize: '0.75rem', display: 'inline-block' }}>
                     View
                   </div>
                 </div>
                 {/* Inconsistency 2: teal success badge */}
-                <div style={clickableStyle('success-color')} onClick={() => handleClick('success-color')} title={interactive ? 'Click to inspect' : undefined}>
+                <div style={clickableStyle('success-color')} onClick={() => handleClick('success-color')}>
                   <div style={{ background: '#14b8a6', color: '#fff', padding: '0.2rem 0.4rem', borderRadius: 99, fontSize: '0.7rem', display: 'inline-block' }}>
                     Active
                   </div>
@@ -101,15 +103,14 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
             <div
               style={{ ...clickableStyle('surface-color'), background: '#ffffff', border: '1px solid #e5e7eb', margin: '0 0.5rem 0.5rem', padding: '0.5rem', borderRadius: 4 }}
               onClick={() => handleClick('surface-color')}
-              title={interactive ? 'Click to inspect' : undefined}
             >
               <div style={{ color: '#111827', fontWeight: 600, marginBottom: '0.25rem' }}>Settings</div>
               <div style={{ color: '#6b7280', fontSize: '0.75rem' }}>Manage your preferences</div>
             </div>
           </div>
           {interactive && (
-            <p style={{ fontSize: '0.75rem', color: found.size === INCONSISTENCIES.length ? 'var(--accent-success)' : 'var(--muted)', marginTop: '0.3rem' }}>
-              Found {found.size}/{INCONSISTENCIES.length} inconsistencies
+            <p style={{ fontSize: '0.75rem', color: showResults && found.size === INCONSISTENCIES.length ? 'var(--accent-success)' : 'var(--muted)', marginTop: '0.3rem' }}>
+              {showResults ? 'Found' : 'Selected'} {found.size}/{INCONSISTENCIES.length} inconsistencies
             </p>
           )}
         </div>

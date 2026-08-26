@@ -29,6 +29,9 @@ function rgbFromCss(value: string): RGB {
 describe('BrandPressureTool contrast validation', () => {
   it('renders distinct Save and Cancel pairs that meet normal-text contrast', () => {
     render(<BrandPressureTool interactive />);
+    expect(screen.getByText('Save text (4.5:1)').parentElement).not.toHaveTextContent('✓');
+    setSurface(PASSING_ROLES.surface);
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     const save = screen.getByRole('button', { name: 'Save' });
     const cancel = screen.getByRole('button', { name: 'Cancel' });
@@ -98,6 +101,7 @@ describe('BrandPressureTool contrast validation', () => {
     fireEvent.change(screen.getAllByRole('textbox')[0], { target: { value: '#ffffff' } });
     setSurface('#666666');
     fireEvent.change(screen.getAllByRole('textbox')[2], { target: { value: '#000000' } });
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     expect(
       screen.getByText('Primary text / page background (4.5:1)').parentElement,
@@ -113,6 +117,7 @@ describe('BrandPressureTool contrast validation', () => {
     fireEvent.change(screen.getAllByRole('textbox')[0], { target: { value: '#000000' } });
     setSurface('#ffffff');
     fireEvent.change(screen.getAllByRole('textbox')[2], { target: { value: '#777777' } });
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     expect(
       screen.getByText('Primary text / card surface (4.5:1)').parentElement,

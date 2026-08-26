@@ -32,15 +32,39 @@ describe('InclusiveReviewTool', () => {
     const simulationCheck = screen.getByTestId('checklist-simulation');
     expect(within(simulationCheck).getByText('Does the interface remain understandable under color vision deficiency simulation modes?')).toBeInTheDocument();
 
-    fireEvent.click(within(simulationCheck).getByRole('button', { name: 'Pass' }));
+    const passButton = within(simulationCheck).getByRole('button', { name: 'Pass' });
+    fireEvent.click(passButton);
     expect(within(simulationCheck).queryByText(/chart bars become hard to distinguish/)).not.toBeInTheDocument();
+    expect(simulationCheck.style.border).toBe('1px solid var(--accent-cta)');
+    expect(passButton.style.border).toBe('1px solid var(--accent-cta)');
+    expect(passButton.getAttribute('style')).toContain(
+      'background: color-mix(in srgb, var(--accent-cta) 20%, transparent)',
+    );
 
     fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
     expect(within(simulationCheck).getByText(/chart bars become hard to distinguish/)).toBeInTheDocument();
+    expect(passButton.style.border).toBe('1px solid var(--accent-danger)');
+    expect(passButton.getAttribute('style')).toContain(
+      'background: color-mix(in srgb, var(--accent-danger) 20%, transparent)',
+    );
 
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
-    fireEvent.click(within(simulationCheck).getByRole('button', { name: 'Needs work' }));
+    const needsWorkButton = within(simulationCheck).getByRole('button', { name: 'Needs work' });
+    fireEvent.click(needsWorkButton);
     expect(within(simulationCheck).queryByText(/chart bars become hard to distinguish/)).not.toBeInTheDocument();
+    expect(simulationCheck.style.border).toBe('1px solid var(--accent-cta)');
+    expect(needsWorkButton.style.border).toBe('1px solid var(--accent-cta)');
+    expect(needsWorkButton.getAttribute('style')).toContain(
+      'background: color-mix(in srgb, var(--accent-cta) 20%, transparent)',
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+    expect(within(simulationCheck).queryByText(/chart bars become hard to distinguish/)).not.toBeInTheDocument();
+    expect(simulationCheck.style.border).toBe('1px solid var(--accent-success)');
+    expect(needsWorkButton.style.border).toBe('1px solid var(--accent-success)');
+    expect(needsWorkButton.getAttribute('style')).toContain(
+      'background: color-mix(in srgb, var(--accent-success) 20%, transparent)',
+    );
   });
 
   it('completes only after every incorrect assessment is revised', () => {

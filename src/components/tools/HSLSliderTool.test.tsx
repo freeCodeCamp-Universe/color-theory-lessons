@@ -152,6 +152,7 @@ describe('HSLSliderTool exercise', () => {
     const onComplete = vi.fn();
     render(<HSLSliderTool onComplete={onComplete} />);
 
+    fireEvent.change(screen.getByRole('slider', { name: /^Hue: /i }), { target: { value: '100' } });
     fireEvent.click(screen.getByRole('button', { name: 'check' }));
 
     expect(screen.getByText('Stage 1 of 3')).toBeInTheDocument();
@@ -162,6 +163,7 @@ describe('HSLSliderTool exercise', () => {
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
 
     expect(screen.getByRole('slider', { name: /^Hue: /i })).toBeEnabled();
+    expect(screen.getByRole('slider', { name: /^Hue: /i })).toHaveValue('100');
     expect(screen.getByText('Stage 1 of 3')).toBeInTheDocument();
   });
 });
