@@ -117,9 +117,9 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
               padding: '0.3rem 0.65rem',
               fontSize: '0.75rem',
               borderRadius: 'var(--radius-sm)',
-              border: `1px solid ${showResults && passed[p.id] ? 'var(--accent-success)' : activePair === i ? 'var(--accent-cta)' : 'var(--border)'}`,
+              border: `1px solid ${showResults && passed[p.id] ? 'var(--accent-success)' : activePair === i ? 'var(--accent-warning)' : 'var(--border)'}`,
               background: activePair === i
-                ? 'color-mix(in srgb, var(--accent-cta) 15%, transparent)'
+                ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)'
                 : 'transparent',
               color: showResults && passed[p.id] ? 'var(--accent-success)' : 'var(--primary-foreground)',
               cursor: interactive ? 'pointer' : 'default',

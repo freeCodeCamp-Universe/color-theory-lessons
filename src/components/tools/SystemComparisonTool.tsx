@@ -50,7 +50,7 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
     position: 'relative',
     cursor: 'default',
     outline: found.has(id)
-      ? `2px solid ${showResults ? 'var(--accent-success)' : 'var(--accent-cta)'}`
+      ? `2px solid ${showResults ? 'var(--accent-success)' : 'var(--accent-warning)'}`
       : 'none',
     outlineOffset: 2,
     borderRadius: 3,
@@ -141,7 +141,7 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
         <div style={{ background: 'var(--surface, #1e293b)', border: '1px solid var(--border)', borderRadius: 4, padding: '0.6rem 0.75rem', fontSize: '0.82rem' }}>
           {INCONSISTENCIES.filter(({ id }) => found.has(id)).map((inconsistency) => (
             <p key={inconsistency.id} style={{ margin: '0.25rem 0' }}>
-              <strong style={{ color: 'var(--accent-cta)' }}>{inconsistency.label}:</strong>{' '}
+              <strong style={{ color: 'var(--accent-warning)' }}>{inconsistency.label}:</strong>{' '}
               <span style={{ color: 'var(--primary-foreground)' }}>{inconsistency.explanation}</span>
             </p>
           ))}

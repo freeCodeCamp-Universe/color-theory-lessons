@@ -123,7 +123,7 @@ export const TokenMapTool = memo(function TokenMapTool({
           <input type="range" min={0} max={360} value={baseHue}
             disabled={inputsDisabled}
             onChange={(e) => setBaseHue(Number(e.target.value))}
-            style={{ width: '100%', accentColor: 'var(--accent-cta)' }}
+            style={{ width: '100%', accentColor: 'var(--accent-warning)' }}
             aria-label={`Base hue: ${baseHue} degrees`}
           />
         </label>
@@ -132,7 +132,7 @@ export const TokenMapTool = memo(function TokenMapTool({
           <input type="range" min={0} max={100} value={baseSat}
             disabled={inputsDisabled}
             onChange={(e) => setBaseSat(Number(e.target.value))}
-            style={{ width: '100%', accentColor: 'var(--accent-cta)' }}
+            style={{ width: '100%', accentColor: 'var(--accent-warning)' }}
             aria-label={`Base saturation: ${baseSat} percent`}
           />
         </label>

@@ -27,7 +27,7 @@ describe('StateWorkshopTool', () => {
     }
 
     expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
-    expect(screen.getByTestId('state-success').style.border).toBe('1px solid var(--accent-cta)');
+    expect(screen.getByTestId('state-success').style.border).toBe('1px solid var(--accent-warning)');
     expect(onComplete).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 

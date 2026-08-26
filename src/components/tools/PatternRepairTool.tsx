@@ -285,7 +285,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({
                         checked={modChecked.includes(option)}
                         onChange={() => toggleOption(mod.id, option)}
                         disabled={submitted}
-                        style={{ accentColor: 'var(--accent-cta)' }}
+                        style={{ accentColor: 'var(--accent-warning)' }}
                       />
                       {option}
                     </label>

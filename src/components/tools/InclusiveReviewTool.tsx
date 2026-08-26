@@ -133,9 +133,9 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
               padding: '0.25rem 0.5rem',
               fontSize: '0.72rem',
               fontFamily: 'var(--font-mono)',
-              background: simulationMode === mode.id ? 'var(--accent-cta)' : 'transparent',
-              color: simulationMode === mode.id ? '#111' : 'var(--muted)',
-              border: `1px solid ${simulationMode === mode.id ? 'var(--accent-cta)' : 'var(--border)'}`,
+              background: simulationMode === mode.id ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'transparent',
+              color: simulationMode === mode.id ? 'var(--accent-warning)' : 'var(--muted)',
+              border: `1px solid ${simulationMode === mode.id ? 'var(--accent-warning)' : 'var(--border)'}`,
               borderRadius: 'var(--radius-sm)',
               cursor: interactive ? 'pointer' : 'default',
             }}
@@ -182,11 +182,11 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
               style={{
                 padding: '0.5rem 0.65rem',
                 borderRadius: 'var(--radius-sm)',
-                border: `1px solid ${answer ? (showResult && isCorrect ? 'var(--accent-success)' : 'var(--accent-cta)') : 'var(--border)'}`,
+                border: `1px solid ${answer ? (showResult && isCorrect ? 'var(--accent-success)' : 'var(--accent-warning)') : 'var(--border)'}`,
                 background: answer
                   ? showResult && isCorrect
                     ? 'color-mix(in srgb, var(--accent-success) 6%, transparent)'
-                    : 'color-mix(in srgb, var(--accent-cta) 6%, transparent)'
+                    : 'color-mix(in srgb, var(--accent-warning) 6%, transparent)'
                   : 'transparent',
               }}
             >
@@ -205,12 +205,12 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
                       border: `1px solid ${answer === opt
                         ? showResult
                           ? isCorrect ? 'var(--accent-success)' : 'var(--accent-danger)'
-                          : 'var(--accent-cta)'
+                          : 'var(--accent-warning)'
                         : 'var(--border)'}`,
                       background: answer === opt
                         ? showResult
                           ? `color-mix(in srgb, ${isCorrect ? 'var(--accent-success)' : 'var(--accent-danger)'} 20%, transparent)`
-                          : 'color-mix(in srgb, var(--accent-cta) 20%, transparent)'
+                          : 'color-mix(in srgb, var(--accent-warning) 6%, transparent)'
                         : 'transparent',
                       borderRadius: 'var(--radius-sm)',
                       cursor: interactive && !submitted ? 'pointer' : 'default',
@@ -222,7 +222,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
                 ))}
               </div>
               {stageController.result === 'incorrect' && answer && !isCorrect && (
-                <p style={{ fontSize: '0.7rem', color: 'var(--accent-cta)', marginTop: '0.25rem', margin: '0.25rem 0 0' }}>
+                <p style={{ fontSize: '0.7rem', color: 'var(--accent-danger)', marginTop: '0.25rem', margin: '0.25rem 0 0' }}>
                   {item.id === 'simulation'
                     ? 'The chart bars become hard to distinguish under color vision deficiency simulation and have no labels or patterns.'
                     : item.id === 'task-testing'

@@ -136,7 +136,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
         <div style={{ flex: '0 0 200px' }}>
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>LIGHT (fixed)</p>
           {KEYS.map(key => (
-            <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem', opacity: 0.7 }}>
+            <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
               <div style={{ width: 16, height: 16, borderRadius: 3, background: LIGHT_THEME[key], border: '1px solid #e5e7eb', flexShrink: 0 }} />
               <span style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 100, flexShrink: 0 }}>{key}</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--primary-foreground)' }}>{LIGHT_THEME[key]}</span>
@@ -182,9 +182,9 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
                 onClick={() => setPreview(m)}
                 style={{
                   padding: '0.2rem 0.6rem', fontSize: '0.75rem', borderRadius: 4, cursor: 'pointer',
-                  background: preview === m ? 'var(--accent-cta)' : 'var(--surface, #1e293b)',
-                  color: preview === m ? 'var(--cta-foreground)' : 'var(--primary-foreground)',
-                  border: '1px solid var(--border)',
+                  background: preview === m ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'var(--surface, #1e293b)',
+                  color: preview === m ? 'var(--accent-warning)' : 'var(--primary-foreground)',
+                  border: `1px solid ${preview === m ? 'var(--accent-warning)' : 'var(--border)'}`,
                 }}
               >
                 {m} mode

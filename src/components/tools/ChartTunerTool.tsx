@@ -251,8 +251,8 @@ export const ChartTunerTool = memo(function ChartTunerTool({
           disabled={!interactive}
           style={{
             fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: 4, cursor: interactive ? 'pointer' : 'default',
-            background: !simulated ? 'var(--accent-cta)' : 'var(--border)', color: !simulated ? '#000' : 'var(--primary-foreground)',
-            border: 'none',
+            background: !simulated ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'var(--border)', color: !simulated ? 'var(--accent-warning)' : 'var(--primary-foreground)',
+            border: `1px solid ${!simulated ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
           }}
         >
           Normal view
@@ -262,8 +262,8 @@ export const ChartTunerTool = memo(function ChartTunerTool({
           disabled={!interactive}
           style={{
             fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: 4, cursor: interactive ? 'pointer' : 'default',
-            background: simulated ? 'var(--accent-cta)' : 'var(--border)', color: simulated ? '#000' : 'var(--primary-foreground)',
-            border: 'none',
+            background: simulated ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'var(--border)', color: simulated ? 'var(--accent-warning)' : 'var(--primary-foreground)',
+            border: `1px solid ${simulated ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
           }}
         >
           Deuteranopia simulation

@@ -89,7 +89,7 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({
               style={{
                 padding: '0.65rem',
                 borderRadius: 'var(--radius-md)',
-                border: `1px solid ${stagePassed ? 'var(--accent-success)' : hasAnyCue ? 'var(--accent-cta)' : 'var(--border)'}`,
+                border: `1px solid ${stagePassed ? 'var(--accent-success)' : hasAnyCue ? 'var(--accent-warning)' : 'var(--border)'}`,
                 background: stagePassed
                   ? 'color-mix(in srgb, var(--accent-success) 5%, transparent)'
                   : 'transparent',

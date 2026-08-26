@@ -17,7 +17,7 @@
 }
 
 .progressSegment.active {
-  background: var(--accent-cta);
+  background: var(--accent-warning);
 }
 
 .progressSegment.completed {
@@ -46,7 +46,7 @@
 }
 
 .title:focus-visible {
-  outline: 2px solid var(--accent-cta);
+  outline: 2px solid var(--accent-warning);
   outline-offset: 3px;
 }
 

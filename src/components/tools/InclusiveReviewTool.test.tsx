@@ -35,10 +35,10 @@ describe('InclusiveReviewTool', () => {
     const passButton = within(simulationCheck).getByRole('button', { name: 'Pass' });
     fireEvent.click(passButton);
     expect(within(simulationCheck).queryByText(/chart bars become hard to distinguish/)).not.toBeInTheDocument();
-    expect(simulationCheck.style.border).toBe('1px solid var(--accent-cta)');
-    expect(passButton.style.border).toBe('1px solid var(--accent-cta)');
+    expect(simulationCheck.style.border).toBe('1px solid var(--accent-warning)');
+    expect(passButton.style.border).toBe('1px solid var(--accent-warning)');
     expect(passButton.getAttribute('style')).toContain(
-      'background: color-mix(in srgb, var(--accent-cta) 20%, transparent)',
+      'background: color-mix(in srgb, var(--accent-warning) 6%, transparent)',
     );
 
     fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
@@ -52,10 +52,10 @@ describe('InclusiveReviewTool', () => {
     const needsWorkButton = within(simulationCheck).getByRole('button', { name: 'Needs work' });
     fireEvent.click(needsWorkButton);
     expect(within(simulationCheck).queryByText(/chart bars become hard to distinguish/)).not.toBeInTheDocument();
-    expect(simulationCheck.style.border).toBe('1px solid var(--accent-cta)');
-    expect(needsWorkButton.style.border).toBe('1px solid var(--accent-cta)');
+    expect(simulationCheck.style.border).toBe('1px solid var(--accent-warning)');
+    expect(needsWorkButton.style.border).toBe('1px solid var(--accent-warning)');
     expect(needsWorkButton.getAttribute('style')).toContain(
-      'background: color-mix(in srgb, var(--accent-cta) 20%, transparent)',
+      'background: color-mix(in srgb, var(--accent-warning) 6%, transparent)',
     );
 
     fireEvent.click(screen.getByRole('button', { name: 'check stage' }));

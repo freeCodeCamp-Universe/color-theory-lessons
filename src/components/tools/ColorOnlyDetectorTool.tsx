@@ -221,7 +221,7 @@ export const ColorOnlyDetectorTool = memo(function ColorOnlyDetectorTool({
                 style={{
                   padding: '0.6rem',
                   borderRadius: 'var(--radius-md)',
-                  border: `1px solid ${showCorrect ? 'var(--accent-success)' : showIncorrect ? 'var(--accent-danger)' : isSelected ? 'var(--accent-cta)' : 'var(--border)'}`,
+                  border: `1px solid ${showCorrect ? 'var(--accent-success)' : showIncorrect ? 'var(--accent-danger)' : isSelected ? 'var(--accent-warning)' : 'var(--border)'}`,
                   background: showCorrect
                     ? 'color-mix(in srgb, var(--accent-success) 8%, transparent)'
                     : showIncorrect

@@ -247,10 +247,10 @@ export const SystemStressTestTool = memo(function SystemStressTestTool({
             disabled={!interactive}
             onClick={() => setContext(item.id)}
             style={{
-              background: context === item.id ? 'var(--accent-cta)' : 'var(--border)',
-              border: 0,
+              background: context === item.id ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'var(--border)',
+              border: `1px solid ${context === item.id ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
               borderRadius: 4,
-              color: context === item.id ? '#000' : 'var(--primary-foreground)',
+              color: context === item.id ? 'var(--accent-warning)' : 'var(--primary-foreground)',
               cursor: interactive ? 'pointer' : 'default',
               fontSize: '0.75rem',
               padding: '0.3rem 0.55rem',

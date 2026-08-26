@@ -56,6 +56,20 @@ function badgeRatio(
   );
 }
 
+function tintedAccentRatio(
+  theme: Record<string, string>,
+  foreground: string,
+  background: string,
+  foregroundPercentage: number,
+): number {
+  const foregroundRgb = hexToRgb(resolveColor(theme, foreground));
+  const backgroundRgb = hexToRgb(resolveColor(theme, background));
+  return contrastRatioWcag(
+    foregroundRgb,
+    mix(foregroundRgb, backgroundRgb, foregroundPercentage),
+  );
+}
+
 describe.each([
   ['dark', dark],
   ['light', light],
@@ -98,6 +112,10 @@ describe.each([
 
   it('keeps selected text at AAA', () => {
     expect(ratio(theme, 'selection-foreground', 'selection-background')).toBeGreaterThanOrEqual(7);
+  });
+
+  it.each(textBackgrounds)('keeps warning text at AAA on its selected-state tint over %s', (background) => {
+    expect(tintedAccentRatio(theme, 'accent-warning', background, 0.06)).toBeGreaterThanOrEqual(7);
   });
 
   it.each([
