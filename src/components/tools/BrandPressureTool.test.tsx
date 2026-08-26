@@ -123,7 +123,10 @@ describe('BrandPressureTool contrast validation', () => {
     const onComplete = vi.fn();
     render(<BrandPressureTool interactive onComplete={onComplete} />);
 
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
     setSurface(PASSING_ROLES.surface);
+    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
     expect(screen.getByText(/supporting roles avoid saturated colors near the brand hue/)).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();

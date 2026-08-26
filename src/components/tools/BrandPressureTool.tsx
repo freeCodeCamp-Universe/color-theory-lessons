@@ -1,15 +1,13 @@
 import { memo, useState } from 'react';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
+import { useExerciseStages } from './useExerciseStages.ts';
 import {
   FIXED_ACTIONS,
   getBrandPressureStatus,
   type RoleKey,
 } from './brand-pressure-validation.ts';
-
-interface BrandPressureToolProps {
-  interactive?: boolean;
-  onComplete?: () => void;
-}
 
 const ROLE_LABELS: Record<RoleKey, string> = {
   'page-bg': 'Page background',
@@ -37,20 +35,33 @@ const INTERACTIVE_DEFAULTS: Record<RoleKey, string> = {
   'neutral-divider': '#e2e8f0',
 };
 
+const STAGES: readonly ExerciseStageDefinition[] = [{
+  id: 'balance-brand-pressure',
+  title: 'Balance the brand roles',
+  instruction: 'Edit the four supporting roles so every contrast check passes and brand pressure stays below 40%.',
+}];
+
 function isValidHex(h: string) { return /^#[0-9a-fA-F]{6}$/.test(h); }
 
 function formatContrastRatio(ratio: number): string {
   return (Math.floor(ratio * 10) / 10).toFixed(1);
 }
 
-export const BrandPressureTool = memo(function BrandPressureTool({ interactive = false, onComplete }: BrandPressureToolProps) {
+export const BrandPressureTool = memo(function BrandPressureTool({
+  interactive = false,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
   const defaults = interactive ? INTERACTIVE_DEFAULTS : NON_INTERACTIVE_DEFAULTS;
   const [roles, setRoles] = useState<Record<RoleKey, string>>(defaults);
-  const [completed, setCompleted] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
   function update(key: RoleKey, val: string) {
-    if (!interactive) return;
+    if (!interactive || stageController.result === 'passed') return;
+    setHasInteracted(true);
     setRoles(prev => ({ ...prev, [key]: val }));
+    stageController.retry();
   }
 
   const {
@@ -66,11 +77,6 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
     allPass,
   } = getBrandPressureStatus(roles);
 
-  if (interactive && allPass && !completed) {
-    setCompleted(true);
-    onComplete?.();
-  }
-
   const bg = isValidHex(roles['page-bg']) ? roles['page-bg'] : '#f8f7ff';
   const surf = isValidHex(roles['surface']) ? roles['surface'] : '#ede9fe';
   const pt = isValidHex(roles['primary-text']) ? roles['primary-text'] : '#1c1917';
@@ -82,6 +88,11 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>brand pressure</span>
 
+      <ExerciseStage
+        controller={stageController}
+        incorrectFeedback="One or more contrast or brand-pressure checks still fail. Adjust the supporting roles and try the stage again."
+        completionFeedback="The supporting roles avoid saturated colors near the brand hue, and every contrast check passes."
+      >
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         {/* Inputs */}
         <div style={{ flex: '0 0 220px' }}>
@@ -108,7 +119,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
                   type="text"
                   value={val}
                   onChange={e => update(key, e.target.value)}
-                  disabled={!interactive}
+                  disabled={!interactive || stageController.result === 'passed'}
                   maxLength={7}
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.78rem',
@@ -177,11 +188,16 @@ export const BrandPressureTool = memo(function BrandPressureTool({ interactive =
         </div>
       </div>
 
-      {completed && (
-        <p style={{ color: 'var(--accent-success)', fontSize: '0.85rem' }}>
-          The supporting roles avoid saturated colors near the brand hue, and every contrast check passes.
-        </p>
+      {interactive && stageController.result !== 'passed' && (
+        <button
+          type="button"
+          disabled={!hasInteracted}
+          onClick={() => allPass ? stageController.markPassed() : stageController.markIncorrect()}
+        >
+          check stage
+        </button>
       )}
+      </ExerciseStage>
     </div>
   );
 });

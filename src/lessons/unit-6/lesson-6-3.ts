@@ -14,7 +14,7 @@ export const lesson6_3: LessonConfig = {
     { text: 'The brand pressure challenge provides fixed brand colors for two actions and lets you edit four supporting roles. Reach the activity targets for text contrast and page/surface contrast, then keep the brand pressure meter below 40%.' },
   ],
   challenge: {
-      prompt: 'Edit four supporting color roles around the two fixed brand actions. Reach 4.5:1 text contrast, 1.2:1 page/surface contrast, and less than 40% brand pressure.',
+      prompt: 'Complete one stage: edit four supporting color roles around the two fixed brand actions. Reach 4.5:1 text contrast, 1.2:1 page/surface contrast, and less than 40% brand pressure.',
       hints: [
         'The fixed actions already use the brand colors. Start the editable supporting roles with neutral colors.',
         'Test primary text against the page background. This pair must reach 4.5:1.',

@@ -14,7 +14,7 @@ export const lesson6_5: LessonConfig = {
     { text: 'In the chart tuner, adjust each series color and assign a different pattern to each series. Compare the normal and deuteranopia views, then show the data table to inspect every bar by month, series, and value.' },
   ],
   challenge: {
-      prompt: 'Tune the series colors for normal and deuteranopia views, assign a different pattern to each series, and inspect the data table before completing the chart.',
+      prompt: 'Complete three stages in order: tune the series colors, assign a different pattern to each series, then inspect the data table.',
       hints: [
         'Use differences in lightness as well as hue to separate the series.',
         'Use the simulation warning to find series pairs below the tool\'s difference threshold.',

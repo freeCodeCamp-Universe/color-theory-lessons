@@ -24,7 +24,7 @@ export const lesson6_7: LessonConfig = {
     },
   ],
   challenge: {
-      prompt: 'Run the stress test on the sample color system. Mark every weakness you find across light, dark, chart, alert, and simulation contexts, then tag each issue as role drift, missing role, or token override.',
+      prompt: 'Complete two stages in order: find the weaknesses across all five contexts, then classify each finding.',
       hints: [
         'Toggle between all five contexts before marking anything. The same issue might appear in multiple views.',
         'Ask: does hierarchy still work? Are states distinct? Is anything too loud or too faint?',

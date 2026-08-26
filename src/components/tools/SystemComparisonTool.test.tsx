@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, it } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { contrastRatioWcag } from '../../utils/color.ts';
 import type { RGB } from '../../utils/color.ts';
 import { SystemComparisonTool } from './SystemComparisonTool.tsx';
@@ -42,5 +42,20 @@ describe('SystemComparisonTool text contrast', () => {
     );
 
     expect(ratio).toBeGreaterThanOrEqual(NORMAL_TEXT_THRESHOLD);
+  });
+
+  it('renders one stage and completes after all four inconsistencies are found', () => {
+    const onComplete = vi.fn();
+    render(<SystemComparisonTool interactive onComplete={onComplete} />);
+
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
+    fireEvent.click(screen.getAllByText('Last updated: today')[0].parentElement!);
+    fireEvent.click(screen.getAllByText('View')[0].parentElement!);
+    fireEvent.click(screen.getAllByText('Active')[0].parentElement!);
+    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getAllByText('Settings')[0].parentElement!);
+
+    expect(screen.getByText(/All inconsistencies found/)).toBeInTheDocument();
+    expect(onComplete).toHaveBeenCalledOnce();
   });
 });

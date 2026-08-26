@@ -35,6 +35,7 @@ describe('RoleBuilderTool', () => {
     const onComplete = vi.fn();
     render(<RoleBuilderTool interactive onComplete={onComplete} />);
 
+    expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
     expect(screen.getByText('Secondary text / surface').parentElement).toHaveTextContent('✗');
     expect(screen.getByText('Page / surface ≥ 1.5:1').parentElement).toHaveTextContent('✗');
     expect(screen.getByText('Status luminance ≥ 1.5:1').parentElement).toHaveTextContent('✗');
@@ -118,20 +119,28 @@ describe('RoleBuilderTool', () => {
 
     setPassingRoles();
 
+    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+
     expect(screen.getByText('All color-role checks pass. The preview keeps labels and icons so meaning never depends on color alone.')).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
   });
 
-  it('clears completion when a passing configuration becomes invalid', () => {
+  it('allows a failed stage to be retried and completes once', () => {
     const onComplete = vi.fn();
     render(<RoleBuilderTool interactive onComplete={onComplete} />);
 
     setPassingRoles();
-    expect(screen.getByText(/All color-role checks pass/)).toBeInTheDocument();
-
     setRole('success', '#invalid');
-    expect(screen.queryByText(/All color-role checks pass/)).not.toBeInTheDocument();
-    expect(screen.getByText('Valid role colors').parentElement).toHaveTextContent('✗');
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+
+    expect(screen.getByText(/One or more role checks still fail/)).toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
+    setRole('success', '#052e16');
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+
+    expect(screen.getByText('Valid role colors').parentElement).toHaveTextContent('✓');
     expect(onComplete).toHaveBeenCalledOnce();
   });
 });

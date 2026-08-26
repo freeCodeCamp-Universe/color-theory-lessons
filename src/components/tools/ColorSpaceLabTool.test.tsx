@@ -65,42 +65,53 @@ describe('ColorSpaceLabTool samples', () => {
     expect(p3Preview.style.getPropertyValue('--srgb-fallback')).toBe('#FF1B00');
     expect(p3Preview.style.filter).toBe('');
     expect(screen.getByText(/may render these panels alike/)).toBeInTheDocument();
-    expect(screen.getByText(/Outside sRGB: this sample needs gamut mapping/)).toBeInTheDocument();
   });
 });
 
 describe('ColorSpaceLabTool challenge', () => {
-  it('does not complete after classification without gamut decisions', () => {
-    const onComplete = vi.fn();
-    render(<ColorSpaceLabTool interactive onComplete={onComplete} />);
+  it('hides the gamut task until the first stage passes', () => {
+    render(<ColorSpaceLabTool interactive />);
 
-    answerSortChallenge();
-    fireEvent.click(screen.getByRole('button', { name: 'check challenge' }));
-
-    expect(onComplete).not.toHaveBeenCalled();
-    expect(screen.getByText('Correct classifications: 9/9. Correct gamut decisions: 0/5.')).toBeInTheDocument();
+    expect(screen.getByText('Stage 1 of 2')).toBeInTheDocument();
+    expect(screen.getAllByRole('combobox')).toHaveLength(SORT_ANSWERS.length);
+    expect(screen.queryByRole('combobox', { name: /Gamut mapping for/ })).not.toBeInTheDocument();
+    expect(screen.queryByText(/needs gamut mapping for sRGB output/)).not.toBeInTheDocument();
   });
 
-  it('does not complete after gamut decisions without classification', () => {
+  it('keeps an incorrect classification attempt in the first stage', () => {
     const onComplete = vi.fn();
     render(<ColorSpaceLabTool interactive onComplete={onComplete} />);
 
-    answerGamutChallenge();
-    fireEvent.click(screen.getByRole('button', { name: 'check challenge' }));
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
 
+    expect(screen.getByText('Correct classifications: 0/9.')).toBeInTheDocument();
+    expect(screen.queryByText('Stage 2 of 2')).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
-    expect(screen.getByText('Correct classifications: 0/9. Correct gamut decisions: 5/5.')).toBeInTheDocument();
   });
 
-  it('completes after both tasks are correct', () => {
+  it('advances in order and completes after both stages pass', () => {
     const onComplete = vi.fn();
-    render(<ColorSpaceLabTool interactive onComplete={onComplete} />);
+    const onStageChange = vi.fn();
+    render(<ColorSpaceLabTool interactive onComplete={onComplete} onStageChange={onStageChange} />);
 
     answerSortChallenge();
-    answerGamutChallenge();
-    fireEvent.click(screen.getByRole('button', { name: 'check challenge' }));
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+    expect(onComplete).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'classify gamut mapping' }));
 
+    expect(screen.getByText('Stage 2 of 2')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Classify the gamut samples' })).toHaveFocus();
+    expect(screen.queryByRole('combobox', { name: 'Category for #0B57D0' })).not.toBeInTheDocument();
+    expect(screen.getAllByRole('combobox')).toHaveLength(DISPLAY_P3_SAMPLES.length);
+
+    answerGamutChallenge();
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+
+    expect(screen.getByText('The P3 samples outside sRGB are marked for gamut mapping.')).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledOnce();
-    expect(screen.getByText(/Both tasks are correct/)).toBeInTheDocument();
+    expect(onStageChange.mock.calls.map(([stage]) => stage.id)).toEqual([
+      'classify-color-terms',
+      'classify-gamut-mapping',
+    ]);
   });
 });
