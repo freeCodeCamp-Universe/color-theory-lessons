@@ -74,7 +74,7 @@
 }
 
 .progressDot.current {
-  background-color: var(--yellow);
+  background-color: var(--accent-warning);
 }
 
 /* ── Question meta ───────────────────────────────────────────────────── */
@@ -94,7 +94,7 @@
 .partLabel {
   font-family: var(--font-mono);
   font-size: 0.7rem;
-  color: var(--yellow);
+  color: var(--accent-warning);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -163,7 +163,7 @@
 
 .choice:hover:not(.chosen):not(.correct):not(.incorrect):has(input:not(:disabled)) {
   border-color: var(--secondary-foreground);
-  background-color: var(--gray-75);
+  background-color: var(--hover-background);
 }
 
 .choice:has(input:focus-visible) {
@@ -177,8 +177,8 @@
 }
 
 .choice.chosen {
-  border-color: var(--yellow);
-  background-color: color-mix(in srgb, var(--yellow) 10%, var(--surface));
+  border-color: var(--accent-warning);
+  background-color: color-mix(in srgb, var(--accent-warning) 10%, var(--surface));
 }
 
 .choice.correct {
@@ -230,9 +230,8 @@
 
 .btnPrimary {
   padding: 0.5rem 1.25rem;
-  background-color: var(--yellow);
-  color: var(--gray-90);
-  font-family: var(--font-mono);
+  background-color: var(--accent-cta);
+  color: var(--cta-foreground);
   font-size: 0.85rem;
   font-weight: 700;
   border-radius: var(--radius-sm);
@@ -333,9 +332,9 @@
 }
 
 .completeBadgeFailed {
-  background-color: color-mix(in srgb, var(--yellow) 15%, var(--surface));
-  border: 1px solid var(--yellow);
-  color: var(--yellow);
+  background-color: color-mix(in srgb, var(--accent-warning) 15%, var(--surface));
+  border: 1px solid var(--accent-warning);
+  color: var(--accent-warning);
 }
 
 .completeTitle {

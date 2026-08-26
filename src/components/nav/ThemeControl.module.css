@@ -1,0 +1,20 @@
+.control {
+  margin-left: auto;
+}
+
+.select {
+  min-height: 30px;
+  padding: 0 var(--spacing-sm);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--secondary-background);
+  color: var(--primary-foreground);
+  font: inherit;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .select {
+    max-width: 8.5rem;
+  }
+}

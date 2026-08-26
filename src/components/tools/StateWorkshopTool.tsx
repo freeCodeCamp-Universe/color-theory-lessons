@@ -164,9 +164,8 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({
             onClick={checkStates}
             style={{
               alignSelf: 'flex-start', padding: '0.5rem 1.25rem',
-              background: 'var(--yellow)', color: 'var(--gray-90)',
-              fontFamily: 'var(--font-mono)', fontWeight: 700,
-              fontSize: '0.85rem', borderRadius: 'var(--radius-sm)',
+              background: 'var(--accent-cta)', color: 'var(--cta-foreground)',
+              fontWeight: 700, fontSize: '1rem', borderRadius: 'var(--radius-sm)',
               border: 'none', cursor: 'pointer',
             }}
           >

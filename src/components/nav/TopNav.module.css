@@ -13,8 +13,8 @@
 
 .logo {
   font-family: var(--font-mono);
-  font-size: 0.9rem;
-  color: var(--yellow);
+  font-size: 1rem;
+  color: var(--accent-warning);
   text-decoration: none;
   white-space: nowrap;
   flex-shrink: 0;
@@ -29,14 +29,12 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  margin-left: auto;
   list-style: none;
   overflow: hidden;
 }
 
 .menuButton {
   display: none;
-  margin-left: auto;
   padding: var(--spacing-xs) var(--spacing-sm);
   font-family: var(--font-mono);
   font-size: 1rem;
@@ -85,8 +83,7 @@
 }
 
 .link {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--secondary-foreground);
   text-decoration: none;
   padding: var(--spacing-xs) var(--spacing-sm);

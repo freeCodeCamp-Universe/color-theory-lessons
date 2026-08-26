@@ -22,7 +22,7 @@ const emptyProgress: ProgressState = {
   completedMilestones: [],
 };
 
-const defaultPrefs = { reducedMotion: false, colorBlindnessMode: null };
+const defaultPrefs = { theme: 'system' as const, reducedMotion: false, colorBlindnessMode: null };
 
 const sampleProgress: ProgressState = {
   completedLessons: ['unit-1-l1', 'unit-1-l2'],
@@ -31,7 +31,7 @@ const sampleProgress: ProgressState = {
   completedMilestones: ['milestone-1'],
 };
 
-const samplePrefs = { reducedMotion: true, colorBlindnessMode: 'deuteranopia' };
+const samplePrefs = { theme: 'dark' as const, reducedMotion: true, colorBlindnessMode: 'deuteranopia' };
 
 beforeEach(() => {
   localStorage.clear();
@@ -55,6 +55,16 @@ describe('loadState', () => {
     const { progress, preferences } = loadState();
     expect(progress).toEqual(sampleProgress);
     expect(preferences).toEqual(samplePrefs);
+  });
+
+  it('uses the system theme for stored preferences created before theme support', () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      version: VERSION,
+      progress: sampleProgress,
+      preferences: { reducedMotion: true, colorBlindnessMode: null },
+    }));
+
+    expect(loadState().preferences.theme).toBe('system');
   });
 
   it('returns defaults when stored version does not match', () => {
@@ -110,6 +120,7 @@ describe('saveState', () => {
     const { preferences } = loadState();
     expect(preferences.reducedMotion).toBe(true);
     expect(preferences.colorBlindnessMode).toBe('deuteranopia');
+    expect(preferences.theme).toBe('dark');
   });
 
   it('does not throw when localStorage is full', () => {

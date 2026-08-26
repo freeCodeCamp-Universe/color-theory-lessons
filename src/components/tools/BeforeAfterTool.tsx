@@ -331,7 +331,7 @@ function HierarchyDemo({
   const checked = stageController.result !== 'idle';
 
   const btnStyle = (role: BtnRole): React.CSSProperties => {
-    if (role === 'primary') return { background: 'var(--yellow)', color: 'var(--gray-90)', border: 'none', padding: '0.5rem 1.2rem', borderRadius: '3px', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 700 };
+    if (role === 'primary') return { background: 'var(--accent-cta)', color: 'var(--cta-foreground)', border: 'none', padding: '0.5rem 1.2rem', borderRadius: '3px', fontSize: '1rem', fontWeight: 700 };
     if (role === 'secondary') return { background: 'transparent', color: 'var(--secondary-foreground)', border: '1px solid var(--border)', padding: '0.5rem 1.2rem', borderRadius: '3px', fontFamily: 'var(--font-mono)', fontSize: '0.85rem' };
     return { background: 'transparent', color: 'var(--muted)', border: 'none', padding: '0.5rem 0.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', textDecoration: 'underline' };
   };
@@ -383,7 +383,7 @@ function HierarchyDemo({
       {interactive && !checked && (
         <button
           onClick={handleCheck}
-          style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'var(--yellow)', color: 'var(--gray-90)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.85rem', borderRadius: '3px', border: 'none', cursor: 'pointer' }}
+          style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'var(--accent-cta)', color: 'var(--cta-foreground)', fontWeight: 700, fontSize: '1rem', borderRadius: '3px', border: 'none', cursor: 'pointer' }}
         >
           check hierarchy
         </button>

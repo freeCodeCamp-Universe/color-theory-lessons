@@ -29,9 +29,8 @@
   align-items: center;
   width: fit-content;
   padding: 0.6rem 1.25rem;
-  background-color: var(--yellow);
-  color: var(--gray-90);
-  font-family: var(--font-mono);
+  background-color: var(--accent-cta);
+  color: var(--cta-foreground);
   font-size: 0.9rem;
   font-weight: 700;
   border-radius: var(--radius-sm);
@@ -175,7 +174,7 @@
 .lessonContinue {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--yellow);
+  color: var(--accent-warning);
   text-decoration: none;
   flex-shrink: 0;
 }
@@ -210,12 +209,12 @@
 
 /* Milestone row — visually distinct from lesson rows */
 .milestoneRow {
-  background-color: color-mix(in srgb, var(--yellow) 5%, var(--primary-background));
-  border-top: 1px solid color-mix(in srgb, var(--yellow) 25%, var(--border));
+  background-color: color-mix(in srgb, var(--accent-warning) 5%, var(--primary-background));
+  border-top: 1px solid color-mix(in srgb, var(--accent-warning) 25%, var(--border));
 }
 
 .milestoneIcon {
-  color: var(--yellow);
+  color: var(--accent-warning);
   font-size: 0.7rem;
   width: auto;
 }

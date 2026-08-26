@@ -198,7 +198,7 @@ export const TokenMapTool = memo(function TokenMapTool({
 
       {interactive && stageController.result === 'idle' && (
         <button onClick={checkSystem} style={{
-          padding: '0.4rem 1rem', background: 'var(--yellow)', color: '#111',
+          padding: '0.4rem 1rem', background: 'var(--accent-cta)', color: 'var(--cta-foreground)',
           border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer',
           fontFamily: 'var(--font-mono)', fontSize: '0.82rem',
         }}>
@@ -250,7 +250,7 @@ export const TokenMapTool = memo(function TokenMapTool({
 
           {stageController.result === 'idle' && (
             <button onClick={checkSort} style={{
-              padding: '0.4rem 1rem', background: 'var(--yellow)', color: '#111',
+              padding: '0.4rem 1rem', background: 'var(--accent-cta)', color: 'var(--cta-foreground)',
               border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer',
               fontFamily: 'var(--font-mono)', fontSize: '0.82rem',
             }}>

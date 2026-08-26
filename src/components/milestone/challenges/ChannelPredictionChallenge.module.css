@@ -129,8 +129,8 @@
 .button {
   border: none;
   border-radius: var(--radius-sm);
-  background-color: var(--yellow);
-  color: var(--gray-90);
+  background-color: var(--accent-cta);
+  color: var(--cta-foreground);
   font-family: var(--font-mono);
   font-size: 0.82rem;
   padding: 0.45rem 0.9rem;

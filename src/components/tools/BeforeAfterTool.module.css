@@ -92,8 +92,8 @@
   align-self: flex-start;
   margin-top: var(--spacing-xs);
   padding: 0.35rem 0.9rem;
-  background-color: var(--yellow);
-  color: var(--gray-90);
+  background-color: var(--accent-cta);
+  color: var(--cta-foreground);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
@@ -306,8 +306,8 @@
 
 .checkAnswerBtn {
   padding: 0.35rem 0.9rem;
-  background: var(--yellow);
-  color: var(--gray-90);
+  background: var(--accent-cta);
+  color: var(--cta-foreground);
   border: none;
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);
@@ -354,8 +354,8 @@
   align-self: flex-start;
   margin-top: var(--spacing-xs);
   padding: 0.35rem 0.9rem;
-  background: var(--yellow);
-  color: var(--gray-90);
+  background: var(--accent-cta);
+  color: var(--cta-foreground);
   border: none;
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);

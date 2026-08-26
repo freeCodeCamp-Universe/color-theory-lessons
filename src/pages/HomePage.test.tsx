@@ -21,7 +21,7 @@ function renderHomePage(completedMilestones: string[]) {
           completedQuizzes: [],
           quizBestScores: {},
           completedMilestones,
-          preferences: { reducedMotion: false, colorBlindnessMode: null },
+          preferences: { theme: 'system', reducedMotion: false, colorBlindnessMode: null },
         }}
       >
         <AppDispatchContext value={vi.fn()}>

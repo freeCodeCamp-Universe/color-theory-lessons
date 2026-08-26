@@ -51,13 +51,13 @@
 }
 
 .resetBtn:hover {
-  border-color: #ef4444;
-  color: #ef4444;
+  border-color: var(--accent-danger);
+  color: var(--accent-danger);
 }
 
 .resetBtnConfirm {
-  border-color: #ef4444;
-  color: #ef4444;
+  border-color: var(--accent-danger);
+  color: var(--accent-danger);
 }
 
 .cancelBtn {

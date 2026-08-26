@@ -323,8 +323,8 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
           {stageController.result !== 'passed' && (
             <button onClick={checkChallenge} style={{
               padding: '0.4rem 1rem',
-              background: 'var(--yellow)',
-              color: '#111',
+              background: 'var(--accent-cta)',
+              color: 'var(--cta-foreground)',
               border: 'none',
               borderRadius: 'var(--radius-sm)',
               cursor: 'pointer',

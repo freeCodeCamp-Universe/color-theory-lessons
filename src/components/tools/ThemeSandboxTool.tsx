@@ -201,8 +201,8 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
 
       {interactive && stageController.result === 'idle' && (
         <button onClick={checkTheme} style={{
-          padding: '0.4rem 1rem', background: 'var(--yellow)',
-          color: '#111',
+          padding: '0.4rem 1rem', background: 'var(--accent-cta)',
+          color: 'var(--cta-foreground)',
           border: 'none', borderRadius: 'var(--radius-sm)',
           cursor: 'pointer',
           fontFamily: 'var(--font-mono)', fontSize: '0.82rem',

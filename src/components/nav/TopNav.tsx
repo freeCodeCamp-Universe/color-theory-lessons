@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { ThemeControl } from './ThemeControl.tsx';
 import styles from './TopNav.module.css';
 
 const NAV_ITEMS = [
@@ -29,6 +30,7 @@ export function TopNav() {
           </li>
         ))}
       </ul>
+      <ThemeControl />
       <button
         type="button"
         className={styles.menuButton}

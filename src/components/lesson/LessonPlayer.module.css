@@ -93,7 +93,7 @@
 }
 
 .progressDot.current {
-  background-color: var(--yellow);
+  background-color: var(--accent-warning);
 }
 
 /* ── Step content ─────────────────────────────────────────────────────── */
@@ -117,7 +117,7 @@
 .stepNumber {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--yellow);
+  color: var(--accent-warning);
 }
 
 .stepText {
@@ -133,9 +133,8 @@
 
 .btnPrimary {
   padding: 0.5rem 1.25rem;
-  background-color: var(--yellow);
-  color: var(--gray-90);
-  font-family: var(--font-mono);
+  background-color: var(--accent-cta);
+  color: var(--cta-foreground);
   font-size: 0.85rem;
   font-weight: 700;
   border-radius: var(--radius-sm);
@@ -252,12 +251,12 @@
 
 .choice:hover:not(.chosen):not(.correct):not(.incorrect) {
   border-color: var(--secondary-foreground);
-  background-color: var(--gray-75);
+  background-color: var(--hover-background);
 }
 
 .choice.chosen {
-  border-color: var(--yellow);
-  background-color: color-mix(in srgb, var(--yellow) 10%, var(--surface));
+  border-color: var(--accent-warning);
+  background-color: color-mix(in srgb, var(--accent-warning) 10%, var(--surface));
   color: var(--primary-foreground);
 }
 

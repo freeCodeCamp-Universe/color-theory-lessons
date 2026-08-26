@@ -132,7 +132,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({
               background: targetHex, border: '2px solid var(--border)',
             }} />
             <button onClick={checkMatch} style={{
-              padding: '0.4rem 1rem', background: 'var(--yellow)', color: '#111',
+              padding: '0.4rem 1rem', background: 'var(--accent-cta)', color: 'var(--cta-foreground)',
               border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer',
               fontFamily: 'var(--font-mono)', fontSize: '0.82rem',
             }}>
