@@ -40,7 +40,7 @@
 .menuButton {
   display: none;
   padding: var(--spacing-xs) var(--spacing-sm);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1;
   color: var(--secondary-foreground);

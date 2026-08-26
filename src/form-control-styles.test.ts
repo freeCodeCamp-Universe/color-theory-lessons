@@ -15,4 +15,10 @@ describe('form control boundary styles', () => {
       /\.hexInputInvalid\s*{\s*border-color: var\(--accent-danger\);\s*}/,
     );
   });
+
+  it('restores the visible focus ring on Palette Builder sliders', () => {
+    expect(paletteCss).toMatch(
+      /\.slider:focus-visible\s*{\s*outline:\s*2px solid var\(--focus-ring\);\s*outline-offset:\s*2px;\s*}/,
+    );
+  });
 });

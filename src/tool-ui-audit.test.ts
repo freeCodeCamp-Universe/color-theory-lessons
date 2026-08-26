@@ -34,6 +34,17 @@ describe('tool UI audit regressions', () => {
     expect(source).not.toContain("color: '#f59e0b'");
   });
 
+  it('uses proportional type for System Stress context legends', () => {
+    const source = read('src/components/tools/SystemStressTestTool.tsx');
+
+    expect(source).toContain(
+      "<legend style={{ fontFamily: 'var(--font-sans)'",
+    );
+    expect(source).not.toContain(
+      "<legend style={{ fontFamily: 'var(--font-mono)'",
+    );
+  });
+
   it('marks only the Color Space and Palette Builder previews as authored visuals', () => {
     expect(read('src/components/tools/ColorSpaceLabTool.tsx')).toMatch(
       /<div data-authored-visual style={{ display: 'flex', gap: '0\.5rem', overflowX: 'auto' }}>/,

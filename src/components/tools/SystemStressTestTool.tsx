@@ -273,7 +273,7 @@ export const SystemStressTestTool = memo(function SystemStressTestTool({
             && classifications[finding.id] !== finding.expectedClassification;
           return (
             <fieldset key={finding.id} style={{ border: '1px solid var(--border)', borderRadius: 4, margin: 0, padding: '0.55rem' }}>
-              <legend style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', fontWeight: 600, padding: '0 0.25rem' }}>{finding.context}</legend>
+              <legend style={{ fontFamily: 'var(--font-sans)', fontSize: '0.78rem', fontWeight: 600, padding: '0 0.25rem' }}>{finding.context}</legend>
               {activeStageId === 'find-system-weaknesses' ? (
               <label style={{ alignItems: 'start', display: 'flex', fontSize: '0.78rem', gap: '0.4rem' }}>
                 <input checked={selected} disabled={!interactive || stageController.result === 'passed'} onChange={event => updateSelection(finding.id, event.target.checked)} type="checkbox" />
