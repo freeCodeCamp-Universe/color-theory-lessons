@@ -1,13 +1,13 @@
 .layout {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--spacing-lg);
   min-height: 60vh;
 }
 
 @media (min-width: 1000px) {
   .layout {
-    grid-template-columns: 340px 1fr;
+    grid-template-columns: 340px minmax(0, 1fr);
     align-items: start;
   }
 }
