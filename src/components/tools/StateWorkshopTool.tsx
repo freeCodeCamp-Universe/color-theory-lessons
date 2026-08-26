@@ -78,7 +78,7 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({
         completionFeedback="Each state has a distinct non-color treatment."
       >
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+      <div className={shellStyles.twoColumnGrid} style={{ gap: '0.5rem' }}>
         {STATES.map((state) => {
           const stateCues = cues[state.name];
           const hasAnyCue = Object.values(stateCues).some(Boolean);

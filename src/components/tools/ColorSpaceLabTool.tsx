@@ -177,7 +177,7 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
         <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.3rem' }}>
           sRGB fallback in different contexts:
         </p>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div data-authored-visual style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto' }}>
           <div style={{ flex: 1, textAlign: 'center' }}>
             <div style={{
               height: 36,
@@ -235,10 +235,12 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
               const answer = sortAnswers[item.label] ?? '';
               const isWrong = stageController.result === 'incorrect' && answer !== item.category;
               return (
-                <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                   <code style={{
                     fontSize: '0.75rem',
-                    minWidth: 170,
+                    minWidth: 0,
+                    flex: '1 1 170px',
+                    overflowWrap: 'anywhere',
                     color: isWrong ? 'var(--accent-danger)' : 'var(--primary-foreground)',
                   }}>
                     {item.label}
@@ -261,6 +263,9 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
                       border: `1px solid ${isWrong ? 'var(--accent-danger)' : 'var(--border)'}`,
                       borderRadius: 'var(--radius-sm)',
                       padding: '0.2rem 0.3rem',
+                      minWidth: 0,
+                      maxWidth: '100%',
+                      flex: '1 1 140px',
                     }}
                     aria-label={`Category for ${item.label}`}
                   >
@@ -281,10 +286,12 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
               const answer = gamutAnswers[sample.id] ?? '';
               const isWrong = stageController.result === 'incorrect' && answer !== expectedGamutAnswer(sample);
               return (
-                <div key={sample.id} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div key={sample.id} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                   <code style={{
                     fontSize: '0.75rem',
-                    minWidth: 170,
+                    minWidth: 0,
+                    flex: '1 1 170px',
+                    overflowWrap: 'anywhere',
                     color: isWrong ? 'var(--accent-danger)' : 'var(--primary-foreground)',
                   }}>
                     {sample.label}
@@ -307,6 +314,9 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
                       border: `1px solid ${isWrong ? 'var(--accent-danger)' : 'var(--border)'}`,
                       borderRadius: 'var(--radius-sm)',
                       padding: '0.2rem 0.3rem',
+                      minWidth: 0,
+                      maxWidth: '100%',
+                      flex: '1 1 140px',
                     }}
                     aria-label={`Gamut mapping for ${sample.label}`}
                   >

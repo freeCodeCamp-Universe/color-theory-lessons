@@ -69,7 +69,7 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
         {/* Ad-hoc mockup */}
         <div style={{ flex: '1 1 220px', minWidth: 200 }}>
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.4rem' }}>
-            AD-HOC {interactive && <span style={{ color: '#f59e0b' }}>(click inconsistencies)</span>}
+            AD-HOC {interactive && <span style={{ color: 'var(--accent-warning)' }}>(click inconsistencies)</span>}
           </p>
           <div data-authored-visual style={{ border: '1px solid #e5e7eb', borderRadius: 6, overflow: 'hidden', fontSize: '0.8rem' }}>
             {/* Header */}

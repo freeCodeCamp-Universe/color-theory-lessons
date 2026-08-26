@@ -100,7 +100,7 @@ function ChartBars({ colors, patterns, simulated }: { colors: string[]; patterns
   const displayColors = simulated ? colors.map(simulateDeuteranopia) : colors;
   const maxVal = 100;
   return (
-    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end', height: 100 }}>
+    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end', height: 100, width: '100%', maxWidth: '100%', overflowX: 'auto' }}>
       {MONTHS.map((month, mi) => (
         <div key={month} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
           <div style={{ display: 'flex', gap: 1, alignItems: 'flex-end', height: 80 }}>

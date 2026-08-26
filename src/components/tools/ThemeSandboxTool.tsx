@@ -146,7 +146,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
       </div>
 
       {/* Color role editors */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.35rem 0.75rem', marginBottom: '0.6rem' }}>
+      <div className={shellStyles.twoColumnGrid} style={{ gap: '0.35rem 0.75rem', marginBottom: '0.6rem' }}>
         {ROLES.map((role) => (
           <label key={role.key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.78rem' }}>
             <input type="color" value={colors[role.key]}
@@ -161,7 +161,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
       </div>
 
       {/* Gradient editors */}
-      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '0.6rem', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.78rem' }}>
           <input type="color" value={gradStart} disabled={inputsDisabled}
             onChange={(e) => setGradStart(e.target.value)}

@@ -1334,6 +1334,7 @@ export function PaletteBuilderPage() {
                     {/* Mini preview */}
                     <div
                       className={styles.miniPreview}
+                      data-authored-visual
                       style={{
                         backgroundColor: roles.background,
                         borderColor: roles.surface,

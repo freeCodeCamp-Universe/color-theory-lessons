@@ -364,14 +364,14 @@ function HierarchyDemo({
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>assign roles</span>
         {HIERARCHY_ITEMS.map((item) => (
-          <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
-            <label htmlFor={`hierarchy-role-${item.id}`} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', width: '90px' }}>{item.label}</label>
+          <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
+            <label htmlFor={`hierarchy-role-${item.id}`} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', flex: '1 1 90px' }}>{item.label}</label>
             <select
               id={`hierarchy-role-${item.id}`}
               value={roles[item.id]}
               onChange={(e) => setRoles((r) => ({ ...r, [item.id]: e.target.value as BtnRole }))}
               disabled={checked || !interactive}
-              style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', background: 'var(--primary-background)', color: 'var(--primary-foreground)', border: '1px solid var(--border)', borderRadius: '3px', padding: '0.3rem 0.5rem' }}
+              style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', background: 'var(--primary-background)', color: 'var(--primary-foreground)', border: '1px solid var(--border)', borderRadius: '3px', padding: '0.3rem 0.5rem', flex: '1 1 180px', minWidth: 0, maxWidth: '100%' }}
             >
               <option value="primary">primary (accent)</option>
               <option value="secondary">secondary (outlined)</option>

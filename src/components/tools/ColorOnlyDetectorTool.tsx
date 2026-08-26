@@ -210,7 +210,7 @@ export const ColorOnlyDetectorTool = memo(function ColorOnlyDetectorTool({
           {selected.size}/3 examples selected
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+        <div className={shellStyles.twoColumnGrid} style={{ gap: '0.5rem' }}>
           {EXAMPLES.map((example) => {
             const isSelected = selected.has(example.id);
             const showCorrect = stageController.result === 'passed' && example.isColorOnly;

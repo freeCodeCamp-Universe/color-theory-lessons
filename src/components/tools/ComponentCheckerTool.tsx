@@ -178,7 +178,7 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
               </div>
 
               {interactive && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
                   <div style={{ width: 20, height: 20, borderRadius: 3, background: isValidHex(color) ? color : '#ccc', border: '1px solid var(--border)', flexShrink: 0 }} />
                   <input
                     type="text"
@@ -189,11 +189,11 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
                       fontFamily: 'var(--font-mono)', fontSize: '0.78rem',
                       padding: '0.2rem 0.4rem', borderRadius: 'var(--radius-sm)',
                       border: '1px solid var(--border)', background: 'var(--surface)',
-                      color: 'var(--primary-foreground)', width: '7rem',
+                      color: 'var(--primary-foreground)', width: '7rem', maxWidth: '100%', minWidth: 0, flex: '1 1 7rem',
                     }}
                     aria-label={`${comp.label} hex color`}
                   />
-                  <span style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>{comp.description}</span>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--muted)', flex: '1 1 100%' }}>{comp.description}</span>
                 </div>
               )}
             </div>
