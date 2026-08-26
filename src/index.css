@@ -182,9 +182,11 @@ textarea:disabled {
   cursor: not-allowed;
 }
 
-input:not([type='color']):not([type='range']):not(:disabled),
-select:not(:disabled),
-textarea:not(:disabled) {
+:where(
+  input:not([type='color']):not([type='range']):not(:disabled),
+  select:not(:disabled),
+  textarea:not(:disabled)
+) {
   border-color: var(--border-strong);
 }
 
