@@ -68,16 +68,8 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({
 
   const inputsDisabled = !interactive || stageController.result !== 'idle';
 
-  return (
-    <div className={shellStyles.shell}>
-      <span className={shellStyles.toolLabel}>hsl playground</span>
-
-      <ExerciseStage
-        controller={stageController}
-        incorrectFeedback="The color is outside the target range. Try this stage again."
-        passedFeedback="Target matched. Continue to the next target."
-        completionFeedback="All three HSL targets matched."
-      >
+  const playground = (
+    <>
         <div style={{ display: 'flex', gap: 'var(--spacing-lg)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
         <HueWheel
           hue={h}
@@ -149,7 +141,23 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({
           </div>
         </div>
       )}
-      </ExerciseStage>
+    </>
+  );
+
+  return (
+    <div className={shellStyles.shell}>
+      <span className={shellStyles.toolLabel}>hsl playground</span>
+
+      {interactive ? (
+        <ExerciseStage
+          controller={stageController}
+          incorrectFeedback="The color is outside the target range. Try this stage again."
+          passedFeedback="Target matched. Continue to the next target."
+          completionFeedback="All three HSL targets matched."
+        >
+          {playground}
+        </ExerciseStage>
+      ) : playground}
     </div>
   );
 });

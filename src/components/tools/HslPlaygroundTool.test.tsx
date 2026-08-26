@@ -12,6 +12,15 @@ describe('HslPlaygroundTool hue controls', () => {
     expect(screen.getByText('rgb(64 149 191)')).toBeInTheDocument();
   });
 
+  it('keeps assessment stages out of the instructional preview', () => {
+    render(<HslPlaygroundTool interactive={false} />);
+
+    expect(screen.getByText('hsl(200 50% 50%)')).toBeInTheDocument();
+    expect(screen.queryByText('Stage 1 of 3')).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Match muted teal surface' }))
+      .not.toBeInTheDocument();
+  });
+
   it('keeps the hue wheel and slider synchronized across the range boundary', () => {
     render(<HslPlaygroundTool interactive={true} />);
     const wheel = screen.getByRole('slider', { name: /Hue wheel/i });
