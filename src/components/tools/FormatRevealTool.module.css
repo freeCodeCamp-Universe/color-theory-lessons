@@ -21,7 +21,7 @@
 .instruction {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--yellow);
+  color: var(--accent-warning);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -37,20 +37,20 @@
 
 /* Clickable elements get a ring on selected/visited */
 .selected {
-  outline: 2px solid var(--yellow) !important;
+  outline: 2px solid var(--accent-warning) !important;
   outline-offset: -2px;
   z-index: 1;
   position: relative;
 }
 
 .visited {
-  outline: 1px solid var(--green) !important;
+  outline: 1px solid var(--accent-success) !important;
   outline-offset: -1px;
 }
 
 /* When both visited and selected, selected wins */
 .selected.visited {
-  outline: 2px solid var(--yellow) !important;
+  outline: 2px solid var(--accent-warning) !important;
 }
 
 /* ── Nav ─────────────────────────────────────────────────────────────── */
@@ -227,7 +227,7 @@
 .formatValue {
   font-family: var(--font-mono);
   font-size: 0.9rem;
-  color: var(--yellow);
+  color: var(--accent-warning);
   letter-spacing: 0.03em;
 }
 

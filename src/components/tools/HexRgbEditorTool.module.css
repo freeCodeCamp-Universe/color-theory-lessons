@@ -20,8 +20,7 @@
 }
 
 .swatchLabel {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--muted);
   text-transform: uppercase;
 }
@@ -35,7 +34,7 @@
 
 .swatchValue {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--secondary-foreground);
 }
 
@@ -59,15 +58,14 @@
 }
 
 .sliderName {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--primary-foreground);
 }
 
 .sliderValue {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--muted);
 }
 
@@ -91,8 +89,7 @@
 }
 
 .hexLabel {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--muted);
   text-transform: uppercase;
   white-space: nowrap;
@@ -100,8 +97,8 @@
 
 .hexInput {
   font-family: var(--font-mono);
-  font-size: 0.9rem;
-  background: var(--background);
+  font-size: 1rem;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--primary-foreground);
@@ -112,7 +109,7 @@
 }
 
 .hexInput:focus {
-  outline: 2px solid var(--primary, #6366f1);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 1px;
 }
 
@@ -122,9 +119,8 @@
 }
 
 .hexError {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: #f87171;
+  font-size: 1rem;
+  color: var(--accent-danger);
 }
 
 /* ─── Presets ────────────────────────────────── */
@@ -135,8 +131,7 @@
 }
 
 .presetsLabel {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--muted);
   text-transform: uppercase;
 }
@@ -154,16 +149,15 @@
   padding: 4px 10px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  background: var(--background);
+  background: var(--surface);
   cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--secondary-foreground);
   transition: border-color 0.15s;
 }
 
 .presetBtn:hover:not(:disabled) {
-  border-color: var(--primary, #6366f1);
+  border-color: var(--border-strong);
   color: var(--primary-foreground);
 }
 
@@ -185,12 +179,11 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
+  font-size: 1rem;
 }
 
 .matchPass {
-  color: #4ade80;
+  color: var(--accent-success);
 }
 
 .matchFail {
@@ -201,10 +194,9 @@
   padding: 8px 20px;
   border-radius: var(--radius-sm);
   border: none;
-  background: var(--primary, #6366f1);
-  color: #fff;
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  background: var(--accent-cta);
+  color: var(--cta-foreground);
+  font-size: 1rem;
   cursor: pointer;
   align-self: flex-start;
 }
@@ -215,7 +207,6 @@
 }
 
 .progress {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 1rem;
   color: var(--muted);
 }

@@ -143,7 +143,7 @@ export const HSLSliderTool = memo(function HSLSliderTool({
                   return (
                     <div key={ch} className={styles.sliderRow}>
                       <div className={styles.sliderHeader}>
-                        <span className={styles.sliderName} style={{ color: isActive ? 'var(--yellow)' : undefined }}>{labels[ch]}</span>
+                        <span className={styles.sliderName} style={{ color: isActive ? 'var(--accent-warning)' : undefined }}>{labels[ch]}</span>
                         <span className={styles.sliderVal}>{preview[ch]}{units[ch]}</span>
                       </div>
                       <input
@@ -174,9 +174,9 @@ export const HSLSliderTool = memo(function HSLSliderTool({
 
       <ExerciseStage
         controller={{ ...stageController, advance: handleAdvance }}
-        incorrectFeedback={<span style={{ color: 'var(--red)' }}>No match yet. Try this stage again.</span>}
-        passedFeedback={<span style={{ color: 'var(--green)' }}>✓ Target matched.</span>}
-        completionFeedback={<span style={{ color: 'var(--green)' }}>✓ All three dimensions matched.</span>}
+        incorrectFeedback={<span style={{ color: 'var(--accent-danger)' }}>No match yet. Try this stage again.</span>}
+        passedFeedback={<span style={{ color: 'var(--accent-success)' }}>✓ Target matched.</span>}
+        completionFeedback={<span style={{ color: 'var(--accent-success)' }}>✓ All three dimensions matched.</span>}
       >
       <div className={styles.root}>
         <div style={{ display: 'flex', gap: 'var(--spacing-lg)', flexWrap: 'wrap', alignItems: 'flex-start' }}>

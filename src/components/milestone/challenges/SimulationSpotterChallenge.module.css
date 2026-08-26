@@ -20,7 +20,7 @@
   padding: 0.35rem 0.65rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  color: var(--blue);
+  color: var(--accent-link);
   font-family: var(--font-mono);
   font-size: 0.72rem;
 }
@@ -51,9 +51,9 @@
 }
 
 .flagged {
-  border-color: var(--yellow);
-  color: var(--yellow);
-  background: color-mix(in srgb, var(--yellow) 10%, var(--surface));
+  border-color: var(--accent-warning);
+  color: var(--accent-warning);
+  background: color-mix(in srgb, var(--accent-warning) 10%, var(--surface));
 }
 
 .swatches {
@@ -100,8 +100,8 @@
   color: var(--muted);
 }
 
-.good { color: var(--green); }
-.bad { color: var(--red); }
+.good { color: var(--accent-success); }
+.bad { color: var(--accent-danger); }
 
 .actions {
   display: flex;

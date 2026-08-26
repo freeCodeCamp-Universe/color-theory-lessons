@@ -72,14 +72,14 @@ export const LogicFixerTool = memo(function LogicFixerTool({
       <span className={shellStyles.toolLabel}>paint logic vs screen logic</span>
       <div style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
         <div style={{ flex: 1, minWidth: '120px', background: '#ede8e0', borderRadius: 'var(--radius-sm)', padding: 'var(--spacing-sm) var(--spacing-md)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', textTransform: 'uppercase', color: '#7a5000', letterSpacing: '0.05em' }}>paint logic</span>
-          <span style={{ fontSize: '0.8rem', color: '#4a3000' }}>pigment mixtures often look darker and less saturated</span>
-          <span style={{ fontSize: '0.8rem', color: '#4a3000' }}>ideal subtractive primaries → black</span>
+          <span style={{ fontSize: '1rem', textTransform: 'uppercase', color: 'var(--yellow-dark)', letterSpacing: '0.05em' }}>paint logic</span>
+          <span style={{ fontSize: '1rem', color: '#4a3000' }}>pigment mixtures often look darker and less saturated</span>
+          <span style={{ fontSize: '1rem', color: '#4a3000' }}>ideal subtractive primaries → black</span>
         </div>
         <div style={{ flex: 1, minWidth: '120px', background: 'var(--surface)', borderRadius: 'var(--radius-sm)', padding: 'var(--spacing-sm) var(--spacing-md)', display: 'flex', flexDirection: 'column', gap: '4px', border: '1px solid var(--border)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--yellow)', letterSpacing: '0.05em' }}>screen logic</span>
-          <span style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>higher RGB values → more light</span>
-          <span style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>full RGB primaries → white</span>
+          <span style={{ fontSize: '1rem', textTransform: 'uppercase', color: 'var(--accent-warning)', letterSpacing: '0.05em' }}>screen logic</span>
+          <span style={{ fontSize: '1rem', color: 'var(--secondary-foreground)' }}>higher RGB values → more light</span>
+          <span style={{ fontSize: '1rem', color: 'var(--secondary-foreground)' }}>full RGB primaries → white</span>
         </div>
       </div>
       {interactive && (
@@ -97,7 +97,7 @@ export const LogicFixerTool = memo(function LogicFixerTool({
                 <button
                   key={choice.id} type="button" onClick={() => handleSelect(choice.id)}
                   disabled={stageController.result !== 'idle'} aria-pressed={isSelected}
-                  style={{ padding: 'var(--spacing-sm) var(--spacing-md)', background: isSelected ? 'color-mix(in srgb, var(--yellow) 10%, var(--surface))' : 'var(--surface)', border: `1px solid ${isSelected ? 'var(--yellow)' : 'var(--border)'}`, borderRadius: 'var(--radius-sm)', color: 'var(--primary-foreground)', fontFamily: 'var(--font-sans)', fontSize: '0.875rem', textAlign: 'left', cursor: stageController.result === 'idle' ? 'pointer' : 'default' }}
+                  style={{ padding: 'var(--spacing-sm) var(--spacing-md)', background: isSelected ? 'color-mix(in srgb, var(--accent-warning) 10%, var(--surface))' : 'var(--surface)', border: `1px solid ${isSelected ? 'var(--accent-warning)' : 'var(--border)'}`, borderRadius: 'var(--radius-sm)', color: 'var(--primary-foreground)', fontFamily: 'var(--font-sans)', fontSize: '1rem', textAlign: 'left', cursor: stageController.result === 'idle' ? 'pointer' : 'default' }}
                 >
                   {choice.label}
                 </button>

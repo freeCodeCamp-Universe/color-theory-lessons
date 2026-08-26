@@ -144,7 +144,7 @@ export const RGBMixerTool = memo(function RGBMixerTool({
                 <button
                   key={option.id} type="button" onClick={() => choosePrediction(option.id)}
                   disabled={stageController.result !== 'idle'} aria-pressed={prediction === option.id}
-                  style={{ textAlign: 'left', border: `1px solid ${prediction === option.id ? 'var(--yellow)' : 'var(--border)'}` }}
+                  style={{ textAlign: 'left', border: `1px solid ${prediction === option.id ? 'var(--accent-warning)' : 'var(--border)'}` }}
                 >
                   {option.label}
                 </button>

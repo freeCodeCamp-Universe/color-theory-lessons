@@ -17,7 +17,7 @@
 }
 
 .brand {
-  color: var(--blue);
+  color: var(--accent-link);
 }
 
 .grid {
@@ -127,11 +127,11 @@
 }
 
 .good {
-  color: var(--green);
+  color: var(--accent-success);
 }
 
 .bad {
-  color: var(--red);
+  color: var(--accent-danger);
 }
 
 .actions {

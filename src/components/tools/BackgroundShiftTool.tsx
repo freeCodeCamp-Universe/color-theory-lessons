@@ -44,9 +44,8 @@ function PixelZoomExplorer({ interactive }: { interactive: boolean }) {
       >
         <span
           style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.75rem',
-            color: 'var(--muted)',
+            fontSize: '1rem',
+            color: 'var(--gray-15)',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
           }}
@@ -58,11 +57,10 @@ function PixelZoomExplorer({ interactive }: { interactive: boolean }) {
           disabled={!interactive}
           style={{
             padding: '0.2rem 0.6rem',
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.7rem',
+            fontSize: '1rem',
             background: 'transparent',
-            color: 'var(--yellow)',
-            border: '1px solid var(--yellow)',
+            color: 'var(--yellow-light)',
+            border: '1px solid var(--yellow-light)',
             borderRadius: '3px',
             cursor: interactive ? 'pointer' : 'not-allowed',
             opacity: interactive ? 1 : 0.4,
@@ -96,9 +94,8 @@ function PixelZoomExplorer({ interactive }: { interactive: boolean }) {
           ))}
           <p
             style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.7rem',
-              color: 'var(--muted)',
+              fontSize: '1rem',
+              color: 'var(--gray-15)',
               margin: '4px 0 0',
               textAlign: 'center',
             }}
@@ -119,9 +116,8 @@ function PixelZoomExplorer({ interactive }: { interactive: boolean }) {
           />
           <p
             style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.7rem',
-              color: 'var(--muted)',
+              fontSize: '1rem',
+              color: 'var(--gray-15)',
               margin: 0,
               textAlign: 'center',
             }}
@@ -353,18 +349,18 @@ export const BackgroundShiftTool = memo(function BackgroundShiftTool({
               const isSelected = selected === choice.id;
               const showResult = submitted;
               const borderColor = showResult && choice.isCorrect
-                ? 'var(--green)'
+                ? 'var(--accent-success)'
                 : showResult && isSelected && !choice.isCorrect
-                ? 'var(--red)'
+                ? 'var(--accent-danger)'
                 : isSelected
-                ? 'var(--yellow)'
+                ? 'var(--accent-warning)'
                 : 'var(--border)';
               const bg = showResult && choice.isCorrect
-                ? 'color-mix(in srgb, var(--green) 8%, var(--surface))'
+                ? 'color-mix(in srgb, var(--accent-success) 8%, var(--surface))'
                 : showResult && isSelected && !choice.isCorrect
-                ? 'color-mix(in srgb, var(--red) 8%, var(--surface))'
+                ? 'color-mix(in srgb, var(--accent-danger) 8%, var(--surface))'
                 : isSelected
-                ? 'color-mix(in srgb, var(--yellow) 8%, var(--surface))'
+                ? 'color-mix(in srgb, var(--accent-warning) 8%, var(--surface))'
                 : 'var(--surface)';
               return (
                 <button
@@ -401,7 +397,7 @@ export const BackgroundShiftTool = memo(function BackgroundShiftTool({
               style={{
                 alignSelf: 'flex-start',
                 padding: '0.5rem 1.25rem',
-                background: selected ? 'var(--yellow)' : 'var(--border)',
+                background: selected ? 'var(--accent-cta)' : 'var(--border)',
                 color: 'var(--gray-90)',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 700,

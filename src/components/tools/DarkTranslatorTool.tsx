@@ -183,7 +183,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
                 style={{
                   padding: '0.2rem 0.6rem', fontSize: '0.75rem', borderRadius: 4, cursor: 'pointer',
                   background: preview === m ? 'var(--accent-cta)' : 'var(--surface, #1e293b)',
-                  color: preview === m ? '#fff' : 'var(--primary-foreground)',
+                  color: preview === m ? 'var(--cta-foreground)' : 'var(--primary-foreground)',
                   border: '1px solid var(--border)',
                 }}
               >
@@ -192,7 +192,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
             ))}
           </div>
 
-          <div style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #4a4a6a', marginBottom: '0.5rem' }}>
+          <div data-authored-visual style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #4a4a6a', marginBottom: '0.5rem' }}>
             <div style={{ background: surf, borderRadius: 4, padding: '0.4rem 0.5rem', border: '1px solid rgba(128,128,128,0.2)' }}>
               <div style={{ color: pt, fontWeight: 600, fontSize: '0.83rem' }}>Card Title</div>
               <div style={{ color: st, fontSize: '0.75rem' }}>Supporting detail</div>

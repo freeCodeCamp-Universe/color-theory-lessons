@@ -135,7 +135,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({
         </div>
 
         {/* Preview */}
-        <div style={{ flex: '1 1 180px', minWidth: 160 }}>
+        <div data-authored-visual style={{ flex: '1 1 180px', minWidth: 160 }}>
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>PREVIEW</p>
           <div style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
             <div style={{ color: pt, fontWeight: 600, fontSize: '0.85rem', marginBottom: '0.3rem' }}>Dashboard</div>

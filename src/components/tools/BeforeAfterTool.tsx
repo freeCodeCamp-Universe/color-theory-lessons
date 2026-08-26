@@ -178,8 +178,8 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
 
       <ExerciseStage
         controller={stageController}
-        incorrectFeedback={<span style={{ color: 'var(--red)' }}>That role does not match this area.</span>}
-        completionFeedback={<span style={{ color: 'var(--green)' }}>✓ All four color roles identified.</span>}
+        incorrectFeedback={<span style={{ color: 'var(--accent-danger)' }}>That role does not match this area.</span>}
+        completionFeedback={<span style={{ color: 'var(--accent-success)' }}>✓ All four color roles identified.</span>}
         onRetry={() => setTriedAnswer(null)}
       >
 
@@ -347,12 +347,12 @@ function HierarchyDemo({
     <ExerciseStage
       controller={stageController}
       incorrectFeedback={(
-        <span style={{ color: 'var(--red)' }}>
+        <span style={{ color: 'var(--accent-danger)' }}>
           Submit should be primary, Save Draft secondary, and Cancel tertiary.
         </span>
       )}
       completionFeedback={(
-        <span style={{ color: 'var(--green)' }}>✓ Submit stands out as the primary action.</span>
+        <span style={{ color: 'var(--accent-success)' }}>✓ Submit stands out as the primary action.</span>
       )}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>

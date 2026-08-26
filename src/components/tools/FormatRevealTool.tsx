@@ -268,10 +268,10 @@ export const FormatRevealTool = memo(function FormatRevealTool({
             {/* Legend */}
             <div className={styles.legend}>
               <span className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: 'var(--yellow)' }} /> selected
+                <span className={styles.legendDot} style={{ background: 'var(--accent-warning)' }} /> selected
               </span>
               <span className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: 'var(--green)' }} /> explored
+                <span className={styles.legendDot} style={{ background: 'var(--accent-success)' }} /> explored
               </span>
             </div>
           </div>

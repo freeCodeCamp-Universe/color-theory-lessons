@@ -239,7 +239,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--muted)' }}>base hue</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--yellow)' }}>{baseH}°</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', color: 'var(--accent-warning)' }}>{baseH}°</span>
           </div>
           <input
             type="range"
@@ -271,9 +271,9 @@ export const ColorWheelTool = memo(function ColorWheelTool({
               style={{
                 padding: '0.4rem 0.75rem',
                 background: relationship === option ? 'var(--surface)' : 'transparent',
-                border: `1px solid ${relationship === option ? 'var(--yellow)' : 'var(--border)'}`,
+                border: `1px solid ${relationship === option ? 'var(--accent-warning)' : 'var(--border)'}`,
                 borderRadius: 'var(--radius-sm)',
-                color: relationship === option ? 'var(--yellow)' : 'var(--secondary-foreground)',
+                color: relationship === option ? 'var(--accent-warning)' : 'var(--secondary-foreground)',
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.8rem',
                 cursor: controlsInteractive ? 'pointer' : 'not-allowed',
@@ -319,9 +319,9 @@ export const ColorWheelTool = memo(function ColorWheelTool({
       <span className={shellStyles.toolLabel}>color wheel explorer</span>
       <ExerciseStage
         controller={stageController}
-        incorrectFeedback={<span style={{ color: 'var(--red)' }}>{validation.feedback}</span>}
-        passedFeedback={<span style={{ color: 'var(--green)' }}>✓ Palette locked.</span>}
-        completionFeedback={<span style={{ color: 'var(--green)' }}>✓ Relationship identified.</span>}
+        incorrectFeedback={<span style={{ color: 'var(--accent-danger)' }}>{validation.feedback}</span>}
+        passedFeedback={<span style={{ color: 'var(--accent-success)' }}>✓ Palette locked.</span>}
+        completionFeedback={<span style={{ color: 'var(--accent-success)' }}>✓ Relationship identified.</span>}
       >
         {stageController.activeStage.id === 'build-palette' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
@@ -352,8 +352,8 @@ export const ColorWheelTool = memo(function ColorWheelTool({
                     onClick={() => setValidationAnswer(choice.id)}
                     style={{
                       padding: '0.45rem 0.75rem',
-                      background: selected ? 'color-mix(in srgb, var(--yellow) 10%, var(--surface))' : 'var(--surface)',
-                      border: `1px solid ${selected ? 'var(--yellow)' : 'var(--border)'}`,
+                      background: selected ? 'color-mix(in srgb, var(--accent-warning) 10%, var(--surface))' : 'var(--surface)',
+                      border: `1px solid ${selected ? 'var(--accent-warning)' : 'var(--border)'}`,
                       borderRadius: 'var(--radius-sm)',
                       color: 'var(--primary-foreground)',
                       fontFamily: 'var(--font-sans)',
@@ -371,7 +371,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
               <button
                 disabled={!validationAnswer}
                 onClick={checkRelationship}
-                style={{ alignSelf: 'flex-start', padding: '0.4rem 1rem', background: validationAnswer ? 'var(--yellow)' : 'var(--border)', color: 'var(--gray-90)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.8rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: validationAnswer ? 'pointer' : 'not-allowed' }}
+                style={{ alignSelf: 'flex-start', padding: '0.4rem 1rem', background: validationAnswer ? 'var(--accent-cta)' : 'var(--border)', color: 'var(--cta-foreground)', fontWeight: 700, fontSize: '1rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: validationAnswer ? 'pointer' : 'not-allowed' }}
               >
                 check
               </button>

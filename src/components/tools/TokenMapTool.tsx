@@ -123,7 +123,7 @@ export const TokenMapTool = memo(function TokenMapTool({
           <input type="range" min={0} max={360} value={baseHue}
             disabled={inputsDisabled}
             onChange={(e) => setBaseHue(Number(e.target.value))}
-            style={{ width: '100%', accentColor: 'var(--yellow)' }}
+            style={{ width: '100%', accentColor: 'var(--accent-cta)' }}
             aria-label={`Base hue: ${baseHue} degrees`}
           />
         </label>
@@ -132,7 +132,7 @@ export const TokenMapTool = memo(function TokenMapTool({
           <input type="range" min={0} max={100} value={baseSat}
             disabled={inputsDisabled}
             onChange={(e) => setBaseSat(Number(e.target.value))}
-            style={{ width: '100%', accentColor: 'var(--yellow)' }}
+            style={{ width: '100%', accentColor: 'var(--accent-cta)' }}
             aria-label={`Base saturation: ${baseSat} percent`}
           />
         </label>
@@ -159,7 +159,7 @@ export const TokenMapTool = memo(function TokenMapTool({
           ))}
         </div>
         {interactive && !hueOk && (
-          <p style={{ fontSize: '0.78rem', color: 'var(--red)', marginTop: '0.3rem' }}>
+          <p style={{ fontSize: '1rem', color: 'var(--accent-danger)', marginTop: '0.3rem' }}>
             Action and error hues are too similar. Adjust the base hue so they are distinct.
           </p>
         )}
@@ -222,7 +222,7 @@ export const TokenMapTool = memo(function TokenMapTool({
                 <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <code style={{
                     fontSize: '0.75rem', minWidth: 180,
-                    color: isWrong ? 'var(--red)' : 'var(--primary-foreground)',
+                    color: isWrong ? 'var(--accent-danger)' : 'var(--primary-foreground)',
                   }}>
                     {item.label}
                   </code>
@@ -233,7 +233,7 @@ export const TokenMapTool = memo(function TokenMapTool({
                     style={{
                       fontSize: '0.75rem', fontFamily: 'var(--font-mono)',
                       background: 'var(--surface)', color: 'var(--primary-foreground)',
-                      border: `1px solid ${isWrong ? 'var(--red)' : 'var(--border)'}`,
+                      border: `1px solid ${isWrong ? 'var(--accent-danger)' : 'var(--border)'}`,
                       borderRadius: 'var(--radius-sm)', padding: '0.2rem 0.3rem',
                     }}
                     aria-label={`Category for ${item.label}`}

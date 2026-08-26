@@ -81,7 +81,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
 
   function resultColor(passes: boolean) {
     if (!showResults) return 'var(--muted)';
-    return passes ? 'var(--green)' : 'var(--red)';
+    return passes ? 'var(--accent-success)' : 'var(--accent-danger)';
   }
 
   function resultSymbol(passes: boolean) {
@@ -99,7 +99,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
         completionFeedback="Theme complete. All five checked text pairs meet 4.5:1."
       >
       {/* Live preview */}
-      <div style={{
+      <div data-authored-visual style={{
         background: colors.bg, borderRadius: 'var(--radius-md)', padding: '0.75rem',
         border: `1px solid ${colors.border}`, marginBottom: '0.75rem',
       }}>

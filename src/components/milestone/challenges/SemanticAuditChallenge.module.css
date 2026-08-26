@@ -35,7 +35,7 @@
 }
 
 .active {
-  border-color: var(--yellow);
+  border-color: var(--accent-warning);
 }
 
 .color {
@@ -99,8 +99,8 @@
   font-size: 0.74rem;
 }
 
-.good { color: var(--green); }
-.bad { color: var(--red); }
+.good { color: var(--accent-success); }
+.bad { color: var(--accent-danger); }
 
 .actions {
   display: flex;

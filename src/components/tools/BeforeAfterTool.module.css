@@ -194,7 +194,7 @@
 }
 
 .region:hover {
-  outline-color: var(--yellow);
+  outline-color: var(--accent-warning);
 }
 
 .region:focus-visible {
@@ -202,11 +202,11 @@
 }
 
 .regionActive {
-  outline-color: var(--blue) !important;
+  outline-color: var(--accent-link) !important;
 }
 
 .regionSolved {
-  outline-color: var(--green) !important;
+  outline-color: var(--accent-success) !important;
   cursor: default;
 }
 
@@ -214,7 +214,7 @@
   position: absolute;
   top: -8px;
   right: -8px;
-  background: var(--green);
+  background: var(--accent-success);
   color: var(--gray-90);
   font-size: 0.65rem;
   font-weight: 700;
@@ -237,7 +237,7 @@
 /* ── Answer panel ─────────────────────────────────────────────────────── */
 .answerPanel {
   background-color: var(--surface);
-  border: 1px solid var(--blue);
+  border: 1px solid var(--accent-link);
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
   display: flex;
@@ -295,7 +295,7 @@
 }
 
 .answerSelected {
-  border-color: var(--yellow);
+  border-color: var(--accent-warning);
   color: var(--primary-foreground);
 }
 
@@ -331,16 +331,16 @@
 }
 
 .answerCorrect {
-  background: color-mix(in srgb, var(--green) 12%, var(--surface));
-  border: 1px solid var(--green);
+  background: color-mix(in srgb, var(--accent-success) 12%, var(--surface));
+  border: 1px solid var(--accent-success);
   color: var(--primary-foreground);
   flex-direction: column;
   gap: var(--spacing-xs);
 }
 
 .answerIncorrect {
-  background: color-mix(in srgb, var(--red) 10%, var(--surface));
-  border: 1px solid var(--red);
+  background: color-mix(in srgb, var(--accent-danger) 10%, var(--surface));
+  border: 1px solid var(--accent-danger);
   color: var(--primary-foreground);
 }
 
@@ -380,5 +380,5 @@
 .allDone {
   font-family: var(--font-mono);
   font-size: 0.85rem;
-  color: var(--green);
+  color: var(--accent-success);
 }

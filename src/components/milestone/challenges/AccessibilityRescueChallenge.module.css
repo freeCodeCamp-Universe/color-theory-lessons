@@ -15,7 +15,7 @@
   font-size: 0.8rem;
 }
 
-.progress { color: var(--yellow); }
+.progress { color: var(--accent-warning); }
 
 .block {
   background: var(--surface);
@@ -56,7 +56,7 @@
 }
 
 .colorOnlyLabel {
-  color: var(--red);
+  color: var(--accent-danger);
   font-weight: 700;
 }
 
@@ -71,7 +71,7 @@
   padding: 0.3rem 0.55rem;
   font-family: var(--font-mono);
   font-size: 0.68rem;
-  color: var(--blue);
+  color: var(--accent-link);
 }
 
 .fakeButton {
@@ -104,8 +104,8 @@
   font-size: 1.2rem;
 }
 
-.good { color: var(--green); font-size: 0.74rem; }
-.bad { color: var(--red); font-size: 0.74rem; }
+.good { color: var(--accent-success); font-size: 1rem; }
+.bad { color: var(--accent-danger); font-size: 1rem; }
 
 .actions {
   display: flex;

@@ -18,7 +18,7 @@
 }
 
 .score {
-  color: var(--yellow);
+  color: var(--accent-warning);
 }
 
 .grid {
@@ -58,17 +58,17 @@
 }
 
 .good {
-  color: var(--green);
+  color: var(--accent-success);
 }
 
 .bad {
-  color: var(--red);
+  color: var(--accent-danger);
 }
 
 .result {
   margin: 0;
   padding: var(--spacing-sm);
-  border-left: 3px solid var(--yellow);
+  border-left: 3px solid var(--accent-warning);
   background-color: var(--primary-background);
   color: var(--primary-foreground);
   font-size: 0.88rem;

@@ -192,7 +192,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
           <input type="range" min={0} max={100} value={Math.round(alpha * 100)}
             disabled={inputsDisabled}
             onChange={(e) => setAlpha(Number(e.target.value) / 100)}
-            style={{ width: '100%', accentColor: 'var(--yellow)' }}
+            style={{ width: '100%', accentColor: 'var(--accent-cta)' }}
             aria-label={`Alpha: ${(alpha * 100).toFixed(0)} percent`}
           />
         </label>

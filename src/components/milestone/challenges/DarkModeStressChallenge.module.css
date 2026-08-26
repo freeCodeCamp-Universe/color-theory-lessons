@@ -59,8 +59,8 @@
   }
 }
 
-.good { color: var(--green); }
-.bad { color: var(--red); }
+.good { color: var(--accent-success); }
+.bad { color: var(--accent-danger); }
 
 .result {
   font-family: var(--font-mono);

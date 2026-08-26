@@ -173,7 +173,7 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
               </div>
 
               {/* Preview on white */}
-              <div style={{ background: '#ffffff', padding: '0.5rem', borderRadius: 'var(--radius-sm)', marginBottom: '0.4rem', border: '1px solid #f0f0f0' }}>
+              <div data-authored-visual style={{ background: '#ffffff', padding: '0.5rem', borderRadius: 'var(--radius-sm)', marginBottom: '0.4rem', border: '1px solid #f0f0f0' }}>
                 {comp.renderPreview(isValidHex(color) ? color : comp.defaultColor)}
               </div>
 

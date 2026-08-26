@@ -18,7 +18,7 @@
 }
 
 .score {
-  color: var(--yellow);
+  color: var(--accent-warning);
 }
 
 .card {
@@ -67,8 +67,8 @@
 }
 
 .active {
-  border-color: var(--yellow);
-  background-color: color-mix(in srgb, var(--yellow) 16%, var(--secondary-background));
+  border-color: var(--accent-warning);
+  background-color: color-mix(in srgb, var(--accent-warning) 16%, var(--secondary-background));
 }
 
 .choice:disabled,
@@ -114,7 +114,7 @@
 .result {
   margin: 0;
   padding: var(--spacing-sm);
-  border-left: 3px solid var(--yellow);
+  border-left: 3px solid var(--accent-warning);
   background-color: var(--primary-background);
   color: var(--primary-foreground);
   font-size: 0.88rem;

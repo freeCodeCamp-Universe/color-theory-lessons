@@ -220,7 +220,7 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
         </div>
 
         {/* Preview */}
-        <div style={{ flex: '1 1 200px', minWidth: 180 }}>
+        <div data-authored-visual style={{ flex: '1 1 200px', minWidth: 180 }}>
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>LIVE PREVIEW</p>
           <div style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
             <div style={{ background: surf, borderRadius: 4, padding: '0.5rem', marginBottom: '0.5rem', border: '1px solid #e5e7eb' }}>
