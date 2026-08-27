@@ -6,6 +6,7 @@ import { MilestonePlayer } from './MilestonePlayer.tsx';
 import { AppProvider } from '../../state/app-provider.tsx';
 import { useAppState } from '../../state/app-context.tsx';
 import { getMilestoneById } from '../../data/milestones.ts';
+import { ErrorBoundary } from '../ErrorBoundary.tsx';
 import type { MilestoneConfig } from '../../types/milestone.ts';
 
 vi.mock('./ChallengeRenderer.tsx', () => ({
@@ -26,13 +27,18 @@ beforeEach(() => {
   localStorage.clear();
   sessionStorage.clear();
 });
-afterEach(() => cleanup());
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+});
 
 function renderMilestone(milestone: MilestoneConfig) {
   return render(
     <MemoryRouter>
       <AppProvider>
-        <MilestonePlayer milestone={milestone} />
+        <ErrorBoundary>
+          <MilestonePlayer milestone={milestone} />
+        </ErrorBoundary>
         <StateReader />
       </AppProvider>
     </MemoryRouter>,
@@ -161,6 +167,52 @@ function completeQuiz(correctAnswers: number) {
 }
 
 describe('MilestonePlayer', () => {
+  describe('session storage failures', () => {
+    const sessionKey = 'color-theory-course-milestone-session:test-milestone';
+
+    it('starts a new milestone when the saved session is malformed', () => {
+      sessionStorage.setItem(sessionKey, '{not valid json');
+
+      renderMilestone(singleQuestionMilestone);
+
+      expect(screen.getByRole('group', { name: 'What color is the sky?' })).toBeInTheDocument();
+      expect(screen.queryByText('something went wrong.')).not.toBeInTheDocument();
+      fireEvent.click(screen.getByRole('radio', { name: /Blue/i }));
+      expect(screen.getByRole('button', { name: 'check' })).toBeEnabled();
+    });
+
+    it('starts and continues a milestone when reading the session throws', () => {
+      const originalGetItem = Storage.prototype.getItem;
+      const getItem = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(function (this: Storage, key) {
+        if (key === sessionKey) throw new Error('session storage is unavailable');
+        return originalGetItem.call(this, key);
+      });
+
+      renderMilestone(singleQuestionMilestone);
+
+      expect(getItem).toHaveBeenCalledWith(sessionKey);
+      expect(screen.queryByText('something went wrong.')).not.toBeInTheDocument();
+      fireEvent.click(screen.getByRole('radio', { name: /Blue/i }));
+      expect(screen.getByRole('button', { name: 'check' })).toBeEnabled();
+    });
+
+    it('continues a milestone when writing the session throws', async () => {
+      const originalSetItem = Storage.prototype.setItem;
+      const setItem = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+        if (key === sessionKey) throw new Error('session storage is unavailable');
+        return originalSetItem.call(this, key, value);
+      });
+
+      renderMilestone(singleQuestionMilestone);
+
+      await waitFor(() => expect(setItem).toHaveBeenCalledWith(sessionKey, expect.any(String)));
+      fireEvent.click(screen.getByRole('radio', { name: /Blue/i }));
+      fireEvent.click(screen.getByRole('button', { name: 'check' }));
+      expect(screen.getByRole('button', { name: 'finish milestone →' })).toBeInTheDocument();
+      expect(screen.queryByText('something went wrong.')).not.toBeInTheDocument();
+    });
+  });
+
   describe('accessible radio roles', () => {
     it('renders choices as radio inputs', () => {
       renderMilestone(singleQuestionMilestone);
