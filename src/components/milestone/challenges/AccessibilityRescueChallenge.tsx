@@ -153,7 +153,7 @@ export function AccessibilityRescueChallenge({
         {stageController.activeStage.id === 'required-field-cue' && (
           <section className={styles.block}>
             <div className={styles.row}>
-              <span className={styles.colorOnlyLabel}>Email address</span>
+              <span data-authored-visual className={styles.colorOnlyLabel}>Email address</span>
               <button type="button" className={styles.toggle} aria-pressed={requiredCueOn} disabled={stageController.result !== 'idle'} onClick={() => setRequiredCueOn((previous) => !previous)}>
                 {requiredCueOn ? 'remove icon and text cue' : 'add icon and text cue'}
               </button>
@@ -181,7 +181,7 @@ export function AccessibilityRescueChallenge({
 
         {stageController.activeStage.id === 'icon-contrast' && (
           <section className={styles.block}>
-            <div className={styles.iconPreview}>
+            <div data-authored-visual className={styles.iconPreview}>
               <span className={styles.icon} style={{ color: checks.iconColor }} role="img" aria-label="Settings">⚙</span>
             </div>
             <label className={styles.sliderLabel}>

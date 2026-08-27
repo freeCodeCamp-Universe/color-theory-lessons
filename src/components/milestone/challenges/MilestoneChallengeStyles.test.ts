@@ -16,7 +16,7 @@ const CHALLENGE_STYLES = [
 ] as const;
 
 const AUTHORED_SMALL_TYPE_COUNTS: Partial<Record<(typeof CHALLENGE_STYLES)[number], number>> = {
-  'AccessibilityRescueChallenge.module.css': 2,
+  'AccessibilityRescueChallenge.module.css': 3,
   'DarkModeStressChallenge.module.css': 1,
   'ThemeFromScratchChallenge.module.css': 3,
 };

@@ -56,7 +56,8 @@
 }
 
 .colorOnlyLabel {
-  color: var(--accent-danger);
+  color: var(--red);
+  font-size: 0.78rem;
   font-weight: 700;
 }
 

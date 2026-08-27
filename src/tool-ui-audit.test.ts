@@ -45,12 +45,35 @@ describe('tool UI audit regressions', () => {
     );
   });
 
-  it('marks only the Color Space and Palette Builder previews as authored visuals', () => {
+  it('marks instructional previews as authored visuals without exempting their controls', () => {
     expect(read('src/components/tools/ColorSpaceLabTool.tsx')).toMatch(
       /<div data-authored-visual style={{ display: 'flex', gap: '0\.5rem', overflowX: 'auto' }}>/,
     );
     expect(read('src/pages/PaletteBuilderPage.tsx')).toMatch(
       /className={styles\.miniPreview}\s+data-authored-visual/,
+    );
+    expect(read('src/components/tools/BeforeAfterTool.tsx')).toMatch(
+      /<div data-authored-visual style={{ background: 'var\(--surface\)'[^>]*>\s*{HIERARCHY_ITEMS\.map/,
+    );
+
+    const accessibilityRescue = read(
+      'src/components/milestone/challenges/AccessibilityRescueChallenge.tsx',
+    );
+    expect(accessibilityRescue).toContain(
+      '<span data-authored-visual className={styles.colorOnlyLabel}>Email address</span>',
+    );
+    expect(accessibilityRescue).toContain(
+      '<div data-authored-visual className={styles.iconPreview}>',
+    );
+    expect(accessibilityRescue).not.toMatch(
+      /<section data-authored-visual[^>]*className={styles\.block}/,
+    );
+
+    const accessibilityRescueCss = read(
+      'src/components/milestone/challenges/AccessibilityRescueChallenge.module.css',
+    );
+    expect(accessibilityRescueCss).toMatch(
+      /\.colorOnlyLabel\s*{[^}]*color: var\(--red\);[^}]*font-size: 0\.78rem;/s,
     );
   });
 
