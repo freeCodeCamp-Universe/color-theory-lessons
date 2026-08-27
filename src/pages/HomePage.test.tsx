@@ -16,6 +16,10 @@ function getUnit(name: string) {
   return screen.getByText(name).closest('[class*="unitCard"]') as HTMLElement;
 }
 
+function getLessonRow(name: string) {
+  return screen.getByText(name).closest('li') as HTMLElement;
+}
+
 describe('HomePage dashboard', () => {
   it('starts with the first unit expanded and locks later units and lessons', () => {
     renderWithAppState(<HomePage />);
@@ -25,7 +29,7 @@ describe('HomePage dashboard', () => {
     expect(screen.getByRole('link', { name: 'start learning' })).toHaveAttribute('href', '/lesson/u1-l1');
     expect(screen.getAllByRole('link', { name: 'continue →' })[0]).toHaveAttribute('href', '/lesson/u1-l1');
     expect(within(getUnit('How Screens Make Color')).getByText('locked')).toBeInTheDocument();
-    expect(screen.getAllByText('locked').length).toBeGreaterThan(1);
+    expect(within(getLessonRow('Hue, Saturation, and Lightness')).getByText('locked')).toBeInTheDocument();
   });
 
   it('shows continue, redo, and locked lesson actions for an in-progress unit', () => {
@@ -37,7 +41,7 @@ describe('HomePage dashboard', () => {
     expect(screen.getAllByRole('link', { name: 'continue →' })[0]).toHaveAttribute('href', '/lesson/u1-l2');
     expect(within(getUnit('Seeing and Describing Color')).getByText('1/6')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'redo →' })).toHaveAttribute('href', '/lesson/u1-l1');
-    expect(screen.getAllByText('locked').length).toBeGreaterThan(1);
+    expect(within(getLessonRow('Contrast and Readability')).getByText('locked')).toBeInTheDocument();
   });
 
   it('unlocks the milestone after every lesson in the unit is complete', () => {
