@@ -107,6 +107,14 @@ describe('tool UI audit regressions', () => {
     );
   });
 
+  it('keeps generated Palette Builder matrix samples at the 18px floor', () => {
+    const source = read('src/pages/PaletteBuilderPage.tsx');
+
+    expect(source).toMatch(
+      /fontFamily: 'var\(--font-mono\)',\s*fontSize: '1rem',[\s\S]{0,100}>\s*sample\s*<\/span>/,
+    );
+  });
+
   it('marks instructional previews as authored visuals without exempting their controls', () => {
     expect(read('src/components/tools/ColorSpaceLabTool.tsx')).toMatch(
       /<div data-authored-visual style={{ display: 'flex', gap: '0\.5rem', overflowX: 'auto' }}>/,

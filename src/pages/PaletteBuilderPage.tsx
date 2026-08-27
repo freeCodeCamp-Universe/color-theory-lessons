@@ -1286,7 +1286,7 @@ export function PaletteBuilderPage() {
                                 padding: '2px 8px',
                                 borderRadius: 'var(--radius-sm)',
                                 fontFamily: 'var(--font-mono)',
-                                fontSize: '0.85rem',
+                                fontSize: '1rem',
                               }}
                             >
                               sample
