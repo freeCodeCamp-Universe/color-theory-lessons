@@ -38,6 +38,7 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 |---|---|---|
 | Start with Unit 1 expanded while later units and lessons are visibly locked. | Full | `src/pages/HomePage.test.tsx` |
 | Expand or collapse an unlocked unit from its dashboard card. | Partial | `src/pages/HomePage.test.tsx` verifies pointer activation, but Enter and Space activation remain unverified. [#54](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/54) owns keyboard-only testing of every main learner flow. |
+| Point the hero continue action to the next progression-eligible lesson. | Partial | `src/pages/HomePage.test.tsx` verifies the first lesson and an in-progress unit; after Unit 1 lessons are complete but its milestone is not, the action points to locked Unit 2. [#118](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/118) owns the deferred progression-lock decision. |
 | Show start, continue, redo, and locked lesson actions from current progress. | Full | `src/pages/HomePage.test.tsx` |
 | Unlock a unit milestone after every lesson in that unit is complete. | Full | `src/pages/HomePage.test.tsx` |
 | Mark a passed unit complete, expand the next unit, and expose its first lesson. | Full | `src/pages/HomePage.test.tsx`, `e2e/critical-learner-journeys.spec.ts` |
@@ -129,7 +130,8 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 
 | Main behavior | Status | Automated test or accountable issue |
 |---|---|---|
-| Load default state when storage is empty, malformed, or from an unsupported version. | Full | `src/state/persistence.test.ts` |
+| Load default state when storage is empty, contains invalid JSON or a non-object value, or uses an unsupported version. | Full | `src/state/persistence.test.ts` |
+| Load a structurally malformed current-version saved state without crashing the app. | Missing | [#260](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/260) owns saved-state shape validation and its regression tests. |
 | Save and reload lesson, quiz, score, milestone, and preference state. | Full | `src/state/persistence.test.ts`, `src/state/app-context.test.ts`, `e2e/critical-learner-journeys.spec.ts` |
 | Keep the best quiz score and avoid duplicate completion records. | Full | `src/state/app-context.test.ts`, `src/hooks/useLessonCompletion.test.tsx`, `src/hooks/useMilestoneCompletion.test.tsx` |
 | Continue without crashing when saving main state fails because local storage is full or unavailable. | Full | `src/state/persistence.test.ts` |
