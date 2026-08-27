@@ -387,11 +387,11 @@ describe('MilestonePlayer', () => {
       });
     });
 
-    it('shows the configured description, time, part progress, and score', () => {
+    it('shows the configured description, part progress, and score without a time estimate', () => {
       renderMilestone(scoredMilestone);
 
       expect(screen.getByText('Test the complete scored flow.')).toBeInTheDocument();
-      expect(screen.getByText('About 10 minutes')).toBeInTheDocument();
+      expect(screen.queryByText('About 10 minutes')).not.toBeInTheDocument();
       expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1');
 
       fireEvent.click(screen.getByRole('button', { name: 'complete test challenge' }));
@@ -547,13 +547,18 @@ describe('MilestonePlayer', () => {
       });
     });
 
-    it('moves focus when the learner advances to a new phase or question', () => {
+    it('presents and focuses quiz instructions before the first question', () => {
       renderMilestone(scoredMilestone);
       fireEvent.click(screen.getByRole('button', { name: 'complete test challenge' }));
 
       expect(document.activeElement).toHaveTextContent('Part 1 complete');
       fireEvent.click(screen.getByRole('button', { name: 'next part →' }));
-      expect(document.activeElement).toHaveTextContent('Question 1?');
+
+      const instructions = screen.getByText('Answer three questions.').parentElement;
+      const question = screen.getByRole('group', { name: 'Question 1?' });
+      if (!instructions) throw new Error('Quiz instructions container was not found');
+      expect(instructions.compareDocumentPosition(question) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      expect(instructions).toHaveFocus();
 
       fireEvent.click(screen.getByRole('radio', { name: /Correct 1/ }));
       fireEvent.click(screen.getByRole('button', { name: 'check' }));

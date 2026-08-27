@@ -8,7 +8,16 @@
 @media (min-width: 1000px) {
   .layout {
     grid-template-columns: 340px minmax(0, 1fr);
+    grid-template-areas: 'panel context';
     align-items: start;
+  }
+
+  .panel {
+    grid-area: panel;
+  }
+
+  .contextPanel {
+    grid-area: context;
   }
 }
 
@@ -45,11 +54,6 @@
   color: var(--secondary-foreground);
   font-size: 1rem;
   line-height: 1.5;
-}
-
-.estimatedTime {
-  color: var(--muted);
-  font-size: 1rem;
 }
 
 /* ── Part progress dots ──────────────────────────────────────────────── */
@@ -353,6 +357,12 @@
 .contextPanel {
   display: flex;
   flex-direction: column;
+}
+
+.questionContext {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
 }
 
 /* Generic context card (for parts without a dedicated visual) */
