@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { LessonPlayer } from './LessonPlayer.tsx';
 import { AppProvider } from '../../state/app-provider.tsx';
 import { useAppState } from '../../state/app-context.tsx';
+import { ErrorBoundary } from '../ErrorBoundary.tsx';
 import type { LessonConfig } from '../../types/lesson.ts';
 
 const sessionKey = (lessonId: string) => `color-theory-course-lesson-session:${lessonId}`;
@@ -69,13 +70,18 @@ beforeEach(() => {
   localStorage.clear();
   sessionStorage.clear();
 });
-afterEach(() => cleanup());
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+});
 
 function renderLesson(lesson: LessonConfig) {
   return render(
     <MemoryRouter>
       <AppProvider>
-        <LessonPlayer lesson={lesson} />
+        <ErrorBoundary>
+          <LessonPlayer lesson={lesson} />
+        </ErrorBoundary>
         <StateReader />
       </AppProvider>
     </MemoryRouter>,
@@ -120,6 +126,53 @@ async function advanceThroughChallenge() {
 }
 
 describe('LessonPlayer', () => {
+  describe('session storage failures', () => {
+    it('starts a new lesson when the saved session is malformed', () => {
+      const lesson = makeLesson();
+      sessionStorage.setItem(sessionKey(lesson.id), '{not valid json');
+
+      renderLesson(lesson);
+
+      expect(screen.getByText('1 / 1')).toBeInTheDocument();
+      expect(screen.queryByText('something went wrong.')).not.toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: 'complete mock challenge' }));
+      expect(screen.getByRole('button', { name: 'take the quiz →' })).toBeInTheDocument();
+    });
+
+    it('starts and continues a lesson when reading the session throws', () => {
+      const originalGetItem = Storage.prototype.getItem;
+      const getItem = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(function (this: Storage, key) {
+        if (key === sessionKey('test-lesson')) throw new Error('session storage is unavailable');
+        return originalGetItem.call(this, key);
+      });
+
+      renderLesson(makeLesson());
+
+      expect(getItem).toHaveBeenCalledWith(sessionKey('test-lesson'));
+      expect(screen.queryByText('something went wrong.')).not.toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: 'complete mock challenge' }));
+      expect(screen.getByRole('button', { name: 'take the quiz →' })).toBeInTheDocument();
+    });
+
+    it('continues a lesson when writing the session throws', async () => {
+      const originalSetItem = Storage.prototype.setItem;
+      const setItem = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+        if (key === sessionKey('test-lesson')) throw new Error('session storage is unavailable');
+        return originalSetItem.call(this, key, value);
+      });
+
+      renderLesson(makeLesson());
+
+      await waitFor(() => expect(setItem).toHaveBeenCalledWith(
+        sessionKey('test-lesson'),
+        expect.any(String),
+      ));
+      fireEvent.click(screen.getByRole('button', { name: 'complete mock challenge' }));
+      expect(screen.getByRole('button', { name: 'take the quiz →' })).toBeInTheDocument();
+      expect(screen.queryByText('something went wrong.')).not.toBeInTheDocument();
+    });
+  });
+
   it('moves through the complete lesson flow and preserves completion after redo', async () => {
     localStorage.setItem('color-theory-course-state', JSON.stringify({
       version: 3,
