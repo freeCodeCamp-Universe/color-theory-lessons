@@ -42,13 +42,14 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | Mark a passed unit complete, expand the next unit, and expose its first lesson. | Full | `src/pages/HomePage.test.tsx`, `e2e/critical-learner-journeys.spec.ts` |
 | Cancel a progress reset without changing completed work. | Full | `src/pages/HomePage.test.tsx` |
 | Confirm a progress reset and return the dashboard to its initial progression state. | Full | `src/pages/HomePage.test.tsx`, `src/state/app-context.test.ts`, `src/state/app-provider.test.tsx` |
-| Clear saved milestone attempts when progress is reset. | Full | `src/state/app-provider.test.tsx`, `src/state/persistence.test.ts` |
+| Clear saved milestone attempts when progress is reset. | Partial | `src/state/app-provider.test.tsx` and `src/state/persistence.test.ts` verify the milestone player plus five challenge-session prefixes; clearing Semantic Audit and Dark Mode Stress sessions remains unverified. |
+| Retain an unfinished lesson session when dashboard progress is reset. | Full | `src/state/app-provider.test.tsx` |
 
 ## Shared lesson flow
 
 | Main behavior | Status | Automated test or accountable issue |
 |---|---|---|
-| Advance through every instructional step before entering the challenge. | Full | `src/components/lesson/LessonPlayer.test.tsx` |
+| Move forward and backward through instructional steps before entering the challenge. | Full | `src/components/lesson/LessonPlayer.test.tsx` |
 | Keep quiz and completion actions unavailable until the interactive challenge reports success. | Full | `src/components/lesson/LessonPlayer.test.tsx` |
 | Show the challenge prompt with hints closed initially. | Full | `src/components/lesson/LessonPlayer.test.tsx`, `src/components/lesson/ChallengeHints.test.tsx` |
 | Show only hints assigned to the active exercise stage and reset hint state after a stage change. | Full | `src/components/lesson/LessonPlayer.test.tsx`, `src/components/lesson/ChallengeHints.test.tsx` |
@@ -79,12 +80,12 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | `mismatch-explainer`: identify every mismatch factor before advancing. | Full | `src/components/tools/Unit2ExerciseStages.test.tsx` |
 | `background-shift`: compare each background effect and advance only after a passing check. | Full | `src/components/tools/Unit2ExerciseStages.test.tsx` |
 | `format-reveal`: inspect every interface element, see equivalent color formats, and complete the stage. | Full | `src/components/tools/FormatRevealTool.test.tsx` |
-| `hex-rgb-editor`: match each target with synchronized HEX and RGB values before completion. | Full | `src/components/tools/HexRgbEditorTool.test.tsx` |
+| `hex-rgb-editor`: match each HEX target, see the RGB readout, and complete after all three stages. | Partial | `src/components/tools/HexRgbEditorTool.test.tsx` covers the initial RGB readout and HEX-driven completion, but does not assert that the RGB readout changes after a HEX edit. |
 | `hsl-playground`: use synchronized hue controls, pass one target at a time, and complete after the final target. | Full | `src/components/tools/HslPlaygroundTool.test.tsx` |
 | `alpha-layer`: pass all four overlay contexts and reject a contrast result that only appears to pass after rounding. | Full | `src/components/tools/AlphaLayerTool.test.tsx` |
 | `theme-sandbox`: repair all five text pairs, see their ratios and targets, and retry a failed theme. | Full | `src/components/tools/ThemeSandboxTool.test.tsx` |
 | `token-map`: set a valid base, distinguish raw values from palette and role tokens, and classify every item. | Full | `src/components/tools/TokenMapTool.test.tsx`, `src/components/lesson/TokenMapLessonFlow.test.tsx` |
-| `color-space-lab`: compare P3 with its sRGB fallback, classify gamut samples, retry, and pass both stages. | Full | `src/components/tools/ColorSpaceLabTool.test.tsx` |
+| `color-space-lab`: compare P3 with its sRGB fallback, classify gamut samples, and pass both stages. | Partial | `src/components/tools/ColorSpaceLabTool.test.tsx` covers a failed submission and the passing path, but does not use the retry action after failure. |
 | `eye-diagram`: reveal the visual pathway in order and complete after its final stage. | Full | `src/components/tools/EyeDiagramTool.test.tsx` |
 | `vision-cards`: open all six cards while keeping visible progress, then complete. | Full | `src/components/tools/Unit4ExerciseStages.test.tsx`, `src/components/tools/VisionCardsTool.test.tsx` |
 | `interface-gallery`: review every required simulation mode and complete the review stage. | Full | `src/components/tools/Unit4ExerciseStages.test.tsx`, `src/components/tools/InterfaceGalleryTool.test.tsx` |
@@ -129,8 +130,9 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | Load default state when storage is empty, malformed, or from an unsupported version. | Full | `src/state/persistence.test.ts` |
 | Save and reload lesson, quiz, score, milestone, and preference state. | Full | `src/state/persistence.test.ts`, `src/state/app-context.test.ts`, `e2e/critical-learner-journeys.spec.ts` |
 | Keep the best quiz score and avoid duplicate completion records. | Full | `src/state/app-context.test.ts`, `src/hooks/useLessonCompletion.test.tsx`, `src/hooks/useMilestoneCompletion.test.tsx` |
-| Continue without crashing when local or session storage is unavailable or full. | Full | `src/state/persistence.test.ts` |
-| Select light, dark, or system theme and persist the explicit selection. | Full | `src/components/nav/ThemeControl.test.tsx`, `src/state/persistence.test.ts` |
+| Continue without crashing when saving main state fails because local storage is full or unavailable. | Full | `src/state/persistence.test.ts` |
+| Continue resetting progress when milestone-session key enumeration is unavailable. | Full | `src/state/persistence.test.ts` |
+| Select a theme and persist the explicit selection. | Partial | `src/components/nav/ThemeControl.test.tsx` verifies selection of dark, and `e2e/critical-learner-journeys.spec.ts` verifies a saved light value. Selecting light and switching back to system through the control remain unverified. |
 | Follow operating-system theme changes while the preference is `system`. | Full | `src/components/nav/ThemeControl.test.tsx` |
 | Apply the saved theme before React renders, then keep it through navigation and reload. | Full | `src/theme-prepaint.test.ts`, `e2e/critical-learner-journeys.spec.ts` |
 | Keep application theme tokens at their required contrast in light and dark themes. | Full | `src/theme-contrast.test.ts`, `src/badge-contrast.test.ts`, `src/cta-usage.test.ts` |
