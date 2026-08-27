@@ -31,6 +31,7 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | Return home from an open mobile menu by using the course logo. | Full | `src/components/nav/TopNav.test.tsx` |
 | Prevent desktop navigation from clipping by switching to the mobile control at the responsive breakpoint. | Partial | `src/components/nav/TopNavStyles.test.ts` verifies the breakpoint rule, but does not render the navigation at 700px and verify that no link clips. |
 | Prevent a learner from entering a locked lesson through its direct URL. | Partial | Dashboard links enforce the visible lock in `src/pages/HomePage.test.tsx`; direct lesson URLs still bypass it. The product decision and remaining result belong to [#118](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/118). |
+| Prevent a learner from entering a locked milestone through its direct URL. | Missing | [#118](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/118) records the shared deferred decision for lesson and milestone route locks. |
 
 ## Dashboard progression and reset
 
@@ -136,6 +137,8 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | Keep the best quiz score and avoid duplicate completion records. | Full | `src/state/app-context.test.ts`, `src/hooks/useLessonCompletion.test.tsx`, `src/hooks/useMilestoneCompletion.test.tsx` |
 | Continue without crashing when saving main state fails because local storage is full or unavailable. | Full | `src/state/persistence.test.ts` |
 | Continue resetting progress when milestone-session key enumeration is unavailable. | Full | `src/state/persistence.test.ts` |
+| Recover from a corrupt or unavailable lesson session and continue when lesson-session writes fail. | Missing | [#261](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/261) owns lesson player session-storage failure coverage. |
+| Recover from a corrupt or unavailable milestone session and continue when milestone-session writes fail. | Missing | [#261](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/261) owns milestone player session-storage failure coverage. |
 | Select a theme and persist the explicit selection. | Partial | `src/components/nav/ThemeControl.test.tsx` verifies selection of dark, and `e2e/critical-learner-journeys.spec.ts` verifies a saved light value. Selecting light and switching back to system through the control remain unverified. |
 | Follow operating-system theme changes while the preference is `system`. | Full | `src/components/nav/ThemeControl.test.tsx` |
 | Apply the saved theme before React renders, then keep it through navigation and reload. | Full | `src/theme-prepaint.test.ts`, `e2e/critical-learner-journeys.spec.ts` |
@@ -163,6 +166,7 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 
 | Main behavior | Status | Automated test or accountable issue |
 |---|---|---|
+| Complete Format Reveal, Color-only Detector, and System Comparison with keyboard-only controls. | Missing | [#54](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/54) records the known click-only or independently unreachable controls and owns keyboard testing of every main learner flow. |
 | Hear equivalent descriptions for informative visuals, quiz swatches, live tool results, stage transitions, milestone previews, chart alternatives, and Palette Builder contrast rows. | Missing | [#107](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/107) owns automated assertions and the required screen-reader, browser, and operating-system results. Palette Builder implementation work remains in [#111](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/111). |
 
 ## Course completion
