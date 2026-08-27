@@ -127,6 +127,32 @@ async function advanceThroughChallenge() {
 }
 
 describe('LessonPlayer', () => {
+  it('renders an assessment-safe description and value for a quiz swatch', async () => {
+    const lesson = makeLesson({
+      quizItems: [{
+        id: 'q1',
+        prompt: 'Which property differs?',
+        colorSwatches: [{
+          label: 'muted blue green',
+          color: '#287F83',
+          accessibleDescription: 'A muted blue-green swatch.',
+        }],
+        choices: [
+          { stableId: 'hue', label: 'Hue', isCorrect: true },
+          { stableId: 'lightness', label: 'Lightness', isCorrect: false },
+        ],
+      }],
+    });
+
+    renderLesson(lesson);
+    await advanceThroughChallenge();
+
+    const description = screen.getByText(/A muted blue-green swatch/);
+    expect(description).toHaveClass('sr-only');
+    expect(description).toHaveTextContent('Color value: #287F83.');
+    expect(screen.getByText('muted blue green').previousElementSibling).toHaveAttribute('aria-hidden', 'true');
+  });
+
   describe('session storage failures', () => {
     it('starts a new lesson when the saved session is malformed', () => {
       const lesson = makeLesson();

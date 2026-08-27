@@ -1,4 +1,7 @@
+import { useId } from 'react';
+import type { ReactNode } from 'react';
 import type { StepPanelConfig } from '../../types/lesson.ts';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import { ColorWheelTool } from '../tools/ColorWheelTool.tsx';
 import { HSLSliderTool } from '../tools/HSLSliderTool.tsx';
 import { RGBMixerTool } from '../tools/RGBMixerTool.tsx';
@@ -13,6 +16,10 @@ interface Props {
 
 export default function StepPanelRenderer({ panel }: Props) {
   if (!panel) return null;
+  return <StepPanelVisual panel={panel}>{renderPanel(panel)}</StepPanelVisual>;
+}
+
+function renderPanel(panel: StepPanelConfig) {
   switch (panel.type) {
     case 'color-wheel-preview':
       return <ColorWheelTool interactive={false} previewRelationship={panel.relationship} />;
@@ -31,4 +38,22 @@ export default function StepPanelRenderer({ panel }: Props) {
     default:
       return null;
   }
+}
+
+function StepPanelVisual({ panel, children }: { panel: StepPanelConfig; children: ReactNode }) {
+  const descriptionId = useId();
+  const accessibility = panel.accessibility;
+
+  if (accessibility?.classification === 'decorative') {
+    return <div aria-hidden="true">{children}</div>;
+  }
+
+  if (!accessibility) return children;
+
+  return (
+    <div data-authored-visual aria-describedby={descriptionId}>
+      {children}
+      <VisualDescription id={descriptionId} visual={accessibility} />
+    </div>
+  );
 }

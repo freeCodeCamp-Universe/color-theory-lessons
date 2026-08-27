@@ -167,6 +167,31 @@ function completeQuiz(correctAnswers: number) {
 }
 
 describe('MilestonePlayer', () => {
+  it('renders an assessment-safe description for a milestone quiz swatch', () => {
+    const milestone: MilestoneConfig = {
+      ...singleQuestionMilestone,
+      parts: [{
+        ...singleQuestionMilestone.parts[0],
+        kind: 'quiz',
+        questions: [{
+          id: 'mq1',
+          prompt: 'Which channel mix creates this color?',
+          swatchColor: '#FFFF00',
+          swatchDescription: 'A bright yellow swatch made from two additive channels.',
+          choices: [
+            { id: 'a', label: 'Red and green', isCorrect: true },
+            { id: 'b', label: 'Blue and green', isCorrect: false },
+          ],
+        }],
+      }],
+    };
+
+    renderMilestone(milestone);
+
+    expect(screen.getByText(/A bright yellow swatch/)).toHaveClass('sr-only');
+    expect(screen.getByText('#FFFF00').previousElementSibling).toHaveAttribute('aria-hidden', 'true');
+  });
+
   describe('session storage failures', () => {
     const sessionKey = 'color-theory-course-milestone-session:test-milestone';
 
