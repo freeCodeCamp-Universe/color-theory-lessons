@@ -270,6 +270,42 @@ describe('PaletteBuilderPage palette editing', () => {
     expect(screen.getByRole('button', { name: 'Edit custom 1 — #808080' })).toBeVisible();
   });
 
+  it('does not add the default custom color more than once', async () => {
+    const user = userEvent.setup();
+    render(<PaletteBuilderPage />);
+    await enterPrimary(user, '#336699');
+
+    const addButton = screen.getByRole('button', { name: '+ add color' });
+    await user.click(addButton);
+    await user.click(addButton);
+
+    expect(screen.getAllByRole('button', { name: /Edit custom \d+ — #808080/ }))
+      .toHaveLength(1);
+    expect(screen.getByRole('status')).toHaveTextContent(
+      '#808080 is already in your palette.',
+    );
+    expect(screen.getAllByRole('textbox', { name: 'Hex color value' })[1])
+      .toHaveValue('#808080');
+  });
+
+  it('rejects an edit that matches another palette color', async () => {
+    const user = userEvent.setup();
+    render(<PaletteBuilderPage />);
+    await enterPrimary(user, '#336699');
+    await user.click(screen.getByRole('button', { name: '+ add color' }));
+    await user.click(screen.getByRole('button', { name: 'Edit custom 1 — #808080' }));
+
+    const editInput = screen.getAllByRole('textbox', { name: 'Hex color value' })[1];
+    await user.clear(editInput);
+    await user.type(editInput, '#336699');
+    await user.keyboard('{Enter}');
+
+    expect(editInput).toHaveAttribute('aria-invalid', 'true');
+    expect(screen.getByText('Error: that color is already in your palette.')).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Edit custom 1 — #808080' })).toBeVisible();
+    expect(screen.getAllByRole('button', { name: /Edit .* — #336699/ })).toHaveLength(1);
+  });
+
   it('updates palette-dependent displays when a color is edited or removed', async () => {
     const user = userEvent.setup();
     render(<PaletteBuilderPage />);
@@ -425,7 +461,7 @@ describe('PaletteBuilderPage theme arranger', () => {
       const user = userEvent.setup();
       render(<PaletteBuilderPage />);
       await enterPrimary(user, '#336699');
-      for (const hex of ['#FFFFFF', '#000000', '#808080', '#FF0000', '#FFFF00']) {
+      for (const hex of ['#FFFFFF', '#000000', '#FF0000', '#FFFF00', '#808080']) {
         await addCustomColor(user, hex);
       }
 
