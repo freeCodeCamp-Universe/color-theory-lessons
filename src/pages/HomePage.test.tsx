@@ -78,6 +78,24 @@ describe('HomePage dashboard', () => {
     expect(unitOneCard).toHaveAttribute('aria-expanded', 'false');
   });
 
+  it('expands and collapses an unlocked unit with Enter and Space', async () => {
+    const user = userEvent.setup();
+    renderWithAppState(<HomePage />);
+
+    const unitOneCard = screen.getByRole('button', { name: /Seeing and Describing Color/ });
+    unitOneCard.focus();
+
+    await user.keyboard('{Enter}');
+    expect(unitOneCard).toHaveAttribute('aria-expanded', 'false');
+    await user.keyboard('{Enter}');
+    expect(unitOneCard).toHaveAttribute('aria-expanded', 'true');
+
+    await user.keyboard(' ');
+    expect(unitOneCard).toHaveAttribute('aria-expanded', 'false');
+    await user.keyboard(' ');
+    expect(unitOneCard).toHaveAttribute('aria-expanded', 'true');
+  });
+
   it('preserves progress when reset is cancelled', async () => {
     const user = userEvent.setup();
     const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false);

@@ -121,6 +121,32 @@ async function answerMilestoneOneQuiz(page: Page, correct: boolean) {
   }
 }
 
+test('every navigation destination remains visible and usable at the mobile breakpoint', async ({ page }) => {
+  await page.setViewportSize({ width: 700, height: 800 });
+  await page.goto('/');
+
+  const menuButton = page.getByRole('button', { name: 'Menu' });
+  await expect(page.getByRole('link', { name: 'color$' })).toBeVisible();
+  await expect(page.getByRole('combobox', { name: 'Theme preference' })).toBeVisible();
+  await expect(menuButton).toBeVisible();
+
+  for (const [name, path] of [
+    ['palette builder', '/palette-builder'],
+    ['glossary', '/glossary'],
+    ['review', '/review'],
+  ] as const) {
+    await menuButton.click();
+    const destination = page.getByRole('link', { name });
+    await expect(destination).toBeVisible();
+    await destination.click();
+    await expect(page).toHaveURL(new RegExp(`${path}$`));
+    await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
+  }
+
+  await page.getByRole('link', { name: 'color$' }).click();
+  await expect(page).toHaveURL(/\/$/);
+});
+
 test('a new learner completes a lesson and keeps progress after a browser reload', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('link', { name: 'start learning' }).click();

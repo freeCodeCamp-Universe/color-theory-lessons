@@ -3,10 +3,12 @@ import {
   ACCESSIBILITY_RESCUE_SESSION_PREFIX,
   CHANNEL_PREDICTION_SESSION_PREFIX,
   clearMilestoneSessions,
+  DARK_MODE_STRESS_SESSION_PREFIX,
   loadState,
   MILESTONE_SESSION_PREFIX,
   READ_INTERFACE_SESSION_PREFIX,
   saveState,
+  SEMANTIC_AUDIT_SESSION_PREFIX,
   SIMULATION_SPOTTER_SESSION_PREFIX,
   THEME_FROM_SCRATCH_SESSION_PREFIX,
 } from './persistence.ts';
@@ -215,6 +217,8 @@ describe('clearMilestoneSessions', () => {
     sessionStorage.setItem(`${THEME_FROM_SCRATCH_SESSION_PREFIX}milestone-3:1`, 'challenge state');
     sessionStorage.setItem(`${SIMULATION_SPOTTER_SESSION_PREFIX}milestone-4:1`, 'challenge state');
     sessionStorage.setItem(`${ACCESSIBILITY_RESCUE_SESSION_PREFIX}milestone-5:1`, 'challenge state');
+    sessionStorage.setItem(`${SEMANTIC_AUDIT_SESSION_PREFIX}milestone-6:1`, 'challenge state');
+    sessionStorage.setItem(`${DARK_MODE_STRESS_SESSION_PREFIX}milestone-6:1`, 'challenge state');
     sessionStorage.setItem('color-theory-course-lesson-session:u1-l1', 'lesson state');
     sessionStorage.setItem('unrelated-key', 'unrelated state');
 
@@ -226,6 +230,8 @@ describe('clearMilestoneSessions', () => {
     expect(sessionStorage.getItem(`${THEME_FROM_SCRATCH_SESSION_PREFIX}milestone-3:1`)).toBeNull();
     expect(sessionStorage.getItem(`${SIMULATION_SPOTTER_SESSION_PREFIX}milestone-4:1`)).toBeNull();
     expect(sessionStorage.getItem(`${ACCESSIBILITY_RESCUE_SESSION_PREFIX}milestone-5:1`)).toBeNull();
+    expect(sessionStorage.getItem(`${SEMANTIC_AUDIT_SESSION_PREFIX}milestone-6:1`)).toBeNull();
+    expect(sessionStorage.getItem(`${DARK_MODE_STRESS_SESSION_PREFIX}milestone-6:1`)).toBeNull();
     expect(sessionStorage.getItem('color-theory-course-lesson-session:u1-l1')).toBe('lesson state');
     expect(sessionStorage.getItem('unrelated-key')).toBe('unrelated state');
   });
