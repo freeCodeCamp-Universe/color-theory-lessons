@@ -120,7 +120,7 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | `theme-from-scratch`: pass text, surface, and accent stages, retry, and restore a session. | Full | `src/components/milestone/challenges/ThemeFromScratchChallenge.test.tsx` |
 | `simulation-spotter`: identify color-only failures and repairs, retry, and restore a session. | Full | `src/components/milestone/challenges/SimulationSpotterChallenge.test.tsx` |
 | `accessibility-rescue`: repair all required accessibility states, retry, and restore a session. | Full | `src/components/milestone/challenges/AccessibilityRescueChallenge.test.tsx`, `src/components/milestone/Milestone5Flow.test.tsx` |
-| `semantic-audit`: assign roles, identify the conflict, retry each stage, and restore a session. | Full | `src/components/milestone/challenges/SemanticAuditChallenge.test.tsx`, `src/components/milestone/Milestone6Flow.test.tsx` |
+| `semantic-audit`: assign roles, identify the conflict, retry, and restore a session. | Partial | `src/components/milestone/challenges/SemanticAuditChallenge.test.tsx` verifies role-stage retry and session restoration, while `src/components/milestone/Milestone6Flow.test.tsx` verifies whole-milestone retry; conflict-stage retry remains unverified. |
 | `dark-mode-stress`: pass all three contrast stages using raw thresholds, retry, and restore a session. | Full | `src/components/milestone/challenges/DarkModeStressChallenge.test.tsx`, `src/components/milestone/Milestone6Flow.test.tsx` |
 
 ## Persistence, preferences, glossary, and Review
