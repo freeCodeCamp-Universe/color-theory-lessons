@@ -164,7 +164,7 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
                   {comp.label}
                 </span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: showResults ? (pass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)' }}>

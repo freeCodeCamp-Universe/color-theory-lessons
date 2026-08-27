@@ -174,12 +174,15 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
           width: 40, height: 40, borderRadius: 'var(--radius-sm)',
           background: blended, border: '1px solid var(--border)',
         }} />
-        <div style={{ fontSize: '0.8rem', fontFamily: 'var(--font-mono)' }}>
-          <span style={{ color: 'var(--muted)' }}>Result:</span> {blended}
+        <div style={{ fontSize: '0.8rem', fontFamily: 'var(--font-sans)' }}>
+          <span style={{ color: 'var(--muted)' }}>Result:</span>{' '}
+          <span style={{ fontFamily: 'var(--font-mono)' }}>{blended}</span>
           {ctx.id === 'image' && imageTextContrast !== null && (
             <div style={{ marginTop: '0.25rem' }}>
               <span style={{ color: 'var(--muted)' }}>Text contrast:</span>{' '}
-              {formatContrastRatio(imageTextContrast)}:1 (target: {IMAGE_TEXT_CONTRAST_TARGET}:1)
+              <span style={{ fontFamily: 'var(--font-mono)' }}>
+                {formatContrastRatio(imageTextContrast)}:1 (target: {IMAGE_TEXT_CONTRAST_TARGET}:1)
+              </span>
             </div>
           )}
         </div>

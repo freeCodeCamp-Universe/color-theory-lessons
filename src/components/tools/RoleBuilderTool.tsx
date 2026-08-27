@@ -194,7 +194,7 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         {/* Inputs */}
         <div style={{ flex: '0 0 220px' }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>SEMANTIC ROLES</p>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>SEMANTIC ROLES</p>
           {(Object.keys(DEFAULTS) as RoleKey[]).map((roleKey) => {
             const val = roles[roleKey];
             return (
@@ -221,7 +221,7 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
 
         {/* Preview */}
         <div style={{ flex: '1 1 200px', minWidth: 180 }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>LIVE PREVIEW</p>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>LIVE PREVIEW</p>
           <div data-authored-visual style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
             <div style={{ background: surf, borderRadius: 4, padding: '0.5rem', marginBottom: '0.5rem', border: '1px solid #e5e7eb' }}>
               <div style={{ color: pt, fontWeight: 600, fontSize: '0.85rem' }}>Card Title</div>
@@ -240,7 +240,7 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
 
         {/* Checks */}
         <div style={{ flex: '0 0 200px' }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>VALIDATION</p>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>VALIDATION</p>
           <CheckRow label="Valid role colors" pass={validRoles} showResult={showResults} />
           <CheckRow label="Primary text / surface" pass={primaryOk} ratio={primaryContrast} showResult={showResults} />
           <CheckRow label="Secondary text / surface" pass={secondaryOk} ratio={secondaryContrast} showResult={showResults} />

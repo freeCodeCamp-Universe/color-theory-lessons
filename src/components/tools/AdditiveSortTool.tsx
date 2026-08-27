@@ -162,7 +162,7 @@ export const AdditiveSortTool = memo(function AdditiveSortTool({
           completionFeedback={`✓ ${correctCount} / ${ITEMS.length} correct. Color models sorted.`}
         >
           <div style={{ borderTop: '1px solid var(--border)', paddingTop: 'var(--spacing-md)', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
               sort each example
             </span>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 'var(--spacing-sm)' }}>

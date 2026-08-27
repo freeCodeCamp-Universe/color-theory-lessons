@@ -134,7 +134,7 @@ export const RGBMixerTool = memo(function RGBMixerTool({
           completionFeedback="✓ All five targets predicted and matched."
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>target</span>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>target</span>
             <div aria-label={`${target.name} target color`} style={{ height: '72px', borderRadius: 'var(--radius-sm)', backgroundColor: rgbString(target.value), border: '1px solid rgba(255,255,255,0.08)' }} />
           </div>
 
@@ -153,7 +153,7 @@ export const RGBMixerTool = memo(function RGBMixerTool({
           ) : (
             <>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>your mix</span>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>your mix</span>
                 <div aria-label="current RGB mix" style={{ height: '72px', borderRadius: 'var(--radius-sm)', backgroundColor: rgbString(current), border: '1px solid rgba(255,255,255,0.08)' }} />
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)' }}>R:{current.r} G:{current.g} B:{current.b}</span>
               </div>

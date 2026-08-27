@@ -297,7 +297,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({
                 <p
                   aria-live="polite"
                   data-testid={`feedback-${mod.id}`}
-                  style={{ margin: '0.45rem 0 0', fontSize: '0.68rem', fontFamily: 'var(--font-mono)', color: isRepaired ? 'var(--accent-success)' : 'var(--accent-danger)' }}
+                  style={{ margin: '0.45rem 0 0', fontSize: '0.68rem', fontFamily: 'var(--font-sans)', color: isRepaired ? 'var(--accent-success)' : 'var(--accent-danger)' }}
                 >
                   {isRepaired ? '✓ repaired' : mod.invalidFeedback(modChecked)}
                 </p>

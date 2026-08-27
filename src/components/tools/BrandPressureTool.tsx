@@ -101,13 +101,13 @@ export const BrandPressureTool = memo(function BrandPressureTool({
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         {/* Inputs */}
         <div style={{ flex: '0 0 220px' }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>ROLES</p>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>ROLES</p>
 
           {/* Read-only brand roles */}
           {FIXED_ACTIONS.map(action => (
             <div key={action.role} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
               <div style={{ width: 18, height: 18, borderRadius: 3, background: action.background, border: '1px solid var(--border)', flexShrink: 0 }} />
-              <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{FIXED_ROLE_LABELS[action.role]} (fixed)</span>
+              <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{FIXED_ROLE_LABELS[action.role]} (fixed)</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--primary-foreground)' }}>{action.background}</span>
             </div>
           ))}
@@ -119,7 +119,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({
             return (
               <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
                 <div style={{ width: 18, height: 18, borderRadius: 3, background: isValidHex(val) ? val : '#888', border: '1px solid var(--border)', flexShrink: 0 }} />
-                <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{ROLE_LABELS[key]}</span>
+                <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{ROLE_LABELS[key]}</span>
                 <input
                   type="text"
                   value={val}
@@ -140,7 +140,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({
 
         {/* Preview */}
         <div style={{ flex: '1 1 180px', minWidth: 160 }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>PREVIEW</p>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>PREVIEW</p>
           <div data-authored-visual style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
             <div style={{ color: pt, fontWeight: 600, fontSize: '0.85rem', marginBottom: '0.3rem' }}>Dashboard</div>
             <div style={{ background: surf, borderRadius: 4, padding: '0.4rem 0.5rem', border: `1px solid ${div}`, marginBottom: '0.4rem' }}>
@@ -162,7 +162,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({
 
         {/* Checks */}
         <div style={{ flex: '0 0 190px' }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>CHECKS</p>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>CHECKS</p>
           {[
             { label: 'Primary text / page background (4.5:1)', pass: pageTextOk, ratio: pageTextContrast },
             { label: 'Primary text / card surface (4.5:1)', pass: cardTextOk, ratio: cardTextContrast },

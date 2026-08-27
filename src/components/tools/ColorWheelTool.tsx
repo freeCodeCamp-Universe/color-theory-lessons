@@ -179,16 +179,16 @@ function LockedPalette({ palette, relationship }: { palette: Palette; relationsh
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
       <div style={{ display: 'flex', gap: '4px', height: '56px' }}>
         <div style={{ flex: 3, borderRadius: 'var(--radius-sm)', backgroundColor: hslToHex(palette.dominant, 70, 50), display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
-          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'rgba(0,0,0,0.7)' }}>dominant</span>
+          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-sans)', color: 'rgba(0,0,0,0.7)' }}>dominant</span>
         </div>
         <div style={{ flex: 1.5, borderRadius: 'var(--radius-sm)', backgroundColor: hslToHex(palette.support, 60, 55), display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
-          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'rgba(0,0,0,0.7)' }}>support</span>
+          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-sans)', color: 'rgba(0,0,0,0.7)' }}>support</span>
         </div>
         <div style={{ flex: 1, borderRadius: 'var(--radius-sm)', backgroundColor: hslToHex(palette.accent, 85, 60), display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
-          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'rgba(0,0,0,0.7)' }}>accent</span>
+          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-sans)', color: 'rgba(0,0,0,0.7)' }}>accent</span>
         </div>
         <div style={{ flex: 2, borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--gray-80)', display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
-          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)' }}>neutral</span>
+          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)' }}>neutral</span>
         </div>
       </div>
       <p style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>
@@ -238,7 +238,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', flex: 1, minWidth: '180px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--muted)' }}>base hue</span>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: 'var(--muted)' }}>base hue</span>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', color: 'var(--accent-warning)' }}>{baseH}°</span>
           </div>
           <input
@@ -262,7 +262,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>relationship</span>
+          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>relationship</span>
           {(['analogous', 'complementary', 'triadic'] as Relationship[]).map((option) => (
             <button
               key={option}
@@ -291,7 +291,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>palette preview</span>
+          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>palette preview</span>
           <div style={{ display: 'flex', gap: '4px' }}>
             <div title={`Base: hsl(${baseH} 70% 50%)`} style={{ flex: 3, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: baseColor }} />
             {relatedColors.map((color, index) => (

@@ -322,7 +322,7 @@ export const BackgroundShiftTool = memo(function BackgroundShiftTool({
                 </div>
                 <span
                   style={{
-                    fontFamily: 'var(--font-mono)',
+                    fontFamily: 'var(--font-sans)',
                     fontSize: '0.7rem',
                     color: 'var(--muted)',
                   }}
@@ -337,7 +337,7 @@ export const BackgroundShiftTool = memo(function BackgroundShiftTool({
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
             <span
               style={{
-                fontFamily: 'var(--font-mono)',
+                fontFamily: 'var(--font-sans)',
                 fontSize: '0.75rem',
                 color: 'var(--muted)',
                 textTransform: 'uppercase',

@@ -181,7 +181,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
       </div>
 
       {/* Contrast readout */}
-      <div style={{ fontSize: '0.78rem', fontFamily: 'var(--font-mono)', marginBottom: '0.5rem' }}>
+      <div style={{ fontSize: '0.78rem', fontFamily: 'var(--font-sans)', marginBottom: '0.5rem' }}>
         <div style={{ color: resultColor(priOnBg >= TEXT_CONTRAST_TARGET) }}>
           {resultSymbol(priOnBg >= TEXT_CONTRAST_TARGET)}Primary text on background: {formatContrastRatio(priOnBg)}:1 (target: 4.5:1)
         </div>

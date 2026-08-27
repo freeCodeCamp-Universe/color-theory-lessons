@@ -68,7 +68,7 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         {/* Ad-hoc mockup */}
         <div style={{ flex: '1 1 220px', minWidth: 200 }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.4rem' }}>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.4rem' }}>
             AD-HOC {interactive && <span style={{ color: 'var(--accent-warning)' }}>(click inconsistencies)</span>}
           </p>
           <div data-authored-visual style={{ border: '1px solid #e5e7eb', borderRadius: 6, overflow: 'hidden', fontSize: '0.8rem' }}>
@@ -117,7 +117,7 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
 
         {/* System mockup */}
         <div style={{ flex: '1 1 220px', minWidth: 200 }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.4rem' }}>SYSTEM (consistent)</p>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.4rem' }}>SYSTEM (consistent)</p>
           <div data-authored-visual style={{ border: '1px solid #e5e7eb', borderRadius: 6, overflow: 'hidden', fontSize: '0.8rem' }}>
             <div style={{ background: '#1e40af', padding: '0.4rem 0.6rem', color: '#fff', fontWeight: 600 }}>My App</div>
             <div style={{ background: SYSTEM_COLORS.surface, border: '1px solid #e5e7eb', margin: '0.5rem', padding: '0.5rem', borderRadius: 4 }}>

@@ -185,7 +185,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
       {/* Color inputs */}
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         <label style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', fontSize: '0.78rem', color: 'var(--muted)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', textTransform: 'uppercase', fontSize: '0.7rem' }}>Text color</span>
+          <span style={{ fontFamily: 'var(--font-sans)', textTransform: 'uppercase', fontSize: '0.7rem' }}>Text color</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             <div style={{ width: 24, height: 24, borderRadius: 4, background: isValidHex(textColor) ? textColor : '#ccc', border: '1px solid var(--border)' }} />
             <input
@@ -204,7 +204,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
           </div>
         </label>
         <label style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', fontSize: '0.78rem', color: 'var(--muted)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', textTransform: 'uppercase', fontSize: '0.7rem' }}>Background color</span>
+          <span style={{ fontFamily: 'var(--font-sans)', textTransform: 'uppercase', fontSize: '0.7rem' }}>Background color</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             <div style={{ width: 24, height: 24, borderRadius: 4, background: isValidHex(bgColor) ? bgColor : '#ccc', border: '1px solid var(--border)' }} />
             <input

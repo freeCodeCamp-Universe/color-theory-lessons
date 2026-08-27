@@ -162,8 +162,8 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
       </p>
 
       <div style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', marginBottom: '0.75rem' }}>
-        <div><span style={{ color: 'var(--muted)' }}>Display P3</span> {accent.p3}</div>
-        <div><span style={{ color: 'var(--muted)' }}>sRGB fallback</span> {accent.srgbFallback}</div>
+        <div><span style={{ color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>Display P3</span> {accent.p3}</div>
+        <div><span style={{ color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>sRGB fallback</span> {accent.srgbFallback}</div>
         {(!interactive || (activeStageId === 'classify-gamut-mapping' && stageController.result === 'passed')) && (
           <div style={{ color: outsideSrgb ? 'var(--accent-warning)' : 'var(--accent-success)', marginTop: '0.2rem' }}>
             {outsideSrgb
@@ -222,9 +222,9 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
         marginBottom: '0.75rem',
         color: 'var(--primary-foreground)',
       }}>
-        <span style={{ color: 'var(--muted)' }}>Fallback RGB</span> rgb({rgb.r} {rgb.g} {rgb.b})
+        <span style={{ color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>Fallback RGB</span> rgb({rgb.r} {rgb.g} {rgb.b})
         {' · '}
-        <span style={{ color: 'var(--muted)' }}>Fallback HSL</span> hsl({hsl.h} {hsl.s}% {hsl.l}%)
+        <span style={{ color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>Fallback HSL</span> hsl({hsl.h} {hsl.s}% {hsl.l}%)
       </div>
 
       {interactive && (

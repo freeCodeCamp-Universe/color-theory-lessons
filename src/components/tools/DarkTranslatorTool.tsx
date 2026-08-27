@@ -134,7 +134,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         {/* Light theme (read-only) */}
         <div style={{ flex: '0 0 200px' }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>LIGHT (fixed)</p>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>LIGHT (fixed)</p>
           {KEYS.map(key => (
             <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
               <div style={{ width: 16, height: 16, borderRadius: 3, background: LIGHT_THEME[key], border: '1px solid #e5e7eb', flexShrink: 0 }} />
@@ -146,7 +146,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
 
         {/* Dark theme (editable) */}
         <div style={{ flex: '0 0 220px' }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>
             DARK {interactive ? '(edit)' : '(default: failing)'}
           </p>
           {KEYS.map(key => {
@@ -205,7 +205,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
           </div>
 
           {/* Dark mode validation */}
-          <p style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.25rem' }}>DARK CHECKS</p>
+          <p style={{ fontSize: '0.72rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.25rem' }}>DARK CHECKS</p>
           {checks.map(({ label, pass, ratio }) => (
             <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', padding: '0.15rem 0' }}>
               <span style={{ color: 'var(--primary-foreground)' }}>{label}</span>

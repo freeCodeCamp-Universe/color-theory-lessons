@@ -45,6 +45,45 @@ describe('tool UI audit regressions', () => {
     );
   });
 
+  it('uses proportional type for learner-facing labels while keeping values monospace', () => {
+    expect(read('src/components/lesson/LessonPlayer.module.css')).toMatch(
+      /\.stepNumber\s*{[^}]*font-family: var\(--font-sans\);/s,
+    );
+
+    for (const [file, label] of [
+      ['src/components/tools/BeforeAfterTool.tsx', 'assign roles'],
+      ['src/components/tools/AdditiveSortTool.tsx', 'sort each example'],
+      ['src/components/tools/RGBMixerTool.tsx', 'target'],
+      ['src/components/tools/MismatchExplainerTool.tsx', 'on screen'],
+      ['src/components/tools/BackgroundShiftTool.tsx', 'the dark background makes the accent feel stronger because…'],
+      ['src/components/tools/TextContrastLabTool.tsx', 'Text color'],
+      ['src/components/tools/ComponentCheckerTool.tsx', '{comp.label}'],
+      ['src/components/tools/SystemComparisonTool.tsx', 'SYSTEM (consistent)'],
+      ['src/components/tools/RoleBuilderTool.tsx', 'SEMANTIC ROLES'],
+      ['src/components/tools/BrandPressureTool.tsx', 'ROLES'],
+      ['src/components/tools/DarkTranslatorTool.tsx', 'DARK CHECKS'],
+      ['src/components/tools/ColorWheelTool.tsx', 'palette preview'],
+    ] as const) {
+      const source = read(file);
+      const escapedLabel = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      expect(source, `${file} should render ${label} in proportional type`).toMatch(
+        new RegExp(`fontFamily: 'var\\(--font-sans\\)'[\\s\\S]{0,500}${escapedLabel}`),
+      );
+    }
+
+    const themeSandbox = read('src/components/tools/ThemeSandboxTool.tsx');
+    expect(themeSandbox).toContain(
+      "fontFamily: 'var(--font-sans)', marginBottom: '0.5rem'",
+    );
+    const alphaLayer = read('src/components/tools/AlphaLayerTool.tsx');
+    expect(alphaLayer).toContain(
+      "<span style={{ fontFamily: 'var(--font-mono)' }}>{blended}</span>",
+    );
+    expect(read('src/components/tools/RGBMixerTool.tsx')).toContain(
+      "fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)' }}>R:{current.r} G:{current.g} B:{current.b}",
+    );
+  });
+
   it('marks instructional previews as authored visuals without exempting their controls', () => {
     expect(read('src/components/tools/ColorSpaceLabTool.tsx')).toMatch(
       /<div data-authored-visual style={{ display: 'flex', gap: '0\.5rem', overflowX: 'auto' }}>/,
