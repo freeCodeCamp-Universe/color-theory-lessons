@@ -6,6 +6,7 @@ import { AppProvider } from '../../state/app-provider.tsx';
 import { useAppState } from '../../state/app-context.tsx';
 import { ErrorBoundary } from '../ErrorBoundary.tsx';
 import type { LessonConfig } from '../../types/lesson.ts';
+import { lesson1_6 } from '../../lessons/unit-1/lesson-1-6.ts';
 
 const sessionKey = (lessonId: string) => `color-theory-course-lesson-session:${lessonId}`;
 
@@ -283,6 +284,29 @@ describe('LessonPlayer', () => {
     expect(screen.queryByRole('button', { name: 'take the quiz →' })).not.toBeInTheDocument();
     expect(screen.getByTestId('completed-lessons')).toHaveTextContent('u1-l6,u1-l1');
     expect(screen.getByTestId('quiz-scores')).toHaveTextContent('"u1-l1":50');
+  });
+
+  it('links a completed final lesson to its unit milestone', async () => {
+    renderLesson(lesson1_6);
+
+    for (let step = 1; step < lesson1_6.steps.length; step += 1) {
+      fireEvent.click(screen.getByRole('button', { name: 'next' }));
+    }
+    fireEvent.click(screen.getByRole('button', { name: 'complete mock challenge' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'take the quiz →' }));
+
+    for (const [index, quizItem] of lesson1_6.quizItems.entries()) {
+      const correctChoice = quizItem.choices.find((choice) => choice.isCorrect);
+      expect(correctChoice).toBeDefined();
+      fireEvent.click(screen.getByText(correctChoice!.label).closest('button')!);
+      fireEvent.click(screen.getByRole('button', { name: 'check' }));
+      fireEvent.click(await screen.findByRole('button', {
+        name: index < lesson1_6.quizItems.length - 1 ? 'next question →' : 'finish lesson →',
+      }));
+    }
+
+    expect(await screen.findByRole('link', { name: 'start milestone →' }))
+      .toHaveAttribute('href', '/milestone/milestone-1');
   });
 
   describe('challenge content', () => {

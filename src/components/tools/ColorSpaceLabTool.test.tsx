@@ -94,6 +94,10 @@ describe('ColorSpaceLabTool challenge', () => {
     const onStageChange = vi.fn();
     render(<ColorSpaceLabTool interactive onComplete={onComplete} onStageChange={onStageChange} />);
 
+    fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
+    expect(screen.getByText('Correct classifications: 0/9.')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
+
     answerSortChallenge();
     fireEvent.click(screen.getByRole('button', { name: 'check stage' }));
     expect(onComplete).not.toHaveBeenCalled();

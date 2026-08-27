@@ -9,6 +9,12 @@ describe('HexRgbEditorTool color readout', () => {
     render(<HexRgbEditorTool interactive={true} />);
 
     expect(screen.getByText('#6366F1 · rgb(99 102 241)')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText('HEX color input'), {
+      target: { value: '#3B82F6' },
+    });
+
+    expect(screen.getByText('#3B82F6 · rgb(59 130 246)')).toBeInTheDocument();
   });
 
   it('requires each target stage to pass before completing', () => {

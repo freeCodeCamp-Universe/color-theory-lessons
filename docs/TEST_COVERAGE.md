@@ -60,7 +60,7 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | Calculate and save a quiz score from the submitted answers. | Full | `src/components/lesson/LessonPlayer.test.tsx`, `src/hooks/useLessonCompletion.test.tsx` |
 | Complete a lesson without a quiz only after its tool reports success. | Full | `src/components/lesson/LessonPlayer.test.tsx` |
 | See lesson completion, return to the dashboard, and redo the lesson without losing recorded completion. | Full | `src/components/lesson/LessonPlayer.test.tsx`, `e2e/critical-learner-journeys.spec.ts` |
-| Continue from a completed lesson to the next lesson or, after a unit's final lesson, to its milestone. | Partial | `src/components/lesson/LessonPlayer.test.tsx` verifies the within-unit next-lesson link; the final-lesson milestone link remains unverified. |
+| Continue from a completed lesson to the next lesson or, after a unit's final lesson, to its milestone. | Full | `src/components/lesson/LessonPlayer.test.tsx` verifies both the within-unit next-lesson link and the final-lesson milestone link. |
 | Resume the current instructional step after a component remount. | Full | `src/components/lesson/LessonPlayer.test.tsx` |
 | Resume quiz position, earlier answers, submitted feedback, and the final score after a component remount. | Full | `src/components/lesson/LessonPlayer.test.tsx` |
 | Keep saved answers attached to stable choices after choices are reordered. | Full | `src/components/lesson/LessonPlayer.test.tsx` |
@@ -84,12 +84,12 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | `mismatch-explainer`: identify every mismatch factor before advancing. | Full | `src/components/tools/Unit2ExerciseStages.test.tsx` |
 | `background-shift`: compare each background effect and advance only after a passing check. | Full | `src/components/tools/Unit2ExerciseStages.test.tsx` |
 | `format-reveal`: inspect every interface element, see equivalent color formats, and complete the stage. | Full | `src/components/tools/FormatRevealTool.test.tsx` |
-| `hex-rgb-editor`: match each HEX target, see the RGB readout, and complete after all three stages. | Partial | `src/components/tools/HexRgbEditorTool.test.tsx` covers the initial RGB readout and HEX-driven completion, but does not assert that the RGB readout changes after a HEX edit. |
+| `hex-rgb-editor`: match each HEX target, see the RGB readout, and complete after all three stages. | Full | `src/components/tools/HexRgbEditorTool.test.tsx` verifies the initial and edited RGB readouts plus HEX-driven completion. |
 | `hsl-playground`: use synchronized hue controls, pass one target at a time, and complete after the final target. | Full | `src/components/tools/HslPlaygroundTool.test.tsx` |
 | `alpha-layer`: pass all four overlay contexts and reject a contrast result that only appears to pass after rounding. | Full | `src/components/tools/AlphaLayerTool.test.tsx` |
 | `theme-sandbox`: repair all five text pairs, see their ratios and targets, and retry a failed theme. | Full | `src/components/tools/ThemeSandboxTool.test.tsx` |
 | `token-map`: set a valid base, distinguish raw values from palette and role tokens, and classify every item. | Full | `src/components/tools/TokenMapTool.test.tsx`, `src/components/lesson/TokenMapLessonFlow.test.tsx` |
-| `color-space-lab`: compare P3 with its sRGB fallback, classify gamut samples, and pass both stages. | Partial | `src/components/tools/ColorSpaceLabTool.test.tsx` covers a failed submission and the passing path, but does not use the retry action after failure. |
+| `color-space-lab`: compare P3 with its sRGB fallback, classify gamut samples, and pass both stages. | Full | `src/components/tools/ColorSpaceLabTool.test.tsx` verifies a failed classification, the visible retry action, correction, advancement, and completion. |
 | `eye-diagram`: reveal the visual pathway in order and complete after its final stage. | Full | `src/components/tools/EyeDiagramTool.test.tsx` |
 | `vision-cards`: open all six cards while keeping visible progress, then complete. | Full | `src/components/tools/Unit4ExerciseStages.test.tsx`, `src/components/tools/VisionCardsTool.test.tsx` |
 | `interface-gallery`: review every required simulation mode and complete the review stage. | Full | `src/components/tools/Unit4ExerciseStages.test.tsx`, `src/components/tools/InterfaceGalleryTool.test.tsx` |
