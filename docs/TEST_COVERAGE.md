@@ -136,7 +136,7 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | Save and reload lesson, quiz, score, milestone, and preference state. | Full | `src/state/persistence.test.ts`, `src/state/app-context.test.ts`, `e2e/critical-learner-journeys.spec.ts` |
 | Keep the best quiz score and avoid duplicate completion records. | Full | `src/state/app-context.test.ts`, `src/hooks/useLessonCompletion.test.tsx`, `src/hooks/useMilestoneCompletion.test.tsx` |
 | Continue without crashing when saving main state fails because local storage is full or unavailable. | Full | `src/state/persistence.test.ts` |
-| Continue resetting progress when milestone-session key enumeration is unavailable. | Full | `src/state/persistence.test.ts` |
+| Continue resetting progress when milestone-session key enumeration is unavailable. | Partial | `src/state/persistence.test.ts` verifies that session cleanup tolerates the error, but does not verify through `AppProvider` that the reset action still reaches the reducer. |
 | Recover from a corrupt or unavailable lesson session and continue when lesson-session writes fail. | Missing | [#261](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/261) owns lesson player session-storage failure coverage. |
 | Recover from a corrupt or unavailable milestone session and continue when milestone-session writes fail. | Missing | [#261](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/261) owns milestone player session-storage failure coverage. |
 | Select a theme and persist the explicit selection. | Partial | `src/components/nav/ThemeControl.test.tsx` verifies selection of dark, and `e2e/critical-learner-journeys.spec.ts` verifies a saved light value. Selecting light and switching back to system through the control remain unverified. |
@@ -154,10 +154,11 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 |---|---|---|
 | Reject an invalid primary color and accept valid HEX, RGB, HSL, and named-swatch input with synchronized values. | Full | `src/pages/PaletteBuilderPage.test.tsx` |
 | Generate analogous, complementary, and triadic suggestions with lighter, darker, and muted variants. | Full | `src/pages/PaletteBuilderPage.test.tsx`, `src/utils/color.test.ts` |
-| Add suggested or custom colors without duplicating a color already in the palette. | Partial | `src/pages/PaletteBuilderPage.test.tsx` verifies duplicate suppression for suggestions, but does not cover repeated custom colors; the custom-color action currently permits duplicates. |
+| Add a suggested color without offering that suggestion again. | Full | `src/pages/PaletteBuilderPage.test.tsx` |
+| Add or edit a custom color without duplicating a color already in the palette. | Missing | [#262](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/262) owns duplicate prevention and user-visible regression tests for custom colors. |
 | Edit or remove palette colors and update every dependent display. | Full | `src/pages/PaletteBuilderPage.test.tsx` |
 | Reset a customized palette to its primary color. | Full | `src/pages/PaletteBuilderPage.test.tsx` |
-| Classify every contrast pairing as fail, AA, or AAA from its WCAG ratio and update the matrix after palette changes. | Full | `src/pages/PaletteBuilderPage.test.tsx`, `src/utils/color.test.ts` |
+| Classify displayed contrast pairings as fail, AA, or AAA from their WCAG ratio and update the matrix after palette changes. | Partial | `src/pages/PaletteBuilderPage.test.tsx` verifies two-color boundaries and updates; filtering pairs below 30 lightness points and limiting the display to 20 pairs remain unverified. |
 | Assign automatic light and dark theme roles, change every role, and update previews and contrast checks. | Full | `src/pages/PaletteBuilderPage.test.tsx` |
 | Apply an accessibility suggestion to its named role, remap edited shared colors, and remove the arranger when fewer than two colors remain. | Full | `src/pages/PaletteBuilderPage.test.tsx` |
 | Expose picker state, generated colors, contrast rows, role controls, previews, and mutation announcements to screen-reader users. | Partial | Current component tests cover picker input, palette mutations, contrast rows, and role assignment, but do not verify every accessible description and live announcement. [#111](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/111) owns the unverified results. |
@@ -167,7 +168,7 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | Main behavior | Status | Automated test or accountable issue |
 |---|---|---|
 | Complete Format Reveal, Color-only Detector, and System Comparison with keyboard-only controls. | Missing | [#54](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/54) records the known click-only or independently unreachable controls and owns keyboard testing of every main learner flow. |
-| Hear equivalent descriptions for informative visuals, quiz swatches, live tool results, stage transitions, milestone previews, chart alternatives, and Palette Builder contrast rows. | Missing | [#107](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/107) owns automated assertions and the required screen-reader, browser, and operating-system results. Palette Builder implementation work remains in [#111](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/111). |
+| Hear equivalent descriptions for informative visuals, quiz swatches, live tool results, stage transitions, milestone previews, chart alternatives, and Palette Builder contrast rows. | Partial | `src/components/lesson/ChallengeHints.test.tsx`, `src/components/tools/ExerciseStage.test.tsx`, and `src/components/tools/ChartTunerTool.test.tsx` verify selected status, focus, and chart-table results. [#107](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/107) owns the remaining automated assertions and screen-reader, browser, and operating-system results; Palette Builder work remains in [#111](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/111). |
 
 ## Course completion
 
