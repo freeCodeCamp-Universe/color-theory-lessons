@@ -340,6 +340,7 @@ export function PaletteBuilderPage() {
   const [paletteIsCustom, setPaletteIsCustom] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editHexInput, setEditHexInput] = useState('');
+  const [paletteError, setPaletteError] = useState('');
   const [darkRoles, setDarkRoles] = useState<Record<RoleKey, string> | null>(
     null,
   );
@@ -385,6 +386,18 @@ export function PaletteBuilderPage() {
     () => new Set(paletteColors.map((c) => c.hex.toUpperCase())),
     [paletteColors],
   );
+
+  const getEditHexError = (index: number) => {
+    const parsed = parseHex(editHexInput);
+    if (!parsed) return 'Error: enter a 3- or 6-digit hex color.';
+
+    const canonical = rgbToHex(parsed);
+    const isDuplicate = paletteColors.some(
+      (color, colorIndex) =>
+        colorIndex !== index && color.hex.toUpperCase() === canonical,
+    );
+    return isDuplicate ? 'Error: that color is already in your palette.' : '';
+  };
 
   /* ── Lighter / darker / neutral suggestions ────────────────────────────── */
 
@@ -543,6 +556,12 @@ export function PaletteBuilderPage() {
   /* ── Palette edit helpers ───────────────────────────────────────────────── */
 
   const updatePaletteColor = (index: number, newHex: string) => {
+    const isDuplicate = paletteColors.some(
+      (color, colorIndex) =>
+        colorIndex !== index && color.hex.toUpperCase() === newHex.toUpperCase(),
+    );
+    if (isDuplicate) return false;
+
     const previousHex = paletteColors[index]?.hex;
     setPaletteColors((prev) =>
       prev.map((c, i) => (i === index ? { ...c, hex: newHex } : c)),
@@ -558,9 +577,21 @@ export function PaletteBuilderPage() {
     }
 
     setPaletteIsCustom(true);
+    setPaletteError('');
+    return true;
   };
 
   const addPaletteColor = (hex = '#808080', label?: string) => {
+    if (paletteHexSet.has(hex.toUpperCase())) {
+      setPaletteError(`${hex.toUpperCase()} is already in your palette.`);
+      const existingIndex = paletteColors.findIndex(
+        (color) => color.hex.toUpperCase() === hex.toUpperCase(),
+      );
+      setEditingIndex(existingIndex);
+      setEditHexInput(hex.toUpperCase());
+      return false;
+    }
+
     setPaletteColors((prev) => {
       const customCount = prev.filter((c) => c.label.startsWith('custom')).length;
       return [...prev, { hex, label: label ?? `custom ${customCount + 1}` }];
@@ -569,6 +600,8 @@ export function PaletteBuilderPage() {
     setLightRoles(null);
     setPaletteIsCustom(true);
     setEditingIndex(null);
+    setPaletteError('');
+    return true;
   };
 
   const removePaletteColor = (index: number) => {
@@ -576,6 +609,7 @@ export function PaletteBuilderPage() {
     setDarkRoles(null);
     setLightRoles(null);
     setPaletteIsCustom(true);
+    setPaletteError('');
     setEditingIndex((prev) =>
       prev === index ? null : prev !== null && prev > index ? prev - 1 : prev,
     );
@@ -589,6 +623,7 @@ export function PaletteBuilderPage() {
     }
     setPaletteIsCustom(false);
     setEditingIndex(null);
+    setPaletteError('');
   };
 
   /* ── Contrast matrix data ───────────────────────────────────────────────── */
@@ -1181,7 +1216,7 @@ export function PaletteBuilderPage() {
                           <div className={styles.editInlineMeta}>
                             <input
                               type="text"
-                              className={`${styles.editInlineInput} ${parseHex(editHexInput) === null ? styles.hexInputInvalid : ''}`}
+                              className={`${styles.editInlineInput} ${getEditHexError(i) ? styles.hexInputInvalid : ''}`}
                               value={editHexInput}
                               onChange={(e) => setEditHexInput(e.target.value)}
                               onBlur={() => {
@@ -1198,21 +1233,22 @@ export function PaletteBuilderPage() {
                                   if (parsed) {
                                     const canonical = rgbToHex(parsed);
                                     setEditHexInput(canonical);
-                                    updatePaletteColor(i, canonical);
-                                    setEditingIndex(null);
+                                    if (updatePaletteColor(i, canonical)) {
+                                      setEditingIndex(null);
+                                    }
                                   }
                                 }
                                 if (e.key === 'Escape') setEditingIndex(null);
                               }}
                               autoFocus
                               aria-label="Hex color value"
-                              aria-invalid={parseHex(editHexInput) === null}
-                              aria-describedby={parseHex(editHexInput) === null ? `palette-color-${i}-hex-error` : undefined}
+                              aria-invalid={getEditHexError(i) !== ''}
+                              aria-describedby={getEditHexError(i) ? `palette-color-${i}-hex-error` : undefined}
                               spellCheck={false}
                             />
-                            {parseHex(editHexInput) === null && (
+                            {getEditHexError(i) && (
                               <span id={`palette-color-${i}-hex-error`} className={styles.inputError}>
-                                Error: enter a 3- or 6-digit hex color.
+                                {getEditHexError(i)}
                               </span>
                             )}
                           </div>
@@ -1222,9 +1258,17 @@ export function PaletteBuilderPage() {
                     </div>
                   ))}
                 </div>
-                <button className={styles.addColorBtn} onClick={() => addPaletteColor()}>
+                <button
+                  className={styles.addColorBtn}
+                  onClick={() => addPaletteColor()}
+                >
                   + add color
                 </button>
+                {paletteError && (
+                  <p className={styles.inputError} role="status">
+                    {paletteError}
+                  </p>
+                )}
               </>
             )}
           </div>
