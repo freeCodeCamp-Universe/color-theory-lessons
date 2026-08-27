@@ -571,8 +571,10 @@ describe('MilestonePlayer', () => {
       fireEvent.click(screen.getByRole('button', { name: 'check' }));
       fireEvent.click(screen.getByRole('button', { name: 'finish milestone →' }));
 
-      expect(document.activeElement).toHaveTextContent(result);
-      expect(document.activeElement).toHaveTextContent(/\d of 1 points/);
+      const resultStatus = screen.getByRole('status');
+      expect(resultStatus).toHaveTextContent(result);
+      expect(resultStatus).toHaveTextContent(/\d of 1 points/);
+      expect(resultStatus.parentElement).toHaveFocus();
     });
 
     it('returns to a clean first part after retrying', () => {
