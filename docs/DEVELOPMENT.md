@@ -20,6 +20,18 @@ npm install
 npm run dev
 ```
 
+The app uses production progression rules by default. Set `VITE_DEV_MODE` to
+any non-empty value when course development requires access to every lesson and
+milestone from the dashboard and through direct routes:
+
+```bash
+VITE_DEV_MODE=1 npm run dev
+```
+
+Leave `VITE_DEV_MODE` unset when checking the learner-facing sequence. An unset
+variable keeps later lessons and milestones inaccessible until their required
+earlier work is complete.
+
 ### Code Standards
 - **Component Design**: Favor functional components and React hooks over class components.
 - **Type Safety**: Avoid using `any`. Define clear interfaces for all component props and state shapes.

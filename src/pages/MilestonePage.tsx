@@ -1,9 +1,12 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
 import { getMilestoneById } from '../data/milestones.ts';
 import { MilestonePlayer } from '../components/milestone/MilestonePlayer.tsx';
+import { useAppState } from '../state/app-context.tsx';
+import { isDevelopmentMode, isMilestoneUnlocked } from '../utils/progression.ts';
 
 export function MilestonePage() {
   const { milestoneId } = useParams<{ milestoneId: string }>();
+  const { completedLessons, completedMilestones } = useAppState();
   const milestone = milestoneId ? getMilestoneById(milestoneId) : undefined;
 
   if (!milestone) {
@@ -16,6 +19,21 @@ export function MilestonePage() {
           ← back to home
         </Link>
       </div>
+    );
+  }
+
+  const isLocked = !isDevelopmentMode() && !isMilestoneUnlocked(
+    milestone.id,
+    { completedLessons, completedMilestones },
+  );
+
+  if (isLocked) {
+    return (
+      <Navigate
+        to="/"
+        replace
+        state={{ routeNotice: 'This milestone is not unlocked yet.' }}
+      />
     );
   }
 

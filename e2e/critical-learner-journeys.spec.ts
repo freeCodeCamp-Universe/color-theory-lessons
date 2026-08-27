@@ -147,6 +147,26 @@ test('every navigation destination remains visible and usable at the mobile brea
   await expect(page).toHaveURL(/\/$/);
 });
 
+test('production progression redirects locked routes and keeps the hero on the milestone', async ({ page }) => {
+  await page.goto('/lesson/u2-l1');
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByRole('status')).toContainText('This lesson is not unlocked yet.');
+
+  await page.getByRole('button', { name: 'dismiss' }).click();
+  await page.goto('/milestone/milestone-1');
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByRole('status')).toContainText('This milestone is not unlocked yet.');
+
+  await page.getByRole('button', { name: 'dismiss' }).click();
+  await page.evaluate(() => localStorage.clear());
+  await seedCourseState(page, { completedLessons: unitLessons[0] });
+  await page.reload();
+  await expect(page.getByRole('link', { name: 'continue →' })).toHaveAttribute(
+    'href',
+    '/milestone/milestone-1',
+  );
+});
+
 test('a new learner completes a lesson and keeps progress after a browser reload', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('link', { name: 'start learning' }).click();
