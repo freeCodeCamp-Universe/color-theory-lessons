@@ -200,8 +200,8 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
           <button onClick={() => interactive && setIsDark(true)} disabled={inputsDisabled}
             style={{
               padding: '0.3rem 0.6rem', fontSize: '0.78rem', fontFamily: 'var(--font-mono)',
-              background: isDark ? '#222' : 'transparent', color: isDark ? '#fff' : 'var(--muted)',
-              border: `1px solid ${isDark ? '#555' : 'var(--border)'}`, borderRadius: 'var(--radius-sm)',
+              background: isDark ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'transparent', color: isDark ? 'var(--accent-warning)' : 'var(--muted)',
+              border: `1px solid ${isDark ? 'var(--accent-warning)' : 'var(--border-strong)'}`, borderRadius: 'var(--radius-sm)',
               cursor: interactive ? 'pointer' : 'default',
             }}>
             dark overlay
@@ -209,8 +209,8 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
           <button onClick={() => interactive && setIsDark(false)} disabled={inputsDisabled}
             style={{
               padding: '0.3rem 0.6rem', fontSize: '0.78rem', fontFamily: 'var(--font-mono)',
-              background: !isDark ? '#eee' : 'transparent', color: !isDark ? '#111' : 'var(--muted)',
-              border: `1px solid ${!isDark ? '#aaa' : 'var(--border)'}`, borderRadius: 'var(--radius-sm)',
+              background: !isDark ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'transparent', color: !isDark ? 'var(--accent-warning)' : 'var(--muted)',
+              border: `1px solid ${!isDark ? 'var(--accent-warning)' : 'var(--border-strong)'}`, borderRadius: 'var(--radius-sm)',
               cursor: interactive ? 'pointer' : 'default',
             }}>
             light overlay

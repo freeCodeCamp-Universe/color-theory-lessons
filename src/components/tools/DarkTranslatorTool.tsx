@@ -164,7 +164,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.72rem',
                     background: 'var(--surface, #1e293b)', color: 'var(--primary-foreground)',
-                    border: `1px solid ${isValidHex(val) ? 'var(--border)' : 'var(--accent-danger)'}`,
+                    border: `1px solid ${isValidHex(val) ? 'var(--border-strong)' : 'var(--accent-danger)'}`,
                     borderRadius: 3, padding: '0.15rem 0.3rem', width: 80,
                   }}
                 />
@@ -184,7 +184,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
                   padding: '0.2rem 0.6rem', fontSize: '0.75rem', borderRadius: 4, cursor: 'pointer',
                   background: preview === m ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'var(--surface, #1e293b)',
                   color: preview === m ? 'var(--accent-warning)' : 'var(--primary-foreground)',
-                  border: `1px solid ${preview === m ? 'var(--accent-warning)' : 'var(--border)'}`,
+                  border: `1px solid ${preview === m ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
                 }}
               >
                 {m} mode

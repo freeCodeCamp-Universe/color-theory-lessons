@@ -271,7 +271,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
               style={{
                 padding: '0.4rem 0.75rem',
                 background: relationship === option ? 'var(--surface)' : 'transparent',
-                border: `1px solid ${relationship === option ? 'var(--accent-warning)' : 'var(--border)'}`,
+                border: `1px solid ${relationship === option ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
                 borderRadius: 'var(--radius-sm)',
                 color: relationship === option ? 'var(--accent-warning)' : 'var(--secondary-foreground)',
                 fontFamily: 'var(--font-mono)',
@@ -353,7 +353,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
                     style={{
                       padding: '0.45rem 0.75rem',
                       background: selected ? 'color-mix(in srgb, var(--accent-warning) 10%, var(--surface))' : 'var(--surface)',
-                      border: `1px solid ${selected ? 'var(--accent-warning)' : 'var(--border)'}`,
+                      border: `1px solid ${selected ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
                       borderRadius: 'var(--radius-sm)',
                       color: 'var(--primary-foreground)',
                       fontFamily: 'var(--font-sans)',

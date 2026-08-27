@@ -135,7 +135,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
               fontFamily: 'var(--font-mono)',
               background: simulationMode === mode.id ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'transparent',
               color: simulationMode === mode.id ? 'var(--accent-warning)' : 'var(--muted)',
-              border: `1px solid ${simulationMode === mode.id ? 'var(--accent-warning)' : 'var(--border)'}`,
+              border: `1px solid ${simulationMode === mode.id ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
               borderRadius: 'var(--radius-sm)',
               cursor: interactive ? 'pointer' : 'default',
             }}
@@ -206,7 +206,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
                         ? showResult
                           ? isCorrect ? 'var(--accent-success)' : 'var(--accent-danger)'
                           : 'var(--accent-warning)'
-                        : 'var(--border)'}`,
+                        : 'var(--border-strong)'}`,
                       background: answer === opt
                         ? showResult
                           ? `color-mix(in srgb, ${isCorrect ? 'var(--accent-success)' : 'var(--accent-danger)'} 20%, transparent)`

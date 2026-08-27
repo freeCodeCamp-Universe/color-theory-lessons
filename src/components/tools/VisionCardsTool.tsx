@@ -114,7 +114,7 @@ export const VisionCardsTool = memo(function VisionCardsTool({
             <div
               key={card.name}
               style={{
-                border: '1px solid var(--border)',
+                border: '1px solid var(--border-strong)',
                 borderRadius: 'var(--radius-md)',
                 overflow: 'hidden',
               }}

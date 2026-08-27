@@ -210,7 +210,7 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.78rem',
                     background: 'var(--surface)', color: 'var(--primary-foreground)',
-                    border: `1px solid ${isValidHex(val) ? 'var(--border)' : 'var(--accent-danger)'}`,
+                    border: `1px solid ${isValidHex(val) ? 'var(--border-strong)' : 'var(--accent-danger)'}`,
                     borderRadius: 3, padding: '0.15rem 0.3rem', width: 90,
                   }}
                 />

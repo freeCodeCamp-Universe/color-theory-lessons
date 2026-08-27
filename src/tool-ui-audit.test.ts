@@ -53,4 +53,29 @@ describe('tool UI audit regressions', () => {
       /className={styles\.miniPreview}\s+data-authored-visual/,
     );
   });
+
+  it('gives unstyled enabled tool buttons a zero-specificity strong boundary', () => {
+    const shellCss = read('src/components/tools/ToolShell.module.css');
+
+    expect(shellCss).toMatch(
+      /:where\(\s*\.shell button:not\(:disabled\):not\(\[data-authored-visual\]\):not\(\[data-authored-visual\] \*\)\s*\)\s*{\s*border: 1px solid var\(--border-strong\);\s*}/,
+    );
+  });
+
+  it.each([
+    ['src/components/tools/AdditiveSortTool.tsx', "active ? 'var(--accent-warning)' : 'var(--border-strong)'"],
+    ['src/components/tools/AuditFlowTool.tsx', "isSelected ? 'var(--accent-warning)' : 'var(--border-strong)'"],
+    ['src/components/tools/BackgroundShiftTool.tsx', ": 'var(--border-strong)';"],
+    ['src/components/tools/ColorOnlyDetectorTool.tsx', "isSelected ? 'var(--accent-warning)' : 'var(--border-strong)'"],
+    ['src/components/tools/ColorWheelTool.tsx', "selected ? 'var(--accent-warning)' : 'var(--border-strong)'"],
+    ['src/components/tools/DarkTranslatorTool.tsx', "preview === m ? 'var(--accent-warning)' : 'var(--border-strong)'"],
+    ['src/components/tools/InclusiveReviewTool.tsx', "simulationMode === mode.id ? 'var(--accent-warning)' : 'var(--border-strong)'"],
+    ['src/components/tools/InterfaceGalleryTool.tsx', "mode === m.id ? 'var(--accent-warning)' : 'var(--border-strong)'"],
+    ['src/components/tools/LogicFixerTool.tsx', "isSelected ? 'var(--accent-warning)' : 'var(--border-strong)'"],
+    ['src/components/tools/MismatchExplainerTool.tsx', "isSelected ? 'var(--accent-warning)' : 'var(--border-strong)'"],
+    ['src/components/tools/RGBMixerTool.tsx', "prediction === option.id ? 'var(--accent-warning)' : 'var(--border-strong)'"],
+    ['src/components/tools/TextContrastLabTool.tsx', "activePair === i ? 'var(--accent-warning)' : 'var(--border-strong)'"],
+  ] as const)('%s gives its enabled choices a strong default boundary', (file, boundary) => {
+    expect(read(file)).toContain(boundary);
+  });
 });

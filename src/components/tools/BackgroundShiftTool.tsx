@@ -354,7 +354,7 @@ export const BackgroundShiftTool = memo(function BackgroundShiftTool({
                 ? 'var(--accent-danger)'
                 : isSelected
                 ? 'var(--accent-warning)'
-                : 'var(--border)';
+                : 'var(--border-strong)';
               const bg = showResult && choice.isCorrect
                 ? 'color-mix(in srgb, var(--accent-success) 8%, var(--surface))'
                 : showResult && isSelected && !choice.isCorrect

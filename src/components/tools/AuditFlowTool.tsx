@@ -146,7 +146,7 @@ export const AuditFlowTool = memo(function AuditFlowTool({
                   display: 'flex', alignItems: 'flex-start', gap: '0.4rem',
                   fontSize: '0.78rem', cursor: interactive && stageController.result !== 'passed' ? 'pointer' : 'default',
                   padding: '0.3rem 0.5rem', borderRadius: 'var(--radius-sm)',
-                  border: `1px solid ${isSelected ? 'var(--accent-warning)' : 'var(--border)'}`,
+                  border: `1px solid ${isSelected ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
                   background: isSelected ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'transparent',
                 }}
               >

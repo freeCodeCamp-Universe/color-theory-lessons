@@ -286,7 +286,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({
                 value={isValidHex(colors[i]) ? colors[i] : '#000000'}
                 disabled={stageController.result === 'passed'}
                 onChange={e => update(i, e.target.value)}
-                style={{ gridRow: '1 / span 2', width: 32, height: 32, padding: 0, border: '1px solid var(--border)', borderRadius: 4, cursor: stageController.result === 'passed' ? 'not-allowed' : 'pointer', background: 'transparent' }}
+                style={{ gridRow: '1 / span 2', width: 32, height: 32, padding: 0, border: '1px solid var(--border-strong)', borderRadius: 4, cursor: stageController.result === 'passed' ? 'not-allowed' : 'pointer', background: 'transparent' }}
                 aria-label={`Change ${name} color`}
               />
             )}
@@ -300,7 +300,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({
                 value={patterns[i]}
                 disabled={stageController.result === 'passed'}
                 onChange={(event) => updatePattern(i, event.target.value as Pattern)}
-                style={{ gridColumn: '1 / -1', width: '100%', fontFamily: 'var(--font-mono)', fontSize: '0.68rem', padding: '0.25rem', color: 'var(--primary-foreground)', background: 'var(--primary-background)', border: '1px solid var(--border)', borderRadius: 4 }}
+                style={{ gridColumn: '1 / -1', width: '100%', fontFamily: 'var(--font-mono)', fontSize: '0.68rem', padding: '0.25rem', color: 'var(--primary-foreground)', background: 'var(--primary-background)', border: '1px solid var(--border-strong)', borderRadius: 4 }}
               >
                 {PATTERN_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>{option.label}</option>

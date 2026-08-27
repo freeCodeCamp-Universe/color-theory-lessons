@@ -250,7 +250,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({
             <div
               key={mod.id}
               style={{
-                border: `1px solid ${isRepaired ? 'var(--accent-success)' : 'var(--border)'}`,
+                border: `1px solid ${isRepaired ? 'var(--accent-success)' : 'var(--border-strong)'}`,
                 borderRadius: 'var(--radius-md)',
                 padding: '0.65rem',
                 background: isRepaired ? 'color-mix(in srgb, var(--accent-success) 6%, transparent)' : 'transparent',

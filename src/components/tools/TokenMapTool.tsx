@@ -233,7 +233,7 @@ export const TokenMapTool = memo(function TokenMapTool({
                     style={{
                       fontSize: '0.75rem', fontFamily: 'var(--font-mono)',
                       background: 'var(--surface)', color: 'var(--primary-foreground)',
-                      border: `1px solid ${isWrong ? 'var(--accent-danger)' : 'var(--border)'}`,
+                      border: `1px solid ${isWrong ? 'var(--accent-danger)' : 'var(--border-strong)'}`,
                       borderRadius: 'var(--radius-sm)', padding: '0.2rem 0.3rem',
                     }}
                     aria-label={`Category for ${item.label}`}

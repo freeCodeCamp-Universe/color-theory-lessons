@@ -47,6 +47,16 @@
   font-size: 1rem !important;
 }
 
+/*
+ * Supply a visible boundary for unstyled tool actions. The zero-specificity
+ * selector lets component selected, success, error, and CTA styles win.
+ */
+:where(
+  .shell button:not(:disabled):not([data-authored-visual]):not([data-authored-visual] *)
+) {
+  border: 1px solid var(--border-strong);
+}
+
 .toolLabel {
   font-size: 1rem;
   color: var(--muted);

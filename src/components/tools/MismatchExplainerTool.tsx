@@ -109,7 +109,7 @@ export const MismatchExplainerTool = memo(function MismatchExplainerTool({
                 <button
                   key={reason.id} type="button" onClick={() => toggleReason(reason.id)}
                   disabled={stageController.result !== 'idle'} aria-pressed={isSelected}
-                  style={{ padding: 'var(--spacing-sm) var(--spacing-md)', background: isSelected ? 'color-mix(in srgb, var(--accent-warning) 10%, var(--surface))' : 'var(--surface)', border: `1px solid ${isSelected ? 'var(--accent-warning)' : 'var(--border)'}`, borderRadius: 'var(--radius-sm)', color: 'var(--primary-foreground)', fontFamily: 'var(--font-sans)', fontSize: '1rem', textAlign: 'left' }}
+                  style={{ padding: 'var(--spacing-sm) var(--spacing-md)', background: isSelected ? 'color-mix(in srgb, var(--accent-warning) 10%, var(--surface))' : 'var(--surface)', border: `1px solid ${isSelected ? 'var(--accent-warning)' : 'var(--border-strong)'}`, borderRadius: 'var(--radius-sm)', color: 'var(--primary-foreground)', fontFamily: 'var(--font-sans)', fontSize: '1rem', textAlign: 'left' }}
                 >
                   {reason.label}
                 </button>

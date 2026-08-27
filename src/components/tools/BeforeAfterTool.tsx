@@ -371,7 +371,7 @@ function HierarchyDemo({
               value={roles[item.id]}
               onChange={(e) => setRoles((r) => ({ ...r, [item.id]: e.target.value as BtnRole }))}
               disabled={checked || !interactive}
-              style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', background: 'var(--primary-background)', color: 'var(--primary-foreground)', border: '1px solid var(--border)', borderRadius: '3px', padding: '0.3rem 0.5rem', flex: '1 1 180px', minWidth: 0, maxWidth: '100%' }}
+              style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', background: 'var(--primary-background)', color: 'var(--primary-foreground)', border: '1px solid var(--border-strong)', borderRadius: '3px', padding: '0.3rem 0.5rem', flex: '1 1 180px', minWidth: 0, maxWidth: '100%' }}
             >
               <option value="primary">primary (accent)</option>
               <option value="secondary">secondary (outlined)</option>

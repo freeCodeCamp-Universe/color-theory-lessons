@@ -188,7 +188,7 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
                     style={{
                       fontFamily: 'var(--font-mono)', fontSize: '0.78rem',
                       padding: '0.2rem 0.4rem', borderRadius: 'var(--radius-sm)',
-                      border: '1px solid var(--border)', background: 'var(--surface)',
+                      border: '1px solid var(--border-strong)', background: 'var(--surface)',
                       color: 'var(--primary-foreground)', width: '7rem', maxWidth: '100%', minWidth: 0, flex: '1 1 7rem',
                     }}
                     aria-label={`${comp.label} hex color`}

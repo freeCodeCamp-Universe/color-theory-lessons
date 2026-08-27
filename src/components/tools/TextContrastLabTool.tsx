@@ -117,7 +117,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
               padding: '0.3rem 0.65rem',
               fontSize: '0.75rem',
               borderRadius: 'var(--radius-sm)',
-              border: `1px solid ${showResults && passed[p.id] ? 'var(--accent-success)' : activePair === i ? 'var(--accent-warning)' : 'var(--border)'}`,
+              border: `1px solid ${showResults && passed[p.id] ? 'var(--accent-success)' : activePair === i ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
               background: activePair === i
                 ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)'
                 : 'transparent',
@@ -196,7 +196,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
               style={{
                 fontFamily: 'var(--font-mono)', fontSize: '0.8rem',
                 padding: '0.25rem 0.4rem', borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border)', background: 'var(--surface)',
+                border: '1px solid var(--border-strong)', background: 'var(--surface)',
                 color: 'var(--primary-foreground)', width: '7rem',
               }}
               aria-label="Text color hex"
@@ -215,7 +215,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
               style={{
                 fontFamily: 'var(--font-mono)', fontSize: '0.8rem',
                 padding: '0.25rem 0.4rem', borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border)', background: 'var(--surface)',
+                border: '1px solid var(--border-strong)', background: 'var(--surface)',
                 color: 'var(--primary-foreground)', width: '7rem',
               }}
               aria-label="Background color hex"

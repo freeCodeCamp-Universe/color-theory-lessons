@@ -280,7 +280,7 @@
 .answerChoice {
   padding: 0.35rem 0.75rem;
   background: var(--primary-background);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   color: var(--secondary-foreground);
   font-family: var(--font-mono);

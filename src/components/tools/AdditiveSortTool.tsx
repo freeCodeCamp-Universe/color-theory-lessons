@@ -199,7 +199,7 @@ export const AdditiveSortTool = memo(function AdditiveSortTool({
                               fontFamily: 'var(--font-mono)',
                               fontSize: '0.7rem',
                               borderRadius: '3px',
-                              border: `1px solid ${active ? 'var(--accent-warning)' : 'var(--border)'}`,
+                              border: `1px solid ${active ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
                               background: active ? 'color-mix(in srgb, var(--accent-warning) 12%, var(--surface))' : 'transparent',
                               color: active ? 'var(--accent-warning)' : 'var(--muted)',
                               cursor: checked ? 'not-allowed' : 'pointer',

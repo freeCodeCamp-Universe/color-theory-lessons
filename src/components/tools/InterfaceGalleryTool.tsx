@@ -90,7 +90,7 @@ export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({
               fontFamily: 'var(--font-mono)',
               background: mode === m.id ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'transparent',
               color: mode === m.id ? 'var(--accent-warning)' : seen.has(m.id) ? 'var(--accent-success)' : 'var(--muted)',
-              border: `1px solid ${mode === m.id ? 'var(--accent-warning)' : 'var(--border)'}`,
+              border: `1px solid ${mode === m.id ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
               borderRadius: 'var(--radius-sm)',
               cursor: interactive ? 'pointer' : 'default',
             }}
