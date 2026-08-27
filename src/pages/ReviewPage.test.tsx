@@ -22,6 +22,14 @@ function renderReview(completedLessons: string[]) {
 }
 
 describe('ReviewPage topic grouping', () => {
+  it('explains how to unlock review content when no lessons are complete', () => {
+    renderReview([]);
+
+    expect(
+      screen.getByText('No review content yet — complete your first lesson to unlock this section.'),
+    ).toBeInTheDocument();
+  });
+
   it('groups completed lessons that share a normalized tag under one heading', () => {
     renderReview(['u3-l5', 'u3-l6', 'u6-l4']);
 
