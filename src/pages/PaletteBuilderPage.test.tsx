@@ -126,19 +126,26 @@ describe('PaletteBuilderPage suggestions', () => {
   it.each([
     ['lighter', '#6699CC', 'missing lighter colors'],
     ['darker', '#336699', 'missing darker colors'],
-    ['neutral', '#668099', 'missing neutral colors'],
-  ])('shows a labeled missing %s color suggestion', async (_, primary, heading) => {
+    ['muted', '#668099', 'missing neutral colors'],
+  ] as const)('shows the expected missing %s color suggestion', async (variant, primary, heading) => {
     const user = userEvent.setup();
     render(<PaletteBuilderPage />);
     await enterPrimary(user, primary);
     await user.click(screen.getByRole('button', { name: 'Add analogous +30 to palette' }));
 
+    const { h, s, l } = hexToHsl(primary);
+    const expected = variant === 'lighter'
+      ? hslToHex(h, s, clamp(l + 25, 0, 96))
+      : variant === 'darker'
+        ? hslToHex(h, s, clamp(l - 25, 5, 100))
+        : hslToHex(h, Math.round(s * 0.4), l);
     expect(screen.getByRole('heading', { name: heading })).toBeVisible();
     const section = screen.getByRole('heading', { name: heading }).parentElement!;
-    const suggestion = within(section).getAllByRole('button')[0];
-    expect(suggestion).toHaveAccessibleName(/^Add #[0-9A-F]{6} to palette$/);
-    expect(suggestion).toHaveAttribute('title', expect.stringMatching(/^#[0-9A-F]{6} — click to add$/));
-    expect(suggestion.style.backgroundColor).not.toBe('');
+    const suggestion = within(section).getByRole('button', {
+      name: `Add ${expected.toUpperCase()} to palette`,
+    });
+    expect(suggestion).toHaveAttribute('title', `${expected.toUpperCase()} — click to add`);
+    expectSwatchColor(suggestion, expected);
   });
 });
 
