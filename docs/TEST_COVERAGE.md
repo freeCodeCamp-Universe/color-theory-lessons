@@ -17,7 +17,7 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 
 | Main behavior | Status | Automated test or accountable issue |
 |---|---|---|
-| Enter the app at `/` and see the course dashboard inside the app shell. | Full | `src/App.test.tsx`, `src/pages/HomePage.test.tsx` |
+| Enter the app at `/` and see the course dashboard inside the app shell. | Partial | `src/App.test.tsx` verifies the route with a mocked dashboard, and `src/pages/HomePage.test.tsx` verifies the real dashboard separately; their integration inside the app shell remains unverified. |
 | Open a registered lesson URL and see its loading state followed by the lesson player. | Full | `src/App.test.tsx`, `src/pages/LessonPage.test.tsx` |
 | Open an unknown lesson ID and see a lesson-not-found result. | Full | `src/pages/LessonPage.test.tsx` |
 | Open a registered milestone URL and see the milestone player. | Full | `src/App.test.tsx`, `src/pages/MilestonePage.test.tsx` |
