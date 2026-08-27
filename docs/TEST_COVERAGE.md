@@ -114,7 +114,7 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | Move through challenge and quiz parts, see part progress and points, and complete only after the final part. | Full | `src/components/milestone/MilestonePlayer.test.tsx` |
 | Submit milestone quiz choices with native radio selection and keyboard behavior. | Full | `src/components/milestone/MilestonePlayer.test.tsx` |
 | Apply each milestone's configured point values and pass threshold at the boundary. | Full | `src/components/milestone/MilestonePlayer.test.tsx`, `src/components/milestone/Milestone5Flow.test.tsx`, `src/components/milestone/Milestone6Flow.test.tsx`, `src/data/milestones.test.ts` |
-| Move focus after advancing to a new milestone part, question, or final result. | Partial | `src/components/milestone/MilestonePlayer.test.tsx` verifies focus on the part summary and each new question, but does not assert focus on the final result. |
+| Move focus after advancing to a new milestone part, question, or final result. | Full | `src/components/milestone/MilestonePlayer.test.tsx` |
 | Retry a failed milestone from a clean first part without unlocking the next unit. | Full | `src/components/milestone/MilestonePlayer.test.tsx`, `e2e/critical-learner-journeys.spec.ts` |
 | Resume an unfinished milestone attempt and restore selected answers after remount or reload. | Full | `src/components/milestone/MilestonePlayer.test.tsx` and each challenge test listed below |
 | Restore failed and passed milestone results while preserving the correct progression state. | Full | `src/components/milestone/MilestonePlayer.test.tsx`, `e2e/critical-learner-journeys.spec.ts` |
@@ -124,7 +124,7 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | `theme-from-scratch`: pass text, surface, and accent stages, retry, and restore a session. | Full | `src/components/milestone/challenges/ThemeFromScratchChallenge.test.tsx` |
 | `simulation-spotter`: identify color-only failures and repairs, retry, and restore a session. | Full | `src/components/milestone/challenges/SimulationSpotterChallenge.test.tsx` |
 | `accessibility-rescue`: repair all required accessibility states, retry, and restore a session. | Full | `src/components/milestone/challenges/AccessibilityRescueChallenge.test.tsx`, `src/components/milestone/Milestone5Flow.test.tsx` |
-| `semantic-audit`: assign roles, identify the conflict, retry, and restore a session. | Partial | `src/components/milestone/challenges/SemanticAuditChallenge.test.tsx` verifies role-stage retry and session restoration, while `src/components/milestone/Milestone6Flow.test.tsx` verifies whole-milestone retry; conflict-stage retry remains unverified. |
+| `semantic-audit`: assign roles, identify the conflict, retry, and restore a session. | Full | `src/components/milestone/challenges/SemanticAuditChallenge.test.tsx`, `src/components/milestone/Milestone6Flow.test.tsx` |
 | `dark-mode-stress`: pass all three contrast stages using raw thresholds, retry, and restore a session. | Full | `src/components/milestone/challenges/DarkModeStressChallenge.test.tsx`, `src/components/milestone/Milestone6Flow.test.tsx` |
 
 ## Persistence, preferences, glossary, and Review

@@ -561,6 +561,20 @@ describe('MilestonePlayer', () => {
       expect(document.activeElement).toHaveTextContent('Question 2?');
     });
 
+    it.each([
+      { choice: 'Blue', result: 'milestone passed' },
+      { choice: 'Red', result: 'milestone not passed' },
+    ])('moves focus to the final $result result', ({ choice, result }) => {
+      renderMilestone(singleQuestionMilestone);
+
+      fireEvent.click(screen.getByRole('radio', { name: new RegExp(choice) }));
+      fireEvent.click(screen.getByRole('button', { name: 'check' }));
+      fireEvent.click(screen.getByRole('button', { name: 'finish milestone →' }));
+
+      expect(document.activeElement).toHaveTextContent(result);
+      expect(document.activeElement).toHaveTextContent(/\d of 1 points/);
+    });
+
     it('returns to a clean first part after retrying', () => {
       renderMilestone(scoredMilestone);
       completeChallengePart();

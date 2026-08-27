@@ -60,6 +60,31 @@ describe('SemanticAuditChallenge', () => {
     expect(onComplete).toHaveBeenCalledOnce();
   });
 
+  it('retries an incorrect conflict and completes without replaying role assignment', async () => {
+    const onComplete = vi.fn();
+    render(<SemanticAuditChallenge onComplete={onComplete} />);
+    passRoleStage();
+    fireEvent.change(screen.getByRole('combobox', { name: 'Which role issue exists in this set?' }), {
+      target: { value: 'surface-too-bright' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: 'check conflict' }));
+    expect(screen.getByRole('status')).toHaveTextContent('That is not the weak role pair in this palette.');
+
+    fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
+    await waitFor(() => expect(screen.getByRole('heading', { name: 'Identify the palette conflict' })).toHaveFocus());
+    expect(screen.getByText('Stage 2 of 2')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Select swatch/ })).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByRole('combobox', { name: 'Which role issue exists in this set?' }), {
+      target: { value: 'warning-error-too-close' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'check conflict' }));
+
+    expect(screen.getByRole('status')).toHaveTextContent('The warning and error colors have weak luminance separation. Challenge complete.');
+    expect(onComplete).toHaveBeenCalledOnce();
+  });
+
   it('restores the conflict stage and its selected answer after reload', async () => {
     const sessionKey = 'milestone-6:1';
     const first = render(<SemanticAuditChallenge onComplete={vi.fn()} sessionKey={sessionKey} />);
