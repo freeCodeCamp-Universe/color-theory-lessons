@@ -200,8 +200,11 @@ test('a failed milestone retry clears the attempt and leaves progression locked'
   await page.reload();
   await expect(page.getByText('0 / 5 answered')).toBeVisible();
   await page.getByRole('link', { name: 'color-theory-course$' }).click();
-  await expect(page.getByText('How Screens Make Color')).toBeVisible();
-  await expect(page.getByText('locked').first()).toBeVisible();
+  const unitTwoCard = page.getByText('How Screens Make Color', { exact: true })
+    .locator('..')
+    .locator('..');
+  await expect(unitTwoCard).toContainText('locked');
+  await expect(unitTwoCard).not.toHaveAttribute('role', 'button');
   await expect.poll(async () => storedCourseState(page)).toMatchObject({
     progress: { completedMilestones: [] },
   });
