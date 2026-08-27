@@ -96,7 +96,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({
               Hue: {h}°
               <input type="range" min={0} max={HUE_MAX} value={h} disabled={inputsDisabled}
                 onChange={(e) => setH(Number(e.target.value))}
-                style={{ width: '100%', accentColor: 'var(--yellow)' }}
+                style={{ width: '100%', accentColor: interactive ? 'var(--accent-warning)' : 'var(--yellow)' }}
                 aria-label={`Hue: ${h} degrees`}
               />
             </label>
@@ -104,7 +104,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({
               Saturation: {s}%
               <input type="range" min={0} max={100} value={s} disabled={inputsDisabled}
                 onChange={(e) => setS(Number(e.target.value))}
-                style={{ width: '100%', accentColor: 'var(--yellow)' }}
+                style={{ width: '100%', accentColor: interactive ? 'var(--accent-warning)' : 'var(--yellow)' }}
                 aria-label={`Saturation: ${s} percent`}
               />
             </label>
@@ -112,7 +112,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({
               Lightness: {l}%
               <input type="range" min={0} max={100} value={l} disabled={inputsDisabled}
                 onChange={(e) => setL(Number(e.target.value))}
-                style={{ width: '100%', accentColor: 'var(--yellow)' }}
+                style={{ width: '100%', accentColor: interactive ? 'var(--accent-warning)' : 'var(--yellow)' }}
                 aria-label={`Lightness: ${l} percent`}
               />
             </label>
@@ -132,7 +132,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({
               background: targetHex, border: '2px solid var(--border)',
             }} />
             <button onClick={checkMatch} style={{
-              padding: '0.4rem 1rem', background: 'var(--yellow)', color: '#111',
+              padding: '0.4rem 1rem', background: 'var(--accent-cta)', color: 'var(--cta-foreground)',
               border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer',
               fontFamily: 'var(--font-mono)', fontSize: '0.82rem',
             }}>
@@ -157,7 +157,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({
         >
           {playground}
         </ExerciseStage>
-      ) : playground}
+      ) : <div data-authored-visual>{playground}</div>}
     </div>
   );
 });

@@ -165,7 +165,7 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({
 
         {/* ─ RGB sliders ─ */}
         {slidersLocked && (
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)' }}>
+          <span style={{ fontSize: '1rem', color: 'var(--muted)' }}>
             sliders locked; type a HEX value to match
           </span>
         )}
@@ -173,7 +173,7 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({
           {CHANNELS.map(({ key, label, trackColor }) => (
             <div key={key} className={styles.sliderRow}>
               <div className={styles.sliderHeader}>
-                <span className={styles.sliderName} style={{ color: trackColor }}>
+                <span className={styles.sliderName}>
                   {label}
                 </span>
                 <span className={styles.sliderValue}>{current[key]}</span>

@@ -141,7 +141,7 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
   if (previewMockup) {
     return (
       <div className={styles.previewFrame}>
-        <div className={`${styles.mockup} ${previewMockup === 'purposeful' ? styles.mockupGood : styles.mockupBad}`}>
+        <div data-authored-visual className={`${styles.mockup} ${previewMockup === 'purposeful' ? styles.mockupGood : styles.mockupBad}`}>
           <div className={styles.nav}>
             <span className={styles.navLogo}>color-theory-course$</span>
             <span className={styles.navLink}>settings</span>
@@ -178,15 +178,15 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
 
       <ExerciseStage
         controller={stageController}
-        incorrectFeedback={<span style={{ color: 'var(--red)' }}>That role does not match this area.</span>}
-        completionFeedback={<span style={{ color: 'var(--green)' }}>✓ All four color roles identified.</span>}
+        incorrectFeedback={<span style={{ color: 'var(--accent-danger)' }}>That role does not match this area.</span>}
+        completionFeedback={<span style={{ color: 'var(--accent-success)' }}>✓ All four color roles identified.</span>}
         onRetry={() => setTriedAnswer(null)}
       >
 
       <div>
         {/* Purposeful mockup — interactive */}
         <div className={styles.panel}>
-          <div className={`${styles.mockup} ${styles.mockupGood}`}>
+          <div data-authored-visual className={`${styles.mockup} ${styles.mockupGood}`}>
             <div
               className={`${styles.nav} ${interactive ? styles.region : ''} ${results['nav'] === true ? styles.regionSolved : activeId === 'nav' ? styles.regionActive : ''}`}
               onClick={() => interactive && handleRegionClick('nav')}
@@ -347,31 +347,31 @@ function HierarchyDemo({
     <ExerciseStage
       controller={stageController}
       incorrectFeedback={(
-        <span style={{ color: 'var(--red)' }}>
+        <span style={{ color: 'var(--accent-danger)' }}>
           Submit should be primary, Save Draft secondary, and Cancel tertiary.
         </span>
       )}
       completionFeedback={(
-        <span style={{ color: 'var(--green)' }}>✓ Submit stands out as the primary action.</span>
+        <span style={{ color: 'var(--accent-success)' }}>✓ Submit stands out as the primary action.</span>
       )}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
-      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '6px', padding: 'var(--spacing-lg)', display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
+      <div data-authored-visual style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '6px', padding: 'var(--spacing-lg)', display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
         {HIERARCHY_ITEMS.map((item) => (
           <span key={item.id} style={btnStyle(roles[item.id])}>{item.label}</span>
         ))}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>assign roles</span>
+        <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>assign roles</span>
         {HIERARCHY_ITEMS.map((item) => (
-          <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
-            <label htmlFor={`hierarchy-role-${item.id}`} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', width: '90px' }}>{item.label}</label>
+          <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
+            <label htmlFor={`hierarchy-role-${item.id}`} style={{ fontFamily: 'var(--font-sans)', fontSize: '0.85rem', flex: '1 1 90px' }}>{item.label}</label>
             <select
               id={`hierarchy-role-${item.id}`}
               value={roles[item.id]}
               onChange={(e) => setRoles((r) => ({ ...r, [item.id]: e.target.value as BtnRole }))}
               disabled={checked || !interactive}
-              style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', background: 'var(--primary-background)', color: 'var(--primary-foreground)', border: '1px solid var(--border)', borderRadius: '3px', padding: '0.3rem 0.5rem' }}
+              style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', background: 'var(--primary-background)', color: 'var(--primary-foreground)', border: '1px solid var(--border-strong)', borderRadius: '3px', padding: '0.3rem 0.5rem', flex: '1 1 180px', minWidth: 0, maxWidth: '100%' }}
             >
               <option value="primary">primary (accent)</option>
               <option value="secondary">secondary (outlined)</option>
@@ -383,7 +383,7 @@ function HierarchyDemo({
       {interactive && !checked && (
         <button
           onClick={handleCheck}
-          style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'var(--yellow)', color: 'var(--gray-90)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.85rem', borderRadius: '3px', border: 'none', cursor: 'pointer' }}
+          style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'var(--accent-cta)', color: 'var(--cta-foreground)', fontWeight: 700, fontSize: '1rem', borderRadius: '3px', border: 'none', cursor: 'pointer' }}
         >
           check hierarchy
         </button>

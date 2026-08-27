@@ -2,15 +2,21 @@ import { createContext, useContext } from 'react';
 import type { ProgressState } from '../types/progress.ts';
 import { loadState } from './persistence.ts';
 
+export type ThemePreference = 'dark' | 'light' | 'system';
+
+export interface AppPreferences {
+  /** Color theme selected by the learner. */
+  theme: ThemePreference;
+  /** Whether to disable decorative animations. */
+  reducedMotion: boolean;
+  /** Simulation filter to apply to the UI (e.g., 'deuteranopia'). */
+  colorBlindnessMode: string | null;
+}
+
 /** Combined global state including progress and user preferences. */
 interface AppState extends ProgressState {
   /** Global user-specific settings. */
-  preferences: {
-    /** Whether to disable decorative animations. */
-    reducedMotion: boolean;
-    /** Simulation filter to apply to the UI (e.g., 'deuteranopia'). */
-    colorBlindnessMode: string | null;
-  };
+  preferences: AppPreferences;
 }
 
 /** Actions that can be dispatched to update the global state. */

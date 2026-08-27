@@ -18,7 +18,7 @@ export function App() {
       <BrowserRouter>
         <AppShell>
           <ErrorBoundary>
-          <Suspense fallback={<p style={{ color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>loading...</p>}>
+          <Suspense fallback={<p style={{ color: 'var(--muted)' }}>loading...</p>}>
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/lesson/:lessonId" element={<LessonPage />} />

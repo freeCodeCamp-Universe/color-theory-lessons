@@ -78,7 +78,7 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({
         completionFeedback="Each state has a distinct non-color treatment."
       >
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+      <div className={shellStyles.twoColumnGrid} style={{ gap: '0.5rem' }}>
         {STATES.map((state) => {
           const stateCues = cues[state.name];
           const hasAnyCue = Object.values(stateCues).some(Boolean);
@@ -89,14 +89,14 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({
               style={{
                 padding: '0.65rem',
                 borderRadius: 'var(--radius-md)',
-                border: `1px solid ${stagePassed ? 'var(--accent-success)' : hasAnyCue ? 'var(--accent-cta)' : 'var(--border)'}`,
+                border: `1px solid ${stagePassed ? 'var(--accent-success)' : hasAnyCue ? 'var(--accent-warning)' : 'var(--border)'}`,
                 background: stagePassed
                   ? 'color-mix(in srgb, var(--accent-success) 5%, transparent)'
                   : 'transparent',
               }}
             >
               {/* State preview */}
-              <div style={{
+              <div data-authored-visual style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.35rem',
@@ -164,9 +164,8 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({
             onClick={checkStates}
             style={{
               alignSelf: 'flex-start', padding: '0.5rem 1.25rem',
-              background: 'var(--yellow)', color: 'var(--gray-90)',
-              fontFamily: 'var(--font-mono)', fontWeight: 700,
-              fontSize: '0.85rem', borderRadius: 'var(--radius-sm)',
+              background: 'var(--accent-cta)', color: 'var(--cta-foreground)',
+              fontWeight: 700, fontSize: '1rem', borderRadius: 'var(--radius-sm)',
               border: 'none', cursor: 'pointer',
             }}
           >

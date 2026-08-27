@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { ThemeControl } from './ThemeControl.tsx';
 import styles from './TopNav.module.css';
 
 const NAV_ITEMS = [
@@ -18,7 +19,8 @@ export function TopNav() {
   return (
     <nav className={styles.nav} aria-label="Main navigation">
       <NavLink to="/" end className={styles.logo} onClick={() => setMenuOpen(false)}>
-        color-theory-course$
+        <span className={styles.fullLogo}>color-theory-course$</span>
+        <span className={styles.shortLogo}>color$</span>
       </NavLink>
       <ul className={styles.links}>
         {NAV_ITEMS.map((item) => (
@@ -29,6 +31,7 @@ export function TopNav() {
           </li>
         ))}
       </ul>
+      <ThemeControl />
       <button
         type="button"
         className={styles.menuButton}

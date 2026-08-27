@@ -94,17 +94,17 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({
       <ExerciseStage
         controller={stageController}
         incorrectFeedback={(
-          <span style={{ color: 'var(--yellow)' }}>
+          <span style={{ color: 'var(--accent-warning)' }}>
             {stageController.activeStage.id === 'classify-colors'
               ? `${swatchCorrect} / ${SWATCHES.length} correct`
               : `${goalCorrect} / ${INTERFACE_GOALS.length} correct`}
           </span>
         )}
         passedFeedback={(
-          <span style={{ color: 'var(--green)' }}>{swatchCorrect} / {SWATCHES.length} correct</span>
+          <span style={{ color: 'var(--accent-success)' }}>{swatchCorrect} / {SWATCHES.length} correct</span>
         )}
         completionFeedback={(
-          <span style={{ color: 'var(--green)' }}>
+          <span style={{ color: 'var(--accent-success)' }}>
             ✓ Color temperature exercise complete. {goalCorrect} / {INTERFACE_GOALS.length} correct.
           </span>
         )}
@@ -125,7 +125,7 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({
                   key={s.id}
                   style={{
                     background: 'var(--surface)',
-                    border: `1px solid ${isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--border)'}`,
+                    border: `1px solid ${isCorrect ? 'var(--accent-success)' : isWrong ? 'var(--accent-danger)' : 'var(--border)'}`,
                     borderRadius: 'var(--radius-sm)',
                     padding: 'var(--spacing-sm)',
                     display: 'flex',
@@ -152,7 +152,7 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({
                       fontSize: '0.75rem',
                       background: 'var(--primary-background)',
                       color: 'var(--primary-foreground)',
-                      border: '1px solid var(--border)',
+                      border: '1px solid var(--border-strong)',
                       borderRadius: '3px',
                       padding: '0.25rem 0.35rem',
                       cursor: swatchesChecked ? 'not-allowed' : 'pointer',
@@ -165,7 +165,7 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({
                     <option value="neutral">neutral</option>
                   </select>
                   {swatchesChecked && (
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--muted)' }}>
+                    <span style={{ fontSize: '1rem', color: isCorrect ? 'var(--accent-success)' : isWrong ? 'var(--accent-danger)' : 'var(--muted)' }}>
                       {isCorrect ? '✓' : isWrong ? `→ ${s.correct}` : 'not answered'}
                     </span>
                   )}
@@ -181,7 +181,7 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({
               style={{
                 alignSelf: 'flex-start',
                 padding: '0.5rem 1.25rem',
-                background: allSwatchesAnswered ? 'var(--yellow)' : 'var(--border)',
+                background: allSwatchesAnswered ? 'var(--accent-cta)' : 'var(--border)',
                 color: 'var(--gray-90)',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 700,
@@ -209,7 +209,7 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({
                 key={g.id}
                 style={{
                   background: 'var(--surface)',
-                  border: `1px solid ${isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--border)'}`,
+                  border: `1px solid ${isCorrect ? 'var(--accent-success)' : isWrong ? 'var(--accent-danger)' : 'var(--border)'}`,
                   borderRadius: 'var(--radius-sm)',
                   padding: 'var(--spacing-sm) var(--spacing-md)',
                   display: 'flex',
@@ -227,7 +227,7 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({
                     fontSize: '0.8rem',
                     background: 'var(--primary-background)',
                     color: 'var(--primary-foreground)',
-                    border: '1px solid var(--border)',
+                    border: '1px solid var(--border-strong)',
                     borderRadius: '3px',
                     padding: '0.3rem 0.5rem',
                     cursor: goalsChecked ? 'not-allowed' : 'pointer',
@@ -240,7 +240,7 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({
                   <option value="neutral">neutral</option>
                 </select>
                 {goalsChecked && (
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--muted)', width: '80px' }}>
+                  <span style={{ fontSize: '1rem', color: isCorrect ? 'var(--accent-success)' : isWrong ? 'var(--accent-danger)' : 'var(--muted)', width: '80px' }}>
                     {isCorrect ? '✓ correct' : isWrong ? `→ ${g.correct}` : 'not answered'}
                   </span>
                 )}
@@ -255,7 +255,7 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({
               style={{
                 alignSelf: 'flex-start',
                 padding: '0.5rem 1.25rem',
-                background: allGoalsAnswered ? 'var(--yellow)' : 'var(--border)',
+                background: allGoalsAnswered ? 'var(--accent-cta)' : 'var(--border)',
                 color: 'var(--gray-90)',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 700,

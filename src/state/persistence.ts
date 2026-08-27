@@ -1,4 +1,5 @@
 import type { ProgressState } from '../types/progress.ts';
+import type { AppPreferences, ThemePreference } from './app-context.tsx';
 
 const STORAGE_KEY = 'color-theory-course-state';
 const VERSION = 3;
@@ -15,10 +16,7 @@ export const DARK_MODE_STRESS_SESSION_PREFIX = 'color-theory-course-dark-mode-st
 interface StoredState {
   version: number;
   progress: ProgressState;
-  preferences: {
-    reducedMotion: boolean;
-    colorBlindnessMode: string | null;
-  };
+  preferences: Partial<AppPreferences>;
 }
 
 const defaultProgress: ProgressState = {
@@ -29,13 +27,14 @@ const defaultProgress: ProgressState = {
 };
 
 const defaultPreferences = {
+  theme: 'system' as ThemePreference,
   reducedMotion: false,
   colorBlindnessMode: null,
 };
 
 export function loadState(): {
   progress: ProgressState;
-  preferences: { reducedMotion: boolean; colorBlindnessMode: string | null };
+  preferences: AppPreferences;
 } {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -48,7 +47,13 @@ export function loadState(): {
     }
     return {
       progress: parsed.progress,
-      preferences: parsed.preferences,
+      preferences: {
+        ...defaultPreferences,
+        ...parsed.preferences,
+        theme: isThemePreference(parsed.preferences.theme)
+          ? parsed.preferences.theme
+          : defaultPreferences.theme,
+      },
     };
   } catch {
     return { progress: defaultProgress, preferences: defaultPreferences };
@@ -57,7 +62,7 @@ export function loadState(): {
 
 export function saveState(
   progress: ProgressState,
-  preferences: { reducedMotion: boolean; colorBlindnessMode: string | null },
+  preferences: AppPreferences,
 ): void {
   try {
     const stored: StoredState = {
@@ -69,6 +74,10 @@ export function saveState(
   } catch {
     // Storage full or unavailable — silently ignore
   }
+}
+
+function isThemePreference(value: unknown): value is ThemePreference {
+  return value === 'dark' || value === 'light' || value === 'system';
 }
 
 export function clearMilestoneSessions(): void {

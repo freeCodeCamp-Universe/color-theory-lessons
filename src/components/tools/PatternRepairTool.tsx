@@ -250,7 +250,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({
             <div
               key={mod.id}
               style={{
-                border: `1px solid ${isRepaired ? 'var(--accent-success)' : 'var(--border)'}`,
+                border: `1px solid ${isRepaired ? 'var(--accent-success)' : 'var(--border-strong)'}`,
                 borderRadius: 'var(--radius-md)',
                 padding: '0.65rem',
                 background: isRepaired ? 'color-mix(in srgb, var(--accent-success) 6%, transparent)' : 'transparent',
@@ -263,14 +263,14 @@ export const PatternRepairTool = memo(function PatternRepairTool({
               {/* Before / After */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '0.5rem' }}>
                 <div>
-                  <p style={{ fontSize: '0.62rem', color: 'var(--muted)', marginBottom: '0.2rem', fontFamily: 'var(--font-mono)', textTransform: 'uppercase' }}>Before</p>
-                  <div style={{ background: '#ffffff', borderRadius: 'var(--radius-sm)', padding: '0.5rem', border: '1px solid #eee', minHeight: 60 }}>
+                  <p style={{ fontSize: '1rem', color: 'var(--muted)', marginBottom: '0.2rem', fontFamily: 'var(--font-sans)', textTransform: 'uppercase' }}>Before</p>
+                  <div data-authored-visual style={{ background: '#ffffff', borderRadius: 'var(--radius-sm)', padding: '0.5rem', border: '1px solid #eee', minHeight: 60 }}>
                     {mod.brokenPreview}
                   </div>
                 </div>
                 <div>
-                  <p style={{ fontSize: '0.62rem', color: 'var(--muted)', marginBottom: '0.2rem', fontFamily: 'var(--font-mono)', textTransform: 'uppercase' }}>After</p>
-                  <div style={{ background: '#ffffff', borderRadius: 'var(--radius-sm)', padding: '0.5rem', border: `1px solid ${isRepaired ? '#bbf7d0' : '#eee'}`, minHeight: 60 }}>
+                  <p style={{ fontSize: '1rem', color: 'var(--muted)', marginBottom: '0.2rem', fontFamily: 'var(--font-sans)', textTransform: 'uppercase' }}>After</p>
+                  <div data-authored-visual style={{ background: '#ffffff', borderRadius: 'var(--radius-sm)', padding: '0.5rem', border: `1px solid ${isRepaired ? '#bbf7d0' : '#eee'}`, minHeight: 60 }}>
                     {modChecked.length > 0 ? mod.repairedPreview(modChecked) : mod.brokenPreview}
                   </div>
                 </div>
@@ -285,7 +285,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({
                         checked={modChecked.includes(option)}
                         onChange={() => toggleOption(mod.id, option)}
                         disabled={submitted}
-                        style={{ accentColor: 'var(--accent-cta)' }}
+                        style={{ accentColor: 'var(--accent-warning)' }}
                       />
                       {option}
                     </label>
@@ -297,7 +297,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({
                 <p
                   aria-live="polite"
                   data-testid={`feedback-${mod.id}`}
-                  style={{ margin: '0.45rem 0 0', fontSize: '0.68rem', fontFamily: 'var(--font-mono)', color: isRepaired ? 'var(--accent-success)' : 'var(--accent-danger)' }}
+                  style={{ margin: '0.45rem 0 0', fontSize: '0.68rem', fontFamily: 'var(--font-sans)', color: isRepaired ? 'var(--accent-success)' : 'var(--accent-danger)' }}
                 >
                   {isRepaired ? '✓ repaired' : mod.invalidFeedback(modChecked)}
                 </p>
@@ -310,7 +310,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({
       {interactive && !submitted && (
         <button
           onClick={handleCheck}
-          style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'var(--yellow)', color: 'var(--gray-90)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.85rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: 'pointer' }}
+          style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'var(--accent-cta)', color: 'var(--cta-foreground)', fontWeight: 700, fontSize: '1rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: 'pointer' }}
         >
           check repairs
         </button>

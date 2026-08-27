@@ -9,7 +9,7 @@ export function MilestonePage() {
   if (!milestone) {
     return (
       <div>
-        <p style={{ color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>
+        <p style={{ color: 'var(--muted)', fontSize: '1rem' }}>
           milestone not found: {milestoneId}
         </p>
         <Link to="/" style={{ marginTop: '1rem', display: 'inline-block' }}>

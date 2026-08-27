@@ -84,7 +84,7 @@ export const RGBMixerTool = memo(function RGBMixerTool({
     return (
       <div className={shellStyles.shell}>
         <span className={shellStyles.toolLabel}>RGB light mixer</span>
-        <div style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
+        <div data-authored-visual style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
           {previewSwatches[previewMode].map((swatch) => (
             <div key={swatch.label} style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: '80px' }}>
               <div style={{ height: '64px', borderRadius: 'var(--radius-sm)', backgroundColor: rgbString(swatch.rgb), border: '1px solid rgba(255,255,255,0.08)' }} />
@@ -134,7 +134,7 @@ export const RGBMixerTool = memo(function RGBMixerTool({
           completionFeedback="✓ All five targets predicted and matched."
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>target</span>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>target</span>
             <div aria-label={`${target.name} target color`} style={{ height: '72px', borderRadius: 'var(--radius-sm)', backgroundColor: rgbString(target.value), border: '1px solid rgba(255,255,255,0.08)' }} />
           </div>
 
@@ -144,7 +144,7 @@ export const RGBMixerTool = memo(function RGBMixerTool({
                 <button
                   key={option.id} type="button" onClick={() => choosePrediction(option.id)}
                   disabled={stageController.result !== 'idle'} aria-pressed={prediction === option.id}
-                  style={{ textAlign: 'left', border: `1px solid ${prediction === option.id ? 'var(--yellow)' : 'var(--border)'}` }}
+                  style={{ textAlign: 'left', border: `1px solid ${prediction === option.id ? 'var(--accent-warning)' : 'var(--border-strong)'}` }}
                 >
                   {option.label}
                 </button>
@@ -153,7 +153,7 @@ export const RGBMixerTool = memo(function RGBMixerTool({
           ) : (
             <>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>your mix</span>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>your mix</span>
                 <div aria-label="current RGB mix" style={{ height: '72px', borderRadius: 'var(--radius-sm)', backgroundColor: rgbString(current), border: '1px solid rgba(255,255,255,0.08)' }} />
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)' }}>R:{current.r} G:{current.g} B:{current.b}</span>
               </div>

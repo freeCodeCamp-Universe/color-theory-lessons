@@ -11,11 +11,11 @@
 .header {
   display: flex;
   justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
 }
 
-.progress { color: var(--yellow); }
+.progress { color: var(--accent-warning); }
 
 .block {
   background: var(--surface);
@@ -28,7 +28,7 @@
 }
 
 .title {
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -43,8 +43,8 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
 }
 
 .row {
@@ -52,26 +52,27 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-sm);
-  font-size: 0.78rem;
+  font-size: 1rem;
 }
 
 .colorOnlyLabel {
   color: var(--red);
+  font-size: 0.78rem;
   font-weight: 700;
 }
 
 .note {
   color: var(--secondary-foreground);
-  font-size: 0.75rem;
+  font-size: 1rem;
 }
 
 .toggle {
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   padding: 0.3rem 0.55rem;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--blue);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--accent-link);
 }
 
 .fakeButton {
@@ -104,8 +105,8 @@
   font-size: 1.2rem;
 }
 
-.good { color: var(--green); font-size: 0.74rem; }
-.bad { color: var(--red); font-size: 0.74rem; }
+.good { color: var(--accent-success); font-size: 1rem; }
+.bad { color: var(--accent-danger); font-size: 1rem; }
 
 .actions {
   display: flex;
@@ -114,12 +115,13 @@
 }
 
 .button {
-  background: var(--yellow);
-  color: var(--gray-90);
+  background: var(--accent-cta);
+  color: var(--cta-foreground);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   padding: 0.48rem 0.9rem;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
   font-weight: 700;
 }
 

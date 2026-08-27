@@ -7,12 +7,67 @@
   flex-direction: column;
   gap: var(--spacing-md);
   min-height: 400px;
+  min-width: 0;
+}
+
+.twoColumnGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 499px) {
+  .twoColumnGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/*
+ * Tool UI follows the 18px application floor. Lesson authors can preserve the
+ * scale of an instructional mock by giving its root data-authored-visual.
+ */
+.shell :where([style*='font-size: 0.']):not(
+  [data-authored-visual],
+  [data-authored-visual] *
+) {
+  font-size: 1rem !important;
+}
+
+.shell :where(button, select, textarea, label, option):not(
+  [data-authored-visual],
+  [data-authored-visual] *
+) {
+  font-family: var(--font-sans) !important;
+  font-size: 1rem !important;
+}
+
+.shell :where(input:not([type='color']):not([type='range'])):not(
+  [data-authored-visual],
+  [data-authored-visual] *
+) {
+  font-size: 1rem !important;
+}
+
+/*
+ * Supply a visible boundary for unstyled tool actions. Shell specificity
+ * beats the global button reset while the target stays low-specificity.
+ */
+.shell :where(
+  button:not(:disabled):not([class]):not([data-authored-visual]):not([data-authored-visual] *)
+) {
+  border: 1px solid var(--border-strong);
 }
 
 .toolLabel {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
+}
+
+.inputError {
+  color: var(--accent-danger);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.4;
+  flex-basis: 100%;
 }

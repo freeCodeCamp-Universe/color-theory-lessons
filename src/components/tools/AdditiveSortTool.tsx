@@ -48,7 +48,7 @@ function MixingDiagram({ mode }: { mode: Model }) {
     ? 'overlapping light → brighter, toward white'
     : 'ideal subtractive mixing → darker, toward black';
 
-  const captionColor = isAdditive ? 'var(--muted)' : '#888';
+  const captionColor = isAdditive ? 'var(--gray-15)' : 'var(--gray-75)';
 
   return (
     <div
@@ -65,11 +65,10 @@ function MixingDiagram({ mode }: { mode: Model }) {
     >
       <span
         style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.75rem',
+          fontSize: '1rem',
           textTransform: 'uppercase',
           letterSpacing: '0.06em',
-          color: isAdditive ? 'var(--yellow)' : '#a06000',
+          color: isAdditive ? 'var(--yellow-light)' : 'var(--yellow-dark)',
         }}
       >
         {isAdditive ? 'additive' : 'subtractive'}
@@ -100,8 +99,7 @@ function MixingDiagram({ mode }: { mode: Model }) {
       </div>
       <p
         style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.72rem',
+          fontSize: '1rem',
           color: captionColor,
           textAlign: 'center',
           margin: 0,
@@ -164,7 +162,7 @@ export const AdditiveSortTool = memo(function AdditiveSortTool({
           completionFeedback={`✓ ${correctCount} / ${ITEMS.length} correct. Color models sorted.`}
         >
           <div style={{ borderTop: '1px solid var(--border)', paddingTop: 'var(--spacing-md)', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
               sort each example
             </span>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 'var(--spacing-sm)' }}>
@@ -177,7 +175,7 @@ export const AdditiveSortTool = memo(function AdditiveSortTool({
                     key={item.id}
                     style={{
                       background: 'var(--surface)',
-                      border: `1px solid ${isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--border)'}`,
+                      border: `1px solid ${isCorrect ? 'var(--accent-success)' : isWrong ? 'var(--accent-danger)' : 'var(--border)'}`,
                       borderRadius: 'var(--radius-sm)',
                       padding: 'var(--spacing-sm)',
                       display: 'flex',
@@ -201,9 +199,9 @@ export const AdditiveSortTool = memo(function AdditiveSortTool({
                               fontFamily: 'var(--font-mono)',
                               fontSize: '0.7rem',
                               borderRadius: '3px',
-                              border: `1px solid ${active ? 'var(--yellow)' : 'var(--border)'}`,
-                              background: active ? 'color-mix(in srgb, var(--yellow) 12%, var(--surface))' : 'transparent',
-                              color: active ? 'var(--yellow)' : 'var(--muted)',
+                              border: `1px solid ${active ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
+                              background: active ? 'color-mix(in srgb, var(--accent-warning) 12%, var(--surface))' : 'transparent',
+                              color: active ? 'var(--accent-warning)' : 'var(--muted)',
                               cursor: checked ? 'not-allowed' : 'pointer',
                             }}
                           >
@@ -213,7 +211,7 @@ export const AdditiveSortTool = memo(function AdditiveSortTool({
                       })}
                     </div>
                     {checked && (
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: isCorrect ? 'var(--green)' : isWrong ? 'var(--red)' : 'var(--muted)' }}>
+                      <span style={{ fontSize: '1rem', color: isCorrect ? 'var(--accent-success)' : isWrong ? 'var(--accent-danger)' : 'var(--muted)' }}>
                         {isCorrect ? '✓ correct' : isWrong ? `→ ${item.correct}` : 'not answered'}
                       </span>
                     )}
@@ -231,7 +229,7 @@ export const AdditiveSortTool = memo(function AdditiveSortTool({
               style={{
                 alignSelf: 'flex-start',
                 padding: '0.5rem 1.25rem',
-                background: allAssigned ? 'var(--yellow)' : 'var(--border)',
+                background: allAssigned ? 'var(--accent-cta)' : 'var(--border)',
                 color: 'var(--gray-90)',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 700,

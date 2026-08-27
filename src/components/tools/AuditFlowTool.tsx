@@ -146,8 +146,8 @@ export const AuditFlowTool = memo(function AuditFlowTool({
                   display: 'flex', alignItems: 'flex-start', gap: '0.4rem',
                   fontSize: '0.78rem', cursor: interactive && stageController.result !== 'passed' ? 'pointer' : 'default',
                   padding: '0.3rem 0.5rem', borderRadius: 'var(--radius-sm)',
-                  border: `1px solid ${isSelected ? 'var(--accent-cta)' : 'var(--border)'}`,
-                  background: isSelected ? 'color-mix(in srgb, var(--accent-cta) 10%, transparent)' : 'transparent',
+                  border: `1px solid ${isSelected ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
+                  background: isSelected ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'transparent',
                 }}
               >
                 <input
@@ -156,7 +156,7 @@ export const AuditFlowTool = memo(function AuditFlowTool({
                   checked={isSelected}
                   disabled={!interactive || stageController.result === 'passed'}
                   onChange={() => stage.type === 'multi-select' ? toggleMulti(option) : selectSingle(option)}
-                  style={{ accentColor: 'var(--accent-cta)', marginTop: 2 }}
+                  style={{ accentColor: 'var(--accent-warning)', marginTop: 2 }}
                 />
                 {option}
               </label>
@@ -170,8 +170,8 @@ export const AuditFlowTool = memo(function AuditFlowTool({
             style={{
               marginTop: '0.65rem', padding: '0.35rem 0.75rem',
               fontSize: '0.78rem', borderRadius: 'var(--radius-sm)',
-              border: '1px solid var(--accent-cta)', background: 'color-mix(in srgb, var(--accent-cta) 15%, transparent)',
-              color: 'var(--primary-foreground)', cursor: 'pointer',
+              border: 'none', background: 'var(--accent-cta)',
+              color: 'var(--cta-foreground)', cursor: 'pointer',
             }}
           >
             Check answer

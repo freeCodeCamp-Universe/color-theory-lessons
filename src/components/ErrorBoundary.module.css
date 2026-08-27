@@ -1,0 +1,20 @@
+.fallback {
+  padding: 2rem;
+  color: var(--primary-foreground);
+  font-family: var(--font-sans);
+}
+
+.message {
+  color: var(--accent-danger);
+}
+
+.retryButton {
+  margin-top: 1rem;
+  padding: 0.48rem 0.9rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--accent-cta);
+  color: var(--cta-foreground);
+  font-family: var(--font-sans);
+  font-weight: 700;
+}

@@ -91,14 +91,14 @@ export const MismatchExplainerTool = memo(function MismatchExplainerTool({
         >
           <div style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: '110px' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>on screen</span>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>on screen</span>
               <div style={{ height: '60px', borderRadius: 'var(--radius-sm)', backgroundColor: scenario.screenColor, border: '1px solid rgba(255,255,255,0.08)' }} />
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)' }}>emits light</span>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.7rem', color: 'var(--muted)' }}>emits light</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: '110px' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>material simulation</span>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>material simulation</span>
               <div style={{ height: '60px', borderRadius: 'var(--radius-sm)', backgroundColor: scenario.screenColor, filter: 'saturate(0.58) brightness(0.78)', border: '1px solid rgba(0,0,0,0.08)' }} />
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)' }}>reflects light</span>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.7rem', color: 'var(--muted)' }}>reflects light</span>
             </div>
           </div>
           <p style={{ fontSize: '0.9rem', color: 'var(--secondary-foreground)', margin: 0 }}>{scenario.description}</p>
@@ -109,7 +109,7 @@ export const MismatchExplainerTool = memo(function MismatchExplainerTool({
                 <button
                   key={reason.id} type="button" onClick={() => toggleReason(reason.id)}
                   disabled={stageController.result !== 'idle'} aria-pressed={isSelected}
-                  style={{ padding: 'var(--spacing-sm) var(--spacing-md)', background: isSelected ? 'color-mix(in srgb, var(--yellow) 10%, var(--surface))' : 'var(--surface)', border: `1px solid ${isSelected ? 'var(--yellow)' : 'var(--border)'}`, borderRadius: 'var(--radius-sm)', color: 'var(--primary-foreground)', fontFamily: 'var(--font-sans)', fontSize: '0.875rem', textAlign: 'left' }}
+                  style={{ padding: 'var(--spacing-sm) var(--spacing-md)', background: isSelected ? 'color-mix(in srgb, var(--accent-warning) 10%, var(--surface))' : 'var(--surface)', border: `1px solid ${isSelected ? 'var(--accent-warning)' : 'var(--border-strong)'}`, borderRadius: 'var(--radius-sm)', color: 'var(--primary-foreground)', fontFamily: 'var(--font-sans)', fontSize: '1rem', textAlign: 'left' }}
                 >
                   {reason.label}
                 </button>

@@ -134,9 +134,9 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         {/* Light theme (read-only) */}
         <div style={{ flex: '0 0 200px' }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>LIGHT (fixed)</p>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>LIGHT (fixed)</p>
           {KEYS.map(key => (
-            <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem', opacity: 0.7 }}>
+            <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
               <div style={{ width: 16, height: 16, borderRadius: 3, background: LIGHT_THEME[key], border: '1px solid #e5e7eb', flexShrink: 0 }} />
               <span style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 100, flexShrink: 0 }}>{key}</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--primary-foreground)' }}>{LIGHT_THEME[key]}</span>
@@ -146,13 +146,15 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
 
         {/* Dark theme (editable) */}
         <div style={{ flex: '0 0 220px' }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>
             DARK {interactive ? '(edit)' : '(default: failing)'}
           </p>
           {KEYS.map(key => {
             const val = dark[key];
+            const invalid = !isValidHex(val);
+            const errorId = `dark-translator-${key}-hex-error`;
             return (
-              <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
+              <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem', flexWrap: 'wrap' }}>
                 <div style={{ width: 16, height: 16, borderRadius: 3, background: isValidHex(val) ? val : '#888', border: '1px solid var(--border)', flexShrink: 0 }} />
                 <span style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 100, flexShrink: 0 }}>{key}</span>
                 <input
@@ -161,13 +163,21 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
                   onChange={e => update(key, e.target.value)}
                   disabled={!interactive || stageController.result === 'passed'}
                   maxLength={7}
+                  aria-label={`${key} dark-theme hex color`}
+                  aria-invalid={invalid}
+                  aria-describedby={invalid ? errorId : undefined}
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.72rem',
                     background: 'var(--surface, #1e293b)', color: 'var(--primary-foreground)',
-                    border: `1px solid ${isValidHex(val) ? 'var(--border)' : '#ef4444'}`,
+                    border: `1px solid ${invalid ? 'var(--accent-danger)' : 'var(--border-strong)'}`,
                     borderRadius: 3, padding: '0.15rem 0.3rem', width: 80,
                   }}
                 />
+                {invalid && (
+                  <span id={errorId} className={shellStyles.inputError}>
+                    Error: enter a 3- or 6-digit hex color for {key}.
+                  </span>
+                )}
               </div>
             );
           })}
@@ -182,9 +192,9 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
                 onClick={() => setPreview(m)}
                 style={{
                   padding: '0.2rem 0.6rem', fontSize: '0.75rem', borderRadius: 4, cursor: 'pointer',
-                  background: preview === m ? 'var(--accent-cta)' : 'var(--surface, #1e293b)',
-                  color: preview === m ? '#fff' : 'var(--primary-foreground)',
-                  border: '1px solid var(--border)',
+                  background: preview === m ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'var(--surface, #1e293b)',
+                  color: preview === m ? 'var(--accent-warning)' : 'var(--primary-foreground)',
+                  border: `1px solid ${preview === m ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
                 }}
               >
                 {m} mode
@@ -192,7 +202,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
             ))}
           </div>
 
-          <div style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #4a4a6a', marginBottom: '0.5rem' }}>
+          <div data-authored-visual style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #4a4a6a', marginBottom: '0.5rem' }}>
             <div style={{ background: surf, borderRadius: 4, padding: '0.4rem 0.5rem', border: '1px solid rgba(128,128,128,0.2)' }}>
               <div style={{ color: pt, fontWeight: 600, fontSize: '0.83rem' }}>Card Title</div>
               <div style={{ color: st, fontSize: '0.75rem' }}>Supporting detail</div>
@@ -205,18 +215,18 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
           </div>
 
           {/* Dark mode validation */}
-          <p style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.25rem' }}>DARK CHECKS</p>
+          <p style={{ fontSize: '0.72rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.25rem' }}>DARK CHECKS</p>
           {checks.map(({ label, pass, ratio }) => (
             <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', padding: '0.15rem 0' }}>
               <span style={{ color: 'var(--primary-foreground)' }}>{label}</span>
-              <span style={{ color: showResults ? (pass ? '#22c55e' : '#ef4444') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
+              <span style={{ color: showResults ? (pass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
                 {showResults ? (pass ? '✓ ' : '✗ ') : ''}{ratio === undefined ? '' : `${formatContrastRatio(ratio)}:1`}
               </span>
             </div>
           ))}
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', padding: '0.15rem 0' }}>
             <span style={{ color: 'var(--primary-foreground)' }}>Success / error hues (30°)</span>
-            <span style={{ color: showResults ? (semanticHueOk ? '#22c55e' : '#ef4444') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
+            <span style={{ color: showResults ? (semanticHueOk ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
               {showResults ? (semanticHueOk ? '✓ ' : '✗ ') : ''}{semanticHueDifference === null
                 ? (semanticRolesValid ? 'no hue (achromatic)' : 'invalid')
                 : `${semanticHueDifference}°`}

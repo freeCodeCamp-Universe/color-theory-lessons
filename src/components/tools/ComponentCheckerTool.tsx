@@ -164,7 +164,7 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
                   {comp.label}
                 </span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: showResults ? (pass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)' }}>
@@ -173,12 +173,12 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
               </div>
 
               {/* Preview on white */}
-              <div style={{ background: '#ffffff', padding: '0.5rem', borderRadius: 'var(--radius-sm)', marginBottom: '0.4rem', border: '1px solid #f0f0f0' }}>
+              <div data-authored-visual style={{ background: '#ffffff', padding: '0.5rem', borderRadius: 'var(--radius-sm)', marginBottom: '0.4rem', border: '1px solid #f0f0f0' }}>
                 {comp.renderPreview(isValidHex(color) ? color : comp.defaultColor)}
               </div>
 
               {interactive && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
                   <div style={{ width: 20, height: 20, borderRadius: 3, background: isValidHex(color) ? color : '#ccc', border: '1px solid var(--border)', flexShrink: 0 }} />
                   <input
                     type="text"
@@ -188,12 +188,12 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
                     style={{
                       fontFamily: 'var(--font-mono)', fontSize: '0.78rem',
                       padding: '0.2rem 0.4rem', borderRadius: 'var(--radius-sm)',
-                      border: '1px solid var(--border)', background: 'var(--surface)',
-                      color: 'var(--primary-foreground)', width: '7rem',
+                      border: '1px solid var(--border-strong)', background: 'var(--surface)',
+                      color: 'var(--primary-foreground)', width: '7rem', maxWidth: '100%', minWidth: 0, flex: '1 1 7rem',
                     }}
                     aria-label={`${comp.label} hex color`}
                   />
-                  <span style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>{comp.description}</span>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--muted)', flex: '1 1 100%' }}>{comp.description}</span>
                 </div>
               )}
             </div>
@@ -207,9 +207,8 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
             onClick={checkRepairs}
             style={{
               alignSelf: 'flex-start', padding: '0.5rem 1.25rem',
-              background: 'var(--yellow)', color: 'var(--gray-90)',
-              fontFamily: 'var(--font-mono)', fontWeight: 700,
-              fontSize: '0.85rem', borderRadius: 'var(--radius-sm)',
+              background: 'var(--accent-cta)', color: 'var(--cta-foreground)',
+              fontWeight: 700, fontSize: '1rem', borderRadius: 'var(--radius-sm)',
               border: 'none', cursor: 'pointer',
             }}
           >

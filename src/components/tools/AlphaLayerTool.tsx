@@ -134,7 +134,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
       >
 
       {/* Preview */}
-      <div style={{
+      <div data-authored-visual style={{
         position: 'relative', width: '100%', height: 120, borderRadius: 'var(--radius-md)',
         background: ctx.bgColor, marginBottom: '0.75rem', overflow: 'hidden',
         border: '1px solid var(--border)',
@@ -174,12 +174,15 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
           width: 40, height: 40, borderRadius: 'var(--radius-sm)',
           background: blended, border: '1px solid var(--border)',
         }} />
-        <div style={{ fontSize: '0.8rem', fontFamily: 'var(--font-mono)' }}>
-          <span style={{ color: 'var(--muted)' }}>Result:</span> {blended}
+        <div style={{ fontSize: '0.8rem', fontFamily: 'var(--font-sans)' }}>
+          <span style={{ color: 'var(--muted)' }}>Result:</span>{' '}
+          <span style={{ fontFamily: 'var(--font-mono)' }}>{blended}</span>
           {ctx.id === 'image' && imageTextContrast !== null && (
             <div style={{ marginTop: '0.25rem' }}>
               <span style={{ color: 'var(--muted)' }}>Text contrast:</span>{' '}
-              {formatContrastRatio(imageTextContrast)}:1 (target: {IMAGE_TEXT_CONTRAST_TARGET}:1)
+              <span style={{ fontFamily: 'var(--font-mono)' }}>
+                {formatContrastRatio(imageTextContrast)}:1 (target: {IMAGE_TEXT_CONTRAST_TARGET}:1)
+              </span>
             </div>
           )}
         </div>
@@ -192,7 +195,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
           <input type="range" min={0} max={100} value={Math.round(alpha * 100)}
             disabled={inputsDisabled}
             onChange={(e) => setAlpha(Number(e.target.value) / 100)}
-            style={{ width: '100%', accentColor: 'var(--yellow)' }}
+            style={{ width: '100%', accentColor: 'var(--accent-warning)' }}
             aria-label={`Alpha: ${(alpha * 100).toFixed(0)} percent`}
           />
         </label>
@@ -200,8 +203,8 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
           <button onClick={() => interactive && setIsDark(true)} disabled={inputsDisabled}
             style={{
               padding: '0.3rem 0.6rem', fontSize: '0.78rem', fontFamily: 'var(--font-mono)',
-              background: isDark ? '#222' : 'transparent', color: isDark ? '#fff' : 'var(--muted)',
-              border: `1px solid ${isDark ? '#555' : 'var(--border)'}`, borderRadius: 'var(--radius-sm)',
+              background: isDark ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'transparent', color: isDark ? 'var(--accent-warning)' : 'var(--muted)',
+              border: `1px solid ${isDark ? 'var(--accent-warning)' : 'var(--border-strong)'}`, borderRadius: 'var(--radius-sm)',
               cursor: interactive ? 'pointer' : 'default',
             }}>
             dark overlay
@@ -209,8 +212,8 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
           <button onClick={() => interactive && setIsDark(false)} disabled={inputsDisabled}
             style={{
               padding: '0.3rem 0.6rem', fontSize: '0.78rem', fontFamily: 'var(--font-mono)',
-              background: !isDark ? '#eee' : 'transparent', color: !isDark ? '#111' : 'var(--muted)',
-              border: `1px solid ${!isDark ? '#aaa' : 'var(--border)'}`, borderRadius: 'var(--radius-sm)',
+              background: !isDark ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'transparent', color: !isDark ? 'var(--accent-warning)' : 'var(--muted)',
+              border: `1px solid ${!isDark ? 'var(--accent-warning)' : 'var(--border-strong)'}`, borderRadius: 'var(--radius-sm)',
               cursor: interactive ? 'pointer' : 'default',
             }}>
             light overlay
@@ -222,7 +225,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
       {interactive && stageController.result === 'idle' && (
         <div style={{ borderTop: '1px solid var(--border)', paddingTop: '0.6rem', marginTop: '0.5rem' }}>
           <button onClick={checkOverlay} style={{
-            padding: '0.4rem 1rem', background: 'var(--yellow)', color: '#111',
+            padding: '0.4rem 1rem', background: 'var(--accent-cta)', color: 'var(--cta-foreground)',
             border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer',
             fontFamily: 'var(--font-mono)', fontSize: '0.82rem',
           }}>

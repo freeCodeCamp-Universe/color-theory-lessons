@@ -93,7 +93,7 @@ function ColorWheel({ baseH, relatedH, interactive, onChange }: ColorWheelProps)
       style={{ cursor: interactive ? 'crosshair' : 'default', flexShrink: 0, outline: 'none' }}
     >
       {focused && interactive && (
-        <circle cx={cx} cy={cy} r={r + 8} fill="none" stroke="var(--accent-cta)" strokeWidth={2} strokeDasharray="4 3" />
+        <circle cx={cx} cy={cy} r={r + 8} fill="none" stroke="var(--focus-ring)" strokeWidth={2} strokeDasharray="4 3" />
       )}
       {segments.map((seg) => (
         <path key={seg.hue} d={seg.d} fill={`hsl(${seg.hue}, 80%, 55%)`} />
@@ -179,16 +179,16 @@ function LockedPalette({ palette, relationship }: { palette: Palette; relationsh
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
       <div style={{ display: 'flex', gap: '4px', height: '56px' }}>
         <div style={{ flex: 3, borderRadius: 'var(--radius-sm)', backgroundColor: hslToHex(palette.dominant, 70, 50), display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
-          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'rgba(0,0,0,0.7)' }}>dominant</span>
+          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-sans)', color: 'rgba(0,0,0,0.7)' }}>dominant</span>
         </div>
         <div style={{ flex: 1.5, borderRadius: 'var(--radius-sm)', backgroundColor: hslToHex(palette.support, 60, 55), display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
-          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'rgba(0,0,0,0.7)' }}>support</span>
+          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-sans)', color: 'rgba(0,0,0,0.7)' }}>support</span>
         </div>
         <div style={{ flex: 1, borderRadius: 'var(--radius-sm)', backgroundColor: hslToHex(palette.accent, 85, 60), display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
-          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'rgba(0,0,0,0.7)' }}>accent</span>
+          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-sans)', color: 'rgba(0,0,0,0.7)' }}>accent</span>
         </div>
         <div style={{ flex: 2, borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--gray-80)', display: 'flex', alignItems: 'flex-end', padding: '4px 8px' }}>
-          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)' }}>neutral</span>
+          <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)' }}>neutral</span>
         </div>
       </div>
       <p style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>
@@ -210,6 +210,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
   const [validationAnswer, setValidationAnswer] = useState<string | null>(null);
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
   const relationship = previewRelationship ?? internalRelationship;
+  const isAuthoredPreview = previewRelationship !== undefined;
   const relatedH = getRelatedHues(baseH, relationship);
   const controlsInteractive = interactive
     && !previewRelationship
@@ -238,8 +239,8 @@ export const ColorWheelTool = memo(function ColorWheelTool({
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', flex: 1, minWidth: '180px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--muted)' }}>base hue</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--yellow)' }}>{baseH}°</span>
+            <span style={{ fontFamily: isAuthoredPreview ? 'var(--font-mono)' : 'var(--font-sans)', fontSize: '0.8rem', color: 'var(--muted)' }}>base hue</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: isAuthoredPreview ? '0.8rem' : '1rem', color: isAuthoredPreview ? 'var(--yellow)' : 'var(--accent-warning)' }}>{baseH}°</span>
           </div>
           <input
             type="range"
@@ -262,7 +263,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>relationship</span>
+          <span style={{ fontFamily: isAuthoredPreview ? 'var(--font-mono)' : 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>relationship</span>
           {(['analogous', 'complementary', 'triadic'] as Relationship[]).map((option) => (
             <button
               key={option}
@@ -271,9 +272,9 @@ export const ColorWheelTool = memo(function ColorWheelTool({
               style={{
                 padding: '0.4rem 0.75rem',
                 background: relationship === option ? 'var(--surface)' : 'transparent',
-                border: `1px solid ${relationship === option ? 'var(--yellow)' : 'var(--border)'}`,
+                border: `1px solid ${relationship === option ? (isAuthoredPreview ? 'var(--yellow)' : 'var(--accent-warning)') : (isAuthoredPreview ? 'var(--border)' : 'var(--border-strong)')}`,
                 borderRadius: 'var(--radius-sm)',
-                color: relationship === option ? 'var(--yellow)' : 'var(--secondary-foreground)',
+                color: relationship === option ? (isAuthoredPreview ? 'var(--yellow)' : 'var(--accent-warning)') : 'var(--secondary-foreground)',
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.8rem',
                 cursor: controlsInteractive ? 'pointer' : 'not-allowed',
@@ -291,7 +292,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>palette preview</span>
+          <span style={{ fontFamily: isAuthoredPreview ? 'var(--font-mono)' : 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>palette preview</span>
           <div style={{ display: 'flex', gap: '4px' }}>
             <div title={`Base: hsl(${baseH} 70% 50%)`} style={{ flex: 3, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: baseColor }} />
             {relatedColors.map((color, index) => (
@@ -309,7 +310,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
     return (
       <div className={shellStyles.shell}>
         <span className={shellStyles.toolLabel}>color wheel explorer</span>
-        {wheelEditor}
+        <div data-authored-visual>{wheelEditor}</div>
       </div>
     );
   }
@@ -319,9 +320,9 @@ export const ColorWheelTool = memo(function ColorWheelTool({
       <span className={shellStyles.toolLabel}>color wheel explorer</span>
       <ExerciseStage
         controller={stageController}
-        incorrectFeedback={<span style={{ color: 'var(--red)' }}>{validation.feedback}</span>}
-        passedFeedback={<span style={{ color: 'var(--green)' }}>✓ Palette locked.</span>}
-        completionFeedback={<span style={{ color: 'var(--green)' }}>✓ Relationship identified.</span>}
+        incorrectFeedback={<span style={{ color: 'var(--accent-danger)' }}>{validation.feedback}</span>}
+        passedFeedback={<span style={{ color: 'var(--accent-success)' }}>✓ Palette locked.</span>}
+        completionFeedback={<span style={{ color: 'var(--accent-success)' }}>✓ Relationship identified.</span>}
       >
         {stageController.activeStage.id === 'build-palette' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
@@ -329,7 +330,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
             {interactive && stageController.result === 'idle' && (
               <button
                 onClick={buildPalette}
-                style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'var(--yellow)', color: 'var(--gray-90)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.85rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: 'pointer' }}
+                style={{ alignSelf: 'flex-start', padding: '0.5rem 1.25rem', background: 'var(--accent-cta)', color: 'var(--cta-foreground)', fontWeight: 700, fontSize: '1rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: 'pointer' }}
               >
                 lock in this palette
               </button>
@@ -352,8 +353,8 @@ export const ColorWheelTool = memo(function ColorWheelTool({
                     onClick={() => setValidationAnswer(choice.id)}
                     style={{
                       padding: '0.45rem 0.75rem',
-                      background: selected ? 'color-mix(in srgb, var(--yellow) 10%, var(--surface))' : 'var(--surface)',
-                      border: `1px solid ${selected ? 'var(--yellow)' : 'var(--border)'}`,
+                      background: selected ? 'color-mix(in srgb, var(--accent-warning) 10%, var(--surface))' : 'var(--surface)',
+                      border: `1px solid ${selected ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
                       borderRadius: 'var(--radius-sm)',
                       color: 'var(--primary-foreground)',
                       fontFamily: 'var(--font-sans)',
@@ -371,7 +372,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
               <button
                 disabled={!validationAnswer}
                 onClick={checkRelationship}
-                style={{ alignSelf: 'flex-start', padding: '0.4rem 1rem', background: validationAnswer ? 'var(--yellow)' : 'var(--border)', color: 'var(--gray-90)', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.8rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: validationAnswer ? 'pointer' : 'not-allowed' }}
+                style={{ alignSelf: 'flex-start', padding: '0.4rem 1rem', background: validationAnswer ? 'var(--accent-cta)' : 'var(--border)', color: 'var(--cta-foreground)', fontWeight: 700, fontSize: '1rem', borderRadius: 'var(--radius-sm)', border: 'none', cursor: validationAnswer ? 'pointer' : 'not-allowed' }}
               >
                 check
               </button>

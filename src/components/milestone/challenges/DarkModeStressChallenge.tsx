@@ -141,7 +141,7 @@ export function DarkModeStressChallenge({
         passedFeedback={`This dark-theme contrast target passes. Next action: ${stageController.activeStage.nextActionLabel}.`}
         completionFeedback="The action reaches 3:1 against the surface. All three checks are complete."
       >
-        <div className={styles.preview} style={{ backgroundColor: checks.bg }}>
+        <div data-authored-visual className={styles.preview} style={{ backgroundColor: checks.bg }}>
           <div className={styles.surface} style={{ backgroundColor: checks.surface }}>
             <p className={styles.title} style={{ color: checks.text }}>Dashboard title</p>
             <span className={styles.action} style={{ backgroundColor: checks.action, color: checks.actionText }}>Apply changes</span>

@@ -103,14 +103,14 @@ export const ContrastTool = memo(function ContrastTool({
       <ExerciseStage
         controller={stageController}
         incorrectFeedback={(
-          <span style={{ color: 'var(--red)' }}>
+          <span style={{ color: 'var(--accent-danger)' }}>
             {failingLabels.length > 0
               ? `Still failing: ${failingLabels.join(', ')}.`
               : 'One or more color pairs do not pass yet.'}
           </span>
         )}
         completionFeedback={(
-          <span style={{ color: 'var(--green)' }}>✓ All three color pairs passed.</span>
+          <span style={{ color: 'var(--accent-success)' }}>✓ All three color pairs passed.</span>
         )}
       >
 
@@ -137,7 +137,7 @@ export const ContrastTool = memo(function ContrastTool({
               key={area.id}
               style={{
                 background: 'var(--surface)',
-                border: `1px solid ${showResult && fixed ? 'var(--green)' : 'var(--border)'}`,
+                border: `1px solid ${showResult && fixed ? 'var(--accent-success)' : 'var(--border)'}`,
                 borderRadius: 'var(--radius-md)',
                 padding: 'var(--spacing-md)',
                 display: 'flex',
@@ -147,21 +147,22 @@ export const ContrastTool = memo(function ContrastTool({
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
+                <span style={{ fontSize: '1rem', color: 'var(--muted)', textTransform: 'uppercase' }}>
                   {area.label}
                 </span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: showResult && fixed ? 'var(--green)' : 'var(--muted)' }}>
+                <span style={{ fontSize: '1rem', color: showResult && fixed ? 'var(--accent-success)' : 'var(--muted)' }}>
                   {showResult ? (fixed ? '✓ readable' : 'below target') : 'not checked'}
                 </span>
               </div>
 
               {/* Ratio display */}
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: showResult && fixed ? 'var(--green)' : showResult ? 'var(--yellow)' : 'var(--muted)' }}>
+              <div style={{ fontSize: '1rem', color: showResult && fixed ? 'var(--accent-success)' : showResult ? 'var(--accent-warning)' : 'var(--muted)' }}>
                 ratio: {ratio.toFixed(2)}:1. WCAG AA requires {area.threshold}:1.
               </div>
 
               {/* Preview */}
               <div
+                data-authored-visual
                 style={{
                   background: bgColor,
                   borderRadius: 'var(--radius-sm)',
@@ -183,10 +184,10 @@ export const ContrastTool = memo(function ContrastTool({
               {/* Lightness slider */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--muted)' }}>
+                  <span style={{ fontSize: '1rem', color: 'var(--muted)' }}>
                     {area.fixBg ? 'button background' : 'text'} lightness
                   </span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--yellow)' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', color: 'var(--accent-warning)' }}>
                     {l}%
                   </span>
                 </div>
@@ -220,11 +221,10 @@ export const ContrastTool = memo(function ContrastTool({
           style={{
             alignSelf: 'flex-start',
             padding: '0.4rem 1rem',
-            background: 'var(--yellow)',
-            color: 'var(--gray-90)',
-            fontFamily: 'var(--font-mono)',
+            background: 'var(--accent-cta)',
+            color: 'var(--cta-foreground)',
             fontWeight: 700,
-            fontSize: '0.8rem',
+            fontSize: '1rem',
             borderRadius: 'var(--radius-sm)',
             border: 'none',
             cursor: 'pointer',

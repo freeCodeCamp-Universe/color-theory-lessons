@@ -117,9 +117,9 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
               padding: '0.3rem 0.65rem',
               fontSize: '0.75rem',
               borderRadius: 'var(--radius-sm)',
-              border: `1px solid ${showResults && passed[p.id] ? 'var(--accent-success)' : activePair === i ? 'var(--accent-cta)' : 'var(--border)'}`,
+              border: `1px solid ${showResults && passed[p.id] ? 'var(--accent-success)' : activePair === i ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
               background: activePair === i
-                ? 'color-mix(in srgb, var(--accent-cta) 15%, transparent)'
+                ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)'
                 : 'transparent',
               color: showResults && passed[p.id] ? 'var(--accent-success)' : 'var(--primary-foreground)',
               cursor: interactive ? 'pointer' : 'default',
@@ -133,6 +133,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
 
       {/* Preview */}
       <div
+        data-authored-visual
         style={{
           background: isValidHex(bgColor) ? bgColor : '#ffffff',
           borderRadius: 'var(--radius-sm)',
@@ -161,8 +162,8 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
           fontSize: '0.75rem', padding: '0.3rem 0.65rem',
           borderRadius: 'var(--radius-sm)',
           background: showResults && normalPass
-            ? 'color-mix(in srgb, var(--accent-success) 12%, transparent)'
-            : showResults ? 'color-mix(in srgb, var(--accent-danger) 12%, transparent)' : 'transparent',
+            ? 'var(--badge-success-background)'
+            : showResults ? 'var(--badge-danger-background)' : 'transparent',
           border: `1px solid ${showResults ? (normalPass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--border)'}`,
           color: showResults ? (normalPass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)',
         }}>
@@ -172,8 +173,8 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
           fontSize: '0.75rem', padding: '0.3rem 0.65rem',
           borderRadius: 'var(--radius-sm)',
           background: showResults && largePass
-            ? 'color-mix(in srgb, var(--accent-success) 12%, transparent)'
-            : showResults ? 'color-mix(in srgb, var(--accent-danger) 12%, transparent)' : 'transparent',
+            ? 'var(--badge-success-background)'
+            : showResults ? 'var(--badge-danger-background)' : 'transparent',
           border: `1px solid ${showResults ? (largePass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--border)'}`,
           color: showResults ? (largePass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)',
         }}>
@@ -184,7 +185,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
       {/* Color inputs */}
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         <label style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', fontSize: '0.78rem', color: 'var(--muted)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', textTransform: 'uppercase', fontSize: '0.7rem' }}>Text color</span>
+          <span style={{ fontFamily: 'var(--font-sans)', textTransform: 'uppercase', fontSize: '0.7rem' }}>Text color</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             <div style={{ width: 24, height: 24, borderRadius: 4, background: isValidHex(textColor) ? textColor : '#ccc', border: '1px solid var(--border)' }} />
             <input
@@ -195,7 +196,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
               style={{
                 fontFamily: 'var(--font-mono)', fontSize: '0.8rem',
                 padding: '0.25rem 0.4rem', borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border)', background: 'var(--surface)',
+                border: '1px solid var(--border-strong)', background: 'var(--surface)',
                 color: 'var(--primary-foreground)', width: '7rem',
               }}
               aria-label="Text color hex"
@@ -203,7 +204,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
           </div>
         </label>
         <label style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', fontSize: '0.78rem', color: 'var(--muted)' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', textTransform: 'uppercase', fontSize: '0.7rem' }}>Background color</span>
+          <span style={{ fontFamily: 'var(--font-sans)', textTransform: 'uppercase', fontSize: '0.7rem' }}>Background color</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             <div style={{ width: 24, height: 24, borderRadius: 4, background: isValidHex(bgColor) ? bgColor : '#ccc', border: '1px solid var(--border)' }} />
             <input
@@ -214,7 +215,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
               style={{
                 fontFamily: 'var(--font-mono)', fontSize: '0.8rem',
                 padding: '0.25rem 0.4rem', borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border)', background: 'var(--surface)',
+                border: '1px solid var(--border-strong)', background: 'var(--surface)',
                 color: 'var(--primary-foreground)', width: '7rem',
               }}
               aria-label="Background color hex"
@@ -229,9 +230,8 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
             onClick={checkRepairs}
             style={{
               alignSelf: 'flex-start', padding: '0.5rem 1.25rem',
-              background: 'var(--yellow)', color: 'var(--gray-90)',
-              fontFamily: 'var(--font-mono)', fontWeight: 700,
-              fontSize: '0.85rem', borderRadius: 'var(--radius-sm)',
+              background: 'var(--accent-cta)', color: 'var(--cta-foreground)',
+              fontWeight: 700, fontSize: '1rem', borderRadius: 'var(--radius-sm)',
               border: 'none', cursor: 'pointer',
             }}
           >

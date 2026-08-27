@@ -210,7 +210,7 @@ export const ColorOnlyDetectorTool = memo(function ColorOnlyDetectorTool({
           {selected.size}/3 examples selected
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+        <div className={shellStyles.twoColumnGrid} style={{ gap: '0.5rem' }}>
           {EXAMPLES.map((example) => {
             const isSelected = selected.has(example.id);
             const showCorrect = stageController.result === 'passed' && example.isColorOnly;
@@ -221,7 +221,7 @@ export const ColorOnlyDetectorTool = memo(function ColorOnlyDetectorTool({
                 style={{
                   padding: '0.6rem',
                   borderRadius: 'var(--radius-md)',
-                  border: `1px solid ${showCorrect ? 'var(--accent-success)' : showIncorrect ? 'var(--accent-danger)' : isSelected ? 'var(--accent-cta)' : 'var(--border)'}`,
+                  border: `1px solid ${showCorrect ? 'var(--accent-success)' : showIncorrect ? 'var(--accent-danger)' : isSelected ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
                   background: showCorrect
                     ? 'color-mix(in srgb, var(--accent-success) 8%, transparent)'
                     : showIncorrect
@@ -232,7 +232,7 @@ export const ColorOnlyDetectorTool = memo(function ColorOnlyDetectorTool({
                 <p style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '0.4rem', color: 'var(--primary-foreground)' }}>
                   {example.name}
                 </p>
-                <div style={{ marginBottom: '0.4rem' }}>{example.visual}</div>
+                <div data-authored-visual style={{ marginBottom: '0.4rem' }}>{example.visual}</div>
                 {interactive && (
                   <button
                     type="button"

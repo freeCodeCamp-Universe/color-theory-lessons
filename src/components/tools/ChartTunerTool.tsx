@@ -100,7 +100,7 @@ function ChartBars({ colors, patterns, simulated }: { colors: string[]; patterns
   const displayColors = simulated ? colors.map(simulateDeuteranopia) : colors;
   const maxVal = 100;
   return (
-    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end', height: 100 }}>
+    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end', height: 100, width: '100%', maxWidth: '100%', overflowX: 'auto' }}>
       {MONTHS.map((month, mi) => (
         <div key={month} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
           <div style={{ display: 'flex', gap: 1, alignItems: 'flex-end', height: 80 }}>
@@ -251,8 +251,8 @@ export const ChartTunerTool = memo(function ChartTunerTool({
           disabled={!interactive}
           style={{
             fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: 4, cursor: interactive ? 'pointer' : 'default',
-            background: !simulated ? 'var(--accent-cta)' : 'var(--border)', color: !simulated ? '#000' : 'var(--primary-foreground)',
-            border: 'none',
+            background: !simulated ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'var(--border)', color: !simulated ? 'var(--accent-warning)' : 'var(--primary-foreground)',
+            border: `1px solid ${!simulated ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
           }}
         >
           Normal view
@@ -262,8 +262,8 @@ export const ChartTunerTool = memo(function ChartTunerTool({
           disabled={!interactive}
           style={{
             fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: 4, cursor: interactive ? 'pointer' : 'default',
-            background: simulated ? 'var(--accent-cta)' : 'var(--border)', color: simulated ? '#000' : 'var(--primary-foreground)',
-            border: 'none',
+            background: simulated ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'var(--border)', color: simulated ? 'var(--accent-warning)' : 'var(--primary-foreground)',
+            border: `1px solid ${simulated ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
           }}
         >
           Deuteranopia simulation
@@ -286,7 +286,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({
                 value={isValidHex(colors[i]) ? colors[i] : '#000000'}
                 disabled={stageController.result === 'passed'}
                 onChange={e => update(i, e.target.value)}
-                style={{ gridRow: '1 / span 2', width: 32, height: 32, padding: 0, border: '1px solid var(--border)', borderRadius: 4, cursor: stageController.result === 'passed' ? 'not-allowed' : 'pointer', background: 'transparent' }}
+                style={{ gridRow: '1 / span 2', width: 32, height: 32, padding: 0, border: '1px solid var(--border-strong)', borderRadius: 4, cursor: stageController.result === 'passed' ? 'not-allowed' : 'pointer', background: 'transparent' }}
                 aria-label={`Change ${name} color`}
               />
             )}
@@ -300,7 +300,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({
                 value={patterns[i]}
                 disabled={stageController.result === 'passed'}
                 onChange={(event) => updatePattern(i, event.target.value as Pattern)}
-                style={{ gridColumn: '1 / -1', width: '100%', fontFamily: 'var(--font-mono)', fontSize: '0.68rem', padding: '0.25rem', color: 'var(--primary-foreground)', background: 'var(--primary-background)', border: '1px solid var(--border)', borderRadius: 4 }}
+                style={{ gridColumn: '1 / -1', width: '100%', fontFamily: 'var(--font-mono)', fontSize: '0.68rem', padding: '0.25rem', color: 'var(--primary-foreground)', background: 'var(--primary-background)', border: '1px solid var(--border-strong)', borderRadius: 4 }}
               >
                 {PATTERN_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>{option.label}</option>

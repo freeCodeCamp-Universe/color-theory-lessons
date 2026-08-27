@@ -10,15 +10,17 @@
 
 .meta {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  gap: var(--spacing-sm);
+  font-family: var(--font-sans);
+  font-size: 1rem;
   color: var(--muted);
 }
 
 .score {
-  color: var(--yellow);
+  color: var(--accent-warning);
 }
 
 .card {
@@ -33,8 +35,8 @@
 .roundTitle {
   margin: 0;
   color: var(--primary-foreground);
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
 }
 
 .questionGroup {
@@ -45,7 +47,7 @@
 }
 
 .prompt {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--primary-foreground);
 }
 
@@ -56,19 +58,19 @@
 }
 
 .choice {
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   background-color: var(--secondary-background);
   color: var(--primary-foreground);
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
   padding: 0.35rem 0.65rem;
   cursor: pointer;
 }
 
 .active {
-  border-color: var(--yellow);
-  background-color: color-mix(in srgb, var(--yellow) 16%, var(--secondary-background));
+  border-color: var(--accent-warning);
+  background-color: color-mix(in srgb, var(--accent-warning) 16%, var(--secondary-background));
 }
 
 .choice:disabled,
@@ -87,7 +89,7 @@
   display: grid;
   gap: 0.25rem;
   padding: 0.35rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   background-color: var(--secondary-background);
   cursor: pointer;
@@ -101,23 +103,23 @@
 
 .swatchLabel {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 1rem;
   color: var(--muted);
 }
 
 .roundResult {
   margin: 0;
   color: var(--primary-foreground);
-  font-size: 0.82rem;
+  font-size: 1rem;
 }
 
 .result {
   margin: 0;
   padding: var(--spacing-sm);
-  border-left: 3px solid var(--yellow);
+  border-left: 3px solid var(--accent-warning);
   background-color: var(--primary-background);
   color: var(--primary-foreground);
-  font-size: 0.88rem;
+  font-size: 1rem;
   line-height: 1.5;
 }
 
@@ -127,12 +129,12 @@
 }
 
 .button {
-  border: none;
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
-  background-color: var(--yellow);
-  color: var(--gray-90);
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
+  background-color: var(--accent-cta);
+  color: var(--cta-foreground);
+  font-family: var(--font-sans);
+  font-size: 1rem;
   padding: 0.45rem 0.9rem;
   cursor: pointer;
 }

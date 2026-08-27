@@ -33,7 +33,7 @@ function renderGlossary(completedLessons: string[]) {
         completedQuizzes: [],
         quizBestScores: {},
         completedMilestones: [],
-        preferences: { reducedMotion: false, colorBlindnessMode: null },
+        preferences: { theme: 'system', reducedMotion: false, colorBlindnessMode: null },
       }}
     >
       <GlossaryPage />

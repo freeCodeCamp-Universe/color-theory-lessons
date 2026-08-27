@@ -69,7 +69,7 @@ function CheckRow({ label, pass, ratio, showResult }: { label: string; pass: boo
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', padding: '0.2rem 0' }}>
       <span style={{ color: 'var(--primary-foreground)' }}>{label}</span>
-      <span style={{ color: showResult ? (pass ? '#22c55e' : '#ef4444') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
+      <span style={{ color: showResult ? (pass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
         {showResult ? (pass ? '✓ ' : '✗ ') : ''}{ratio !== undefined ? ratio.toFixed(2) + ':1' : ''}
       </span>
     </div>
@@ -194,11 +194,13 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         {/* Inputs */}
         <div style={{ flex: '0 0 220px' }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>SEMANTIC ROLES</p>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>SEMANTIC ROLES</p>
           {(Object.keys(DEFAULTS) as RoleKey[]).map((roleKey) => {
             const val = roles[roleKey];
+            const invalid = !isValidHex(val);
+            const errorId = `role-builder-${roleKey}-hex-error`;
             return (
-              <div key={roleKey} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
+              <div key={roleKey} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem', flexWrap: 'wrap' }}>
                 <div style={{ width: 18, height: 18, borderRadius: 3, background: isValidHex(val) ? val : '#888', border: '1px solid var(--border)', flexShrink: 0 }} />
                 <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{ROLE_LABELS[roleKey]}</span>
                 <input
@@ -207,13 +209,21 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
                   onChange={(e) => update(roleKey, e.target.value)}
                   disabled={!interactive || stageController.result === 'passed'}
                   maxLength={7}
+                  aria-label={`${ROLE_LABELS[roleKey]} hex color`}
+                  aria-invalid={invalid}
+                  aria-describedby={invalid ? errorId : undefined}
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.78rem',
                     background: 'var(--surface)', color: 'var(--primary-foreground)',
-                    border: `1px solid ${isValidHex(val) ? 'var(--border)' : '#ef4444'}`,
+                    border: `1px solid ${invalid ? 'var(--accent-danger)' : 'var(--border-strong)'}`,
                     borderRadius: 3, padding: '0.15rem 0.3rem', width: 90,
                   }}
                 />
+                {invalid && (
+                  <span id={errorId} className={shellStyles.inputError}>
+                    Error: enter a 3- or 6-digit hex color for {ROLE_LABELS[roleKey]}.
+                  </span>
+                )}
               </div>
             );
           })}
@@ -221,8 +231,8 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
 
         {/* Preview */}
         <div style={{ flex: '1 1 200px', minWidth: 180 }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>LIVE PREVIEW</p>
-          <div style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>LIVE PREVIEW</p>
+          <div data-authored-visual style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
             <div style={{ background: surf, borderRadius: 4, padding: '0.5rem', marginBottom: '0.5rem', border: '1px solid #e5e7eb' }}>
               <div style={{ color: pt, fontWeight: 600, fontSize: '0.85rem' }}>Card Title</div>
               <div style={{ color: st, fontSize: '0.75rem' }}>Supporting information</div>
@@ -240,7 +250,7 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
 
         {/* Checks */}
         <div style={{ flex: '0 0 200px' }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>VALIDATION</p>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>VALIDATION</p>
           <CheckRow label="Valid role colors" pass={validRoles} showResult={showResults} />
           <CheckRow label="Primary text / surface" pass={primaryOk} ratio={primaryContrast} showResult={showResults} />
           <CheckRow label="Secondary text / surface" pass={secondaryOk} ratio={secondaryContrast} showResult={showResults} />

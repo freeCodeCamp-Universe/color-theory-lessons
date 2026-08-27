@@ -181,6 +181,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
           </p>
 
           <div className={styles.mockup}>
+            <div data-authored-visual>
             {/* Nav */}
             <div
               className={`${styles.nav} ${selectedId === 'nav-bg' ? styles.selected : ''} ${revealed.has('nav-bg') ? styles.visited : ''}`}
@@ -264,14 +265,15 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                 ✓ success
               </span>
             </div>
+            </div>
 
             {/* Legend */}
             <div className={styles.legend}>
               <span className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: 'var(--yellow)' }} /> selected
+                <span className={styles.legendDot} style={{ background: 'var(--accent-warning)' }} /> selected
               </span>
               <span className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: 'var(--green)' }} /> explored
+                <span className={styles.legendDot} style={{ background: 'var(--accent-success)' }} /> explored
               </span>
             </div>
           </div>

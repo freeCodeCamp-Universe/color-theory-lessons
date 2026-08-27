@@ -158,6 +158,9 @@ describe('HSLSliderTool exercise', () => {
     expect(screen.getByText('Stage 1 of 3')).toBeInTheDocument();
     expect(screen.queryByText('Match the saturation')).not.toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('No match yet.');
+    expect(screen.getByText('No match yet. Try this stage again.')).toHaveStyle({
+      color: 'var(--accent-danger)',
+    });
     expect(onComplete).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));

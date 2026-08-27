@@ -17,8 +17,7 @@
 }
 
 .swatchLabel {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--muted);
   text-transform: uppercase;
 }
@@ -32,7 +31,7 @@
 
 .hslValue {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--secondary-foreground);
 }
 
@@ -55,20 +54,18 @@
 }
 
 .sliderName {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
 .sliderVal {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--yellow);
+  font-size: 1rem;
+  color: var(--accent-warning);
 }
 
 .sliderLocked {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--muted);
 }
 
@@ -138,29 +135,26 @@
 }
 
 .targetName {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--secondary-foreground);
 }
 
 .targetDim {
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--muted);
 }
 
 .matchResult {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   margin-left: auto;
 }
 
 .doneBtn {
   align-self: flex-start;
   padding: 0.5rem 1.25rem;
-  background-color: var(--yellow);
-  color: var(--gray-90);
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  background-color: var(--accent-cta);
+  color: var(--cta-foreground);
+  font-size: 1rem;
   font-weight: 700;
   border-radius: var(--radius-sm);
   border: none;

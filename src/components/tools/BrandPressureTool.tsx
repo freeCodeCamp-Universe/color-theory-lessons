@@ -82,7 +82,11 @@ export const BrandPressureTool = memo(function BrandPressureTool({
   const pt = isValidHex(roles['primary-text']) ? roles['primary-text'] : '#1c1917';
   const div = isValidHex(roles['neutral-divider']) ? roles['neutral-divider'] : '#e2e8f0';
 
-  const meterColor = pressure < 40 ? '#22c55e' : pressure < 60 ? '#f59e0b' : '#ef4444';
+  const meterColor = pressure < 40
+    ? 'var(--accent-success)'
+    : pressure < 60
+      ? 'var(--accent-warning)'
+      : 'var(--accent-danger)';
   const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
 
   return (
@@ -97,13 +101,13 @@ export const BrandPressureTool = memo(function BrandPressureTool({
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         {/* Inputs */}
         <div style={{ flex: '0 0 220px' }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>ROLES</p>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>ROLES</p>
 
           {/* Read-only brand roles */}
           {FIXED_ACTIONS.map(action => (
-            <div key={action.role} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem', opacity: 0.7 }}>
+            <div key={action.role} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
               <div style={{ width: 18, height: 18, borderRadius: 3, background: action.background, border: '1px solid var(--border)', flexShrink: 0 }} />
-              <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{FIXED_ROLE_LABELS[action.role]} (fixed)</span>
+              <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{FIXED_ROLE_LABELS[action.role]} (fixed)</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--primary-foreground)' }}>{action.background}</span>
             </div>
           ))}
@@ -112,23 +116,33 @@ export const BrandPressureTool = memo(function BrandPressureTool({
 
           {(Object.keys(defaults) as RoleKey[]).map(key => {
             const val = roles[key];
+            const invalid = !isValidHex(val);
+            const errorId = `brand-pressure-${key}-hex-error`;
             return (
-              <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
+              <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem', flexWrap: 'wrap' }}>
                 <div style={{ width: 18, height: 18, borderRadius: 3, background: isValidHex(val) ? val : '#888', border: '1px solid var(--border)', flexShrink: 0 }} />
-                <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{ROLE_LABELS[key]}</span>
+                <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{ROLE_LABELS[key]}</span>
                 <input
                   type="text"
                   value={val}
                   onChange={e => update(key, e.target.value)}
                   disabled={!interactive || stageController.result === 'passed'}
                   maxLength={7}
+                  aria-label={`${ROLE_LABELS[key]} hex color`}
+                  aria-invalid={invalid}
+                  aria-describedby={invalid ? errorId : undefined}
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.78rem',
                     background: 'var(--surface, #1e293b)', color: 'var(--primary-foreground)',
-                    border: `1px solid ${isValidHex(val) ? 'var(--border)' : '#ef4444'}`,
+                    border: `1px solid ${invalid ? 'var(--accent-danger)' : 'var(--border-strong)'}`,
                     borderRadius: 3, padding: '0.15rem 0.3rem', width: 90,
                   }}
                 />
+                {invalid && (
+                  <span id={errorId} className={shellStyles.inputError}>
+                    Error: enter a 3- or 6-digit hex color for {ROLE_LABELS[key]}.
+                  </span>
+                )}
               </div>
             );
           })}
@@ -136,8 +150,8 @@ export const BrandPressureTool = memo(function BrandPressureTool({
 
         {/* Preview */}
         <div style={{ flex: '1 1 180px', minWidth: 160 }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>PREVIEW</p>
-          <div style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>PREVIEW</p>
+          <div data-authored-visual style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
             <div style={{ color: pt, fontWeight: 600, fontSize: '0.85rem', marginBottom: '0.3rem' }}>Dashboard</div>
             <div style={{ background: surf, borderRadius: 4, padding: '0.4rem 0.5rem', border: `1px solid ${div}`, marginBottom: '0.4rem' }}>
               <div style={{ color: pt, fontSize: '0.8rem' }}>Recent activity</div>
@@ -158,7 +172,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({
 
         {/* Checks */}
         <div style={{ flex: '0 0 190px' }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.5rem' }}>CHECKS</p>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>CHECKS</p>
           {[
             { label: 'Primary text / page background (4.5:1)', pass: pageTextOk, ratio: pageTextContrast },
             { label: 'Primary text / card surface (4.5:1)', pass: cardTextOk, ratio: cardTextContrast },
@@ -171,7 +185,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({
           ].map(({ label, pass, ratio }) => (
             <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', padding: '0.2rem 0' }}>
               <span style={{ color: 'var(--primary-foreground)' }}>{label}</span>
-              <span style={{ color: showResults ? (pass ? '#22c55e' : '#ef4444') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
+              <span style={{ color: showResults ? (pass ? 'var(--accent-success)' : 'var(--accent-danger)') : 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
                 {showResults ? (pass ? '✓ ' : '✗ ') : ''}{formatContrastRatio(ratio)}:1
               </span>
             </div>

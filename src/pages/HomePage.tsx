@@ -97,7 +97,7 @@ export function HomePage() {
                   </div>
                   <div className={styles.unitMeta}>
                     {complete ? (
-                      <span className={styles.unitBadge} style={{ color: 'var(--green)', borderColor: 'var(--green)' }}>
+                      <span className={styles.unitBadge} style={{ color: 'var(--accent-success)', borderColor: 'var(--accent-success)' }}>
                         ✓ done
                       </span>
                     ) : started ? (
@@ -131,7 +131,7 @@ export function HomePage() {
                       const isNext = !isDone && (li === 0 || completedLessons.includes(unit.lessons[li - 1]));
                       const isLocked = !isDone && !isNext;
                       return (
-                        <li key={lessonId} className={`${styles.lessonRow} ${isLocked ? styles.lessonLocked : ''}`}>
+                        <li key={lessonId} className={styles.lessonRow}>
                           <span className={styles.lessonNum}>{String(li + 1).padStart(2, '0')}</span>
                           <span className={styles.lessonName}>{LESSON_TITLES[lessonId] ?? lessonId}</span>
                           {isDone && (
@@ -156,7 +156,7 @@ export function HomePage() {
                       return (
                         <li
                           key={unit.milestoneId}
-                          className={`${styles.lessonRow} ${styles.milestoneRow} ${milestoneLocked ? styles.lessonLocked : ''}`}
+                          className={`${styles.lessonRow} ${styles.milestoneRow}`}
                         >
                           <span className={`${styles.lessonNum} ${styles.milestoneIcon}`}>★</span>
                           <span className={styles.lessonName}>{milestone.title}</span>

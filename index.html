@@ -5,6 +5,26 @@
     <link rel="icon" type="image/png" href="/favicon-32x32.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0a0a23" />
+    <script>
+      (() => {
+        let preference = 'system';
+        try {
+          const stored = JSON.parse(localStorage.getItem('color-theory-course-state') || 'null');
+          const savedTheme = stored && stored.version === 3
+            && stored.preferences && stored.preferences.theme;
+          if (savedTheme === 'dark' || savedTheme === 'light') preference = savedTheme;
+        } catch {
+          // Use the system preference when storage is unavailable or invalid.
+        }
+        const theme = preference === 'system'
+          ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          : preference;
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        document.querySelector('meta[name="theme-color"]')
+          .setAttribute('content', theme === 'dark' ? '#0a0a23' : '#ffffff');
+      })();
+    </script>
     <meta name="description" content="Learn color theory for digital design — RGB, HSL, color accessibility, and more. Free, interactive, self-paced." />
     <meta property="og:title" content="Color Theory Course" />
     <meta property="og:description" content="Learn color theory for digital design — RGB, HSL, color accessibility, and more. Free, interactive, self-paced." />

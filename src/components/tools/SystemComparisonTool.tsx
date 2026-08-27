@@ -50,9 +50,10 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
     position: 'relative',
     cursor: 'default',
     outline: found.has(id)
-      ? `2px solid ${showResults ? '#22c55e' : 'var(--accent-cta)'}`
+      ? `2px solid ${showResults ? 'var(--accent-success)' : 'var(--accent-warning)'}`
       : 'none',
-    outlineOffset: 2,
+    outlineOffset: 0,
+    boxShadow: found.has(id) ? '0 0 0 4px var(--gray-90)' : 'none',
     borderRadius: 3,
   });
 
@@ -68,10 +69,10 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         {/* Ad-hoc mockup */}
         <div style={{ flex: '1 1 220px', minWidth: 200 }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.4rem' }}>
-            AD-HOC {interactive && <span style={{ color: '#f59e0b' }}>(click inconsistencies)</span>}
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.4rem' }}>
+            AD-HOC {interactive && <span style={{ color: 'var(--accent-warning)' }}>(click inconsistencies)</span>}
           </p>
-          <div style={{ border: '1px solid #e5e7eb', borderRadius: 6, overflow: 'hidden', fontSize: '0.8rem' }}>
+          <div data-authored-visual style={{ border: '1px solid #e5e7eb', borderRadius: 6, overflow: 'hidden', fontSize: '0.8rem' }}>
             {/* Header */}
             <div style={{ background: '#2563EB', padding: '0.4rem 0.6rem', color: '#fff', fontWeight: 600 }}>My App</div>
             {/* Card 1 */}
@@ -117,8 +118,8 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
 
         {/* System mockup */}
         <div style={{ flex: '1 1 220px', minWidth: 200 }}>
-          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', marginBottom: '0.4rem' }}>SYSTEM (consistent)</p>
-          <div style={{ border: '1px solid #e5e7eb', borderRadius: 6, overflow: 'hidden', fontSize: '0.8rem' }}>
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.4rem' }}>SYSTEM (consistent)</p>
+          <div data-authored-visual style={{ border: '1px solid #e5e7eb', borderRadius: 6, overflow: 'hidden', fontSize: '0.8rem' }}>
             <div style={{ background: '#1e40af', padding: '0.4rem 0.6rem', color: '#fff', fontWeight: 600 }}>My App</div>
             <div style={{ background: SYSTEM_COLORS.surface, border: '1px solid #e5e7eb', margin: '0.5rem', padding: '0.5rem', borderRadius: 4 }}>
               <div style={{ color: '#111827', fontWeight: 600, marginBottom: '0.25rem' }}>Account Overview</div>
@@ -141,7 +142,7 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
         <div style={{ background: 'var(--surface, #1e293b)', border: '1px solid var(--border)', borderRadius: 4, padding: '0.6rem 0.75rem', fontSize: '0.82rem' }}>
           {INCONSISTENCIES.filter(({ id }) => found.has(id)).map((inconsistency) => (
             <p key={inconsistency.id} style={{ margin: '0.25rem 0' }}>
-              <strong style={{ color: 'var(--accent-cta)' }}>{inconsistency.label}:</strong>{' '}
+              <strong style={{ color: 'var(--accent-warning)' }}>{inconsistency.label}:</strong>{' '}
               <span style={{ color: 'var(--primary-foreground)' }}>{inconsistency.explanation}</span>
             </p>
           ))}

@@ -5,42 +5,28 @@
   --gray-85: #1b1b32;
   --gray-80: #2a2a40;
   --gray-75: #3b3b4f;
+  --gray-50: #626262;
   --gray-45: #858591;
+  --gray-40: #939393;
   --gray-15: #d0d0d5;
   --gray-10: #dfdfe2;
   --gray-05: #f5f6f7;
   --gray-00: #ffffff;
 
-  /* Accent – light variants (on dark) */
-  --purple: #dbb8ff;
-  --yellow: #f1be32;
-  --blue: #99c9ff;
-  --green: #acd157;
-  --red: #ffadad;
+  /* Accent variants */
+  --purple-light: #dbb8ff;
+  --yellow-light: #f1be32;
+  --blue-light: #99c9ff;
+  --green-light: #acd157;
+  --red-light: #ffadad;
 
-  /* Accent – dark variants (on light) */
   --purple-dark: #5a01a7;
   --yellow-dark: #4d3800;
   --blue-dark: #002ead;
   --green-dark: #00471b;
   --red-dark: #850000;
-
-  /* Semantic */
-  --primary-background: var(--gray-90);
-  --secondary-background: var(--gray-85);
-  --surface: var(--gray-80);
-  --border: var(--gray-75);
-  --muted: var(--gray-45);
-  --secondary-foreground: var(--gray-15);
-  --primary-foreground: var(--gray-00);
-
-  --accent-cta: var(--yellow);
-  --accent-link: var(--blue);
-  --accent-success: var(--green);
-  --accent-danger: var(--red);
-  --accent-emphasis: var(--purple);
-
-  --focus-ring: #198eee;
+  --yellow-gold: #ffbf00;
+  --blue-mid: #198eee;
 
   /* Typography */
   --font-mono: 'Hack-ZeroSlash', 'Fira Mono', Menlo, Consolas, monospace;
@@ -61,6 +47,74 @@
   --radius-md: 6px;
 }
 
+:root,
+:root[data-theme='dark'] {
+  --primary-background: var(--gray-90);
+  --secondary-background: var(--gray-85);
+  --surface: var(--gray-80);
+  --border: var(--gray-75);
+  --border-strong: var(--gray-15);
+  --hover-background: var(--gray-75);
+  --muted: var(--gray-15);
+  --disabled: var(--gray-45);
+  --secondary-foreground: var(--gray-15);
+  --primary-foreground: var(--gray-00);
+
+  --yellow: var(--yellow-light);
+  --blue: var(--blue-light);
+  --green: var(--green-light);
+  --red: var(--red-light);
+  --purple: var(--purple-light);
+
+  --accent-cta: var(--yellow-gold);
+  --cta-foreground: var(--gray-90);
+  --accent-warning: var(--yellow-light);
+  --accent-link: var(--blue-light);
+  --accent-success: var(--green-light);
+  --accent-danger: var(--red-light);
+  --accent-emphasis: var(--purple-light);
+  --selection-background: var(--blue-dark);
+  --selection-foreground: var(--gray-00);
+  --focus-ring: var(--blue-mid);
+
+  /* Accent text remains AAA when paired with these restrained badge tints. */
+  --badge-link-background: color-mix(in srgb, var(--accent-link) 6%, var(--surface));
+  --badge-success-background: color-mix(in srgb, var(--accent-success) 6%, var(--surface));
+  --badge-warning-background: color-mix(in srgb, var(--accent-warning) 6%, var(--surface));
+  --badge-danger-background: color-mix(in srgb, var(--accent-danger) 5%, var(--surface));
+}
+
+:root[data-theme='light'] {
+  --primary-background: var(--gray-00);
+  --secondary-background: var(--gray-05);
+  --surface: var(--gray-10);
+  --border: var(--gray-15);
+  --border-strong: var(--gray-75);
+  --hover-background: var(--gray-15);
+  --muted: var(--gray-75);
+  --disabled: var(--gray-45);
+  --secondary-foreground: var(--gray-75);
+  --primary-foreground: var(--gray-90);
+
+  /* Legacy visual tokens stay fixed so authored lesson mocks do not change. */
+  --yellow: var(--yellow-light);
+  --blue: var(--blue-light);
+  --green: var(--green-light);
+  --red: var(--red-light);
+  --purple: var(--purple-light);
+
+  --accent-cta: var(--yellow-gold);
+  --cta-foreground: var(--gray-90);
+  --accent-warning: var(--yellow-dark);
+  --accent-link: var(--blue-dark);
+  --accent-success: var(--green-dark);
+  --accent-danger: var(--red-dark);
+  --accent-emphasis: var(--purple-dark);
+  --selection-background: var(--blue-light);
+  --selection-foreground: var(--gray-90);
+  --focus-ring: var(--blue-dark);
+}
+
 /* ── Base reset ───────────────────────────────────────────────────────────── */
 *,
 *::before,
@@ -72,7 +126,6 @@
 
 html {
   font-size: var(--font-size-base);
-  color-scheme: dark;
 }
 
 body {
@@ -99,6 +152,16 @@ a:hover {
   text-decoration: underline;
 }
 
+::selection {
+  background: var(--selection-background);
+  color: var(--selection-foreground);
+}
+
+::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
 *:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
@@ -110,6 +173,21 @@ button {
   cursor: pointer;
   border: none;
   background: none;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  cursor: not-allowed;
+}
+
+:where(
+  input:not([type='color']):not([type='range']):not(:disabled),
+  select:not(:disabled),
+  textarea:not(:disabled)
+) {
+  border-color: var(--border-strong);
 }
 
 code,

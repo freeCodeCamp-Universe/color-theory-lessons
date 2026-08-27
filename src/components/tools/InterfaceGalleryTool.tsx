@@ -88,9 +88,9 @@ export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({
               padding: '0.3rem 0.6rem',
               fontSize: '0.75rem',
               fontFamily: 'var(--font-mono)',
-              background: mode === m.id ? 'var(--accent-cta)' : 'transparent',
-              color: mode === m.id ? '#111' : seen.has(m.id) ? 'var(--accent-success)' : 'var(--muted)',
-              border: `1px solid ${mode === m.id ? 'var(--accent-cta)' : 'var(--border)'}`,
+              background: mode === m.id ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'transparent',
+              color: mode === m.id ? 'var(--accent-warning)' : seen.has(m.id) ? 'var(--accent-success)' : 'var(--muted)',
+              border: `1px solid ${mode === m.id ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
               borderRadius: 'var(--radius-sm)',
               cursor: interactive ? 'pointer' : 'default',
             }}
@@ -101,7 +101,7 @@ export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({
       </div>
 
       {/* Mockup panel with filter applied */}
-      <div style={{ filter: currentFilter, borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid var(--border)' }}>
+      <div data-authored-visual style={{ filter: currentFilter, borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid var(--border)' }}>
         {/* Nav */}
         <div style={{ background: '#1e3a5f', padding: '0.5rem 0.75rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <span style={{ color: '#4da6ff', fontSize: '0.8rem', fontWeight: 600 }}>Dashboard</span>

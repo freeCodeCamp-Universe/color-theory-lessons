@@ -10,9 +10,11 @@
 
 .header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  gap: var(--spacing-sm);
+  font-family: var(--font-sans);
+  font-size: 1rem;
 }
 
 .preview {
@@ -49,8 +51,8 @@
   grid-template-columns: 170px 1fr 120px;
   gap: var(--spacing-sm);
   align-items: center;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
 }
 
 @media (max-width: 780px) {
@@ -59,12 +61,12 @@
   }
 }
 
-.good { color: var(--green); }
-.bad { color: var(--red); }
+.good { color: var(--accent-success); }
+.bad { color: var(--accent-danger); }
 
 .result {
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
 }
 
 .actions {
@@ -73,12 +75,13 @@
 }
 
 .button {
-  background: var(--yellow);
-  color: var(--gray-90);
+  background: var(--accent-cta);
+  color: var(--cta-foreground);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   padding: 0.48rem 0.9rem;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
   font-weight: 700;
 }
 

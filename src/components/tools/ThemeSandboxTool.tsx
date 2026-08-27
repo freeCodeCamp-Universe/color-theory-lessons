@@ -81,7 +81,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
 
   function resultColor(passes: boolean) {
     if (!showResults) return 'var(--muted)';
-    return passes ? 'var(--green)' : 'var(--red)';
+    return passes ? 'var(--accent-success)' : 'var(--accent-danger)';
   }
 
   function resultSymbol(passes: boolean) {
@@ -99,7 +99,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
         completionFeedback="Theme complete. All five checked text pairs meet 4.5:1."
       >
       {/* Live preview */}
-      <div style={{
+      <div data-authored-visual style={{
         background: colors.bg, borderRadius: 'var(--radius-md)', padding: '0.75rem',
         border: `1px solid ${colors.border}`, marginBottom: '0.75rem',
       }}>
@@ -146,7 +146,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
       </div>
 
       {/* Color role editors */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.35rem 0.75rem', marginBottom: '0.6rem' }}>
+      <div className={shellStyles.twoColumnGrid} style={{ gap: '0.35rem 0.75rem', marginBottom: '0.6rem' }}>
         {ROLES.map((role) => (
           <label key={role.key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.78rem' }}>
             <input type="color" value={colors[role.key]}
@@ -161,7 +161,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
       </div>
 
       {/* Gradient editors */}
-      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '0.6rem', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.78rem' }}>
           <input type="color" value={gradStart} disabled={inputsDisabled}
             onChange={(e) => setGradStart(e.target.value)}
@@ -181,7 +181,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
       </div>
 
       {/* Contrast readout */}
-      <div style={{ fontSize: '0.78rem', fontFamily: 'var(--font-mono)', marginBottom: '0.5rem' }}>
+      <div style={{ fontSize: '0.78rem', fontFamily: 'var(--font-sans)', marginBottom: '0.5rem' }}>
         <div style={{ color: resultColor(priOnBg >= TEXT_CONTRAST_TARGET) }}>
           {resultSymbol(priOnBg >= TEXT_CONTRAST_TARGET)}Primary text on background: {formatContrastRatio(priOnBg)}:1 (target: 4.5:1)
         </div>
@@ -201,8 +201,8 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
 
       {interactive && stageController.result === 'idle' && (
         <button onClick={checkTheme} style={{
-          padding: '0.4rem 1rem', background: 'var(--yellow)',
-          color: '#111',
+          padding: '0.4rem 1rem', background: 'var(--accent-cta)',
+          color: 'var(--cta-foreground)',
           border: 'none', borderRadius: 'var(--radius-sm)',
           cursor: 'pointer',
           fontFamily: 'var(--font-mono)', fontSize: '0.82rem',

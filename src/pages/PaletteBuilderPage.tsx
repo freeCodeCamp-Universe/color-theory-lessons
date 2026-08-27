@@ -776,8 +776,15 @@ export function PaletteBuilderPage() {
                   onBlur={handleHexBlur}
                   onKeyDown={handleHexKey}
                   aria-label="Hex color value"
+                  aria-invalid={!isValid}
+                  aria-describedby={!isValid ? 'palette-primary-hex-error' : undefined}
                   spellCheck={false}
                 />
+                {!isValid && (
+                  <span id="palette-primary-hex-error" className={styles.inputError}>
+                    Error: enter a 3- or 6-digit hex color.
+                  </span>
+                )}
                 <span className={styles.hslReadout}>
                   H {primaryHsl.h} &middot; S {primaryHsl.s} &middot; L {primaryHsl.l}
                 </span>
@@ -1171,35 +1178,44 @@ export function PaletteBuilderPage() {
                             }}
                             aria-label="Pick color"
                           />
-                          <input
-                            type="text"
-                            className={`${styles.editInlineInput} ${parseHex(editHexInput) === null ? styles.hexInputInvalid : ''}`}
-                            value={editHexInput}
-                            onChange={(e) => setEditHexInput(e.target.value)}
-                            onBlur={() => {
-                              const parsed = parseHex(editHexInput);
-                              if (parsed) {
-                                const canonical = rgbToHex(parsed);
-                                setEditHexInput(canonical);
-                                updatePaletteColor(i, canonical);
-                              }
-                            }}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
+                          <div className={styles.editInlineMeta}>
+                            <input
+                              type="text"
+                              className={`${styles.editInlineInput} ${parseHex(editHexInput) === null ? styles.hexInputInvalid : ''}`}
+                              value={editHexInput}
+                              onChange={(e) => setEditHexInput(e.target.value)}
+                              onBlur={() => {
                                 const parsed = parseHex(editHexInput);
                                 if (parsed) {
                                   const canonical = rgbToHex(parsed);
                                   setEditHexInput(canonical);
                                   updatePaletteColor(i, canonical);
-                                  setEditingIndex(null);
                                 }
-                              }
-                              if (e.key === 'Escape') setEditingIndex(null);
-                            }}
-                            autoFocus
-                            aria-label="Hex color value"
-                            spellCheck={false}
-                          />
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  const parsed = parseHex(editHexInput);
+                                  if (parsed) {
+                                    const canonical = rgbToHex(parsed);
+                                    setEditHexInput(canonical);
+                                    updatePaletteColor(i, canonical);
+                                    setEditingIndex(null);
+                                  }
+                                }
+                                if (e.key === 'Escape') setEditingIndex(null);
+                              }}
+                              autoFocus
+                              aria-label="Hex color value"
+                              aria-invalid={parseHex(editHexInput) === null}
+                              aria-describedby={parseHex(editHexInput) === null ? `palette-color-${i}-hex-error` : undefined}
+                              spellCheck={false}
+                            />
+                            {parseHex(editHexInput) === null && (
+                              <span id={`palette-color-${i}-hex-error`} className={styles.inputError}>
+                                Error: enter a 3- or 6-digit hex color.
+                              </span>
+                            )}
+                          </div>
                         </div>
                       )}
                       <span className={styles.swatchHex}>{color.hex.toUpperCase()}</span>
@@ -1270,7 +1286,7 @@ export function PaletteBuilderPage() {
                                 padding: '2px 8px',
                                 borderRadius: 'var(--radius-sm)',
                                 fontFamily: 'var(--font-mono)',
-                                fontSize: '0.85rem',
+                                fontSize: '1rem',
                               }}
                             >
                               sample
@@ -1334,6 +1350,7 @@ export function PaletteBuilderPage() {
                     {/* Mini preview */}
                     <div
                       className={styles.miniPreview}
+                      data-authored-visual
                       style={{
                         backgroundColor: roles.background,
                         borderColor: roles.surface,

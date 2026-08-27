@@ -247,10 +247,10 @@ export const SystemStressTestTool = memo(function SystemStressTestTool({
             disabled={!interactive}
             onClick={() => setContext(item.id)}
             style={{
-              background: context === item.id ? 'var(--accent-cta)' : 'var(--border)',
-              border: 0,
+              background: context === item.id ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'var(--border)',
+              border: `1px solid ${context === item.id ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
               borderRadius: 4,
-              color: context === item.id ? '#000' : 'var(--primary-foreground)',
+              color: context === item.id ? 'var(--accent-warning)' : 'var(--primary-foreground)',
               cursor: interactive ? 'pointer' : 'default',
               fontSize: '0.75rem',
               padding: '0.3rem 0.55rem',
@@ -261,7 +261,9 @@ export const SystemStressTestTool = memo(function SystemStressTestTool({
         ))}
       </div>
 
-      <ContextPreview context={context} />
+      <div data-authored-visual style={{ display: 'contents' }}>
+        <ContextPreview context={context} />
+      </div>
 
       <div style={{ display: 'grid', gap: '0.5rem' }}>
         {FINDINGS.map(finding => {
@@ -271,7 +273,7 @@ export const SystemStressTestTool = memo(function SystemStressTestTool({
             && classifications[finding.id] !== finding.expectedClassification;
           return (
             <fieldset key={finding.id} style={{ border: '1px solid var(--border)', borderRadius: 4, margin: 0, padding: '0.55rem' }}>
-              <legend style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', fontWeight: 600, padding: '0 0.25rem' }}>{finding.context}</legend>
+              <legend style={{ fontFamily: 'var(--font-sans)', fontSize: '0.78rem', fontWeight: 600, padding: '0 0.25rem' }}>{finding.context}</legend>
               {activeStageId === 'find-system-weaknesses' ? (
               <label style={{ alignItems: 'start', display: 'flex', fontSize: '0.78rem', gap: '0.4rem' }}>
                 <input checked={selected} disabled={!interactive || stageController.result === 'passed'} onChange={event => updateSelection(finding.id, event.target.checked)} type="checkbox" />

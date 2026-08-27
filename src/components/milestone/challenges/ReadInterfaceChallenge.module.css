@@ -10,15 +10,17 @@
 
 .meta {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  gap: var(--spacing-sm);
+  font-family: var(--font-sans);
+  font-size: 1rem;
   color: var(--muted);
 }
 
 .score {
-  color: var(--yellow);
+  color: var(--accent-warning);
 }
 
 .grid {
@@ -37,41 +39,41 @@
 }
 
 .label {
-  font-size: 0.88rem;
+  font-size: 1rem;
   color: var(--primary-foreground);
 }
 
 .select {
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   background-color: var(--primary-background);
   color: var(--primary-foreground);
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
   padding: 0.4rem 0.5rem;
 }
 
 .hint {
-  font-size: 0.78rem;
+  font-size: 1rem;
   color: var(--muted);
   min-height: 1.2rem;
 }
 
 .good {
-  color: var(--green);
+  color: var(--accent-success);
 }
 
 .bad {
-  color: var(--red);
+  color: var(--accent-danger);
 }
 
 .result {
   margin: 0;
   padding: var(--spacing-sm);
-  border-left: 3px solid var(--yellow);
+  border-left: 3px solid var(--accent-warning);
   background-color: var(--primary-background);
   color: var(--primary-foreground);
-  font-size: 0.88rem;
+  font-size: 1rem;
   line-height: 1.5;
 }
 
@@ -81,12 +83,12 @@
 }
 
 .button {
-  border: none;
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
-  background-color: var(--yellow);
-  color: var(--gray-90);
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
+  background-color: var(--accent-cta);
+  color: var(--cta-foreground);
+  font-family: var(--font-sans);
+  font-size: 1rem;
   padding: 0.45rem 0.9rem;
   cursor: pointer;
 }

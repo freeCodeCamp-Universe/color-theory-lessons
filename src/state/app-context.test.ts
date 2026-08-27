@@ -7,8 +7,8 @@ const baseState = {
   completedQuizzes: [],
   quizBestScores: {},
   completedMilestones: [],
-  preferences: { reducedMotion: false, colorBlindnessMode: null },
-} satisfies ProgressState & { preferences: { reducedMotion: boolean; colorBlindnessMode: string | null } };
+  preferences: { theme: 'system', reducedMotion: false, colorBlindnessMode: null },
+} satisfies ProgressState & { preferences: { theme: 'system'; reducedMotion: boolean; colorBlindnessMode: string | null } };
 
 describe('appReducer', () => {
   describe('COMPLETE_LESSON', () => {
