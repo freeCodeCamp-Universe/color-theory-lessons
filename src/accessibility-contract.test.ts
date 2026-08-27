@@ -23,6 +23,7 @@ describe('accessible visual inventory', () => {
   it('includes shared shells and Palette Builder', () => {
     expect(inventory).toContain('## Shared shell inventory');
     expect(inventory).toContain('| LessonPlayer |');
+    expect(inventory).toContain('| ExerciseStage |');
     expect(inventory).toContain('| MilestonePlayer |');
     expect(inventory).toContain('## Palette Builder inventory');
     expect(inventory).toContain('| Picker tabs, hue ring, and current picker marker |');
