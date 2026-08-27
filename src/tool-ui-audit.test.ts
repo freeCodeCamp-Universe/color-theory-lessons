@@ -62,6 +62,17 @@ describe('tool UI audit regressions', () => {
     );
   });
 
+  it('uses the semantic focus token for custom application indicators', () => {
+    expect(read('src/components/tools/HueWheel.tsx')).toContain('stroke="var(--focus-ring)"');
+    expect(read('src/components/tools/ColorWheelTool.tsx')).toContain('stroke="var(--focus-ring)"');
+    expect(read('src/components/tools/ExerciseStage.module.css')).toMatch(
+      /\.title:focus-visible\s*{\s*outline: 2px solid var\(--focus-ring\);/,
+    );
+    expect(read('src/components/milestone/MilestonePlayer.module.css')).toMatch(
+      /\.choice:has\(input:focus-visible\)\s*{\s*outline: 2px solid var\(--focus-ring\);/,
+    );
+  });
+
   it.each([
     ['src/components/tools/AdditiveSortTool.tsx', "active ? 'var(--accent-warning)' : 'var(--border-strong)'"],
     ['src/components/tools/AuditFlowTool.tsx', "isSelected ? 'var(--accent-warning)' : 'var(--border-strong)'"],

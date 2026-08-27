@@ -93,7 +93,7 @@ function ColorWheel({ baseH, relatedH, interactive, onChange }: ColorWheelProps)
       style={{ cursor: interactive ? 'crosshair' : 'default', flexShrink: 0, outline: 'none' }}
     >
       {focused && interactive && (
-        <circle cx={cx} cy={cy} r={r + 8} fill="none" stroke="var(--accent-warning)" strokeWidth={2} strokeDasharray="4 3" />
+        <circle cx={cx} cy={cy} r={r + 8} fill="none" stroke="var(--focus-ring)" strokeWidth={2} strokeDasharray="4 3" />
       )}
       {segments.map((seg) => (
         <path key={seg.hue} d={seg.d} fill={`hsl(${seg.hue}, 80%, 55%)`} />
