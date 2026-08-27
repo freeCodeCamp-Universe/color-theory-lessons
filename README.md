@@ -22,6 +22,16 @@ npm install
 npm run dev
 ```
 
+Set `VITE_DEV_MODE` to any non-empty value to unlock every lesson and milestone
+in the dashboard and allow direct access to their routes during course
+development:
+
+```sh
+VITE_DEV_MODE=1 npm run dev
+```
+
+When `VITE_DEV_MODE` is unset, the app enforces lesson and milestone progression.
+
 ## Build
 
 ```sh

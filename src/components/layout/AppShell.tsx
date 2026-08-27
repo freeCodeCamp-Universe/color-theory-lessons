@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { TopNav } from '../nav/TopNav.tsx';
+import { RouteSnackbar } from '../feedback/RouteSnackbar.tsx';
 import { useAppState } from '../../state/app-context.tsx';
 import styles from './AppShell.module.css';
 
@@ -42,6 +43,7 @@ export function AppShell({ children }: AppShellProps) {
       <div dangerouslySetInnerHTML={{ __html: CVD_SVG_DEFS }} />
       <TopNav />
       <main className={styles.main}>{children}</main>
+      <RouteSnackbar />
     </div>
   );
 }

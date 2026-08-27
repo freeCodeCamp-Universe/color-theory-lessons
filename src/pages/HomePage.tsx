@@ -4,10 +4,17 @@ import { units } from '../data/units.ts';
 import { getMilestoneById } from '../data/milestones.ts';
 import { LESSON_TITLES } from '../lessons/lesson-titles.ts';
 import { useAppState, useAppDispatch } from '../state/app-context.tsx';
+import {
+  getNextLearningPath,
+  isDevelopmentMode,
+  isUnitUnlocked,
+} from '../utils/progression.ts';
 import styles from './HomePage.module.css';
 
 export function HomePage() {
   const { completedLessons, completedMilestones } = useAppState();
+  const progress = { completedLessons, completedMilestones };
+  const developmentMode = isDevelopmentMode();
   const dispatch = useAppDispatch();
   // Start with the current unit expanded: the first unit that is unlocked
   // (previous unit fully finished) but not yet fully finished itself.
@@ -29,9 +36,7 @@ export function HomePage() {
     }
   }
 
-  // Find the first lesson the user hasn't completed yet
-  const allLessonIds = units.flatMap((u) => u.lessons);
-  const nextLessonId = allLessonIds.find((id) => !completedLessons.includes(id)) ?? allLessonIds[0];
+  const nextLearningPath = getNextLearningPath(progress);
 
   return (
     <>
@@ -46,7 +51,7 @@ export function HomePage() {
           Six units of hands-on lessons covering color perception, digital color
           models, accessibility, and design systems — built for people who write code.
         </p>
-        <Link to={`/lesson/${nextLessonId}`} className={styles.startBtn}>
+        <Link to={nextLearningPath} className={styles.startBtn}>
           {completedLessons.length === 0 ? 'start learning' : 'continue →'}
         </Link>
       </section>
@@ -62,15 +67,7 @@ export function HomePage() {
             const started = done > 0 && !complete;
             const firstLesson = unit.lessons[0];
 
-            const prevUnit = i > 0 ? units[i - 1] : null;
-            const prevUnitLessonsDone = prevUnit
-              ? prevUnit.lessons.every((id) => completedLessons.includes(id))
-              : true;
-            const prevUnitMilestoneDone = prevUnit?.milestoneId
-              ? completedMilestones.includes(prevUnit.milestoneId)
-              : true;
-            const prevUnitComplete = prevUnitLessonsDone && prevUnitMilestoneDone;
-            const isUnlocked = i === 0 || prevUnitComplete;
+            const isUnlocked = developmentMode || isUnitUnlocked(unit.id, progress);
             const canExpand = isUnlocked;
             const isExpanded = expandedUnit === unit.id;
 
@@ -128,7 +125,11 @@ export function HomePage() {
                       const isDone = completedLessons.includes(lessonId);
                       // The list only renders inside an expanded (therefore unlocked)
                       // unit, so its first lesson is always startable when not done.
-                      const isNext = !isDone && (li === 0 || completedLessons.includes(unit.lessons[li - 1]));
+                      const isNext = !isDone && (
+                        developmentMode
+                        || li === 0
+                        || completedLessons.includes(unit.lessons[li - 1])
+                      );
                       const isLocked = !isDone && !isNext;
                       return (
                         <li key={lessonId} className={styles.lessonRow}>
@@ -151,8 +152,8 @@ export function HomePage() {
                       if (!milestone) return null;
                       const allLessonsDone = total > 0 && done === total;
                       const milestoneDone = completedMilestones.includes(unit.milestoneId);
-                      const milestoneNext = allLessonsDone && !milestoneDone;
-                      const milestoneLocked = !allLessonsDone && !milestoneDone;
+                      const milestoneNext = !milestoneDone && (developmentMode || allLessonsDone);
+                      const milestoneLocked = !milestoneDone && !milestoneNext;
                       return (
                         <li
                           key={unit.milestoneId}

@@ -30,8 +30,8 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | Open the mobile menu, navigate from it, and have it close after navigation. | Full | `src/components/nav/TopNav.test.tsx` |
 | Return home from an open mobile menu by using the course logo. | Full | `src/components/nav/TopNav.test.tsx` |
 | Prevent desktop navigation from clipping by switching to the mobile control at the responsive breakpoint. | Full | `src/components/nav/TopNavStyles.test.ts`, `e2e/critical-learner-journeys.spec.ts` |
-| Allow direct lesson access in development while preventing out-of-order lesson access and completion in production. | Missing | [#118](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/118) owns the environment-specific route rule and its coverage. |
-| Allow direct milestone access in development while preventing out-of-order milestone access and completion in production. | Missing | [#118](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/118) owns the environment-specific route rule and its coverage. |
+| Allow direct lesson access in development while preventing out-of-order lesson access and completion in production. | Full | `src/pages/LessonPage.test.tsx`, `src/utils/progression.test.ts`, `e2e/critical-learner-journeys.spec.ts` |
+| Allow direct milestone access in development while preventing out-of-order milestone access and completion in production. | Full | `src/pages/MilestonePage.test.tsx`, `src/utils/progression.test.ts`, `e2e/critical-learner-journeys.spec.ts` |
 
 ## Dashboard progression and reset
 
@@ -39,9 +39,10 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 |---|---|---|
 | Start with Unit 1 expanded while later units and lessons are visibly locked. | Full | `src/pages/HomePage.test.tsx` |
 | Expand or collapse an unlocked unit from its dashboard card. | Full | `src/pages/HomePage.test.tsx` |
-| Point the hero continue action to the next progression-eligible lesson. | Partial | `src/pages/HomePage.test.tsx` verifies the first lesson and an in-progress unit; after Unit 1 lessons are complete but its milestone is not, the action points to locked Unit 2. [#118](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/118) owns production progression enforcement and its coverage. |
+| Point the hero continue action to the next progression-eligible lesson or milestone. | Full | `src/pages/HomePage.test.tsx`, `src/utils/progression.test.ts` |
 | Show start, continue, redo, and locked lesson actions from current progress. | Full | `src/pages/HomePage.test.tsx` |
 | Unlock a unit milestone after every lesson in that unit is complete. | Full | `src/pages/HomePage.test.tsx` |
+| Expose every lesson and milestone from the dashboard when development mode is enabled. | Full | `src/pages/HomePage.test.tsx` |
 | Mark a passed unit complete, expand the next unit, and expose its first lesson. | Full | `src/pages/HomePage.test.tsx`, `e2e/critical-learner-journeys.spec.ts` |
 | Cancel a progress reset without changing completed work. | Full | `src/pages/HomePage.test.tsx` |
 | Confirm a progress reset and return the dashboard to its initial progression state. | Full | `src/pages/HomePage.test.tsx`, `src/state/app-context.test.ts`, `src/state/app-provider.test.tsx` |

@@ -24,12 +24,13 @@ export const emptyAppState: AppState = {
 
 interface RenderOptions {
   route?: string;
+  routeState?: unknown;
   state?: Partial<AppState>;
 }
 
 export function renderWithAppState(
   ui: ReactElement,
-  { route = '/', state = {} }: RenderOptions = {},
+  { route = '/', routeState, state = {} }: RenderOptions = {},
 ) {
   const initialState: AppState = {
     ...emptyAppState,
@@ -44,7 +45,7 @@ export function renderWithAppState(
     const [currentState, dispatch] = useReducer(appReducer, initialState);
 
     return (
-      <MemoryRouter initialEntries={[route]}>
+      <MemoryRouter initialEntries={[{ pathname: route, state: routeState }]}>
         <AppStateContext value={currentState}>
           <AppDispatchContext value={dispatch}>
             {children}

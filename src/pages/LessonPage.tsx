@@ -1,22 +1,35 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
 import type { LessonConfig } from '../types/lesson.ts';
 import { loadLessonById, prefetchLessonById } from '../lessons/lesson-loader.ts';
 import { prefetchToolByInteractionType } from '../components/tools/tool-prefetch.ts';
 import { units } from '../data/units.ts';
+import { useAppState } from '../state/app-context.tsx';
+import { isDevelopmentMode, isLessonUnlocked } from '../utils/progression.ts';
 
 const LessonPlayer = lazy(() => import('../components/lesson/LessonPlayer.tsx').then((m) => ({ default: m.LessonPlayer })));
 
 export function LessonPage() {
   const { lessonId } = useParams<{ lessonId: string }>();
+  const { completedLessons, completedMilestones } = useAppState();
   const [lesson, setLesson] = useState<LessonConfig | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const isRegisteredLesson = units.some((unit) => unit.lessons.includes(lessonId ?? ''));
+  const isLocked = isRegisteredLesson
+    && !isDevelopmentMode()
+    && !isLessonUnlocked(lessonId ?? '', { completedLessons, completedMilestones });
 
   useEffect(() => {
     let cancelled = false;
 
     async function run() {
       if (!lessonId) {
+        setLesson(null);
+        setIsLoading(false);
+        return;
+      }
+
+      if (isLocked) {
         setLesson(null);
         setIsLoading(false);
         return;
@@ -53,7 +66,17 @@ export function LessonPage() {
     return () => {
       cancelled = true;
     };
-  }, [lessonId]);
+  }, [isLocked, lessonId]);
+
+  if (isLocked) {
+    return (
+      <Navigate
+        to="/"
+        replace
+        state={{ routeNotice: 'This lesson is not unlocked yet.' }}
+      />
+    );
+  }
 
   if (isLoading) {
     return (

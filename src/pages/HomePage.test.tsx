@@ -8,6 +8,7 @@ import { HomePage } from './HomePage.tsx';
 afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
+  vi.unstubAllEnvs();
 });
 
 const unitOne = units[0];
@@ -52,6 +53,36 @@ describe('HomePage dashboard', () => {
     expect(within(getUnit('Seeing and Describing Color')).getByText('6/6')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'start →' })).toHaveAttribute('href', '/milestone/milestone-1');
     expect(within(getUnit('How Screens Make Color')).getByText('locked')).toBeInTheDocument();
+  });
+
+  it('continues to the milestone before advancing to the next unit', () => {
+    renderWithAppState(<HomePage />, {
+      state: { completedLessons: unitOne.lessons },
+    });
+
+    expect(screen.getByRole('link', { name: 'continue →' })).toHaveAttribute(
+      'href',
+      '/milestone/milestone-1',
+    );
+  });
+
+  it('exposes every lesson and milestone in development mode', async () => {
+    vi.stubEnv('VITE_DEV_MODE', '1');
+    const user = userEvent.setup();
+    renderWithAppState(<HomePage />);
+
+    expect(within(getLessonRow('Read the Interface')).getByRole('link', { name: 'start →' }))
+      .toHaveAttribute('href', '/milestone/milestone-1');
+
+    const unitTwoCard = screen.getByRole('button', { name: /How Screens Make Color/ });
+    await user.click(unitTwoCard);
+
+    expect(within(getLessonRow('Two Ways Color Mixes')).getByRole('link', { name: 'continue →' }))
+      .toHaveAttribute('href', '/lesson/u2-l1');
+    expect(within(getLessonRow('Seeing Pixels as Light, Not Paint')).getByRole('link', { name: 'continue →' }))
+      .toHaveAttribute('href', '/lesson/u2-l5');
+    expect(within(getLessonRow('Mix for Screen')).getByRole('link', { name: 'start →' }))
+      .toHaveAttribute('href', '/milestone/milestone-2');
   });
 
   it('marks a completed unit done and expands the next unit', async () => {

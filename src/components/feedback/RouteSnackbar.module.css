@@ -1,0 +1,31 @@
+.snackbar {
+  position: fixed;
+  z-index: 20;
+  right: var(--spacing-md);
+  bottom: var(--spacing-md);
+  left: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  width: min(36rem, calc(100% - 2 * var(--spacing-md)));
+  margin: 0 auto;
+  padding: 0.75rem var(--spacing-md);
+  color: var(--primary-foreground);
+  background: var(--secondary-background);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0.4rem 1rem color-mix(in srgb, var(--primary-background) 65%, transparent);
+}
+
+.dismiss {
+  flex: none;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  color: var(--accent-link);
+  border: 1px solid currentColor;
+  border-radius: var(--radius-sm);
+}
+
+.dismiss:hover {
+  text-decoration: underline;
+}
