@@ -44,7 +44,7 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe('ThemeControl', () => {
-  it('shows and persists the learner selection', () => {
+  it('applies and persists each learner preference', () => {
     installMatchMedia(false);
     render(
       <AppProvider>
@@ -55,11 +55,16 @@ describe('ThemeControl', () => {
     const control = screen.getByRole('combobox', { name: 'Theme preference' });
     expect(control).toHaveValue('system');
 
-    fireEvent.change(control, { target: { value: 'dark' } });
-
-    expect(control).toHaveValue('dark');
-    expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
-    expect(JSON.parse(localStorage.getItem(STORAGE_KEY)!).preferences.theme).toBe('dark');
+    for (const [preference, appliedTheme] of [
+      ['dark', 'dark'],
+      ['light', 'light'],
+      ['system', 'light'],
+    ] as const) {
+      fireEvent.change(control, { target: { value: preference } });
+      expect(control).toHaveValue(preference);
+      expect(document.documentElement).toHaveAttribute('data-theme', appliedTheme);
+      expect(JSON.parse(localStorage.getItem(STORAGE_KEY)!).preferences.theme).toBe(preference);
+    }
   });
 
   it('restores a saved preference', () => {

@@ -2,7 +2,6 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { App } from './App.tsx';
 
-vi.mock('./pages/HomePage.tsx', () => ({ HomePage: () => <h1>home route</h1> }));
 vi.mock('./pages/LessonPage.tsx', () => ({ LessonPage: () => <h1>lesson route</h1> }));
 vi.mock('./pages/MilestonePage.tsx', () => ({ MilestonePage: () => <h1>milestone route</h1> }));
 vi.mock('./pages/PaletteBuilderPage.tsx', () => ({ PaletteBuilderPage: () => <h1>palette builder route</h1> }));
@@ -15,15 +14,26 @@ afterEach(() => {
   window.history.replaceState({}, '', '/');
 });
 
-async function renderRoute(path: string, heading: string) {
+async function renderRoute(path: string, heading: string | RegExp) {
   window.history.replaceState({}, '', path);
   render(<App />);
   expect(await screen.findByRole('heading', { name: heading })).toBeInTheDocument();
 }
 
 describe('App routes', () => {
+  it('renders the course dashboard inside the app shell at /', async () => {
+    window.history.replaceState({}, '', '/');
+    render(<App />);
+
+    expect(await screen.findByRole('heading', { name: /Color Theory.*for Developers/ })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Main navigation' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /color-theory-course\$/ })).toHaveAttribute('href', '/');
+    expect(screen.getByRole('combobox', { name: 'Theme preference' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Seeing and Describing Color/ })).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('button', { name: 'reset progress' })).toBeInTheDocument();
+  });
+
   it.each([
-    ['/', 'home route'],
     ['/lesson/u1-l1', 'lesson route'],
     ['/milestone/milestone-1', 'milestone route'],
     ['/palette-builder', 'palette builder route'],
@@ -39,7 +49,7 @@ describe('App routes', () => {
   });
 
   it('redirects /settings to the home page', async () => {
-    await renderRoute('/settings', 'home route');
+    await renderRoute('/settings', /Color Theory.*for Developers/);
     expect(window.location.pathname).toBe('/');
   });
 
