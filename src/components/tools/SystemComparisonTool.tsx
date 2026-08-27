@@ -52,7 +52,8 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
     outline: found.has(id)
       ? `2px solid ${showResults ? 'var(--accent-success)' : 'var(--accent-warning)'}`
       : 'none',
-    outlineOffset: 2,
+    outlineOffset: 0,
+    boxShadow: found.has(id) ? '0 0 0 4px var(--gray-90)' : 'none',
     borderRadius: 3,
   });
 

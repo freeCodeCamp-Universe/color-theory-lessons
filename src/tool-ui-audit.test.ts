@@ -34,6 +34,27 @@ describe('tool UI audit regressions', () => {
     expect(source).not.toContain("color: '#f59e0b'");
   });
 
+  it('backs semantic mock state rings with surface-specific palette colors', () => {
+    const formatRevealCss = read('src/components/tools/FormatRevealTool.module.css');
+    expect(formatRevealCss).toMatch(
+      /\.nav,[\s\S]*\.cta\s*{\s*--state-outline-contrast: var\(--gray-00\);/,
+    );
+    expect(formatRevealCss).toMatch(
+      /\.hero,[\s\S]*\.accent\s*{\s*--state-outline-contrast: var\(--gray-90\);/,
+    );
+    expect(formatRevealCss).toMatch(
+      /\.selected\s*{[^}]*outline: 2px solid var\(--state-outline-contrast\) !important;[^}]*box-shadow: inset 0 0 0 4px var\(--accent-warning\);/s,
+    );
+    expect(formatRevealCss).toMatch(
+      /\.visited\s*{[^}]*outline: 2px dashed var\(--state-outline-contrast\) !important;[^}]*box-shadow: inset 0 0 0 4px var\(--accent-success\);/s,
+    );
+
+    const systemComparison = read('src/components/tools/SystemComparisonTool.tsx');
+    expect(systemComparison).toContain(
+      "boxShadow: found.has(id) ? '0 0 0 4px var(--gray-90)' : 'none'",
+    );
+  });
+
   it('uses proportional type for System Stress context legends', () => {
     const source = read('src/components/tools/SystemStressTestTool.tsx');
 

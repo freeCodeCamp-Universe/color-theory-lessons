@@ -35,22 +35,43 @@
   user-select: none;
 }
 
-/* Clickable elements get a ring on selected/visited */
+/*
+ * App state rings cross the mock's fixed dark and light surfaces. The neutral
+ * outer line supplies 3:1 contrast while the inset keeps the semantic color.
+ */
+.nav,
+.navText,
+.cta {
+  --state-outline-contrast: var(--gray-00);
+}
+
+.hero,
+.card,
+.cardBorder,
+.accent {
+  --state-outline-contrast: var(--gray-90);
+}
+
 .selected {
-  outline: 2px solid var(--accent-warning) !important;
+  outline: 2px solid var(--state-outline-contrast) !important;
   outline-offset: -2px;
+  box-shadow: inset 0 0 0 4px var(--accent-warning);
   z-index: 1;
   position: relative;
 }
 
 .visited {
-  outline: 1px solid var(--accent-success) !important;
-  outline-offset: -1px;
+  outline: 2px dashed var(--state-outline-contrast) !important;
+  outline-offset: -2px;
+  box-shadow: inset 0 0 0 4px var(--accent-success);
+  z-index: 1;
+  position: relative;
 }
 
 /* When both visited and selected, selected wins */
 .selected.visited {
-  outline: 2px solid var(--accent-warning) !important;
+  outline: 2px solid var(--state-outline-contrast) !important;
+  box-shadow: inset 0 0 0 4px var(--accent-warning);
 }
 
 /* ── Nav ─────────────────────────────────────────────────────────────── */
