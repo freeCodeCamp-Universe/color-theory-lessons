@@ -90,8 +90,64 @@ describe('loadState', () => {
   it('returns defaults when stored JSON is valid but not an object', () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(null));
 
-    const { progress } = loadState();
+    const { progress, preferences } = loadState();
     expect(progress).toEqual(emptyProgress);
+    expect(preferences).toEqual(defaultPrefs);
+  });
+
+  it('returns safe defaults for missing current-version fields', () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      version: VERSION,
+      progress: {},
+      preferences: {},
+    }));
+
+    const { progress, preferences } = loadState();
+    expect(progress).toEqual(emptyProgress);
+    expect(preferences).toEqual(defaultPrefs);
+  });
+
+  it('preserves valid fields and defaults invalid current-version fields', () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      version: VERSION,
+      progress: {
+        completedLessons: sampleProgress.completedLessons,
+        completedQuizzes: 'unit-1-l1',
+        quizBestScores: sampleProgress.quizBestScores,
+        completedMilestones: ['milestone-1', 2],
+      },
+      preferences: {
+        theme: 'midnight',
+        reducedMotion: true,
+        colorBlindnessMode: 42,
+      },
+    }));
+
+    const { progress, preferences } = loadState();
+    expect(progress).toEqual({
+      completedLessons: sampleProgress.completedLessons,
+      completedQuizzes: [],
+      quizBestScores: sampleProgress.quizBestScores,
+      completedMilestones: [],
+    });
+    expect(preferences).toEqual({
+      theme: 'system',
+      reducedMotion: true,
+      colorBlindnessMode: null,
+    });
+  });
+
+  it('defaults an unsupported color-blindness mode', () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      version: VERSION,
+      progress: sampleProgress,
+      preferences: {
+        ...samplePrefs,
+        colorBlindnessMode: 'bogus-mode',
+      },
+    }));
+
+    expect(loadState().preferences.colorBlindnessMode).toBeNull();
   });
 });
 
