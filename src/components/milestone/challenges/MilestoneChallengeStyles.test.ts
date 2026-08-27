@@ -77,4 +77,13 @@ describe('milestone challenge application styles', () => {
       'border: 1px solid var(--border-strong)',
     );
   });
+
+  it('contains the semantic conflict selector at narrow widths', () => {
+    const css = stylesheet('SemanticAuditChallenge.module.css');
+
+    expect(declarations(css, '.problem')).toContain('min-width: 0');
+    expect(declarations(css, '.problem select')).toContain('width: 100%');
+    expect(declarations(css, '.problem select')).toContain('min-width: 0');
+    expect(declarations(css, '.problem select')).toContain('max-width: 100%');
+  });
 });
