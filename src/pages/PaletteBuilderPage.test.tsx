@@ -79,6 +79,22 @@ function cssColor(hex: string) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
+function getRenderedContrastRows() {
+  const matrix = screen.getByRole('heading', { name: 'contrast pairings' }).parentElement!;
+
+  return within(matrix).getAllByText('sample').map((sample) => {
+    const previewCell = sample.parentElement!;
+    const pairCell = previewCell.previousElementSibling!
+      .previousElementSibling!
+      .previousElementSibling! as HTMLElement;
+    const swatches = Array.from(
+      pairCell.querySelectorAll<HTMLElement>('[class*="matrixHeaderSwatch"]'),
+    );
+
+    return `${swatches[0].style.backgroundColor} on ${swatches[1].style.backgroundColor}`;
+  });
+}
+
 function expectThemeChecks(panel: HTMLElement, roles: ThemeRoles) {
   const checks = Array.from(panel.querySelectorAll<HTMLElement>('[class*="checkRow"]'));
   expect(checks[0]).toHaveTextContent(`text/bg: ${expectedBadge(roles['primary text'], roles.background)}`);
@@ -403,6 +419,44 @@ describe('PaletteBuilderPage contrast pairings', () => {
     await user.click(screen.getByRole('button', { name: 'Remove custom 1' }));
     expect(screen.queryByRole('heading', { name: 'contrast pairings' })).not.toBeInTheDocument();
   });
+
+  it('keeps pairs at or above the 30-point lightness boundary', async () => {
+    const user = userEvent.setup();
+    render(<PaletteBuilderPage />);
+    await enterPrimary(user, '#000000');
+    await addCustomColor(user, '#4A4A4A');
+    await addCustomColor(user, '#4D4D4D');
+    await addCustomColor(user, '#4F4F4F');
+
+    expect(hexToHsl('#4A4A4A').l).toBe(29);
+    expect(hexToHsl('#4D4D4D').l).toBe(30);
+    expect(hexToHsl('#4F4F4F').l).toBe(31);
+
+    const renderedPairs = getRenderedContrastRows();
+    expect(renderedPairs).toEqual([
+      `${cssColor('#000000')} on ${cssColor('#4F4F4F')}`,
+      `${cssColor('#000000')} on ${cssColor('#4D4D4D')}`,
+    ]);
+    expect(renderedPairs).not.toContain(
+      `${cssColor('#000000')} on ${cssColor('#4A4A4A')}`,
+    );
+  });
+
+  it('limits the rendered contrast matrix to 20 rows', async () => {
+    const user = userEvent.setup();
+    render(<PaletteBuilderPage />);
+    const lowColors = [0, 1, 2, 3, 4].map((lightness) =>
+      hslToHex(0, 0, lightness));
+    const highColors = [60, 61, 62, 63, 64].map((lightness) =>
+      hslToHex(0, 0, lightness));
+
+    await enterPrimary(user, lowColors[0]);
+    for (const color of [...lowColors.slice(1), ...highColors]) {
+      await addCustomColor(user, color);
+    }
+
+    expect(getRenderedContrastRows()).toHaveLength(20);
+  }, 10_000);
 });
 
 describe('PaletteBuilderPage theme arranger', () => {
