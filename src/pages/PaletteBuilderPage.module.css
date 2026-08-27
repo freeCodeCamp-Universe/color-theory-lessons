@@ -22,7 +22,7 @@
 
 .twoColumn {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--spacing-xl);
   align-items: start;
 }
@@ -43,7 +43,7 @@
 
 @media (max-width: 800px) {
   .twoColumn {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .paletteColumn {
@@ -83,6 +83,13 @@
 
 .hexInputInvalid {
   border-color: var(--accent-danger);
+}
+
+.inputError {
+  color: var(--accent-danger);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.4;
 }
 
 .swatchPreview {
@@ -462,6 +469,14 @@
   flex-shrink: 0;
 }
 
+.editInlineMeta {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
 .editInlineInput {
   font-family: var(--font-mono);
   font-size: 1rem;
@@ -472,6 +487,8 @@
   color: var(--primary-foreground);
   flex: 1;
   min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ── Add color button ──────────────────────────────────────────────────────── */
@@ -574,13 +591,13 @@
 
 .arrangerRow {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--spacing-md);
 }
 
 @media (max-width: 800px) {
   .arrangerRow {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
