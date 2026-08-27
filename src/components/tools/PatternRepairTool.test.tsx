@@ -9,6 +9,18 @@ function selectOption(name: string) {
 }
 
 describe('PatternRepairTool', () => {
+  it('keeps comparison labels outside the authored samples', () => {
+    render(<PatternRepairTool interactive />);
+
+    for (const label of ['Before', 'After']) {
+      for (const element of screen.getAllByText(label, { exact: true })) {
+        expect(element.closest('[data-authored-visual]')).not.toBeInTheDocument();
+        expect(getComputedStyle(element).fontSize).toBe('1rem');
+        expect(getComputedStyle(element).fontFamily).toContain('var(--font-sans)');
+      }
+    }
+  });
+
   it('does not reveal repair requirements before checking', () => {
     render(<PatternRepairTool interactive />);
 

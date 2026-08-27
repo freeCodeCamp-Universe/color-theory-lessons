@@ -20,7 +20,10 @@ describe('VisionCardsTool typography', () => {
     render(<VisionCardsTool interactive={false} previewExpandedNames={['Protanopia']} />);
 
     const description = screen.getByText(/Loss of function from the L-cone/);
+    const instruction = screen.getByText(/Review the expanded cards/);
     expect(description.closest('[data-authored-visual]')).toBeInTheDocument();
     expect(getComputedStyle(description).fontSize).toBe('0.82rem');
+    expect(instruction.closest('[data-authored-visual]')).not.toBeInTheDocument();
+    expect(getComputedStyle(instruction).fontSize).toBe('1rem');
   });
 });

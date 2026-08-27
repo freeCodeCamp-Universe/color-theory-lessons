@@ -180,7 +180,8 @@ export const FormatRevealTool = memo(function FormatRevealTool({
               : `Select each colored element. ${remaining} remaining.`}
           </p>
 
-          <div data-authored-visual className={styles.mockup}>
+          <div className={styles.mockup}>
+            <div data-authored-visual>
             {/* Nav */}
             <div
               className={`${styles.nav} ${selectedId === 'nav-bg' ? styles.selected : ''} ${revealed.has('nav-bg') ? styles.visited : ''}`}
@@ -263,6 +264,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
               >
                 ✓ success
               </span>
+            </div>
             </div>
 
             {/* Legend */}

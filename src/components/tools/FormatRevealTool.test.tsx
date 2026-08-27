@@ -29,6 +29,16 @@ function parseHslString(value: string) {
 }
 
 describe('FormatRevealTool', () => {
+  it('keeps the exercise legend outside the authored mock', () => {
+    render(<FormatRevealTool />);
+
+    for (const label of ['selected', 'explored']) {
+      const legend = screen.getByText(label, { exact: true });
+      expect(legend.closest('[data-authored-visual]')).not.toBeInTheDocument();
+    }
+    expect(screen.getByText('site.ui').closest('[data-authored-visual]')).toBeInTheDocument();
+  });
+
   it('uses one named stage and completes after every element is explored', () => {
     const onComplete = vi.fn();
     render(<FormatRevealTool onComplete={onComplete} />);

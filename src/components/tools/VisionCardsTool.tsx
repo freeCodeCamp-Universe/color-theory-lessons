@@ -188,12 +188,12 @@ export const VisionCardsTool = memo(function VisionCardsTool({
           {cards}
         </ExerciseStage>
       ) : (
-        <div data-authored-visual>
-          <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.75rem' }}>
+        <>
+          <p style={{ fontSize: '1rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.75rem' }}>
             Review the expanded cards to learn about each type of color vision deficiency.
           </p>
-          {cards}
-        </div>
+          <div data-authored-visual>{cards}</div>
+        </>
       )}
     </div>
   );

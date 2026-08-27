@@ -108,10 +108,32 @@ describe('tool UI audit regressions', () => {
 
     const visionCards = read('src/components/tools/VisionCardsTool.tsx');
     expect(visionCards).toMatch(
-      /\) : \(\s*<div data-authored-visual>[\s\S]*Review the expanded cards[\s\S]*{cards}\s*<\/div>/,
+      /Review the expanded cards[\s\S]*<div data-authored-visual>{cards}<\/div>/,
+    );
+    expect(visionCards).not.toMatch(
+      /<div data-authored-visual>[\s\S]*Review the expanded cards/,
     );
     expect(visionCards).toContain(
       "border: interactive ? '1px solid var(--border-strong)' : '1px solid var(--border)'",
+    );
+
+    const formatReveal = read('src/components/tools/FormatRevealTool.tsx');
+    expect(formatReveal).toMatch(
+      /<div className={styles\.mockup}>\s*<div data-authored-visual>[\s\S]*<\/div>\s*{\/\* Legend \*\/}/,
+    );
+    expect(formatReveal).not.toMatch(
+      /<div data-authored-visual className={styles\.mockup}>/,
+    );
+    expect(read('src/components/tools/FormatRevealTool.module.css')).toMatch(
+      /\.legendItem\s*{[^}]*font-family: var\(--font-sans\);[^}]*font-size: 1rem;/s,
+    );
+
+    const patternRepair = read('src/components/tools/PatternRepairTool.tsx');
+    expect(patternRepair).toMatch(
+      /fontFamily: 'var\(--font-sans\)'[^>]*>Before<\/p>[\s\S]*<div data-authored-visual/,
+    );
+    expect(patternRepair).toMatch(
+      /fontFamily: 'var\(--font-sans\)'[^>]*>After<\/p>[\s\S]*<div data-authored-visual/,
     );
 
     const accessibilityRescue = read(
