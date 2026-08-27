@@ -11,6 +11,7 @@ import {
 import { ToolRenderer } from '../tools/ToolRenderer.tsx';
 import type { ActiveExerciseStage } from '../tools/exercise-stage.ts';
 import { ChallengeHints } from './ChallengeHints.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import StepPanelRenderer from './StepPanelRenderer.tsx';
 import styles from './LessonPlayer.module.css';
 
@@ -388,8 +389,13 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
                 <div className={styles.quizSwatches}>
                   {question.colorSwatches.map((swatch) => (
                     <div key={swatch.label} className={styles.swatchItem}>
-                      <div className={styles.swatchColor} style={{ backgroundColor: swatch.color }} />
+                      <div aria-hidden="true" className={styles.swatchColor} style={{ backgroundColor: swatch.color }} />
                       <span className={styles.swatchLabel}>{swatch.label}</span>
+                      {swatch.accessibleDescription && (
+                        <VisualDescription>
+                          {swatch.accessibleDescription} Color value: {swatch.color.toUpperCase()}.
+                        </VisualDescription>
+                      )}
                     </div>
                   ))}
                 </div>

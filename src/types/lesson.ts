@@ -1,3 +1,5 @@
+import type { VisualAccessibility } from './accessibility.ts';
+
 export interface UnitConfig {
   id: string;
   title: string;
@@ -56,14 +58,20 @@ export const INTERACTION_TYPES = [
 
 export type InteractionType = (typeof INTERACTION_TYPES)[number];
 
-export type StepPanelConfig =
+type StepPanelAccessibility = {
+  /** Authored accessibility treatment for the rendered step visual. */
+  accessibility?: VisualAccessibility;
+};
+
+export type StepPanelConfig = StepPanelAccessibility & (
   | { type: 'color-wheel-preview'; relationship: 'analogous' | 'complementary' | 'triadic' }
   | { type: 'hsl-slider-preview'; dimension: 'h' | 's' | 'l' }
   | { type: 'rgb-mixer-preview'; mode: 'extremes' | 'channel-pairs' | 'neutral-grays' }
   | { type: 'hsl-playground-preview' }
   | { type: 'vision-cards-preview'; expandedNames: string[] }
   | { type: 'interface-gallery-preview'; simulation: 'normal' | 'deuteranopia' | 'protanopia' | 'tritanopia' | 'achromatopsia' }
-  | { type: 'before-after-preview'; mockup: 'purposeful' | 'noisy' };
+  | { type: 'before-after-preview'; mockup: 'purposeful' | 'noisy' }
+);
 
 export interface LessonStep {
   text: string;
@@ -91,7 +99,14 @@ export interface QuizChoice {
 export interface QuizItem {
   id: string;
   prompt: string;
-  colorSwatches?: { label: string; color: string }[];
+  colorSwatches?: {
+    /** Visible color name. */
+    label: string;
+    /** Visible color value. */
+    color: string;
+    /** Assessment-safe description of the evidence visible in the swatch. */
+    accessibleDescription?: string;
+  }[];
   choices: QuizChoice[];
 }
 

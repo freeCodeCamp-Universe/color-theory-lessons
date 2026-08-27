@@ -1,3 +1,5 @@
+import type { VisualAccessibility } from './accessibility.ts';
+
 /** A single multiple-choice question within a milestone quiz part. */
 export interface MilestoneQuestion {
   /** Unique identifier for the question. */
@@ -9,6 +11,8 @@ export interface MilestoneQuestion {
    * Useful for color-matching or identification tasks.
    */
   swatchColor?: string;
+  /** Assessment-safe description of the visible swatch evidence. */
+  swatchDescription?: string;
   /** Selectable answers. */
   choices: { 
     id: string; 
@@ -33,14 +37,17 @@ export interface MilestoneQuizPart {
 }
 
 /** Supported milestone challenge component types. */
-export type MilestoneChallengeType =
-  | 'read-interface'
-  | 'channel-prediction'
-  | 'theme-from-scratch'
-  | 'simulation-spotter'
-  | 'accessibility-rescue'
-  | 'semantic-audit'
-  | 'dark-mode-stress';
+export const MILESTONE_CHALLENGE_TYPES = [
+  'read-interface',
+  'channel-prediction',
+  'theme-from-scratch',
+  'simulation-spotter',
+  'accessibility-rescue',
+  'semantic-audit',
+  'dark-mode-stress',
+] as const;
+
+export type MilestoneChallengeType = (typeof MILESTONE_CHALLENGE_TYPES)[number];
 
 /** An interactive exercise that acts as a practical challenge in a milestone. */
 export interface MilestoneChallengePart {
@@ -51,6 +58,8 @@ export interface MilestoneChallengePart {
   title: string;
   /** Description shown before the challenge starts. */
   description: string;
+  /** Authored accessibility treatment for the challenge's persistent visual. */
+  visualAccessibility?: VisualAccessibility;
   /** 
    * Maps to the specific component rendered by the milestone's 
    * challenge renderer (e.g., 'read-interface').

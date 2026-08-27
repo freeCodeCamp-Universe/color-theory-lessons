@@ -6,6 +6,7 @@ import { units } from '../../data/units.ts';
 import { MILESTONE_SESSION_PREFIX } from '../../state/persistence.ts';
 import { ChallengeRenderer } from './ChallengeRenderer.tsx';
 import { InterfaceMockup } from './InterfaceMockup.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import styles from './MilestonePlayer.module.css';
 
 interface MilestonePlayerProps {
@@ -299,8 +300,12 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
           <div
             className={styles.swatch}
             style={{ backgroundColor: swatchColor }}
+            aria-hidden="true"
           />
           <span className={styles.swatchHex}>{swatchColor.toUpperCase()}</span>
+          {currentQuestion?.swatchDescription && (
+            <VisualDescription>{currentQuestion.swatchDescription}</VisualDescription>
+          )}
           <p className={styles.swatchHint}>
             Identify which RGB channel values produce this color.
           </p>

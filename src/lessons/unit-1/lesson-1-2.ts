@@ -49,8 +49,8 @@ export const lesson1_2: LessonConfig = {
       id: 'q1',
       prompt: 'A designer changes a button\'s color from vivid red to muted dusty rose. Which HSL value changes the most?',
       colorSwatches: [
-        { label: 'vivid red', color: '#E53935' },
-        { label: 'dusty rose', color: '#C48B9F' },
+        { label: 'vivid red', color: '#E53935', accessibleDescription: 'A vivid, strongly saturated red swatch.' },
+        { label: 'dusty rose', color: '#C48B9F', accessibleDescription: 'A muted, lighter rose-red swatch.' },
       ],
       choices: [
         { stableId: 'hue', label: 'Hue', isCorrect: false, explanation: 'The colors remain in nearby red hue ranges. Their hue angles differ by about 22 degrees.' },
@@ -73,8 +73,8 @@ export const lesson1_2: LessonConfig = {
       id: 'q3',
       prompt: 'Which HSL value differs most between these two blue swatches?',
       colorSwatches: [
-        { label: 'sky blue', color: '#87CEEB' },
-        { label: 'deep navy', color: '#1A237E' },
+        { label: 'sky blue', color: '#87CEEB', accessibleDescription: 'A light sky-blue swatch.' },
+        { label: 'deep navy', color: '#1A237E', accessibleDescription: 'A dark navy-blue swatch.' },
       ],
       choices: [
         { stableId: 'hue', label: 'Hue', isCorrect: false, explanation: 'Their hues differ by 38 degrees, but both remain in the blue range.' },
