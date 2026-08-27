@@ -136,6 +136,19 @@ describe('loadState', () => {
       colorBlindnessMode: null,
     });
   });
+
+  it('defaults an unsupported color-blindness mode', () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      version: VERSION,
+      progress: sampleProgress,
+      preferences: {
+        ...samplePrefs,
+        colorBlindnessMode: 'bogus-mode',
+      },
+    }));
+
+    expect(loadState().preferences.colorBlindnessMode).toBeNull();
+  });
 });
 
 describe('saveState', () => {

@@ -74,6 +74,13 @@ function isThemePreference(value: unknown): value is ThemePreference {
   return value === 'dark' || value === 'light' || value === 'system';
 }
 
+function isColorBlindnessMode(value: unknown): value is string {
+  return value === 'deuteranopia'
+    || value === 'protanopia'
+    || value === 'tritanopia'
+    || value === 'achromatopsia';
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
@@ -116,7 +123,7 @@ function sanitizePreferences(value: unknown): AppPreferences {
     reducedMotion: typeof preferences.reducedMotion === 'boolean'
       ? preferences.reducedMotion
       : defaultPreferences.reducedMotion,
-    colorBlindnessMode: typeof preferences.colorBlindnessMode === 'string'
+    colorBlindnessMode: isColorBlindnessMode(preferences.colorBlindnessMode)
       || preferences.colorBlindnessMode === null
       ? preferences.colorBlindnessMode
       : defaultPreferences.colorBlindnessMode,
