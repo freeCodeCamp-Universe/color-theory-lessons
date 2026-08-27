@@ -62,7 +62,6 @@ describe('tool UI audit regressions', () => {
       ['src/components/tools/RoleBuilderTool.tsx', 'SEMANTIC ROLES'],
       ['src/components/tools/BrandPressureTool.tsx', 'ROLES'],
       ['src/components/tools/DarkTranslatorTool.tsx', 'DARK CHECKS'],
-      ['src/components/tools/ColorWheelTool.tsx', 'palette preview'],
     ] as const) {
       const source = read(file);
       const escapedLabel = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -82,6 +81,9 @@ describe('tool UI audit regressions', () => {
     expect(read('src/components/tools/RGBMixerTool.tsx')).toContain(
       "fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)' }}>R:{current.r} G:{current.g} B:{current.b}",
     );
+    expect(read('src/components/tools/ColorWheelTool.tsx')).toContain(
+      "fontFamily: isAuthoredPreview ? 'var(--font-mono)' : 'var(--font-sans)'",
+    );
   });
 
   it('marks instructional previews as authored visuals without exempting their controls', () => {
@@ -93,6 +95,23 @@ describe('tool UI audit regressions', () => {
     );
     expect(read('src/components/tools/BeforeAfterTool.tsx')).toMatch(
       /<div data-authored-visual style={{ background: 'var\(--surface\)'[^>]*>\s*{HIERARCHY_ITEMS\.map/,
+    );
+    expect(read('src/components/tools/RGBMixerTool.tsx')).toMatch(
+      /<div data-authored-visual style={{ display: 'flex', gap: 'var\(--spacing-md\)'/,
+    );
+    expect(read('src/components/tools/ColorWheelTool.tsx')).toContain(
+      '<div data-authored-visual>{wheelEditor}</div>',
+    );
+    expect(read('src/components/tools/HslPlaygroundTool.tsx')).toContain(
+      ') : <div data-authored-visual>{playground}</div>}',
+    );
+
+    const visionCards = read('src/components/tools/VisionCardsTool.tsx');
+    expect(visionCards).toMatch(
+      /\) : \(\s*<div data-authored-visual>[\s\S]*Review the expanded cards[\s\S]*{cards}\s*<\/div>/,
+    );
+    expect(visionCards).toContain(
+      "border: interactive ? '1px solid var(--border-strong)' : '1px solid var(--border)'",
     );
 
     const accessibilityRescue = read(

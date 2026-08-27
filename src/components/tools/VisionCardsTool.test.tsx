@@ -15,4 +15,12 @@ describe('VisionCardsTool typography', () => {
     const description = screen.getByText(/Loss of function from the L-cone/);
     expect(getComputedStyle(description).fontSize).toBe('1rem');
   });
+
+  it('preserves the authored lesson preview without exempting the interactive tool', () => {
+    render(<VisionCardsTool interactive={false} previewExpandedNames={['Protanopia']} />);
+
+    const description = screen.getByText(/Loss of function from the L-cone/);
+    expect(description.closest('[data-authored-visual]')).toBeInTheDocument();
+    expect(getComputedStyle(description).fontSize).toBe('0.82rem');
+  });
 });

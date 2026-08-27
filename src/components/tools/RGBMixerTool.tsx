@@ -84,7 +84,7 @@ export const RGBMixerTool = memo(function RGBMixerTool({
     return (
       <div className={shellStyles.shell}>
         <span className={shellStyles.toolLabel}>RGB light mixer</span>
-        <div style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
+        <div data-authored-visual style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
           {previewSwatches[previewMode].map((swatch) => (
             <div key={swatch.label} style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: '80px' }}>
               <div style={{ height: '64px', borderRadius: 'var(--radius-sm)', backgroundColor: rgbString(swatch.rgb), border: '1px solid rgba(255,255,255,0.08)' }} />

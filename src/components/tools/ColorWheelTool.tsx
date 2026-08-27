@@ -210,6 +210,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
   const [validationAnswer, setValidationAnswer] = useState<string | null>(null);
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
   const relationship = previewRelationship ?? internalRelationship;
+  const isAuthoredPreview = previewRelationship !== undefined;
   const relatedH = getRelatedHues(baseH, relationship);
   const controlsInteractive = interactive
     && !previewRelationship
@@ -238,8 +239,8 @@ export const ColorWheelTool = memo(function ColorWheelTool({
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', flex: 1, minWidth: '180px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: 'var(--muted)' }}>base hue</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', color: 'var(--accent-warning)' }}>{baseH}°</span>
+            <span style={{ fontFamily: isAuthoredPreview ? 'var(--font-mono)' : 'var(--font-sans)', fontSize: '0.8rem', color: 'var(--muted)' }}>base hue</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: isAuthoredPreview ? '0.8rem' : '1rem', color: isAuthoredPreview ? 'var(--yellow)' : 'var(--accent-warning)' }}>{baseH}°</span>
           </div>
           <input
             type="range"
@@ -262,7 +263,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>relationship</span>
+          <span style={{ fontFamily: isAuthoredPreview ? 'var(--font-mono)' : 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>relationship</span>
           {(['analogous', 'complementary', 'triadic'] as Relationship[]).map((option) => (
             <button
               key={option}
@@ -271,9 +272,9 @@ export const ColorWheelTool = memo(function ColorWheelTool({
               style={{
                 padding: '0.4rem 0.75rem',
                 background: relationship === option ? 'var(--surface)' : 'transparent',
-                border: `1px solid ${relationship === option ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
+                border: `1px solid ${relationship === option ? (isAuthoredPreview ? 'var(--yellow)' : 'var(--accent-warning)') : (isAuthoredPreview ? 'var(--border)' : 'var(--border-strong)')}`,
                 borderRadius: 'var(--radius-sm)',
-                color: relationship === option ? 'var(--accent-warning)' : 'var(--secondary-foreground)',
+                color: relationship === option ? (isAuthoredPreview ? 'var(--yellow)' : 'var(--accent-warning)') : 'var(--secondary-foreground)',
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.8rem',
                 cursor: controlsInteractive ? 'pointer' : 'not-allowed',
@@ -291,7 +292,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>palette preview</span>
+          <span style={{ fontFamily: isAuthoredPreview ? 'var(--font-mono)' : 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>palette preview</span>
           <div style={{ display: 'flex', gap: '4px' }}>
             <div title={`Base: hsl(${baseH} 70% 50%)`} style={{ flex: 3, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: baseColor }} />
             {relatedColors.map((color, index) => (
@@ -309,7 +310,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
     return (
       <div className={shellStyles.shell}>
         <span className={shellStyles.toolLabel}>color wheel explorer</span>
-        {wheelEditor}
+        <div data-authored-visual>{wheelEditor}</div>
       </div>
     );
   }
