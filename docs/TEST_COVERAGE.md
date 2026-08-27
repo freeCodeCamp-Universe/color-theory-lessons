@@ -110,7 +110,7 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | Move through challenge and quiz parts, see part progress and points, and complete only after the final part. | Full | `src/components/milestone/MilestonePlayer.test.tsx` |
 | Submit milestone quiz choices with native radio selection and keyboard behavior. | Full | `src/components/milestone/MilestonePlayer.test.tsx` |
 | Apply each milestone's configured point values and pass threshold at the boundary. | Full | `src/components/milestone/MilestonePlayer.test.tsx`, `src/components/milestone/Milestone5Flow.test.tsx`, `src/components/milestone/Milestone6Flow.test.tsx`, `src/data/milestones.test.ts` |
-| Move focus to the new part, question, or result after advancing. | Full | `src/components/milestone/MilestonePlayer.test.tsx` |
+| Move focus after advancing to a new milestone part, question, or final result. | Partial | `src/components/milestone/MilestonePlayer.test.tsx` verifies focus on the part summary and each new question, but does not assert focus on the final result. |
 | Retry a failed milestone from a clean first part without unlocking the next unit. | Full | `src/components/milestone/MilestonePlayer.test.tsx`, `e2e/critical-learner-journeys.spec.ts` |
 | Resume an unfinished milestone attempt and restore selected answers after remount or reload. | Full | `src/components/milestone/MilestonePlayer.test.tsx` and each challenge test listed below |
 | Restore failed and passed milestone results while preserving the correct progression state. | Full | `src/components/milestone/MilestonePlayer.test.tsx`, `e2e/critical-learner-journeys.spec.ts` |
@@ -147,7 +147,7 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 |---|---|---|
 | Reject an invalid primary color and accept valid HEX, RGB, HSL, and named-swatch input with synchronized values. | Full | `src/pages/PaletteBuilderPage.test.tsx` |
 | Generate analogous, complementary, and triadic suggestions with lighter, darker, and muted variants. | Full | `src/pages/PaletteBuilderPage.test.tsx`, `src/utils/color.test.ts` |
-| Add suggested or custom colors without duplicating a color already in the palette. | Full | `src/pages/PaletteBuilderPage.test.tsx` |
+| Add suggested or custom colors without duplicating a color already in the palette. | Partial | `src/pages/PaletteBuilderPage.test.tsx` verifies duplicate suppression for suggestions, but does not cover repeated custom colors; the custom-color action currently permits duplicates. |
 | Edit or remove palette colors and update every dependent display. | Full | `src/pages/PaletteBuilderPage.test.tsx` |
 | Reset a customized palette to its primary color. | Full | `src/pages/PaletteBuilderPage.test.tsx` |
 | Classify every contrast pairing as fail, AA, or AAA from its WCAG ratio and update the matrix after palette changes. | Full | `src/pages/PaletteBuilderPage.test.tsx`, `src/utils/color.test.ts` |
