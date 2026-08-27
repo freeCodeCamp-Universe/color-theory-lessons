@@ -137,6 +137,7 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
   const [attemptId, setAttemptId] = useState(initialSession.attemptId);
   const [phase, setPhase] = useState<Phase>(initialSession.phase);
   const activeContentRef = useRef<HTMLDivElement>(null);
+  const partInstructionsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     saveMilestoneSession(milestone.id, {
@@ -153,6 +154,11 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
   }, [answers, attemptId, completedChallenges, milestone.id, partIndex, phase, questionIndex, selectedChoice, submitted]);
 
   useEffect(() => {
+    if (phase === 'question' && questionIndex === 0) {
+      partInstructionsRef.current?.focus();
+      return;
+    }
+
     activeContentRef.current?.focus();
   }, [partIndex, phase, questionIndex]);
 
@@ -273,17 +279,46 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
       ? currentQuestion.swatchColor
       : undefined;
 
-  return (
-    <div className={styles.layout}>
-      {/* ── Left instruction panel ── */}
-      <aside className={styles.panel}>
+  const questionContext = phase === 'question' && currentPart.kind === 'quiz' ? (
+    <div className={styles.questionContext}>
+      <div
+        className={styles.contextCard}
+        ref={partInstructionsRef}
+        tabIndex={-1}
+      >
+        <span className={styles.contextCardLabel}>
+          Part {partIndex + 1} of {milestone.parts.length}
+        </span>
+        <p className={styles.contextCardTitle}>{currentPart.title}</p>
+        <p className={styles.contextCardDesc}>{currentPart.description}</p>
+      </div>
+
+      {swatchColor ? (
+        <div className={styles.swatchPanel}>
+          <span className={styles.swatchLabel}>target color</span>
+          <div
+            className={styles.swatch}
+            style={{ backgroundColor: swatchColor }}
+          />
+          <span className={styles.swatchHex}>{swatchColor.toUpperCase()}</span>
+          <p className={styles.swatchHint}>
+            Identify which RGB channel values produce this color.
+          </p>
+        </div>
+      ) : showMockup ? (
+        <InterfaceMockup />
+      ) : null}
+    </div>
+  ) : null;
+
+  const instructionPanel = (
+    <aside className={styles.panel}>
         <div className={styles.milestoneMeta}>
           <span className={styles.unitLabel}>
             Unit {milestone.unitId.split('-')[1]} · Milestone
           </span>
           <h1 className={styles.milestoneTitle}>{milestone.title}</h1>
           <p className={styles.milestoneDescription}>{milestone.description}</p>
-          <span className={styles.estimatedTime}>About {milestone.estimatedMinutes} minutes</span>
         </div>
 
         {/* Part progress dots */}
@@ -468,28 +503,18 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
             </div>
           </div>
         )}
-      </aside>
+    </aside>
+  );
 
-      {/* ── Right context panel ── */}
-      <div className={styles.contextPanel}>
-        {phase === 'challenge' && currentPart.kind === 'challenge' ? (
+  const contextPanel = (
+    <div className={styles.contextPanel}>
+      {questionContext ?? (
+        phase === 'challenge' && currentPart.kind === 'challenge' ? (
           <ChallengeRenderer
             challengeType={currentPart.challengeType}
             onComplete={handleCompleteChallenge}
             sessionKey={`${milestone.id}:${attemptId}`}
           />
-        ) : swatchColor ? (
-          <div className={styles.swatchPanel}>
-            <span className={styles.swatchLabel}>target color</span>
-            <div
-              className={styles.swatch}
-              style={{ backgroundColor: swatchColor }}
-            />
-            <span className={styles.swatchHex}>{swatchColor.toUpperCase()}</span>
-            <p className={styles.swatchHint}>
-              Identify which RGB channel values produce this color.
-            </p>
-          </div>
         ) : showMockup ? (
           <InterfaceMockup />
         ) : (
@@ -500,8 +525,24 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
             <p className={styles.contextCardTitle}>{currentPart.title}</p>
             <p className={styles.contextCardDesc}>{currentPart.description}</p>
           </div>
-        )}
-      </div>
+        )
+      )}
+    </div>
+  );
+
+  return (
+    <div className={styles.layout}>
+      {phase === 'question' ? (
+        <>
+          {contextPanel}
+          {instructionPanel}
+        </>
+      ) : (
+        <>
+          {instructionPanel}
+          {contextPanel}
+        </>
+      )}
     </div>
   );
 }
