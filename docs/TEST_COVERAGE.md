@@ -13,6 +13,8 @@ There are no accepted manual-only exceptions in the current inventory. Open acce
 
 Paths in the evidence column are relative to the repository root. `npm test` runs the Vitest files, and `npm run test:e2e` runs the Playwright file against the production build.
 
+The inventory contains 118 behaviors: 115 have full automated coverage, 2 have partial coverage, and 1 is missing coverage. There are no manual-only rows.
+
 ## App entry, routes, and navigation
 
 | Main behavior | Status | Automated test or accountable issue |
@@ -133,13 +135,13 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | Main behavior | Status | Automated test or accountable issue |
 |---|---|---|
 | Load default state when storage is empty, contains invalid JSON or a non-object value, or uses an unsupported version. | Full | `src/state/persistence.test.ts` |
-| Load a structurally malformed current-version saved state without crashing the app. | Missing | [#260](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/260) owns saved-state shape validation and its regression tests. |
+| Load a structurally malformed current-version saved state without crashing the app. | Full | `src/state/persistence.test.ts` verifies that missing fields receive safe defaults and that valid fields survive alongside malformed fields. |
 | Save and reload lesson, quiz, score, milestone, and preference state. | Full | `src/state/persistence.test.ts`, `src/state/app-context.test.ts`, `e2e/critical-learner-journeys.spec.ts` |
 | Keep the best quiz score and avoid duplicate completion records. | Full | `src/state/app-context.test.ts`, `src/hooks/useLessonCompletion.test.tsx`, `src/hooks/useMilestoneCompletion.test.tsx` |
 | Continue without crashing when saving main state fails because local storage is full or unavailable. | Full | `src/state/persistence.test.ts` |
 | Continue resetting progress when milestone-session key enumeration is unavailable. | Full | `src/state/persistence.test.ts`, `src/state/app-provider.test.tsx` |
-| Recover from a corrupt or unavailable lesson session and continue when lesson-session writes fail. | Missing | [#261](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/261) owns lesson player session-storage failure coverage. |
-| Recover from a corrupt or unavailable milestone session and continue when milestone-session writes fail. | Missing | [#261](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/261) owns milestone player session-storage failure coverage. |
+| Recover from a corrupt or unavailable lesson session and continue when lesson-session writes fail. | Full | `src/components/lesson/LessonPlayer.test.tsx` verifies recovery from malformed data plus read and write failures, then continues into the quiz. |
+| Recover from a corrupt or unavailable milestone session and continue when milestone-session writes fail. | Full | `src/components/milestone/MilestonePlayer.test.tsx` verifies recovery from malformed data plus read and write failures, then continues through the milestone. |
 | Select light, dark, or system through the theme control and persist the preference. | Full | `src/components/nav/ThemeControl.test.tsx` |
 | Follow operating-system theme changes while the preference is `system`. | Full | `src/components/nav/ThemeControl.test.tsx` |
 | Apply the saved theme before React renders, then keep it through navigation and reload. | Full | `src/theme-prepaint.test.ts`, `e2e/critical-learner-journeys.spec.ts` |
@@ -156,7 +158,7 @@ Paths in the evidence column are relative to the repository root. `npm test` run
 | Reject an invalid primary color and accept valid HEX, RGB, HSL, and named-swatch input with synchronized values. | Full | `src/pages/PaletteBuilderPage.test.tsx` |
 | Generate analogous, complementary, and triadic suggestions with lighter, darker, and muted variants. | Full | `src/pages/PaletteBuilderPage.test.tsx`, `src/utils/color.test.ts` |
 | Add a suggested color without offering that suggestion again. | Full | `src/pages/PaletteBuilderPage.test.tsx` |
-| Add or edit a custom color without duplicating a color already in the palette. | Missing | [#262](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/262) owns duplicate prevention and user-visible regression tests for custom colors. |
+| Add or edit a custom color without duplicating a color already in the palette. | Full | `src/pages/PaletteBuilderPage.test.tsx` verifies that duplicate additions keep one custom color and announce the conflict, and duplicate edits show an error without changing the palette. |
 | Edit or remove palette colors and update every dependent display. | Full | `src/pages/PaletteBuilderPage.test.tsx` |
 | Reset a customized palette to its primary color. | Full | `src/pages/PaletteBuilderPage.test.tsx` |
 | Classify displayed contrast pairings as fail, AA, or AAA from their WCAG ratio, filter pairs below 30 lightness points, limit the matrix to 20 rows, and update the matrix after palette changes. | Full | `src/pages/PaletteBuilderPage.test.tsx` (`keeps pairs at or above the 30-point lightness boundary` and `limits the rendered contrast matrix to 20 rows`) |
