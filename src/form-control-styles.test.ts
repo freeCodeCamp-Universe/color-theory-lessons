@@ -30,7 +30,7 @@ describe('form control boundary styles', () => {
 
     for (const source of [brandPressureSource, darkTranslatorSource, roleBuilderSource]) {
       expect(source).toContain(
-        "isValidHex(val) ? 'var(--border-strong)' : 'var(--accent-danger)'",
+        "invalid ? 'var(--accent-danger)' : 'var(--border-strong)'",
       );
     }
   });

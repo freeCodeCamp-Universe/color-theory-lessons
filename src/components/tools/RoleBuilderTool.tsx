@@ -197,8 +197,10 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>SEMANTIC ROLES</p>
           {(Object.keys(DEFAULTS) as RoleKey[]).map((roleKey) => {
             const val = roles[roleKey];
+            const invalid = !isValidHex(val);
+            const errorId = `role-builder-${roleKey}-hex-error`;
             return (
-              <div key={roleKey} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
+              <div key={roleKey} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem', flexWrap: 'wrap' }}>
                 <div style={{ width: 18, height: 18, borderRadius: 3, background: isValidHex(val) ? val : '#888', border: '1px solid var(--border)', flexShrink: 0 }} />
                 <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{ROLE_LABELS[roleKey]}</span>
                 <input
@@ -207,13 +209,21 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
                   onChange={(e) => update(roleKey, e.target.value)}
                   disabled={!interactive || stageController.result === 'passed'}
                   maxLength={7}
+                  aria-label={`${ROLE_LABELS[roleKey]} hex color`}
+                  aria-invalid={invalid}
+                  aria-describedby={invalid ? errorId : undefined}
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.78rem',
                     background: 'var(--surface)', color: 'var(--primary-foreground)',
-                    border: `1px solid ${isValidHex(val) ? 'var(--border-strong)' : 'var(--accent-danger)'}`,
+                    border: `1px solid ${invalid ? 'var(--accent-danger)' : 'var(--border-strong)'}`,
                     borderRadius: 3, padding: '0.15rem 0.3rem', width: 90,
                   }}
                 />
+                {invalid && (
+                  <span id={errorId} className={shellStyles.inputError}>
+                    Error: enter a 3- or 6-digit hex color for {ROLE_LABELS[roleKey]}.
+                  </span>
+                )}
               </div>
             );
           })}

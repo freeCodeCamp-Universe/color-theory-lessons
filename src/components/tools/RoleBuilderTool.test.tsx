@@ -31,6 +31,27 @@ function setPassingRoles() {
 }
 
 describe('RoleBuilderTool', () => {
+  it('describes invalid hex values with a visible error', () => {
+    render(<RoleBuilderTool interactive />);
+
+    const input = screen.getByRole('textbox', { name: 'primary-text hex color' });
+    fireEvent.change(input, { target: { value: 'nope' } });
+
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(input).toHaveAttribute(
+      'aria-describedby',
+      'role-builder-primary-text-hex-error',
+    );
+    expect(screen.getByText(
+      'Error: enter a 3- or 6-digit hex color for primary-text.',
+    )).toBeInTheDocument();
+
+    fireEvent.change(input, { target: { value: '#101827' } });
+    expect(input).toHaveAttribute('aria-invalid', 'false');
+    expect(input).not.toHaveAttribute('aria-describedby');
+    expect(screen.queryByText(/hex color for primary-text/)).not.toBeInTheDocument();
+  });
+
   it('starts with failed checks and does not complete after one passing edit', () => {
     const onComplete = vi.fn();
     render(<RoleBuilderTool interactive onComplete={onComplete} />);

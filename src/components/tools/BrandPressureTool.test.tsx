@@ -27,6 +27,27 @@ function rgbFromCss(value: string): RGB {
 }
 
 describe('BrandPressureTool contrast validation', () => {
+  it('describes invalid hex values with a visible error', () => {
+    render(<BrandPressureTool interactive />);
+
+    const input = screen.getByRole('textbox', { name: 'Primary text hex color' });
+    fireEvent.change(input, { target: { value: 'nope' } });
+
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(input).toHaveAttribute(
+      'aria-describedby',
+      'brand-pressure-primary-text-hex-error',
+    );
+    expect(screen.getByText(
+      'Error: enter a 3- or 6-digit hex color for Primary text.',
+    )).toBeInTheDocument();
+
+    fireEvent.change(input, { target: { value: '#1c1917' } });
+    expect(input).toHaveAttribute('aria-invalid', 'false');
+    expect(input).not.toHaveAttribute('aria-describedby');
+    expect(screen.queryByText(/hex color for Primary text/)).not.toBeInTheDocument();
+  });
+
   it('renders distinct Save and Cancel pairs that meet normal-text contrast', () => {
     render(<BrandPressureTool interactive />);
     expect(screen.getByText('Save text (4.5:1)').parentElement).not.toHaveTextContent('✓');

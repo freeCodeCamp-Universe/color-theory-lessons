@@ -63,3 +63,11 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
+
+.inputError {
+  color: var(--accent-danger);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.4;
+  flex-basis: 100%;
+}

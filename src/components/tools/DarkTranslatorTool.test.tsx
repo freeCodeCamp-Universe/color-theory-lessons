@@ -37,6 +37,29 @@ function checkStage() {
 }
 
 describe('DarkTranslatorTool', () => {
+  it('describes invalid hex values with a visible error', () => {
+    render(<DarkTranslatorTool interactive />);
+
+    const input = screen.getByRole('textbox', {
+      name: 'primary-text dark-theme hex color',
+    });
+    fireEvent.change(input, { target: { value: 'nope' } });
+
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(input).toHaveAttribute(
+      'aria-describedby',
+      'dark-translator-primary-text-hex-error',
+    );
+    expect(screen.getByText(
+      'Error: enter a 3- or 6-digit hex color for primary-text.',
+    )).toBeInTheDocument();
+
+    fireEvent.change(input, { target: { value: '#f8fafc' } });
+    expect(input).toHaveAttribute('aria-invalid', 'false');
+    expect(input).not.toHaveAttribute('aria-describedby');
+    expect(screen.queryByText(/hex color for primary-text/)).not.toBeInTheDocument();
+  });
+
   it('uses theme-aware semantic roles for live check results', () => {
     render(<DarkTranslatorTool interactive />);
 

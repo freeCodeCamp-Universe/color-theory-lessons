@@ -151,8 +151,10 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
           </p>
           {KEYS.map(key => {
             const val = dark[key];
+            const invalid = !isValidHex(val);
+            const errorId = `dark-translator-${key}-hex-error`;
             return (
-              <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
+              <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem', flexWrap: 'wrap' }}>
                 <div style={{ width: 16, height: 16, borderRadius: 3, background: isValidHex(val) ? val : '#888', border: '1px solid var(--border)', flexShrink: 0 }} />
                 <span style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 100, flexShrink: 0 }}>{key}</span>
                 <input
@@ -161,13 +163,21 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
                   onChange={e => update(key, e.target.value)}
                   disabled={!interactive || stageController.result === 'passed'}
                   maxLength={7}
+                  aria-label={`${key} dark-theme hex color`}
+                  aria-invalid={invalid}
+                  aria-describedby={invalid ? errorId : undefined}
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.72rem',
                     background: 'var(--surface, #1e293b)', color: 'var(--primary-foreground)',
-                    border: `1px solid ${isValidHex(val) ? 'var(--border-strong)' : 'var(--accent-danger)'}`,
+                    border: `1px solid ${invalid ? 'var(--accent-danger)' : 'var(--border-strong)'}`,
                     borderRadius: 3, padding: '0.15rem 0.3rem', width: 80,
                   }}
                 />
+                {invalid && (
+                  <span id={errorId} className={shellStyles.inputError}>
+                    Error: enter a 3- or 6-digit hex color for {key}.
+                  </span>
+                )}
               </div>
             );
           })}
