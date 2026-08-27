@@ -58,7 +58,7 @@ describe('tool UI audit regressions', () => {
     const shellCss = read('src/components/tools/ToolShell.module.css');
 
     expect(shellCss).toMatch(
-      /:where\(\s*\.shell button:not\(:disabled\):not\(\[data-authored-visual\]\):not\(\[data-authored-visual\] \*\)\s*\)\s*{\s*border: 1px solid var\(--border-strong\);\s*}/,
+      /\.shell :where\(\s*button:not\(:disabled\):not\(\[class\]\):not\(\[data-authored-visual\]\):not\(\[data-authored-visual\] \*\)\s*\)\s*{\s*border: 1px solid var\(--border-strong\);\s*}/,
     );
   });
 
