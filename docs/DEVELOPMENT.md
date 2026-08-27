@@ -43,8 +43,9 @@ The app is deployed via freeCodeCamp Universe, configured in `platform.yaml`.
 
 ## Accessibility (a11y)
 
-The project aims for WCAG 2.1 AA compliance:
-- **Contrast**: Ensure all text has a contrast ratio of at least 4.5:1 against its background.
+The project targets WCAG 2.2 Level AAA conformance. Meeting this target requires satisfying every applicable Level A, AA, and AAA success criterion; the points below are not a complete conformance checklist.
+
+- **Contrast**: Ensure normal text has a contrast ratio of at least 7:1 against its background. Large text must reach at least 4.5:1.
 - **Color Blindness**: Avoid using color as the *only* means of communicating information.
 - **Keyboard**: Ensure all interactive tools can be focused and manipulated via the keyboard.
 - **Motion**: Respect the `prefers-reduced-motion` media query for all animations.
