@@ -24,7 +24,6 @@ vi.mock('../tools/ToolRenderer.tsx', async () => {
         total: number;
       }) => void;
     }) => {
-      const initialOnChallengeComplete = useRef(onChallengeComplete);
       const initialOnStageChange = useRef(onStageChange);
       useEffect(() => {
         initialOnStageChange.current?.({
@@ -34,18 +33,20 @@ vi.mock('../tools/ToolRenderer.tsx', async () => {
           position: 1,
           total: 3,
         });
-        initialOnChallengeComplete.current?.();
       }, []);
       return (
-        <button onClick={() => onStageChange?.({
-          id: 'saturation',
-          title: 'Match the saturation',
-          instruction: 'Match the saturation target.',
-          position: 2,
-          total: 3,
-        })}>
-          advance mock stage
-        </button>
+        <>
+          <button onClick={onChallengeComplete}>complete mock challenge</button>
+          <button onClick={() => onStageChange?.({
+            id: 'saturation',
+            title: 'Match the saturation',
+            instruction: 'Match the saturation target.',
+            position: 2,
+            total: 3,
+          })}>
+            advance mock stage
+          </button>
+        </>
       );
     },
   };
@@ -113,11 +114,124 @@ function makeLesson(overrides?: Partial<LessonConfig>): LessonConfig {
 }
 
 async function advanceThroughChallenge() {
+  fireEvent.click(screen.getByRole('button', { name: 'complete mock challenge' }));
   const quizBtn = await screen.findByRole('button', { name: 'take the quiz →' });
   fireEvent.click(quizBtn);
 }
 
 describe('LessonPlayer', () => {
+  it('moves through the complete lesson flow and preserves completion after redo', async () => {
+    localStorage.setItem('color-theory-course-state', JSON.stringify({
+      version: 3,
+      progress: {
+        completedLessons: ['u1-l6'],
+        completedQuizzes: ['u1-l6'],
+        quizBestScores: { 'u1-l6': 100 },
+        completedMilestones: ['milestone-1'],
+      },
+      preferences: {},
+    }));
+
+    renderLesson(makeLesson({
+      id: 'u1-l1',
+      unitId: 'unit-1',
+      steps: [
+        { text: 'Step one' },
+        { text: 'Step two' },
+        { text: 'Step three' },
+      ],
+      challenge: { prompt: 'Complete the color challenge.', hints: [] },
+      quizItems: [
+        {
+          id: 'q1',
+          prompt: 'First question?',
+          choices: [
+            {
+              stableId: 'correct-answer',
+              label: 'Correct Answer',
+              isCorrect: true,
+              explanation: 'This is why the first answer is correct.',
+            },
+            {
+              stableId: 'wrong-answer',
+              label: 'Wrong Answer',
+              isCorrect: false,
+              explanation: 'This is why the first answer is incorrect.',
+            },
+          ],
+        },
+        {
+          id: 'q2',
+          prompt: 'Second question?',
+          choices: [
+            {
+              stableId: 'right-choice',
+              label: 'Right Choice',
+              isCorrect: true,
+              explanation: 'This is why the second answer is correct.',
+            },
+            { stableId: 'bad-choice', label: 'Bad Choice', isCorrect: false },
+          ],
+        },
+      ],
+    }));
+
+    expect(screen.getByText('Step one')).toBeInTheDocument();
+    expect(screen.getByText('1 / 3')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'back' })).toBeDisabled();
+    expect(screen.queryByRole('button', { name: 'take the quiz →' })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'next' }));
+    expect(screen.getByText('Step two')).toBeInTheDocument();
+    expect(screen.getByText('2 / 3')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'back' }));
+    expect(screen.getByText('Step one')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'next' }));
+    fireEvent.click(screen.getByRole('button', { name: 'next' }));
+    expect(screen.getByText('Step three')).toBeInTheDocument();
+    expect(screen.getByText('Complete the color challenge.')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'take the quiz →' })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'complete mock challenge' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'take the quiz →' }));
+
+    expect(screen.getByText('question 1 of 2')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'check' })).toBeDisabled();
+    fireEvent.click(screen.getByRole('button', { name: /Wrong Answer/i }));
+    expect(screen.getByRole('button', { name: 'check' })).toBeEnabled();
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+    expect(screen.getByRole('button', { name: /Wrong Answer/i })).toHaveClass(/incorrect/);
+    expect(screen.getByRole('button', { name: /Correct Answer/i })).toHaveClass(/correct/);
+    expect(screen.getByText('This is why the first answer is incorrect.')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'next question →' }));
+    expect(screen.getByText('question 2 of 2')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'check' })).toBeDisabled();
+    fireEvent.click(screen.getByRole('button', { name: /Right Choice/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+    expect(screen.getByRole('button', { name: /Right Choice/i })).toHaveClass(/correct/);
+    expect(screen.getByText('This is why the second answer is correct.')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'finish lesson →' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('1 of 2 quiz questions correct.')).toBeInTheDocument();
+    });
+    expect(screen.getByRole('link', { name: 'next lesson →' })).toHaveAttribute('href', '/lesson/u1-l2');
+    expect(screen.getByRole('link', { name: '← all units' })).toHaveAttribute('href', '/');
+    expect(screen.getByTestId('completed-lessons')).toHaveTextContent('u1-l6,u1-l1');
+    expect(screen.getByTestId('quiz-scores')).toHaveTextContent('"u1-l1":50');
+
+    fireEvent.click(screen.getByRole('button', { name: 'redo lesson' }));
+    expect(screen.getByText('Step one')).toBeInTheDocument();
+    expect(screen.getByText('1 / 3')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'back' })).toBeDisabled();
+    expect(screen.queryByText('1 of 2 quiz questions correct.')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'take the quiz →' })).not.toBeInTheDocument();
+    expect(screen.getByTestId('completed-lessons')).toHaveTextContent('u1-l6,u1-l1');
+    expect(screen.getByTestId('quiz-scores')).toHaveTextContent('"u1-l1":50');
+  });
+
   describe('challenge content', () => {
     it('renders the prompt with a closed hint interaction', () => {
       renderLesson(makeLesson({
@@ -271,13 +385,16 @@ describe('LessonPlayer', () => {
       });
     });
 
-    it('dispatches COMPLETE_LESSON without COMPLETE_QUIZ when lesson has no quiz items', async () => {
+    it('finishes a no-quiz lesson only after the tool reports success', async () => {
       renderLesson(makeLesson({ quizItems: [] }));
 
+      expect(screen.queryByRole('button', { name: 'finish lesson →' })).not.toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: 'complete mock challenge' }));
       const finishBtn = await screen.findByRole('button', { name: 'finish lesson →' });
       fireEvent.click(finishBtn);
 
       await waitFor(() => {
+        expect(screen.getByText('0 of 0 quiz questions correct.')).toBeInTheDocument();
         expect(screen.getByTestId('completed-lessons').textContent).toContain('test-lesson');
         expect(screen.getByTestId('completed-quizzes').textContent).toBe('');
       });
