@@ -40,6 +40,11 @@ npm run build
 
 Deploys to freeCodeCamp Universe (`platform.yaml`) using `npm run build` and serves the `dist/` output as a static SPA.
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local setup, verification, and pull
+request instructions.
+
 ## Structure
 
 ```
