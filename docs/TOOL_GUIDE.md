@@ -104,8 +104,9 @@ Complete each registration step:
 1. Add a unique string key to `INTERACTION_TYPES` in `src/types/lesson.ts`. The `InteractionType` union is derived from this registry.
 2. Add the interaction type to the lesson interaction inventory in `docs/ACCESSIBLE_VISUALS.md` and assign its accessibility owner. `src/accessibility-contract.test.ts` enforces this entry.
 3. Add a lazy import and switch case in `src/components/tools/ToolRenderer.tsx`. Pass `interactive={true}`, `onComplete={onChallengeComplete}`, and `onStageChange` to the tool.
-4. Use the interaction type in at least one `LessonConfig`. `src/components/tools/interaction-type-coverage.test.ts` rejects unused registry entries.
-5. Add the interaction to `docs/TEST_COVERAGE.md` with the focused test that owns its learner-visible behavior.
+4. Add the matching dynamic import to `src/components/tools/tool-prefetch.ts`. Its exhaustive switch makes the TypeScript build fail when a registered type has no prefetch mapping.
+5. Use the interaction type in at least one `LessonConfig`. `src/components/tools/interaction-type-coverage.test.ts` rejects unused registry entries.
+6. Add the interaction to `docs/TEST_COVERAGE.md` with the focused test that owns its learner-visible behavior.
 
 ```tsx
 // src/components/tools/ToolRenderer.tsx
