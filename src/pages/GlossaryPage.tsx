@@ -36,19 +36,21 @@ export function GlossaryPage() {
           No terms yet. Complete your first lesson to unlock this glossary.
         </p>
       ) : (
-        <dl className={styles.termList}>
+        <div className={styles.termList}>
           {byLetter.map(([letter, terms]) => (
-            <div key={letter} className={styles.letterGroup}>
-              <span className={styles.letter}>{letter}</span>
-              {terms.map((entry) => (
-                <div key={entry.term} className={styles.entry}>
-                  <dt className={styles.term}>{entry.term}</dt>
-                  <dd className={styles.definition}>{entry.definition}</dd>
-                </div>
-              ))}
-            </div>
+            <section key={letter} className={styles.letterGroup}>
+              <h2 className={styles.letter}>{letter}</h2>
+              <dl className={styles.letterTerms}>
+                {terms.map((entry) => (
+                  <div key={entry.term} className={styles.entry}>
+                    <dt className={styles.term}>{entry.term}</dt>
+                    <dd className={styles.definition}>{entry.definition}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
           ))}
-        </dl>
+        </div>
       )}
     </div>
   );
