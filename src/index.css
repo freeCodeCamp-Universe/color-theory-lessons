@@ -35,7 +35,7 @@
   --line-height-base: 1.5;
 
   /* Layout */
-  --header-height: 38px;
+  --header-height: 52px;
   --max-content-width: 900px;
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
@@ -173,6 +173,29 @@ button {
   cursor: pointer;
   border: none;
   background: none;
+}
+
+/* WCAG 2.2 SC 2.5.5: interactive controls need a 44px pointer target. */
+:where(
+  button:not(:disabled),
+  select:not(:disabled),
+  textarea:not(:disabled),
+  input:not(:disabled):not([type='hidden']):not([type='radio']):not([type='checkbox']),
+  [role='button']:not([aria-disabled='true']),
+  [role='tab']:not([aria-disabled='true']),
+  [role='slider']:not([aria-disabled='true'])
+) {
+  min-width: 44px !important;
+  min-height: 44px !important;
+}
+
+:where(span[role='button'], span[role='tab'], span[role='slider']) {
+  display: inline-flex;
+  align-items: center;
+}
+
+:where(label:has(> input[type='radio']:not(:disabled)), label:has(> input[type='checkbox']:not(:disabled))) {
+  min-height: 44px !important;
 }
 
 button:disabled,
