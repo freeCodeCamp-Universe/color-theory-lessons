@@ -11,9 +11,9 @@ This inventory maps the application's main learner behaviors to the tests or ope
 
 There are no accepted manual-only exceptions in the current inventory. Open accessibility work that requires manual assistive-technology results remains **Missing** and is accountable to [#107](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/107), rather than being treated as completed manual coverage.
 
-Paths in the evidence column are relative to the repository root. `npm test` runs the Vitest files, and `npm run test:e2e` runs the Playwright file against the production build.
+Paths in the evidence column are relative to the repository root. `npm test` runs the Vitest files, and `npm run test:e2e` runs the Playwright files against the production build.
 
-The inventory contains 118 behaviors: 115 have full automated coverage, 2 have partial coverage, and 1 is missing coverage. There are no manual-only rows.
+The inventory contains 120 behaviors: 117 have full automated coverage, 2 have partial coverage, and 1 is missing coverage. There are no manual-only rows.
 
 ## App entry, routes, and navigation
 
@@ -28,21 +28,23 @@ The inventory contains 118 behaviors: 115 have full automated coverage, 2 have p
 | Follow `/capstone` to Milestone 6 and `/settings` back to the dashboard. | Full | `src/App.test.tsx` |
 | Open an unknown app route and see the 404 page with a link back to the course. | Full | `src/App.test.tsx` |
 | Recover from a render error by using the application error fallback's retry action. | Full | `src/components/ErrorBoundary.test.tsx` |
+| Skip repeated navigation and move keyboard focus to the main content. | Full | `e2e/route-accessibility.spec.ts` |
+| Receive the final route's document title and focused heading after client navigation, browser history traversal, lazy loading, redirects, or an invalid route. | Full | `src/components/accessibility/DocumentTitle.test.tsx`, `src/App.test.tsx`, `e2e/route-accessibility.spec.ts` |
 | Use desktop navigation links and identify the current page. | Full | `src/components/nav/TopNav.test.tsx` |
 | Open the mobile menu, navigate from it, and have it close after navigation. | Full | `src/components/nav/TopNav.test.tsx` |
 | Return home from an open mobile menu by using the course logo. | Full | `src/components/nav/TopNav.test.tsx` |
 | Prevent desktop navigation from clipping by switching to the mobile control at the responsive breakpoint. | Full | `src/components/nav/TopNavStyles.test.ts`, `e2e/critical-learner-journeys.spec.ts` |
-| Allow direct lesson access in development while preventing out-of-order lesson access and completion in production. | Full | `src/pages/LessonPage.test.tsx`, `src/utils/progression.test.ts`, `e2e/critical-learner-journeys.spec.ts` |
-| Allow direct milestone access in development while preventing out-of-order milestone access and completion in production. | Full | `src/pages/MilestonePage.test.tsx`, `src/utils/progression.test.ts`, `e2e/critical-learner-journeys.spec.ts` |
+| Allow direct lesson access in development while preventing out-of-order lesson access and completion in production, then show the lock reason after redirecting. | Full | `src/pages/LessonPage.test.tsx`, `src/utils/progression.test.ts`, `src/components/feedback/RouteSnackbar.test.tsx`, `e2e/critical-learner-journeys.spec.ts`, `e2e/route-accessibility.spec.ts` |
+| Allow direct milestone access in development while preventing out-of-order milestone access and completion in production, then show the lock reason after redirecting. | Full | `src/pages/MilestonePage.test.tsx`, `src/utils/progression.test.ts`, `src/components/feedback/RouteSnackbar.test.tsx`, `e2e/critical-learner-journeys.spec.ts`, `e2e/route-accessibility.spec.ts` |
 
 ## Dashboard progression and reset
 
 | Main behavior | Status | Automated test or accountable issue |
 |---|---|---|
 | Start with Unit 1 expanded while later units and lessons are visibly locked. | Full | `src/pages/HomePage.test.tsx` |
-| Expand or collapse an unlocked unit from its dashboard card. | Full | `src/pages/HomePage.test.tsx` |
+| Expand or collapse an unlocked unit with a native disclosure while keeping lesson links independently reachable in keyboard order. | Full | `src/pages/HomePage.test.tsx`, `e2e/home-disclosure-accessibility.spec.ts` |
 | Point the hero continue action to the next progression-eligible lesson or milestone. | Full | `src/pages/HomePage.test.tsx`, `src/utils/progression.test.ts` |
-| Show start, continue, redo, and locked lesson actions from current progress. | Full | `src/pages/HomePage.test.tsx` |
+| Show destination-specific start, continue, redo, and locked lesson actions from current progress. | Full | `src/pages/HomePage.test.tsx`, `e2e/home-disclosure-accessibility.spec.ts`, `e2e/route-accessibility.spec.ts` |
 | Unlock a unit milestone after every lesson in that unit is complete. | Full | `src/pages/HomePage.test.tsx` |
 | Expose every lesson and milestone from the dashboard when development mode is enabled. | Full | `src/pages/HomePage.test.tsx` |
 | Mark a passed unit complete, expand the next unit, and expose its first lesson. | Full | `src/pages/HomePage.test.tsx`, `e2e/critical-learner-journeys.spec.ts` |
@@ -80,7 +82,7 @@ The inventory contains 118 behaviors: 115 have full automated coverage, 2 have p
 | `rgb-mixer`: predict each target before matching it, use stage-specific hints, and advance only after checking. | Full | `src/components/tools/Unit2ExerciseStages.test.tsx` |
 | `temperature-sorter`: complete the sorting and interface-goal stages in order. | Full | `src/components/tools/TemperatureSorterTool.test.tsx` |
 | `contrast-checker`: repair all three pairs to their WCAG thresholds and see which pairs still fail. | Full | `src/components/tools/ContrastTool.test.tsx` |
-| `before-after`: assign every interface color role, receive feedback only after checking, retry, and complete. | Full | `src/components/tools/BeforeAfterTool.test.tsx` |
+| `before-after`: assign every interface color role, receive feedback only after checking, retry, complete, and retain the authored mockup colors and contrast in both application themes. | Full | `src/components/tools/BeforeAfterTool.test.tsx`, `e2e/critical-learner-journeys.spec.ts` |
 | `slider-explore`: match each HSL target in order, keep wheel and slider values synchronized, and retry a failed match. | Full | `src/components/tools/HSLSliderTool.test.tsx` |
 | `additive-sort`: sort additive and subtractive examples in one retryable stage. | Full | `src/components/tools/Unit2ExerciseStages.test.tsx` |
 | `logic-fixer`: keep each logic scenario active after a failed check and advance after a correct retry. | Full | `src/components/tools/Unit2ExerciseStages.test.tsx` |
@@ -171,7 +173,7 @@ The inventory contains 118 behaviors: 115 have full automated coverage, 2 have p
 | Main behavior | Status | Automated test or accountable issue |
 |---|---|---|
 | Complete Format Reveal, Color-only Detector, and System Comparison with keyboard-only controls. | Missing | [#54](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/54) records the known click-only or independently unreachable controls and owns keyboard testing of every main learner flow. |
-| Hear equivalent descriptions for informative visuals, quiz swatches, live tool results, stage transitions, milestone previews, chart alternatives, and Palette Builder contrast rows. | Partial | `src/components/lesson/ChallengeHints.test.tsx`, `src/components/tools/ExerciseStage.test.tsx`, and `src/components/tools/ChartTunerTool.test.tsx` verify selected status, focus, and chart-table results. [#107](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/107) owns the remaining automated assertions and screen-reader, browser, and operating-system results; Palette Builder work remains in [#111](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/111). |
+| Hear equivalent descriptions for informative visuals, quiz swatches, live tool results, stage transitions, milestone previews, chart alternatives, and Palette Builder contrast rows. | Partial | `src/components/accessibility/accessibility-components.test.tsx`, `src/components/lesson/StepPanelRenderer.test.tsx`, `src/components/lesson/LessonPlayer.test.tsx`, `src/components/milestone/MilestonePlayer.test.tsx`, `src/components/lesson/ChallengeHints.test.tsx`, `src/components/tools/ExerciseStage.test.tsx`, and `src/components/tools/ChartTunerTool.test.tsx` verify shared description and announcement semantics, informative and decorative step panels, lesson and milestone quiz swatches, selected hints, stage focus and status, and chart-table results. [#107](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/107) owns the remaining live-result and visual-equivalence assertions plus screen-reader, browser, and operating-system results; Palette Builder work remains in [#111](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/111). |
 
 ## Course completion
 
