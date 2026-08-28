@@ -25,8 +25,11 @@ describe('HomePage dashboard', () => {
   it('starts with the first unit expanded and locks later units and lessons', () => {
     renderWithAppState(<HomePage />);
 
-    const unitOneCard = screen.getByRole('button', { name: /Seeing and Describing Color/ });
-    expect(unitOneCard).toHaveAttribute('aria-expanded', 'true');
+    const unitOneDisclosure = screen.getByRole('button', { name: 'Collapse Seeing and Describing Color' });
+    expect(unitOneDisclosure).toHaveAttribute('aria-expanded', 'true');
+    expect(unitOneDisclosure).toHaveAttribute('aria-controls', 'unit-1-lessons');
+    expect(within(getUnit('Color Systems and Advanced Topics')).queryByRole('button'))
+      .not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'start learning' })).toHaveAttribute('href', '/lesson/u1-l1');
     expect(screen.getAllByRole('link', { name: 'continue →' })[0]).toHaveAttribute('href', '/lesson/u1-l1');
     expect(within(getUnit('How Screens Make Color')).getByText('locked')).toBeInTheDocument();
@@ -94,37 +97,59 @@ describe('HomePage dashboard', () => {
       },
     });
 
-    const unitOneCard = screen.getByRole('button', { name: /Seeing and Describing Color/ });
-    const unitTwoCard = screen.getByRole('button', { name: /How Screens Make Color/ });
+    const unitOneCard = getUnit('Seeing and Describing Color');
+    const unitOneDisclosure = screen.getByRole('button', { name: 'Expand Seeing and Describing Color' });
+    const unitTwoDisclosure = screen.getByRole('button', { name: 'Collapse How Screens Make Color' });
     expect(within(unitOneCard).getByText('✓ done')).toBeInTheDocument();
-    expect(unitOneCard).toHaveAttribute('aria-expanded', 'false');
-    expect(unitTwoCard).toHaveAttribute('aria-expanded', 'true');
+    expect(unitOneDisclosure).toHaveAttribute('aria-expanded', 'false');
+    expect(unitTwoDisclosure).toHaveAttribute('aria-expanded', 'true');
     expect(screen.getByRole('link', { name: 'start →' })).toHaveAttribute('href', '/lesson/u2-l1');
 
-    await user.click(unitOneCard);
-    expect(unitOneCard).toHaveAttribute('aria-expanded', 'true');
+    await user.click(unitOneDisclosure);
+    expect(unitOneDisclosure).toHaveAttribute('aria-expanded', 'true');
     expect(screen.getAllByRole('link', { name: 'redo →' }).at(-1)).toHaveAttribute('href', '/milestone/milestone-1');
 
-    await user.click(unitOneCard);
-    expect(unitOneCard).toHaveAttribute('aria-expanded', 'false');
+    await user.click(unitOneDisclosure);
+    expect(unitOneDisclosure).toHaveAttribute('aria-expanded', 'false');
   });
 
   it('expands and collapses an unlocked unit with Enter and Space', async () => {
     const user = userEvent.setup();
     renderWithAppState(<HomePage />);
 
-    const unitOneCard = screen.getByRole('button', { name: /Seeing and Describing Color/ });
-    unitOneCard.focus();
+    const unitOneDisclosure = screen.getByRole('button', { name: 'Collapse Seeing and Describing Color' });
+    unitOneDisclosure.focus();
 
     await user.keyboard('{Enter}');
-    expect(unitOneCard).toHaveAttribute('aria-expanded', 'false');
+    expect(unitOneDisclosure).toHaveAttribute('aria-expanded', 'false');
     await user.keyboard('{Enter}');
-    expect(unitOneCard).toHaveAttribute('aria-expanded', 'true');
+    expect(unitOneDisclosure).toHaveAttribute('aria-expanded', 'true');
 
     await user.keyboard(' ');
-    expect(unitOneCard).toHaveAttribute('aria-expanded', 'false');
+    expect(unitOneDisclosure).toHaveAttribute('aria-expanded', 'false');
     await user.keyboard(' ');
-    expect(unitOneCard).toHaveAttribute('aria-expanded', 'true');
+    expect(unitOneDisclosure).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('keeps lesson links outside the disclosure and in logical tab order', async () => {
+    const user = userEvent.setup();
+    renderWithAppState(<HomePage />);
+
+    const unitOneCard = getUnit('Seeing and Describing Color');
+    const disclosure = within(unitOneCard).getByRole('button', {
+      name: 'Collapse Seeing and Describing Color',
+    });
+    const startLink = within(unitOneCard).getByRole('link', { name: 'start →' });
+    const lessonLink = screen.getAllByRole('link', { name: 'continue →' })[0];
+
+    expect(disclosure).not.toContainElement(startLink);
+    expect(disclosure).not.toContainElement(lessonLink);
+
+    disclosure.focus();
+    await user.tab();
+    expect(startLink).toHaveFocus();
+    await user.tab();
+    expect(lessonLink).toHaveFocus();
   });
 
   it('preserves progress when reset is cancelled', async () => {

@@ -248,6 +248,7 @@ test('a failed milestone retry clears the attempt and leaves progression locked'
   await page.getByRole('link', { name: 'color-theory-course$' }).click();
   const unitTwoCard = page.getByText('How Screens Make Color', { exact: true })
     .locator('..')
+    .locator('..')
     .locator('..');
   await expect(unitTwoCard).toContainText('locked');
   await expect(unitTwoCard).not.toHaveAttribute('role', 'button');

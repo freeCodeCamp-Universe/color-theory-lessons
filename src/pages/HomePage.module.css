@@ -72,8 +72,26 @@
   border-radius: var(--radius-md);
 }
 
-.unitCard[role='button'] {
+.unitInteractive {
   border-color: var(--border-strong);
+}
+
+.unitDisclosure,
+.unitSummary {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  min-width: 0;
+  flex: 1;
+  text-align: left;
+  color: inherit;
+}
+
+.unitDisclosure {
+  align-self: stretch;
+  margin: calc(var(--spacing-md) * -1) 0 calc(var(--spacing-md) * -1) calc(var(--spacing-lg) * -1);
+  padding: var(--spacing-md) 0 var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
 }
 
 .unitExpanded {
@@ -93,6 +111,7 @@
 }
 
 .expandChevron {
+  margin-left: auto;
   font-size: 1rem;
   color: var(--muted);
 }
@@ -147,6 +166,10 @@
   border-top: none;
   border-radius: 0 0 var(--radius-md) var(--radius-md);
   overflow: hidden;
+}
+
+.lessonList[hidden] {
+  display: none;
 }
 
 .lessonRow {
@@ -245,6 +268,16 @@
 
   .unitInfo {
     min-width: 0;
+  }
+
+  .unitDisclosure,
+  .unitSummary {
+    grid-column: 1 / -1;
+  }
+
+  .unitDisclosure {
+    margin: calc(var(--spacing-md) * -1) calc(var(--spacing-md) * -1) 0;
+    padding: var(--spacing-md);
   }
 
   .unitMeta {

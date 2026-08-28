@@ -68,8 +68,8 @@ export function HomePage() {
             const firstLesson = unit.lessons[0];
 
             const isUnlocked = developmentMode || isUnitUnlocked(unit.id, progress);
-            const canExpand = isUnlocked;
             const isExpanded = expandedUnit === unit.id;
+            const lessonListId = `${unit.id}-lessons`;
 
             function toggleExpand() {
               setExpandedUnit((prev) => (prev === unit.id ? null : unit.id));
@@ -78,20 +78,35 @@ export function HomePage() {
             return (
               <div key={unit.id} className={styles.unitGroup}>
                 <div
-                  className={`${styles.unitCard} ${complete ? styles.unitComplete : ''} ${isExpanded ? styles.unitExpanded : ''}`}
-                  onClick={canExpand ? toggleExpand : undefined}
-                  role={canExpand ? 'button' : undefined}
-                  tabIndex={canExpand ? 0 : undefined}
-                  aria-label={canExpand ? `${unit.title} — click to ${isExpanded ? 'collapse' : 'expand'}` : undefined}
-                  aria-expanded={canExpand ? isExpanded : undefined}
-                  onKeyDown={(e) => canExpand && (e.key === 'Enter' || e.key === ' ') && toggleExpand()}
-                  style={{ cursor: canExpand ? 'pointer' : 'default' }}
+                  className={`${styles.unitCard} ${isUnlocked ? styles.unitInteractive : ''} ${complete ? styles.unitComplete : ''} ${isExpanded ? styles.unitExpanded : ''}`}
                 >
-                  <span className={styles.unitIndex}>{String(i + 1).padStart(2, '0')}</span>
-                  <div className={styles.unitInfo}>
-                    <span className={styles.unitTitle}>{unit.title}</span>
-                    <span className={styles.unitDesc}>{unit.description}</span>
-                  </div>
+                  {isUnlocked ? (
+                    <button
+                      type="button"
+                      className={styles.unitDisclosure}
+                      onClick={toggleExpand}
+                      aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${unit.title}`}
+                      aria-controls={lessonListId}
+                      aria-expanded={isExpanded}
+                    >
+                      <span className={styles.unitIndex}>{String(i + 1).padStart(2, '0')}</span>
+                      <span className={styles.unitInfo}>
+                        <span className={styles.unitTitle}>{unit.title}</span>
+                        <span className={styles.unitDesc}>{unit.description}</span>
+                      </span>
+                      <span className={styles.expandChevron} aria-hidden="true">
+                        {isExpanded ? '▲' : '▼'}
+                      </span>
+                    </button>
+                  ) : (
+                    <div className={styles.unitSummary}>
+                      <span className={styles.unitIndex}>{String(i + 1).padStart(2, '0')}</span>
+                      <span className={styles.unitInfo}>
+                        <span className={styles.unitTitle}>{unit.title}</span>
+                        <span className={styles.unitDesc}>{unit.description}</span>
+                      </span>
+                    </div>
+                  )}
                   <div className={styles.unitMeta}>
                     {complete ? (
                       <span className={styles.unitBadge} style={{ color: 'var(--accent-success)', borderColor: 'var(--accent-success)' }}>
@@ -105,7 +120,6 @@ export function HomePage() {
                       <Link
                         to={`/lesson/${firstLesson}`}
                         className={styles.unitStart}
-                        onClick={(e) => e.stopPropagation()}
                       >
                         start →
                       </Link>
@@ -114,17 +128,14 @@ export function HomePage() {
                         locked
                       </span>
                     )}
-                    {canExpand && (
-                      <span className={styles.expandChevron}>{isExpanded ? '▲' : '▼'}</span>
-                    )}
                   </div>
                 </div>
-                {isExpanded && (
-                  <ul className={styles.lessonList}>
+                {isUnlocked && (
+                  <ul id={lessonListId} className={styles.lessonList} hidden={!isExpanded}>
                     {unit.lessons.map((lessonId, li) => {
                       const isDone = completedLessons.includes(lessonId);
-                      // The list only renders inside an expanded (therefore unlocked)
-                      // unit, so its first lesson is always startable when not done.
+                      // The list belongs to an unlocked unit, so its first lesson is
+                      // always startable when not done.
                       const isNext = !isDone && (
                         developmentMode
                         || li === 0
