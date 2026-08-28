@@ -11,13 +11,13 @@ async function expectMinimumTargetSize(target: Locator, name: string) {
 
 async function expectVisibleTargetsMeetMinimum(page: Page, scopeName: string) {
   const targets = page.locator([
-    'button:not([disabled])',
+    'button:not([disabled]):not([data-target-size-exception="essential"])',
     'select:not([disabled])',
     'textarea:not([disabled])',
     'input:not([disabled]):not([type="hidden"]):not([type="radio"]):not([type="checkbox"])',
-    '[role="button"]:not([aria-disabled="true"])',
-    '[role="tab"]:not([aria-disabled="true"])',
-    '[role="slider"]:not([aria-disabled="true"])',
+    '[role="button"]:not([aria-disabled="true"]):not([data-target-size-exception="essential"])',
+    '[role="tab"]:not([aria-disabled="true"]):not([data-target-size-exception="essential"])',
+    '[role="slider"]:not([aria-disabled="true"]):not([data-target-size-exception="essential"])',
     'a[href]',
   ].join(', '));
 
@@ -136,6 +136,22 @@ test('System Comparison targets meet the AAA minimum', async ({ page }) => {
   await page.goto('/lesson/u6-l1');
   await advanceToLastLessonStep(page, 'system comparison');
   await expectVisibleTargetsMeetMinimum(page, 'System Comparison');
+});
+
+test('Format Reveal preserves essential authored target boundaries', async ({ page }) => {
+  await page.goto('/lesson/u3-l1');
+  await advanceToLastLessonStep(page, 'format explorer');
+
+  for (const name of ['Nav text', 'Primary action button', 'Card border', 'Success accent']) {
+    const target = page.getByRole('button', { name, exact: true });
+    await expect(target).toHaveAttribute('data-target-size-exception', 'essential');
+    const box = await target.boundingBox();
+    expect(box, `${name} should have a rendered target`).not.toBeNull();
+    expect(
+      box!.width < MINIMUM_TARGET_SIZE || box!.height < MINIMUM_TARGET_SIZE,
+      `${name} should retain its authored visual boundary`,
+    ).toBe(true);
+  }
 });
 
 test('invalid-route recovery links meet the AAA minimum', async ({ page }) => {

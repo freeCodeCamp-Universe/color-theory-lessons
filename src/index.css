@@ -175,21 +175,27 @@ button {
   background: none;
 }
 
-/* WCAG 2.2 SC 2.5.5: interactive controls need a 44px pointer target. */
+/* WCAG 2.2 SC 2.5.5: interactive controls need a 44px pointer target.
+ * Authored visual regions may retain essential boundaries when enlarging them
+ * would change which nested visual element a learner selects. */
 :where(
-  button:not(:disabled),
+  button:not(:disabled):not([data-target-size-exception='essential']),
   select:not(:disabled),
   textarea:not(:disabled),
   input:not(:disabled):not([type='hidden']):not([type='radio']):not([type='checkbox']),
-  [role='button']:not([aria-disabled='true']),
-  [role='tab']:not([aria-disabled='true']),
-  [role='slider']:not([aria-disabled='true'])
+  [role='button']:not([aria-disabled='true']):not([data-target-size-exception='essential']),
+  [role='tab']:not([aria-disabled='true']):not([data-target-size-exception='essential']),
+  [role='slider']:not([aria-disabled='true']):not([data-target-size-exception='essential'])
 ) {
   min-width: 44px !important;
   min-height: 44px !important;
 }
 
-:where(span[role='button'], span[role='tab'], span[role='slider']) {
+:where(
+  span[role='button']:not([data-target-size-exception='essential']),
+  span[role='tab']:not([data-target-size-exception='essential']),
+  span[role='slider']:not([data-target-size-exception='essential'])
+) {
   display: inline-flex;
   align-items: center;
 }
