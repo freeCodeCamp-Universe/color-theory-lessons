@@ -52,7 +52,7 @@ src/
   components/   # layout, nav, shared UI, tool components
   data/         # static data (units, milestones, glossary)
   lessons/      # lesson configs organized by unit (unit-1 through unit-6)
-  pages/        # route-level page components (Home, Lesson, Milestone, PaletteBuilder, Glossary, Review, Settings)
+  pages/        # route-level page components (Home, Lesson, Milestone, PaletteBuilder, Glossary, Review, NotFound)
   state/        # app-context.tsx, persistence.ts
   types/        # TypeScript interfaces
   utils/        # color conversion and analysis utilities
