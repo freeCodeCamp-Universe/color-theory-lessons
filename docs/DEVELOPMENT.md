@@ -4,17 +4,20 @@ This document outlines the technical standards, tech stack, and operational work
 
 ## Technical Stack
 
-- **Framework**: React 19 (Latest stable release, utilizing new hooks like `useActionState` where applicable).
-- **Language**: TypeScript 5.9 (Strict mode enabled, focusing on type safety for lesson and tool configurations).
-- **Build Tool**: Vite 8 (Optimized for fast HMR and high-performance production builds).
+- **Framework**: React 19.
+- **Language**: TypeScript 5.9 with strict mode enabled.
+- **Build Tool**: Vite 8.
 - **Routing**: React Router 7 (`BrowserRouter`).
-- **State**: React Context + `useReducer` (Centralized state for course progress).
-- **Styling**: CSS Modules (Scoped CSS per component) and CSS Custom Properties (Theme tokens).
+- **State**: React Context + `useReducer` for course progress, with `localStorage` persistence.
+- **Styling**: CSS Modules and CSS custom properties.
 
 ## Operational Workflow
 
 ### Local Development
+
+Use Node.js 22, which matches the version used by continuous integration.
 To start the development server, run:
+
 ```bash
 npm install
 npm run dev
@@ -35,7 +38,7 @@ earlier work is complete.
 ### Code Standards
 - **Component Design**: Favor functional components and React hooks over class components.
 - **Type Safety**: Avoid using `any`. Define clear interfaces for all component props and state shapes.
-- **Styling**: Maintain the "Command-line Chic" aesthetic. Avoid adding new color hex codes; instead, use the variables defined in `src/index.css`.
+- **Styling**: Use the Command-line Chic variables in `src/index.css` for application UI. Literal color values are appropriate when the value is lesson content or learner-editable data.
 - **Contrast Ratios**: Compare calculated ratios at full precision. For display, round down to the chosen number of decimal places so a value below a threshold is not shown as equal to that threshold.
 - **Linting**: Run `npm run lint` before committing to ensure adherence to ESLint rules.
 
@@ -56,10 +59,8 @@ The app is deployed via freeCodeCamp Universe, configured in `platform.yaml`.
 
 ## Contributing
 
-1.  **Feature/Bugfix**: Create a new branch for each contribution.
-2.  **Documentation**: If you add a new lesson or tool, update the corresponding documentation in the `docs/` folder.
-3.  **Testing**: Before submitting a PR, verify your changes in a local build to ensure no routing issues (especially if you've added new pages).
-4.  **Submission**: Open a Pull Request into the `main` branch.
+See the [contribution guide](../CONTRIBUTING.md) for repository setup, branch and
+commit conventions, verification, and pull request requirements.
 
 ## Accessibility (a11y)
 
