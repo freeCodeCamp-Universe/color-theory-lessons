@@ -6,7 +6,7 @@ This document maps the Color Theory Lessons app's main runtime paths, state stor
 
 The app is a data-driven React single-page application. Lesson and milestone content lives in TypeScript configuration files, while players and renderers own navigation, scoring, and interactive state.
 
-`src/App.tsx` wraps the routes with `AppProvider`, `BrowserRouter`, `AppShell`, and `ErrorBoundary`. Route pages are loaded with `React.lazy` and `Suspense`. `AppShell` supplies the top navigation, main-content landmark, skip link, route announcements, transient route messages, and the selected color-vision simulation.
+`src/App.tsx` wraps the routes with `AppProvider`, `BrowserRouter`, `AppShell`, and `ErrorBoundary`. Route pages are loaded with `React.lazy` and `Suspense`. `AppShell` supplies the top navigation, main-content landmark, skip link, route-change focus management, transient route messages, and the selected color-vision simulation.
 
 ## Lesson data and loading
 
@@ -28,7 +28,7 @@ Interactive lesson exercises are selected by the lesson's `interactionType`.
 
 - **Interaction types** are defined by the `INTERACTION_TYPES` constant and derived `InteractionType` union in `src/types/lesson.ts`.
 - **Tool renderer (`src/components/tools/ToolRenderer.tsx`)** uses an exhaustive switch to map each interaction type to a lazily imported React component.
-- **Shared callbacks** let tools report challenge completion and active exercise stages to `LessonPlayer`. The active stage controls staged hints and retry behavior.
+- **Shared callbacks** let tools report challenge completion and active exercise stages to `LessonPlayer`. `LessonPlayer` uses the reported stage to select staged hints; each tool owns its stage transitions and retry behavior.
 - **Tool prefetching (`src/components/tools/tool-prefetch.ts`)** mirrors the renderer's mappings so `LessonPage` can request the correct tool chunk as soon as lesson data loads.
 
 The renderer passes lesson-specific options where needed. Interactive tools otherwise share the `interactive`, `onComplete`, and `onStageChange` contract.
@@ -39,7 +39,7 @@ Milestones are configured in `src/data/milestones.ts` using the discriminated pa
 
 - **`MilestoneQuizPart`** has `kind: 'quiz'` and a sequence of multiple-choice questions.
 - **`MilestoneChallengePart`** has `kind: 'challenge'`, a typed `challengeType`, instructions, completion feedback, and a point value.
-- **Milestone player (`src/components/milestone/MilestonePlayer.tsx`)** advances through quiz, challenge, part-summary, and complete phases. It adds correct quiz answers to earned challenge points and compares the result with the milestone's `passThreshold`.
+- **Milestone player (`src/components/milestone/MilestonePlayer.tsx`)** advances through question, challenge, part-summary, and complete phases. It adds correct quiz answers to earned challenge points and compares the result with the milestone's `passThreshold`.
 - **Challenge renderer (`src/components/milestone/ChallengeRenderer.tsx`)** maps each `MilestoneChallengeType` to its challenge component.
 
 The supported challenge types are:
