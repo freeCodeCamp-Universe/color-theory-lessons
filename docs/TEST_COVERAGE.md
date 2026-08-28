@@ -82,7 +82,7 @@ The inventory contains 120 behaviors: 117 have full automated coverage, 2 have p
 | `rgb-mixer`: predict each target before matching it, use stage-specific hints, and advance only after checking. | Full | `src/components/tools/Unit2ExerciseStages.test.tsx` |
 | `temperature-sorter`: complete the sorting and interface-goal stages in order. | Full | `src/components/tools/TemperatureSorterTool.test.tsx` |
 | `contrast-checker`: repair all three pairs to their WCAG thresholds and see which pairs still fail. | Full | `src/components/tools/ContrastTool.test.tsx` |
-| `before-after`: assign every interface color role, receive feedback only after checking, retry, and complete. | Full | `src/components/tools/BeforeAfterTool.test.tsx` |
+| `before-after`: assign every interface color role, receive feedback only after checking, retry, complete, and retain the authored mockup colors and contrast in both application themes. | Full | `src/components/tools/BeforeAfterTool.test.tsx`, `e2e/critical-learner-journeys.spec.ts` |
 | `slider-explore`: match each HSL target in order, keep wheel and slider values synchronized, and retry a failed match. | Full | `src/components/tools/HSLSliderTool.test.tsx` |
 | `additive-sort`: sort additive and subtractive examples in one retryable stage. | Full | `src/components/tools/Unit2ExerciseStages.test.tsx` |
 | `logic-fixer`: keep each logic scenario active after a failed check and advance after a correct retry. | Full | `src/components/tools/Unit2ExerciseStages.test.tsx` |
