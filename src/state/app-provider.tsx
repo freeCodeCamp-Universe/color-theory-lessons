@@ -8,7 +8,7 @@ import {
   createInitialState,
 } from './app-context.tsx';
 import type { Action } from './app-context.tsx';
-import { clearMilestoneSessions, saveState } from './persistence.ts';
+import { clearProgressSessions, saveState } from './persistence.ts';
 
 function getSystemTheme(): 'dark' | 'light' {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -17,7 +17,7 @@ function getSystemTheme(): 'dark' | 'light' {
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, reducerDispatch] = useReducer(appReducer, undefined, createInitialState);
   const dispatch = useCallback((action: Action) => {
-    if (action.type === 'RESET_PROGRESS') clearMilestoneSessions();
+    if (action.type === 'RESET_PROGRESS') clearProgressSessions();
     reducerDispatch(action);
   }, []);
 

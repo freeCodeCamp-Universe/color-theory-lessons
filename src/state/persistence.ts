@@ -5,6 +5,8 @@ const STORAGE_KEY = 'color-theory-course-state';
 const VERSION = 3;
 
 export const MILESTONE_SESSION_PREFIX = 'color-theory-course-milestone-session:';
+export const LESSON_SESSION_PREFIX = 'color-theory-course-lesson-session:';
+export const LEGACY_STEP_STORAGE_PREFIX = 'color-theory-course-step:';
 export const READ_INTERFACE_SESSION_PREFIX = 'color-theory-course-read-interface-session:';
 export const CHANNEL_PREDICTION_SESSION_PREFIX = 'color-theory-course-channel-prediction-session:';
 export const THEME_FROM_SCRATCH_SESSION_PREFIX = 'color-theory-course-theme-from-scratch-session:';
@@ -130,7 +132,7 @@ function sanitizePreferences(value: unknown): AppPreferences {
   };
 }
 
-export function clearMilestoneSessions(): void {
+export function clearProgressSessions(): void {
   try {
     const keys = Array.from(
       { length: sessionStorage.length },
@@ -139,7 +141,9 @@ export function clearMilestoneSessions(): void {
 
     for (const key of keys) {
       if (
-        key?.startsWith(MILESTONE_SESSION_PREFIX)
+        key?.startsWith(LESSON_SESSION_PREFIX)
+        || key?.startsWith(LEGACY_STEP_STORAGE_PREFIX)
+        || key?.startsWith(MILESTONE_SESSION_PREFIX)
         || key?.startsWith(READ_INTERFACE_SESSION_PREFIX)
         || key?.startsWith(CHANNEL_PREDICTION_SESSION_PREFIX)
         || key?.startsWith(THEME_FROM_SCRATCH_SESSION_PREFIX)

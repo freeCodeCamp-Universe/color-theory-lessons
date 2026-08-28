@@ -2,7 +2,9 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   ACCESSIBILITY_RESCUE_SESSION_PREFIX,
   CHANNEL_PREDICTION_SESSION_PREFIX,
-  clearMilestoneSessions,
+  clearProgressSessions,
+  LEGACY_STEP_STORAGE_PREFIX,
+  LESSON_SESSION_PREFIX,
   DARK_MODE_STRESS_SESSION_PREFIX,
   loadState,
   MILESTONE_SESSION_PREFIX,
@@ -209,8 +211,8 @@ describe('round-trip', () => {
   });
 });
 
-describe('clearMilestoneSessions', () => {
-  it('removes milestone player and challenge sessions', () => {
+describe('clearProgressSessions', () => {
+  it('removes lesson, milestone player, and challenge sessions', () => {
     sessionStorage.setItem(`${MILESTONE_SESSION_PREFIX}milestone-1`, 'milestone state');
     sessionStorage.setItem(`${READ_INTERFACE_SESSION_PREFIX}milestone-1:1`, 'challenge state');
     sessionStorage.setItem(`${CHANNEL_PREDICTION_SESSION_PREFIX}milestone-2:1`, 'challenge state');
@@ -219,10 +221,11 @@ describe('clearMilestoneSessions', () => {
     sessionStorage.setItem(`${ACCESSIBILITY_RESCUE_SESSION_PREFIX}milestone-5:1`, 'challenge state');
     sessionStorage.setItem(`${SEMANTIC_AUDIT_SESSION_PREFIX}milestone-6:1`, 'challenge state');
     sessionStorage.setItem(`${DARK_MODE_STRESS_SESSION_PREFIX}milestone-6:1`, 'challenge state');
-    sessionStorage.setItem('color-theory-course-lesson-session:u1-l1', 'lesson state');
+    sessionStorage.setItem(`${LESSON_SESSION_PREFIX}u1-l1`, 'lesson state');
+    sessionStorage.setItem(`${LEGACY_STEP_STORAGE_PREFIX}u1-l2`, 'legacy lesson state');
     sessionStorage.setItem('unrelated-key', 'unrelated state');
 
-    clearMilestoneSessions();
+    clearProgressSessions();
 
     expect(sessionStorage.getItem(`${MILESTONE_SESSION_PREFIX}milestone-1`)).toBeNull();
     expect(sessionStorage.getItem(`${READ_INTERFACE_SESSION_PREFIX}milestone-1:1`)).toBeNull();
@@ -232,7 +235,8 @@ describe('clearMilestoneSessions', () => {
     expect(sessionStorage.getItem(`${ACCESSIBILITY_RESCUE_SESSION_PREFIX}milestone-5:1`)).toBeNull();
     expect(sessionStorage.getItem(`${SEMANTIC_AUDIT_SESSION_PREFIX}milestone-6:1`)).toBeNull();
     expect(sessionStorage.getItem(`${DARK_MODE_STRESS_SESSION_PREFIX}milestone-6:1`)).toBeNull();
-    expect(sessionStorage.getItem('color-theory-course-lesson-session:u1-l1')).toBe('lesson state');
+    expect(sessionStorage.getItem(`${LESSON_SESSION_PREFIX}u1-l1`)).toBeNull();
+    expect(sessionStorage.getItem(`${LEGACY_STEP_STORAGE_PREFIX}u1-l2`)).toBeNull();
     expect(sessionStorage.getItem('unrelated-key')).toBe('unrelated state');
   });
 
@@ -242,6 +246,6 @@ describe('clearMilestoneSessions', () => {
       throw new Error('SecurityError');
     });
 
-    expect(() => clearMilestoneSessions()).not.toThrow();
+    expect(() => clearProgressSessions()).not.toThrow();
   });
 });

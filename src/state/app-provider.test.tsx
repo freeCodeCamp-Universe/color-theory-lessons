@@ -6,6 +6,8 @@ import {
   ACCESSIBILITY_RESCUE_SESSION_PREFIX,
   CHANNEL_PREDICTION_SESSION_PREFIX,
   DARK_MODE_STRESS_SESSION_PREFIX,
+  LEGACY_STEP_STORAGE_PREFIX,
+  LESSON_SESSION_PREFIX,
   MILESTONE_SESSION_PREFIX,
   READ_INTERFACE_SESSION_PREFIX,
   SEMANTIC_AUDIT_SESSION_PREFIX,
@@ -38,7 +40,7 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe('AppProvider', () => {
-  it('clears milestone sessions when progress is reset', () => {
+  it('clears lesson and milestone sessions when progress is reset', () => {
     const milestoneSessionKeys = [
       `${MILESTONE_SESSION_PREFIX}milestone-1`,
       `${READ_INTERFACE_SESSION_PREFIX}milestone-1:1`,
@@ -50,7 +52,12 @@ describe('AppProvider', () => {
       `${DARK_MODE_STRESS_SESSION_PREFIX}milestone-6:1`,
     ];
     milestoneSessionKeys.forEach((key) => sessionStorage.setItem(key, 'session state'));
-    sessionStorage.setItem('color-theory-course-lesson-session:u1-l1', 'lesson state');
+    const lessonSessionKeys = [
+      `${LESSON_SESSION_PREFIX}u1-l1`,
+      `${LEGACY_STEP_STORAGE_PREFIX}u1-l2`,
+    ];
+    lessonSessionKeys.forEach((key) => sessionStorage.setItem(key, 'lesson state'));
+    sessionStorage.setItem('unrelated-key', 'unrelated state');
 
     render(
       <AppProvider>
@@ -60,7 +67,8 @@ describe('AppProvider', () => {
     fireEvent.click(screen.getByRole('button', { name: 'reset test progress' }));
 
     milestoneSessionKeys.forEach((key) => expect(sessionStorage.getItem(key)).toBeNull());
-    expect(sessionStorage.getItem('color-theory-course-lesson-session:u1-l1')).toBe('lesson state');
+    lessonSessionKeys.forEach((key) => expect(sessionStorage.getItem(key)).toBeNull());
+    expect(sessionStorage.getItem('unrelated-key')).toBe('unrelated state');
   });
 
   it('reaches the reducer when milestone-session key enumeration throws', () => {
