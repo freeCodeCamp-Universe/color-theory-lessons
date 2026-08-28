@@ -6,6 +6,8 @@ import { prefetchToolByInteractionType } from '../components/tools/tool-prefetch
 import { units } from '../data/units.ts';
 import { useAppState } from '../state/app-context.tsx';
 import { isDevelopmentMode, isLessonUnlocked } from '../utils/progression.ts';
+import { LESSON_TITLES } from '../lessons/lesson-titles.ts';
+import { DocumentTitle } from '../components/accessibility/DocumentTitle.tsx';
 
 const LessonPlayer = lazy(() => import('../components/lesson/LessonPlayer.tsx').then((m) => ({ default: m.LessonPlayer })));
 
@@ -80,15 +82,19 @@ export function LessonPage() {
 
   if (isLoading) {
     return (
-      <p style={{ color: 'var(--muted)', fontSize: '1rem' }}>
-        loading lesson...
-      </p>
+      <>
+        <DocumentTitle page={LESSON_TITLES[lessonId ?? ''] ?? 'Lesson not found'} />
+        <p style={{ color: 'var(--muted)', fontSize: '1rem' }}>
+          loading lesson...
+        </p>
+      </>
     );
   }
 
   if (!lesson) {
     return (
       <div>
+        <DocumentTitle page="Lesson not found" />
         <h1>lesson not found</h1>
         <p style={{ color: 'var(--muted)', fontSize: '1rem' }}>
           lesson not found: {lessonId}
@@ -108,6 +114,7 @@ export function LessonPage() {
         </p>
       }
     >
+      <DocumentTitle page={lesson.title} />
       <LessonPlayer key={lesson.id} lesson={lesson} />
     </Suspense>
   );

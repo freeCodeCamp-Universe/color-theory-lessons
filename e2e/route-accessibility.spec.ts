@@ -1,5 +1,33 @@
 import { expect, test } from '@playwright/test';
 
+type WindowWithTitleHistory = Window & {
+  observedTitles: string[];
+  titleObserver: MutationObserver;
+};
+
+async function startTitleHistory(page: import('@playwright/test').Page) {
+  await page.evaluate(() => {
+    const observedWindow = window as unknown as WindowWithTitleHistory;
+    observedWindow.observedTitles = [document.title];
+    observedWindow.titleObserver = new MutationObserver(() => {
+      observedWindow.observedTitles.push(document.title);
+    });
+    observedWindow.titleObserver.observe(document.head, {
+      childList: true,
+      characterData: true,
+      subtree: true,
+    });
+  });
+}
+
+async function titleHistory(page: import('@playwright/test').Page) {
+  return page.evaluate(() => {
+    const observedWindow = window as unknown as WindowWithTitleHistory;
+    observedWindow.titleObserver.disconnect();
+    return observedWindow.observedTitles;
+  });
+}
+
 test('skip navigation is first and targets programmatically focusable main content', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle('Color Theory Course');
@@ -45,12 +73,20 @@ test('lesson loading waits for the final heading before moving focus', async ({ 
 });
 
 test('locked and invalid routes expose only their final page context', async ({ page }) => {
-  await page.goto('/lesson/u1-l2');
+  await page.goto('/');
+  await startTitleHistory(page);
+  await page.evaluate(() => {
+    window.history.pushState({}, '', '/lesson/u1-l2');
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  });
 
   await expect(page).toHaveURL('/');
   await expect(page).toHaveTitle('Color Theory Course');
   await expect(page.getByRole('heading', { name: /Color Theory.*for Developers/ })).toBeFocused();
   await expect(page.getByRole('status')).toHaveText('This lesson is not unlocked yet.');
+  expect(await titleHistory(page)).not.toContain(
+    'Hue, Saturation, and Lightness | Color Theory Course',
+  );
 
   await page.evaluate(() => {
     window.history.pushState({}, '', '/not-a-route');
@@ -58,4 +94,20 @@ test('locked and invalid routes expose only their final page context', async ({ 
   });
   await expect(page).toHaveTitle('Page not found | Color Theory Course');
   await expect(page.getByRole('heading', { name: 'page not found' })).toBeFocused();
+});
+
+test('redirect sources never publish transient document titles', async ({ page }) => {
+  await page.goto('/');
+  await startTitleHistory(page);
+
+  await page.evaluate(() => {
+    window.history.pushState({}, '', '/capstone');
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  });
+
+  await expect(page).toHaveURL('/');
+  await expect(page).toHaveTitle('Color Theory Course');
+  const titles = await titleHistory(page);
+  expect(titles).not.toContain('Page not found | Color Theory Course');
+  expect(titles).not.toContain('Color System Capstone | Color Theory Course');
 });

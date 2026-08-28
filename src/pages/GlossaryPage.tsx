@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { glossary } from '../data/glossary.ts';
 import { useAppState } from '../state/app-context.tsx';
 import styles from './GlossaryPage.module.css';
+import { DocumentTitle } from '../components/accessibility/DocumentTitle.tsx';
 
 export function GlossaryPage() {
   const { completedLessons } = useAppState();
@@ -24,6 +25,7 @@ export function GlossaryPage() {
 
   return (
     <div className={styles.container}>
+      <DocumentTitle page="Glossary" />
       <h1 className={styles.heading}>glossary</h1>
       <p className={styles.subtitle}>
         Terms from completed lessons, in alphabetical order.

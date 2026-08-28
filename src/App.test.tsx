@@ -3,11 +3,42 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { App } from './App.tsx';
 
-vi.mock('./pages/LessonPage.tsx', () => ({ LessonPage: () => <h1>lesson route</h1> }));
-vi.mock('./pages/MilestonePage.tsx', () => ({ MilestonePage: () => <h1>milestone route</h1> }));
-vi.mock('./pages/PaletteBuilderPage.tsx', () => ({ PaletteBuilderPage: () => <h1>palette builder route</h1> }));
-vi.mock('./pages/GlossaryPage.tsx', () => ({ GlossaryPage: () => <h1>glossary route</h1> }));
-vi.mock('./pages/ReviewPage.tsx', () => ({ ReviewPage: () => <h1>review route</h1> }));
+vi.mock('./pages/LessonPage.tsx', () => ({
+  LessonPage: () => {
+    document.title = window.location.pathname.endsWith('/u1-l1')
+      ? 'What Color Does in Interface Design | Color Theory Course'
+      : 'Lesson not found | Color Theory Course';
+    return <h1>lesson route</h1>;
+  },
+}));
+vi.mock('./pages/MilestonePage.tsx', () => ({
+  MilestonePage: () => {
+    document.title = window.location.pathname.endsWith('/milestone-6')
+      ? 'Color System Capstone | Color Theory Course'
+      : window.location.pathname.endsWith('/milestone-1')
+        ? 'Read the Interface | Color Theory Course'
+        : 'Milestone not found | Color Theory Course';
+    return <h1>milestone route</h1>;
+  },
+}));
+vi.mock('./pages/PaletteBuilderPage.tsx', () => ({
+  PaletteBuilderPage: () => {
+    document.title = 'Palette Builder | Color Theory Course';
+    return <h1>palette builder route</h1>;
+  },
+}));
+vi.mock('./pages/GlossaryPage.tsx', () => ({
+  GlossaryPage: () => {
+    document.title = 'Glossary | Color Theory Course';
+    return <h1>glossary route</h1>;
+  },
+}));
+vi.mock('./pages/ReviewPage.tsx', () => ({
+  ReviewPage: () => {
+    document.title = 'Review | Color Theory Course';
+    return <h1>review route</h1>;
+  },
+}));
 
 afterEach(() => {
   cleanup();

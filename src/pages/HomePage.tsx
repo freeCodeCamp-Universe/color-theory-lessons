@@ -10,6 +10,7 @@ import {
   isUnitUnlocked,
 } from '../utils/progression.ts';
 import styles from './HomePage.module.css';
+import { DocumentTitle } from '../components/accessibility/DocumentTitle.tsx';
 
 export function HomePage() {
   const { completedLessons, completedMilestones } = useAppState();
@@ -47,6 +48,7 @@ export function HomePage() {
 
   return (
     <>
+      <DocumentTitle />
       <section className={styles.hero}>
         <span className={styles.prompt}>~/color-theory-course $ learn --interactive</span>
         <h1 className={styles.title}>

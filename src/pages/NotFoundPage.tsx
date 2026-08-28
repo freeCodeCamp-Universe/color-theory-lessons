@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { DocumentTitle } from '../components/accessibility/DocumentTitle.tsx';
 
 export function NotFoundPage() {
   return (
@@ -12,6 +13,7 @@ export function NotFoundPage() {
       textAlign: 'center',
       padding: '2rem',
     }}>
+      <DocumentTitle page="Page not found" />
       <span style={{
         fontSize: '1rem',
         textTransform: 'uppercase',
