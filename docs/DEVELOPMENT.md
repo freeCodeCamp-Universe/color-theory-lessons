@@ -15,7 +15,8 @@ This document outlines the technical standards, tech stack, and operational work
 
 ### Local Development
 
-Use Node.js 22, which matches the version used by continuous integration.
+Use Node.js 22.12 or a later 22.x release. Continuous integration also runs
+Node.js 22.x.
 To start the development server, run:
 
 ```bash
