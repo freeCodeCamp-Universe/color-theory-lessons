@@ -8,7 +8,8 @@ working in those areas.
 
 ## Set up the project
 
-Use Node.js 22, which matches the version used by continuous integration.
+Use Node.js 22.13 or a later 22.x release. Continuous integration also runs
+Node.js 22.x.
 
 1. Fork the repository and clone your fork.
 2. Add the main repository as the `upstream` remote:
