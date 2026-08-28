@@ -89,6 +89,7 @@ export function LessonPage() {
   if (!lesson) {
     return (
       <div>
+        <h1>lesson not found</h1>
         <p style={{ color: 'var(--muted)', fontSize: '1rem' }}>
           lesson not found: {lessonId}
         </p>

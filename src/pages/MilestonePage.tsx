@@ -12,6 +12,7 @@ export function MilestonePage() {
   if (!milestone) {
     return (
       <div>
+        <h1>milestone not found</h1>
         <p style={{ color: 'var(--muted)', fontSize: '1rem' }}>
           milestone not found: {milestoneId}
         </p>

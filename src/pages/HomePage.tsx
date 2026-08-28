@@ -37,6 +37,13 @@ export function HomePage() {
   }
 
   const nextLearningPath = getNextLearningPath(progress);
+  const nextLearningName = (() => {
+    const lessonMatch = nextLearningPath.match(/^\/lesson\/(.+)$/);
+    if (lessonMatch) return LESSON_TITLES[lessonMatch[1]] ?? lessonMatch[1];
+    const milestoneMatch = nextLearningPath.match(/^\/milestone\/(.+)$/);
+    if (milestoneMatch) return getMilestoneById(milestoneMatch[1])?.title ?? milestoneMatch[1];
+    return 'course dashboard';
+  })();
 
   return (
     <>
@@ -51,7 +58,11 @@ export function HomePage() {
           Six units of hands-on lessons covering color perception, digital color
           models, accessibility, and design systems — built for people who write code.
         </p>
-        <Link to={nextLearningPath} className={styles.startBtn}>
+        <Link
+          to={nextLearningPath}
+          className={styles.startBtn}
+          aria-label={`${completedLessons.length === 0 ? 'Start' : 'Continue'}: ${nextLearningName}`}
+        >
           {completedLessons.length === 0 ? 'start learning' : 'continue →'}
         </Link>
       </section>
@@ -120,6 +131,7 @@ export function HomePage() {
                       <Link
                         to={`/lesson/${firstLesson}`}
                         className={styles.unitStart}
+                        aria-label={`Start: ${LESSON_TITLES[firstLesson] ?? firstLesson}`}
                       >
                         start →
                       </Link>
@@ -147,10 +159,18 @@ export function HomePage() {
                           <span className={styles.lessonNum}>{String(li + 1).padStart(2, '0')}</span>
                           <span className={styles.lessonName}>{LESSON_TITLES[lessonId] ?? lessonId}</span>
                           {isDone && (
-                            <Link to={`/lesson/${lessonId}`} className={styles.lessonRedo}>redo →</Link>
+                            <Link
+                              to={`/lesson/${lessonId}`}
+                              className={styles.lessonRedo}
+                              aria-label={`Redo: ${LESSON_TITLES[lessonId] ?? lessonId}`}
+                            >redo →</Link>
                           )}
                           {isNext && (
-                            <Link to={`/lesson/${lessonId}`} className={styles.lessonContinue}>continue →</Link>
+                            <Link
+                              to={`/lesson/${lessonId}`}
+                              className={styles.lessonContinue}
+                              aria-label={`Continue: ${LESSON_TITLES[lessonId] ?? lessonId}`}
+                            >continue →</Link>
                           )}
                           {isLocked && (
                             <span className={styles.lessonLockedLabel}>locked</span>
@@ -173,10 +193,18 @@ export function HomePage() {
                           <span className={`${styles.lessonNum} ${styles.milestoneIcon}`}>★</span>
                           <span className={styles.lessonName}>{milestone.title}</span>
                           {milestoneDone && (
-                            <Link to={`/milestone/${unit.milestoneId}`} className={styles.lessonRedo}>redo →</Link>
+                            <Link
+                              to={`/milestone/${unit.milestoneId}`}
+                              className={styles.lessonRedo}
+                              aria-label={`Redo: ${milestone.title}`}
+                            >redo →</Link>
                           )}
                           {milestoneNext && (
-                            <Link to={`/milestone/${unit.milestoneId}`} className={styles.lessonContinue}>start →</Link>
+                            <Link
+                              to={`/milestone/${unit.milestoneId}`}
+                              className={styles.lessonContinue}
+                              aria-label={`Start: ${milestone.title}`}
+                            >start →</Link>
                           )}
                           {milestoneLocked && (
                             <span className={styles.lessonLockedLabel}>locked</span>
