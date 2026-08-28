@@ -18,7 +18,7 @@ async function expectVisibleTargetsMeetMinimum(page: Page, scopeName: string) {
     '[role="button"]:not([aria-disabled="true"]):not([data-target-size-exception="essential"])',
     '[role="tab"]:not([aria-disabled="true"]):not([data-target-size-exception="essential"])',
     '[role="slider"]:not([aria-disabled="true"]):not([data-target-size-exception="essential"])',
-    'a[href]',
+    'a[href]:not([data-target-size-exception="inline"])',
   ].join(', '));
 
   for (let index = 0; index < await targets.count(); index += 1) {
@@ -142,8 +142,8 @@ test('Format Reveal preserves essential authored target boundaries', async ({ pa
   await page.goto('/lesson/u3-l1');
   await advanceToLastLessonStep(page, 'format explorer');
 
-  for (const name of ['Nav text', 'Primary action button', 'Card border', 'Success accent']) {
-    const target = page.getByRole('button', { name, exact: true });
+  for (const name of ['Nav text', 'Primary action button', 'Button text', 'Card border', 'Success accent']) {
+    const target = page.locator(`[aria-label="${name}"][data-target-size-exception="essential"]`);
     await expect(target).toHaveAttribute('data-target-size-exception', 'essential');
     const box = await target.boundingBox();
     expect(box, `${name} should have a rendered target`).not.toBeNull();
@@ -152,6 +152,20 @@ test('Format Reveal preserves essential authored target boundaries', async ({ pa
       `${name} should retain its authored visual boundary`,
     ).toBe(true);
   }
+});
+
+test('Color-Only Detector preserves its inline link target', async ({ page }) => {
+  await page.goto('/lesson/u4-l4');
+  await advanceToLastLessonStep(page, 'color-only detector');
+
+  const target = page.getByRole('link', { name: 'privacy policy', exact: true });
+  await expect(target).toHaveAttribute('data-target-size-exception', 'inline');
+  const box = await target.boundingBox();
+  expect(box, 'privacy policy should have a rendered target').not.toBeNull();
+  expect(
+    box!.width < MINIMUM_TARGET_SIZE || box!.height < MINIMUM_TARGET_SIZE,
+    'privacy policy should retain its inline text boundary',
+  ).toBe(true);
 });
 
 test('invalid-route recovery links meet the AAA minimum', async ({ page }) => {

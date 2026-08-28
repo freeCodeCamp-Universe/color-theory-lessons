@@ -106,7 +106,12 @@ const EXAMPLES: Example[] = [
     visual: (
       <p style={{ fontSize: '0.8rem', lineHeight: 1.5, margin: 0 }}>
         Read our{' '}
-        <a href="#" onClick={(e) => e.preventDefault()} style={{ color: '#2563eb', textDecoration: 'underline' }}>
+        <a
+          href="#"
+          onClick={(e) => e.preventDefault()}
+          style={{ color: '#2563eb', textDecoration: 'underline' }}
+          data-target-size-exception="inline"
+        >
           privacy policy
         </a>{' '}
         for details.
