@@ -76,7 +76,7 @@ Each row lists the rendered visual items, followed by their classifications in t
 | `brand-pressure` | Fixed brand and editable supporting-role swatches; generated interface preview; contrast and pressure state; duplicate swatches and meter fill | Informative; informative; informative; decorative | Describe brand and supporting colors, values, preview changes, contrast, pressure, validation, and completion | #104 |
 | `dark-translator` | Light and dark previews; role values and controls; contrast state; decorative chips | Informative; informative; informative; decorative | Summarize each theme, assigned values, surface hierarchy, and contrast; announce changes and results | #104 |
 | `chart-tuner` | Grouped bar chart; series colors and pattern fills; normal/simulated state; optional data table; repeated bars and swatch chips | Informative; informative; informative; informative; decorative | Supply series, month, value, color, and pattern data; describe the active simulation; hide repeated chart primitives after the data-table equivalent | #104 |
-| `color-space-lab` | sRGB and Display P3 comparison swatches and values; CSS, SVG, and canvas-style examples; selected sample and gamut result; repeated swatches and drawing primitives | Informative; informative; informative; decorative | Describe each comparison, example, value, selected sample, and gamut result; hide redundant swatches and drawing primitives | #104 |
+| `color-space-lab` | sRGB and Display P3 comparison swatches and values; CSS, SVG, and canvas-style examples; selected sample and submitted gamut result; repeated swatches and drawing primitives | Assessment; informative; informative; decorative | Describe each comparison, example, value, and selected sample without revealing whether it needs gamut mapping; expose the result after submission and hide redundant swatches and drawing primitives | #104 |
 | `system-stress` | System preview across scenarios; finding list and validation state; decorative preview blocks | Assessment; informative; decorative | Describe current scenario and observable preview state without naming findings early; announce findings and completion | #104 |
 
 ## Milestone challenge inventory
@@ -99,7 +99,7 @@ Each row lists the rendered visual items, followed by their classifications in t
 | StepPanelRenderer | Seven authored lesson previews | Informative or assessment | Render `panel.accessibility`; keep preview-specific remediation with the owning unit issue | #105 |
 | ToolRenderer | Loading state and the active tool | Informative | Keep the loading message named; pass stage and completion state to the lesson shell without duplicate announcements | #105 |
 | ExerciseStage | Stage progress track and position; current instruction; submitted result, retry, and completion state; individual progress marks and result glyphs | Informative; informative; informative; decorative | Expose the stage title, position, instruction, and submitted state as text; announce result, retry, stage, and completion changes once; hide repeated marks and glyphs | #105 for lesson tools; #110 for milestone challenges |
-| Lesson quiz | Named swatches and visible values; selected and submitted choice state | Assessment; informative | Render each `accessibleDescription`, keep the visible label and value, and announce result once | #105 |
+| Lesson quiz | Named swatches and authored values; selected and submitted choice state | Assessment; informative | Render each `accessibleDescription` with the authored value, keep the visible label, and announce result once | #105 |
 | MilestonePlayer | Part dots, score, pass state, and transitions | Informative; decorative | Expose part position and result as text; hide individual dots; announce part, score, pass, and completion changes | #110 |
 | Milestone quiz | Target swatch and value; choice result | Assessment; informative | Render `swatchDescription` without giving the answer; hide the color block after its text equivalent | #110 |
 | InterfaceMockup | Navigation, hero, cards, footer, and their color hierarchy | Assessment | Move the source-comment evidence into rendered assistive text without naming classifications before submission | #110 |
@@ -110,6 +110,7 @@ Each row lists the rendered visual items, followed by their classifications in t
 | Visual items | Classification | Required equivalent or treatment | Owner |
 |---|---|---|---|
 | Picker tabs, hue ring, and current picker marker | Informative | Expose selected tab, hue, color name, value, and native control state; announce committed changes | #111 |
+| Named-color swatch picker | Informative | Expose each swatch's color name and value, selected state, and committed change | #111 |
 | Generated harmony swatches and labels | Informative | Name harmony role, color name, and value; announce additions without reading the full palette | #111 |
 | Tonal suggestion swatches | Informative | Name variant type, source color, result name, and value; announce accepted suggestions | #111 |
 | Editable palette grid and color controls | Informative | Expose palette position, name, value, edit state, and removal result | #111 |
