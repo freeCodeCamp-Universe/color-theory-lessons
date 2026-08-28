@@ -13,6 +13,10 @@ import type { ActiveExerciseStage } from '../tools/exercise-stage.ts';
 import { ChallengeHints } from './ChallengeHints.tsx';
 import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import StepPanelRenderer from './StepPanelRenderer.tsx';
+import {
+  LEGACY_STEP_STORAGE_PREFIX,
+  LESSON_SESSION_PREFIX,
+} from '../../state/persistence.ts';
 import styles from './LessonPlayer.module.css';
 
 interface LessonPlayerProps {
@@ -32,9 +36,6 @@ interface LessonSessionState {
   submitted: boolean;
   quizSignature: string | null;
 }
-
-const LESSON_SESSION_PREFIX = 'color-theory-course-lesson-session:';
-const LEGACY_STEP_STORAGE_PREFIX = 'color-theory-course-step:';
 
 function initialLessonSession(): LessonSessionState {
   return {
