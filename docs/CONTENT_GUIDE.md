@@ -96,6 +96,11 @@ Each part must be one of:
 - `kind: 'quiz'`: Uses `questions` with multiple-choice answers.
 - `kind: 'challenge'`: Uses `challengeType`, `briefing`, `successMessage`, and `pointValue`.
 
+After defining the milestone, add it to `milestoneRegistry` in
+`src/data/milestones.ts`. Set the parent unit's `milestoneId` to the same ID in
+`src/data/units.ts`. The dashboard reads the unit's `milestoneId`, and the
+milestone route resolves that ID through `milestoneRegistry`.
+
 ### Milestone challenge types (important)
 
 Milestone challenge parts are type-safe and must use a supported `challengeType` from `src/types/milestone.ts`.
@@ -109,11 +114,13 @@ Current supported values:
 - `semantic-audit`
 - `dark-mode-stress`
 
-When adding a new challenge type, update all four:
+When adding a new challenge type, complete all six steps:
 1. `MILESTONE_CHALLENGE_TYPES` in `src/types/milestone.ts`. The `MilestoneChallengeType` union is derived from this registry.
-2. Switch mapping in `src/components/milestone/ChallengeRenderer.tsx`
-3. Milestone challenge inventory in `docs/ACCESSIBLE_VISUALS.md`
-4. Milestone content in `src/data/milestones.ts`
+2. Create the challenge component and its focused test in `src/components/milestone/challenges/`.
+3. Import the component and add its switch mapping in `src/components/milestone/ChallengeRenderer.tsx`.
+4. Add the challenge to the milestone challenge inventory in `docs/ACCESSIBLE_VISUALS.md`.
+5. Add its learner-visible behavior and focused test to `docs/TEST_COVERAGE.md`.
+6. Use the challenge type in milestone content in `src/data/milestones.ts`.
 
 If a challenge type is not mapped in `ChallengeRenderer`, it now renders an unavailable state and cannot be completed.
 
