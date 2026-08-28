@@ -200,6 +200,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                 tabIndex={0}
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.stopPropagation(), handleSelect('nav-text'))}
                 aria-label="Nav text"
+                data-target-size-exception="essential"
               >
                 site.ui
               </span>
@@ -221,12 +222,14 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                 style={{ backgroundColor: '#2563eb' }}
                 onClick={(e) => { e.stopPropagation(); handleSelect('cta'); }}
                 aria-label="Primary action button"
+                data-target-size-exception="essential"
               >
                 <span
                   className={`${selectedId === 'cta-text' ? styles.selected : ''} ${revealed.has('cta-text') ? styles.visited : ''}`}
                   style={{ color: '#ffffff' }}
                   onClick={(e) => { e.stopPropagation(); handleSelect('cta-text'); }}
                   aria-label="Button text"
+                  data-target-size-exception="essential"
                 >
                   Try it free →
                 </span>
@@ -250,6 +253,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                 tabIndex={0}
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.stopPropagation(), handleSelect('card-border'))}
                 aria-label="Card border"
+                data-target-size-exception="essential"
               >
                 border →
               </div>
@@ -261,6 +265,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                 tabIndex={0}
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.stopPropagation(), handleSelect('accent'))}
                 aria-label="Success accent"
+                data-target-size-exception="essential"
               >
                 ✓ success
               </span>

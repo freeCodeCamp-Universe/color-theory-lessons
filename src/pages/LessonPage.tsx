@@ -99,7 +99,7 @@ export function LessonPage() {
         <p style={{ color: 'var(--muted)', fontSize: '1rem' }}>
           lesson not found: {lessonId}
         </p>
-        <Link to="/" style={{ marginTop: '1rem', display: 'inline-block' }}>
+        <Link to="/" style={{ marginTop: '1rem', display: 'inline-flex', alignItems: 'center', minHeight: 44 }}>
           ← back to home
         </Link>
       </div>

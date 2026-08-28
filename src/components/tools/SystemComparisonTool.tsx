@@ -48,7 +48,15 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
 
   const clickableStyle = (id: string): React.CSSProperties => ({
     position: 'relative',
-    cursor: 'default',
+    minWidth: 44,
+    minHeight: 44,
+    border: 0,
+    padding: 0,
+    background: 'transparent',
+    color: 'inherit',
+    font: 'inherit',
+    textAlign: 'left',
+    cursor: interactive && stageController.result !== 'passed' ? 'pointer' : 'not-allowed',
     outline: found.has(id)
       ? `2px solid ${showResults ? 'var(--accent-success)' : 'var(--accent-warning)'}`
       : 'none',
@@ -79,35 +87,39 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
             <div style={{ background: '#f9fafb', border: '1px solid #e5e7eb', margin: '0.5rem', padding: '0.5rem', borderRadius: 4 }}>
               <div style={{ color: '#111827', fontWeight: 600, marginBottom: '0.25rem' }}>Account Overview</div>
               {/* Inconsistency 4: secondary text too light */}
-              <div
+              <button
+                type="button"
                 style={clickableStyle('text-weight')}
                 onClick={() => handleClick('text-weight')}
+                disabled={!interactive || stageController.result === 'passed'}
               >
                 <div style={{ color: '#9ca3af', fontSize: '0.75rem' }}>Last updated: today</div>
-              </div>
+              </button>
               <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.4rem', alignItems: 'center' }}>
                 {/* Inconsistency 1: different blue than header */}
-                <div style={clickableStyle('btn-color')} onClick={() => handleClick('btn-color')}>
+                <button type="button" style={clickableStyle('btn-color')} onClick={() => handleClick('btn-color')} disabled={!interactive || stageController.result === 'passed'}>
                   <div style={{ background: '#3b82f6', color: '#fff', padding: '0.2rem 0.5rem', borderRadius: 4, fontSize: '0.75rem', display: 'inline-block' }}>
                     View
                   </div>
-                </div>
+                </button>
                 {/* Inconsistency 2: teal success badge */}
-                <div style={clickableStyle('success-color')} onClick={() => handleClick('success-color')}>
+                <button type="button" style={clickableStyle('success-color')} onClick={() => handleClick('success-color')} disabled={!interactive || stageController.result === 'passed'}>
                   <div style={{ background: '#14b8a6', color: '#fff', padding: '0.2rem 0.4rem', borderRadius: 99, fontSize: '0.7rem', display: 'inline-block' }}>
                     Active
                   </div>
-                </div>
+                </button>
               </div>
             </div>
             {/* Card 2 — Inconsistency 3: white instead of off-white */}
-            <div
-              style={{ ...clickableStyle('surface-color'), background: '#ffffff', border: '1px solid #e5e7eb', margin: '0 0.5rem 0.5rem', padding: '0.5rem', borderRadius: 4 }}
+            <button
+              type="button"
+              style={{ ...clickableStyle('surface-color'), display: 'block', width: 'calc(100% - 1rem)', background: '#ffffff', border: '1px solid #e5e7eb', margin: '0 0.5rem 0.5rem', padding: '0.5rem', borderRadius: 4 }}
               onClick={() => handleClick('surface-color')}
+              disabled={!interactive || stageController.result === 'passed'}
             >
               <div style={{ color: '#111827', fontWeight: 600, marginBottom: '0.25rem' }}>Settings</div>
               <div style={{ color: '#6b7280', fontSize: '0.75rem' }}>Manage your preferences</div>
-            </div>
+            </button>
           </div>
           {interactive && (
             <p style={{ fontSize: '0.75rem', color: showResults && found.size === INCONSISTENCIES.length ? 'var(--accent-success)' : 'var(--muted)', marginTop: '0.3rem' }}>

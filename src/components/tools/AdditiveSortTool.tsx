@@ -60,7 +60,8 @@ function MixingDiagram({ mode }: { mode: Model }) {
         flexDirection: 'column',
         alignItems: 'center',
         gap: '0.75rem',
-        flex: 1,
+        flex: '1 1 192px',
+        minWidth: 0,
       }}
     >
       <span

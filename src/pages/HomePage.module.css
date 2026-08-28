@@ -119,6 +119,9 @@
 }
 
 .unitStart {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
   font-size: 1rem;
   color: var(--accent-link);
   text-decoration: none;
@@ -190,6 +193,9 @@
 }
 
 .lessonContinue {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
   font-size: 1rem;
   color: var(--accent-warning);
   text-decoration: none;
@@ -201,6 +207,9 @@
 }
 
 .lessonRedo {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
   font-size: 1rem;
   color: var(--muted);
   text-decoration: none;

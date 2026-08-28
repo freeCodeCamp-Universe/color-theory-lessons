@@ -40,6 +40,9 @@ export function NotFoundPage() {
       <Link
         to="/"
         style={{
+          display: 'flex',
+          alignItems: 'center',
+          minHeight: '44px',
           marginTop: '0.5rem',
           fontSize: '1rem',
           color: 'var(--accent-link)',

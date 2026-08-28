@@ -173,13 +173,24 @@
 
 .slider {
   flex: 1;
-  height: 6px;
+  height: 44px;
   appearance: none;
   -webkit-appearance: none;
-  background: var(--border-strong);
-  border-radius: 3px;
+  background-color: transparent;
   outline: none;
   cursor: pointer;
+}
+
+.slider::-webkit-slider-runnable-track {
+  height: 6px;
+  background: var(--border-strong);
+  border-radius: 3px;
+}
+
+.slider::-moz-range-track {
+  height: 6px;
+  background: var(--border-strong);
+  border-radius: 3px;
 }
 
 .slider:focus-visible {

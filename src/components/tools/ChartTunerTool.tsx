@@ -100,9 +100,9 @@ function ChartBars({ colors, patterns, simulated }: { colors: string[]; patterns
   const displayColors = simulated ? colors.map(simulateDeuteranopia) : colors;
   const maxVal = 100;
   return (
-    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end', height: 100, width: '100%', maxWidth: '100%', overflowX: 'auto' }}>
+    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end', height: 110, width: '100%', maxWidth: '100%', overflowX: 'auto' }}>
       {MONTHS.map((month, mi) => (
-        <div key={month} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+        <div key={month} style={{ flex: '0 0 44px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
           <div style={{ display: 'flex', gap: 1, alignItems: 'flex-end', height: 80 }}>
             {SERIES.map((name, si) => {
               const h = (CHART_DATA[mi][si] / maxVal) * 80;
@@ -245,7 +245,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({
           : 'Each series has a distinct pattern.'}
         completionFeedback="The data table identifies every chart value, color, and pattern."
       >
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.5rem' }}>
         <button
           onClick={() => setSimulated(false)}
           disabled={!interactive}
