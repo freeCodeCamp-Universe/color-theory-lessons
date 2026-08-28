@@ -13,6 +13,7 @@ async function expectVisibleTargetsMeetMinimum(page: Page, scopeName: string) {
   const targets = page.locator([
     'button:not([disabled])',
     'select:not([disabled])',
+    'textarea:not([disabled])',
     'input:not([disabled]):not([type="hidden"]):not([type="radio"]):not([type="checkbox"])',
     '[role="button"]:not([aria-disabled="true"])',
     '[role="tab"]:not([aria-disabled="true"])',
@@ -45,6 +46,42 @@ async function expectVisibleTargetsMeetMinimum(page: Page, scopeName: string) {
   }
 }
 
+async function advanceToLastLessonStep(page: Page) {
+  for (let step = 0; step < 10; step += 1) {
+    const next = page.getByRole('button', { name: 'next', exact: true });
+    if (!(await next.isVisible().catch(() => false))) return;
+    await next.click();
+  }
+}
+
+async function expectTargetsDoNotOverlap(page: Page, scopeName: string) {
+  const overlaps = await page.evaluate(() => {
+    const selector = 'button:not(:disabled),select:not(:disabled),textarea:not(:disabled),input:not(:disabled):not([type="hidden"]):not([type="radio"]):not([type="checkbox"]),[role="button"]:not([aria-disabled="true"]),[role="tab"]:not([aria-disabled="true"]),[role="slider"]:not([aria-disabled="true"]),a[href]';
+    const targets = [...document.querySelectorAll<HTMLElement>(selector)].filter((element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0 && getComputedStyle(element).visibility !== 'hidden';
+    });
+    const failures: string[] = [];
+    for (let first = 0; first < targets.length; first += 1) {
+      for (let second = first + 1; second < targets.length; second += 1) {
+        const a = targets[first];
+        const b = targets[second];
+        if (a.contains(b) || b.contains(a)) continue;
+        const aRect = a.getBoundingClientRect();
+        const bRect = b.getBoundingClientRect();
+        const width = Math.min(aRect.right, bRect.right) - Math.max(aRect.left, bRect.left);
+        const height = Math.min(aRect.bottom, bRect.bottom) - Math.max(aRect.top, bRect.top);
+        if (width > 0.5 && height > 0.5) {
+          const name = (element: HTMLElement) => element.getAttribute('aria-label') || element.innerText.trim();
+          failures.push(`${name(a)} overlaps ${name(b)}`);
+        }
+      }
+    }
+    return failures;
+  });
+  expect(overlaps, `${scopeName} targets`).toEqual([]);
+}
+
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.setItem('color-theory-course-state', JSON.stringify({
@@ -53,10 +90,13 @@ test.beforeEach(async ({ page }) => {
         completedLessons: [
           'u1-l1', 'u1-l2', 'u1-l3', 'u1-l4', 'u1-l5', 'u1-l6',
           'u2-l1', 'u2-l2', 'u2-l3', 'u2-l4', 'u2-l5',
+          'u3-l1', 'u3-l2', 'u3-l3', 'u3-l4', 'u3-l5', 'u3-l6',
+          'u4-l1', 'u4-l2', 'u4-l3', 'u4-l4',
+          'u5-l1', 'u5-l2', 'u5-l3', 'u5-l4', 'u5-l5', 'u5-l6',
         ],
         completedQuizzes: [],
         quizBestScores: {},
-        completedMilestones: ['milestone-1'],
+        completedMilestones: ['milestone-1', 'milestone-2', 'milestone-3', 'milestone-4', 'milestone-5'],
       },
       preferences: { theme: 'system', reducedMotion: false, colorBlindnessMode: null },
     }));
@@ -85,6 +125,35 @@ test('representative tool controls meet the AAA minimum', async ({ page }) => {
   await page.getByRole('button', { name: 'next', exact: true }).click();
   await page.getByRole('button', { name: 'next', exact: true }).click();
   await expectVisibleTargetsMeetMinimum(page, 'RGB mixer');
+});
+
+test('System Comparison targets meet the AAA minimum', async ({ page }) => {
+  await page.goto('/lesson/u6-l1');
+  await advanceToLastLessonStep(page);
+  await expectVisibleTargetsMeetMinimum(page, 'System Comparison');
+});
+
+test('invalid-route recovery links meet the AAA minimum', async ({ page }) => {
+  for (const route of ['/lesson/not-a-lesson', '/milestone/not-a-milestone']) {
+    await page.goto(route);
+    await expectMinimumTargetSize(page.getByRole('link', { name: 'back to home' }), route);
+  }
+});
+
+test('exercise routes reflow with text-spacing overrides', async ({ page }) => {
+  for (const lessonId of ['u1-l5', 'u3-l1', 'u4-l3', 'u4-l4', 'u5-l1', 'u5-l4', 'u5-l6', 'u6-l5']) {
+    await page.goto(`/lesson/${lessonId}`);
+    await advanceToLastLessonStep(page);
+    await page.addStyleTag({ content: `
+      * { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
+      p { margin-bottom: 2em !important; }
+    ` });
+    await expect.poll(
+      () => page.evaluate(() => document.documentElement.scrollWidth),
+      { message: `${lessonId} should not overflow horizontally` },
+    ).toBeLessThanOrEqual(320);
+    await expectTargetsDoNotOverlap(page, lessonId);
+  }
 });
 
 test('Palette Builder controls meet the AAA minimum in each picker mode', async ({ page }) => {

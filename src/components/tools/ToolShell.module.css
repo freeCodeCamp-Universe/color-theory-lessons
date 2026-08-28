@@ -19,6 +19,11 @@
   .twoColumnGrid {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  .shell :where(div:not([role='button']):not([role='tab']):not([role='slider']), fieldset, section, article) {
+    min-width: 0 !important;
+    max-width: 100%;
+  }
 }
 
 /*
