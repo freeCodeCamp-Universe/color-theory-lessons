@@ -30,8 +30,8 @@ describe('HomePage dashboard', () => {
     expect(unitOneDisclosure).toHaveAttribute('aria-controls', 'unit-1-lessons');
     expect(within(getUnit('Color Systems and Advanced Topics')).queryByRole('button'))
       .not.toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'start learning' })).toHaveAttribute('href', '/lesson/u1-l1');
-    expect(screen.getAllByRole('link', { name: 'continue →' })[0]).toHaveAttribute('href', '/lesson/u1-l1');
+    expect(screen.getByRole('link', { name: 'Start learning: What Color Does in Interface Design' })).toHaveAttribute('href', '/lesson/u1-l1');
+    expect(screen.getByRole('link', { name: 'Continue: What Color Does in Interface Design' })).toHaveAttribute('href', '/lesson/u1-l1');
     expect(within(getUnit('How Screens Make Color')).getByText('locked')).toBeInTheDocument();
     expect(within(getLessonRow('Hue, Saturation, and Lightness')).getByText('locked')).toBeInTheDocument();
   });
@@ -41,10 +41,10 @@ describe('HomePage dashboard', () => {
       state: { completedLessons: ['u1-l1'] },
     });
 
-    expect(screen.getAllByRole('link', { name: 'continue →' })).toHaveLength(2);
-    expect(screen.getAllByRole('link', { name: 'continue →' })[0]).toHaveAttribute('href', '/lesson/u1-l2');
+    expect(screen.getAllByRole('link', { name: /Continue: Hue, Saturation, and Lightness/ })).toHaveLength(2);
+    expect(screen.getAllByRole('link', { name: /Continue: Hue, Saturation, and Lightness/ })[0]).toHaveAttribute('href', '/lesson/u1-l2');
     expect(within(getUnit('Seeing and Describing Color')).getByText('1/6')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'redo →' })).toHaveAttribute('href', '/lesson/u1-l1');
+    expect(screen.getByRole('link', { name: 'Redo: What Color Does in Interface Design' })).toHaveAttribute('href', '/lesson/u1-l1');
     expect(within(getLessonRow('Contrast and Readability')).getByText('locked')).toBeInTheDocument();
   });
 
@@ -54,7 +54,7 @@ describe('HomePage dashboard', () => {
     });
 
     expect(within(getUnit('Seeing and Describing Color')).getByText('6/6')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'start →' })).toHaveAttribute('href', '/milestone/milestone-1');
+    expect(screen.getByRole('link', { name: 'Start: Read the Interface' })).toHaveAttribute('href', '/milestone/milestone-1');
     expect(within(getUnit('How Screens Make Color')).getByText('locked')).toBeInTheDocument();
   });
 
@@ -63,7 +63,7 @@ describe('HomePage dashboard', () => {
       state: { completedLessons: unitOne.lessons },
     });
 
-    expect(screen.getByRole('link', { name: 'continue →' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Continue: Read the Interface' })).toHaveAttribute(
       'href',
       '/milestone/milestone-1',
     );
@@ -74,17 +74,17 @@ describe('HomePage dashboard', () => {
     const user = userEvent.setup();
     renderWithAppState(<HomePage />);
 
-    expect(within(getLessonRow('Read the Interface')).getByRole('link', { name: 'start →' }))
+    expect(within(getLessonRow('Read the Interface')).getByRole('link', { name: 'Start: Read the Interface' }))
       .toHaveAttribute('href', '/milestone/milestone-1');
 
     const unitTwoCard = screen.getByRole('button', { name: /How Screens Make Color/ });
     await user.click(unitTwoCard);
 
-    expect(within(getLessonRow('Two Ways Color Mixes')).getByRole('link', { name: 'continue →' }))
+    expect(within(getLessonRow('Two Ways Color Mixes')).getByRole('link', { name: 'Continue: Two Ways Color Mixes' }))
       .toHaveAttribute('href', '/lesson/u2-l1');
-    expect(within(getLessonRow('Seeing Pixels as Light, Not Paint')).getByRole('link', { name: 'continue →' }))
+    expect(within(getLessonRow('Seeing Pixels as Light, Not Paint')).getByRole('link', { name: 'Continue: Seeing Pixels as Light, Not Paint' }))
       .toHaveAttribute('href', '/lesson/u2-l5');
-    expect(within(getLessonRow('Mix for Screen')).getByRole('link', { name: 'start →' }))
+    expect(within(getLessonRow('Mix for Screen')).getByRole('link', { name: 'Start: Mix for Screen' }))
       .toHaveAttribute('href', '/milestone/milestone-2');
   });
 
@@ -103,11 +103,11 @@ describe('HomePage dashboard', () => {
     expect(within(unitOneCard).getByText('✓ done')).toBeInTheDocument();
     expect(unitOneDisclosure).toHaveAttribute('aria-expanded', 'false');
     expect(unitTwoDisclosure).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getByRole('link', { name: 'start →' })).toHaveAttribute('href', '/lesson/u2-l1');
+    expect(screen.getByRole('link', { name: 'Start: Two Ways Color Mixes' })).toHaveAttribute('href', '/lesson/u2-l1');
 
     await user.click(unitOneDisclosure);
     expect(unitOneDisclosure).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getAllByRole('link', { name: 'redo →' }).at(-1)).toHaveAttribute('href', '/milestone/milestone-1');
+    expect(screen.getByRole('link', { name: 'Redo: Read the Interface' })).toHaveAttribute('href', '/milestone/milestone-1');
 
     await user.click(unitOneDisclosure);
     expect(unitOneDisclosure).toHaveAttribute('aria-expanded', 'false');
@@ -139,8 +139,8 @@ describe('HomePage dashboard', () => {
     const disclosure = within(unitOneCard).getByRole('button', {
       name: 'Collapse Seeing and Describing Color',
     });
-    const startLink = within(unitOneCard).getByRole('link', { name: 'start →' });
-    const lessonLink = screen.getAllByRole('link', { name: 'continue →' })[0];
+    const startLink = within(unitOneCard).getByRole('link', { name: 'Start: What Color Does in Interface Design' });
+    const lessonLink = screen.getByRole('link', { name: 'Continue: What Color Does in Interface Design' });
 
     expect(disclosure).not.toContainElement(startLink);
     expect(disclosure).not.toContainElement(lessonLink);
@@ -163,7 +163,7 @@ describe('HomePage dashboard', () => {
 
     expect(confirm).toHaveBeenCalledWith('Reset all progress? This cannot be undone.');
     expect(within(getUnit('Seeing and Describing Color')).getByText('1/6')).toBeInTheDocument();
-    expect(screen.getAllByRole('link', { name: 'continue →' })[0]).toHaveAttribute('href', '/lesson/u1-l2');
+    expect(screen.getAllByRole('link', { name: 'Continue: Hue, Saturation, and Lightness' })[0]).toHaveAttribute('href', '/lesson/u1-l2');
   });
 
   it('clears progress and updates the dashboard when reset is confirmed', async () => {
@@ -175,8 +175,8 @@ describe('HomePage dashboard', () => {
 
     await user.click(screen.getByRole('button', { name: 'reset progress' }));
 
-    expect(screen.getByRole('link', { name: 'start learning' })).toHaveAttribute('href', '/lesson/u1-l1');
-    expect(within(getUnit('Seeing and Describing Color')).getByRole('link', { name: 'start →' })).toHaveAttribute('href', '/lesson/u1-l1');
+    expect(screen.getByRole('link', { name: 'Start learning: What Color Does in Interface Design' })).toHaveAttribute('href', '/lesson/u1-l1');
+    expect(within(getUnit('Seeing and Describing Color')).getByRole('link', { name: 'Start: What Color Does in Interface Design' })).toHaveAttribute('href', '/lesson/u1-l1');
     expect(screen.queryByText('1/6')).not.toBeInTheDocument();
   });
 });

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { TopNav } from '../nav/TopNav.tsx';
 import { RouteSnackbar } from '../feedback/RouteSnackbar.tsx';
+import { RouteAccessibility } from '../accessibility/RouteAccessibility.tsx';
 import { useAppState } from '../../state/app-context.tsx';
 import styles from './AppShell.module.css';
 
@@ -38,11 +39,19 @@ export function AppShell({ children }: AppShellProps) {
     ? CVD_FILTER_MAP[preferences.colorBlindnessMode]
     : undefined;
 
+  function focusMainContent() {
+    document.getElementById('main-content')?.focus();
+  }
+
   return (
     <div className={styles.shell} style={cvdFilter ? { filter: cvdFilter } : undefined}>
       <div dangerouslySetInnerHTML={{ __html: CVD_SVG_DEFS }} />
+      <a className={styles.skipLink} href="#main-content" onClick={focusMainContent}>
+        skip to main content
+      </a>
       <TopNav />
-      <main className={styles.main}>{children}</main>
+      <main id="main-content" className={styles.main} tabIndex={-1}>{children}</main>
+      <RouteAccessibility />
       <RouteSnackbar />
     </div>
   );

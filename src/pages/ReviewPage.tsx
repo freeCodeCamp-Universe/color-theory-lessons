@@ -3,6 +3,7 @@ import { lessonRegistry } from '../lessons/lesson-registry.ts';
 import { useAppState } from '../state/app-context.tsx';
 import { TAG_LABELS } from '../data/reviewTags.ts';
 import styles from './ReviewPage.module.css';
+import { DocumentTitle } from '../components/accessibility/DocumentTitle.tsx';
 
 interface ReviewEntry {
   lessonId: string;
@@ -43,6 +44,7 @@ export function ReviewPage() {
 
   return (
     <div className={styles.container}>
+      <DocumentTitle page="Review" />
       <h1 className={styles.heading}>review</h1>
       <p className={styles.subtitle}>
         Key facts from completed lessons, grouped by topic.

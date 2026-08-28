@@ -12,6 +12,7 @@ import {
 } from '../utils/color.ts';
 import type { RGB, Relationship } from '../utils/color.ts';
 import styles from './PaletteBuilderPage.module.css';
+import { DocumentTitle } from '../components/accessibility/DocumentTitle.tsx';
 
 /* ── Types ────────────────────────────────────────────────────────────────── */
 
@@ -781,6 +782,7 @@ export function PaletteBuilderPage() {
 
   return (
     <div className={styles.container}>
+      <DocumentTitle page="Palette Builder" />
       <h1 className={styles.heading}>palette builder</h1>
       <p className={styles.subtitle}>
         Pick a primary color, explore harmony suggestions, and build your

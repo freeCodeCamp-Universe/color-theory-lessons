@@ -161,7 +161,7 @@ test('production progression redirects locked routes and keeps the hero on the m
   await page.evaluate(() => localStorage.clear());
   await seedCourseState(page, { completedLessons: unitLessons[0] });
   await page.reload();
-  await expect(page.getByRole('link', { name: 'continue →' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'Continue: Read the Interface' })).toHaveAttribute(
     'href',
     '/milestone/milestone-1',
   );
@@ -169,7 +169,7 @@ test('production progression redirects locked routes and keeps the hero on the m
 
 test('a new learner completes a lesson and keeps progress after a browser reload', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('link', { name: 'start learning' }).click();
+  await page.getByRole('link', { name: 'Start learning: What Color Does in Interface Design' }).click();
   await expect(page).toHaveURL(/\/lesson\/u1-l1$/);
 
   for (let index = 0; index < 4; index += 1) {
@@ -182,12 +182,12 @@ test('a new learner completes a lesson and keeps progress after a browser reload
   await expect(page.getByText('lesson complete')).toBeVisible();
   await page.getByRole('link', { name: '← all units' }).click();
   await expect(page).toHaveURL(/\/$/);
-  await expect(page.getByRole('link', { name: 'redo →' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Redo: What Color Does in Interface Design' })).toBeVisible();
 
   await page.reload();
 
-  await expect(page.getByRole('link', { name: 'redo →' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'continue →' }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Redo: What Color Does in Interface Design' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Continue: Hue, Saturation, and Lightness' }).first()).toBeVisible();
   await expect.poll(async () => storedCourseState(page)).toMatchObject({
     progress: {
       completedLessons: ['u1-l1'],
@@ -206,12 +206,12 @@ test('passing a milestone unlocks the next unit after reload', async ({ page }) 
   await expect(page.getByText('milestone passed')).toBeVisible();
   await page.getByRole('link', { name: '← all units' }).click();
   await expect(page.getByRole('button', { name: /How Screens Make Color/ })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'start →' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Start: Two Ways Color Mixes' })).toBeVisible();
 
   await page.reload();
 
   await expect(page.getByRole('button', { name: /How Screens Make Color/ })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'start →' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Start: Two Ways Color Mixes' })).toBeVisible();
   await expect.poll(async () => storedCourseState(page)).toMatchObject({
     progress: { completedMilestones: ['milestone-1'] },
   });
