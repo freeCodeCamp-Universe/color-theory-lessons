@@ -11,7 +11,7 @@ This timeline outlines the progression of topics, lessons, and hands-on mileston
 - **Lesson 1.2: Hue, Saturation, and Lightness**: Mastering the three core dimensions of color.
 - **Lesson 1.3: Contrast and Readability**: Measuring text readability with relative-luminance contrast ratios.
 - **Lesson 1.4: Warm and Cool Colors in Practice**: Using color temperature to set mood and hierarchy.
-- **Lesson 1.5: Visual Hierarchy Through Color**: Guiding the user's eye using saturation and value.
+- **Lesson 1.5: Visual Hierarchy Through Color**: Reserving a saturated accent for the focal point while supporting actions use neutral, outlined, or text-link treatments.
 - **Lesson 1.6: Basic Color Relationships and Harmony**: Analogous, complementary, and triadic color-wheel relationships.
 - **Milestone 1: Read the Interface**: Classify five parts of an interface, then answer three questions about emphasis, contrast, and visual hierarchy.
 
@@ -34,7 +34,7 @@ This timeline outlines the progression of topics, lessons, and hands-on mileston
 
 - **Lesson 3.1: Why Digital Design Needs Color Formats**: Understanding the bridge between design tools and code.
 - **Lesson 3.2: HEX and RGB**: Reading and writing HEX and RGB values, including alpha in modern `rgb()` syntax.
-- **Lesson 3.3: HSL and Alpha**: Why HSL is often the preferred format for designers who code.
+- **Lesson 3.3: HSL and Alpha**: Using HSL for direct hue, saturation, and lightness adjustments, with alpha for transparency.
 - **Lesson 3.4: Alpha, Transparency, and Layered Color**: Deep alpha behavior in layered interfaces and context-dependent blending.
 - **Lesson 3.5: Gradients, CSS Color Usage, and Theme Building**: Applying gradients and role assignments in implementation-focused theme building.
 - **Lesson 3.6: Design Tokens and Role-Based Color Systems**: Moving from hardcoded values to semantic variables.
