@@ -124,6 +124,25 @@ To maintain the "Command-line Chic" aesthetic, use the CSS custom properties def
 
 ### Best Practices
 - **Styling Approach**: Prefer `.module.css` for reusable structure and repeated patterns, but inline styles are acceptable for tool-specific dynamic previews (e.g., live color swatches, generated gradients, per-role color chips).
-- **Accessibility**: Ensure that interactive elements respond to both mouse and keyboard inputs where possible. 
 - **Tool-Only Logic**: Keep the tool's internal state independent. The tool should not know about the lesson's current step or quiz status.
 - **Responsive Layout**: Tools should ideally be designed to fit within the `ToolShell` container, which provides consistent padding and border-styling.
+
+## Required accessibility checklist
+
+New and changed tools must meet the WCAG 2.2 Level AAA requirements in [Development Standards](DEVELOPMENT.md). Use [the accessible visual-content contract](ACCESSIBLE_VISUALS.md) for tool visuals. Issue #53 owns visual descriptions; issue #54 owns general structure, interaction, keyboard, focus, zoom, and reflow.
+
+- Use native buttons, links, inputs, selects, fieldsets, legends, and headings when their semantics match the task. Do not recreate native behavior with a clickable `div` or `span`.
+- Give every control a visible label or an equivalent accessible name. Expose its role, current value, selected or expanded state, invalid state, and disabled state when applicable.
+- Support the complete task with a keyboard. Provide buttons or other keyboard controls for drag, draw, hover, or pointer-position interactions. Keep focus order predictable and the focus indicator visible.
+- Keep instructions next to the controls they describe. Do not rely on color, position, shape, motion, or pointer gestures as the only instruction or result cue.
+- Describe informative and assessment visuals with the authored fields and `VisualDescription` pattern in `ACCESSIBLE_VISUALS.md`. Hide only the smallest decorative element, never an interactive wrapper.
+- Include color names and the values visible to sighted learners. Describe relationships, order, contrast, patterns, and the current tool state rather than listing colors alone.
+- Keep assessment descriptions answer-safe. Expose observable evidence and the learner's current input, but do not identify the correct choice, target value, faulty region, or repair before submission.
+- Announce validation only after the learner checks an answer. Announce retry state, stage changes, and completion once from the component that owns the change. Use the shared `ExerciseStage` status region or `StatusAnnouncement`; do not create a second live region for the same message.
+- Respect `prefers-reduced-motion` and provide a static equivalent for information shown through animation.
+
+### Accessibility verification
+
+Add focused automated tests for the behavior introduced by the tool. Test native or programmatic roles and names, state changes, keyboard operation, answer-safe visual descriptions, validation, retry, and completion announcements. Run the focused file during development, then run the project checks named in [Development Standards](DEVELOPMENT.md).
+
+Automated tests do not replace manual checks. Complete the changed task in a browser with only a keyboard. Use a screen reader when names, descriptions, values, states, live messages, focus movement, validation, or completion change. Confirm that focus is visible, the task does not require color or pointer input, and each meaningful change is announced once. Record the browser, viewport, keyboard path, screen reader and browser pair, and observed announcements in the pull request.

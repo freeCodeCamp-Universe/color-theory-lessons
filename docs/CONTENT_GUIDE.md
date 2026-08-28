@@ -128,3 +128,27 @@ New terms should be added to `src/data/glossary.ts`. Each entry has a `relatedLe
 ## Content Best Practices
 - **Quiz Explanations**: Always provide an `explanation` for both correct and incorrect choices. This is where the actual teaching happens for users who guess.
 - **Incremental Difficulty**: Ensure that early steps in a lesson prepare the user for the subsequent challenge and quiz.
+
+## Accessible visual content
+
+Classify each visual as informative, part of an assessment, or decorative before authoring it. Use the fields and rendering patterns in [the accessible visual-content contract](ACCESSIBLE_VISUALS.md). Issue #53 owns visual descriptions; general application structure and interaction remain in #54.
+
+### Informative and decorative visuals
+
+- Give an informative visual an authored description of the information a sighted learner receives. Add an accessible name when the visible heading or label does not identify it.
+- Include human-readable color names and the same HEX, RGB, HSL, or alpha values shown visually. A list of colors does not replace a description of their order, contrast, relationship, pattern, or current state.
+- Mark decorative visuals as hidden from assistive technology. Decorative content repeats adjacent text or adds styling without teaching information. Never hide a wrapper that contains a control.
+- Keep the visible label and accessible description consistent. Do not use an accessible description to introduce instructions or facts that are unavailable to sighted learners.
+
+For lesson step panels, author `panel.accessibility`. Informative and assessment entries require `accessibleDescription`; add `accessibleName` when the visible text is insufficient and `colors` when the visual exposes named color values.
+
+### Quiz and assessment visuals
+
+Each lesson quiz swatch in `colorSwatches` needs a visible `label`, a visible `color` value, and an `accessibleDescription`. Each milestone quiz swatch needs its visible `swatchColor` and an authored `swatchDescription`. Write color names and values in the description when they are part of the visible evidence.
+
+Assessment descriptions must present the evidence needed to answer without interpreting it for the learner. Describe appearance, layout, labels, current values, and non-color cues. Before submission, do not state the correct choice, target value, faulty region, classification, or repair.
+
+- Answer-safe: "A muted, lighter rose-red swatch. Color value: #C48B9F."
+- Reveals the answer: "The second swatch has lower saturation, so choose Saturation."
+
+Keep a hidden target separate from the learner's current state. The target description can explain its visible appearance without exposing a hidden numeric answer. The current-state description can expose the learner's selected or entered values. Submitted feedback may explain the correct relationship after grading.
