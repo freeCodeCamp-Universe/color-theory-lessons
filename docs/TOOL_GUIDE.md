@@ -1,44 +1,14 @@
 # Tool Development Guide
 
-Interactive tools are the heart of the Color Theory Lessons app. This guide explains how to build, register, and style new tools.
+Lesson tools render the interactive challenge in each lesson. This guide explains how to build, register, style, and verify a tool.
 
 ## Creating a New Tool
 
 All tool components are located in `src/components/tools/`.
 
-### 1. The Standard Tool Component
-New tools should follow a specific React functional component pattern.
+### 1. Create the tool component
 
-```tsx
-import React, { useState } from 'react';
-import styles from './YourTool.module.css';
-
-interface YourToolProps {
-  interactive?: boolean;     // Can the user change its state?
-  onComplete?: () => void;   // Callback for finishing a challenge
-  onStageChange?: ExerciseStageChangeHandler; // Reports the active task
-}
-
-export function YourTool({ interactive = true, onComplete }: YourToolProps) {
-  const [isFinished, setIsFinished] = useState(false);
-
-  // Logic to handle user interaction
-  const handleInteraction = () => {
-    if (!interactive) return;
-    // ...
-    if (/* condition for success */) {
-      setIsFinished(true);
-      onComplete?.();
-    }
-  };
-
-  return (
-    <div className={styles.container}>
-      {/* Your Tool UI */}
-    </div>
-  );
-}
-```
+Use `ExerciseToolProps` from `src/components/tools/exercise-stage.ts`. Its `interactive` prop controls whether the learner can change the tool, `onComplete` reports that the exercise is complete, and `onStageChange` reports the active task to the lesson flow.
 
 ## Exercise stage contract
 
@@ -47,6 +17,12 @@ Every lesson exercise has at least one stage. Define each stage with an `id`, `t
 Use `ExerciseToolProps`, `useExerciseStages`, and `ExerciseStage` for evaluative tools. The hook owns the active position, result, completed-stage IDs, advancement, and final completion callback. The component renders the shared `Stage X of Y` progress pattern, including `Stage 1 of 1`, plus the title, instruction, result, retry action, completion message, and next action. Answer values remain in the tool so its retry handler can either preserve the current work or reset it when the exercise requires a fresh attempt.
 
 ```tsx
+import { useState } from 'react';
+import { ExerciseStage } from './ExerciseStage.tsx';
+import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
+import shellStyles from './ToolShell.module.css';
+import { useExerciseStages } from './useExerciseStages.ts';
+
 const stages = [
   {
     id: 'identify-role',
@@ -55,17 +31,49 @@ const stages = [
   },
 ] satisfies readonly ExerciseStageDefinition[];
 
-export function YourTool({ onComplete, onStageChange }: ExerciseToolProps) {
+export function YourTool({
+  interactive = true,
+  onComplete,
+  onStageChange,
+}: ExerciseToolProps) {
+  const [answer, setAnswer] = useState('');
   const stage = useExerciseStages({ stages, onComplete, onStageChange });
 
+  function checkAnswer() {
+    if (!interactive || stage.result !== 'idle') return;
+
+    const isCorrect = answer === 'surface';
+    if (isCorrect) stage.markPassed();
+    else stage.markIncorrect();
+  }
+
   return (
-    <ExerciseStage
-      controller={stage}
-      incorrectFeedback="Review the highlighted element and try again."
-      completionFeedback="Exercise complete."
-    >
-      {/* Inputs and the explicit Check action */}
-    </ExerciseStage>
+    <div className={shellStyles.shell}>
+      <ExerciseStage
+        controller={stage}
+        incorrectFeedback="Review the highlighted element and try again."
+        completionFeedback="Exercise complete."
+      >
+        <label htmlFor="color-role">Color role</label>
+        <select
+          id="color-role"
+          value={answer}
+          disabled={!interactive || stage.result !== 'idle'}
+          onChange={(event) => setAnswer(event.target.value)}
+        >
+          <option value="">Choose a role</option>
+          <option value="surface">Surface</option>
+          <option value="text">Text</option>
+        </select>
+        <button
+          type="button"
+          disabled={!interactive || stage.result !== 'idle'}
+          onClick={checkAnswer}
+        >
+          check answer
+        </button>
+      </ExerciseStage>
+    </div>
   );
 }
 ```
@@ -89,22 +97,28 @@ The final stage shows its completion feedback in the same status region. It has 
 
 Challenge prompts should state the number and sequence of stages without copying the detailed stage instructions. Stage instructions belong in the stage definitions, where they remain aligned with the active inputs and hints.
 
-### 2. Registering the Tool
-There are three steps to making your tool available to lessons:
+### 2. Register the tool
 
-1.  **Add to InteractionType Enum**: Add a unique string key for your tool in `src/types/lesson.ts`.
-2.  **Import in ToolRenderer**: Add your component import to `src/components/tools/ToolRenderer.tsx`.
-3.  **Add Switch Case**: Add a new `case` to the `ToolRenderer` component that returns your tool when its `interactionType` matches.
+Complete each registration step:
+
+1. Add a unique string key to `INTERACTION_TYPES` in `src/types/lesson.ts`. The `InteractionType` union is derived from this registry.
+2. Add the interaction type to the lesson interaction inventory in `docs/ACCESSIBLE_VISUALS.md` and assign its accessibility owner. `src/accessibility-contract.test.ts` enforces this entry.
+3. Add a lazy import and switch case in `src/components/tools/ToolRenderer.tsx`. Pass `interactive={true}`, `onComplete={onChallengeComplete}`, and `onStageChange` to the tool.
+4. Add the matching dynamic import to `src/components/tools/tool-prefetch.ts`. Its exhaustive switch makes the TypeScript build fail when a registered type has no prefetch mapping.
+5. Use the interaction type in at least one `LessonConfig`. `src/components/tools/interaction-type-coverage.test.ts` rejects unused registry entries.
+6. Add the interaction to `docs/TEST_COVERAGE.md` with the focused test that owns its learner-visible behavior.
 
 ```tsx
 // src/components/tools/ToolRenderer.tsx
 case 'your-tool-type':
-  return (
-    <YourTool 
-      interactive={toolUnlocked} 
-      onComplete={isChallenge ? onChallengeComplete : undefined} 
+  tool = (
+    <YourTool
+      interactive={true}
+      onComplete={onChallengeComplete}
+      onStageChange={onStageChange}
     />
   );
+  break;
 ```
 
 ## Styling & Theme Tokens
@@ -114,18 +128,23 @@ To maintain the "Command-line Chic" aesthetic, use the CSS custom properties def
 ### Common Design Tokens
 | Category | Variable | Use Case |
 |---|---|---|
-| Backgrounds | `--primary-background` | Main app background (Dark) |
-| Surfaces | `--surface` | Tool panels, input containers |
-| Foregrounds | `--primary-foreground` | Main text (Off-white) |
-| Accents | `--accent-cta` | Primary actions (Yellow) |
-| Accents | `--accent-success` | Correct states (Green) |
-| Accents | `--accent-danger` | Error states (Red) |
-| Typography | `--font-mono` | All UI text (Monospace) |
+| Backgrounds | `--primary-background` | App canvas |
+| Backgrounds | `--secondary-background` | Tool shell |
+| Surfaces | `--surface` | Nested panels and input groups |
+| Foregrounds | `--primary-foreground` | Main text |
+| Foregrounds | `--muted` | Secondary text |
+| Borders | `--border`, `--border-strong` | Standard and emphasized boundaries |
+| Actions | `--accent-cta`, `--cta-foreground` | Primary action background and text |
+| Status | `--accent-success` | Success text and boundaries |
+| Status | `--accent-danger` | Error text and boundaries |
+| Typography | `--font-sans` | Body text and controls |
+| Typography | `--font-mono` | Code, color values, and authored mockups |
 
 ### Best Practices
 - **Styling Approach**: Prefer `.module.css` for reusable structure and repeated patterns, but inline styles are acceptable for tool-specific dynamic previews (e.g., live color swatches, generated gradients, per-role color chips).
 - **Tool-Only Logic**: Keep the tool's internal state independent. The tool should not know about the lesson's current step or quiz status.
-- **Responsive Layout**: Tools should ideally be designed to fit within the `ToolShell` container, which provides consistent padding and border-styling.
+- **Shared Shell**: Wrap the tool in `shellStyles.shell` from `ToolShell.module.css`. The class supplies the shared background, boundary, spacing, control typography, and safeguards for inline text sizes below the 18px application floor.
+- **Responsive Layout**: Use layouts that can shrink without overflow. The shared `shellStyles.twoColumnGrid` changes from two columns to one below 500px.
 
 ## Required accessibility checklist
 
