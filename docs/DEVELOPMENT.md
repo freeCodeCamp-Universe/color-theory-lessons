@@ -44,7 +44,15 @@ The app is deployed via freeCodeCamp Universe, configured in `platform.yaml`.
 
 1.  **Build**: `npm run build`. This generates a `dist/` folder.
 2.  **Base Path**: The application serves from `/` (default Vite base).
-3.  **Deployment**: Handled automatically by freeCodeCamp Universe on push to `main`. Build command: `npm run build`; output directory: `dist`.
+3.  **Deployment**: Deployments are started manually from the repository root with the Universe CLI. Pushing to `main` does not deploy the application.
+
+    - Deploy to production with `universe static deploy --promote`.
+    - Create a preview with `universe static deploy`, then promote the latest preview with `universe static promote`.
+    - List deployments with `universe static ls`.
+    - Roll back production with `universe static rollback`.
+    - If deployment fails with `whoami preflight failed (unauthenticated)`, run `! universe login` to complete the interactive OAuth device flow, then retry the deployment.
+
+    The Universe CLI runs the `npm run build` command from `platform.yaml` and uploads the `dist` output directory.
 
 ## Contributing
 
