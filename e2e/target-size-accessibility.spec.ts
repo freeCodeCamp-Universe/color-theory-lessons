@@ -46,12 +46,14 @@ async function expectVisibleTargetsMeetMinimum(page: Page, scopeName: string) {
   }
 }
 
-async function advanceToLastLessonStep(page: Page) {
+async function advanceToLastLessonStep(page: Page, toolName: string) {
+  await page.locator('aside h1').waitFor();
   for (let step = 0; step < 10; step += 1) {
     const next = page.getByRole('button', { name: 'next', exact: true });
-    if (!(await next.isVisible().catch(() => false))) return;
+    if (!(await next.isVisible().catch(() => false))) break;
     await next.click();
   }
+  await expect(page.getByText(toolName, { exact: true }).first()).toBeVisible();
 }
 
 async function expectTargetsDoNotOverlap(page: Page, scopeName: string) {
@@ -93,6 +95,7 @@ test.beforeEach(async ({ page }) => {
           'u3-l1', 'u3-l2', 'u3-l3', 'u3-l4', 'u3-l5', 'u3-l6',
           'u4-l1', 'u4-l2', 'u4-l3', 'u4-l4',
           'u5-l1', 'u5-l2', 'u5-l3', 'u5-l4', 'u5-l5', 'u5-l6',
+          'u6-l1', 'u6-l2', 'u6-l3', 'u6-l4',
         ],
         completedQuizzes: [],
         quizBestScores: {},
@@ -106,44 +109,57 @@ test.beforeEach(async ({ page }) => {
 
 test('shared navigation targets meet the AAA minimum', async ({ page }) => {
   await page.goto('/');
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await page.getByRole('button', { name: 'Menu' }).click();
   await expectVisibleTargetsMeetMinimum(page, 'shared navigation');
 });
 
 test('lesson controls meet the AAA minimum', async ({ page }) => {
   await page.goto('/lesson/u1-l1');
+  await expect(page.locator('aside h1')).toBeVisible();
   await expectVisibleTargetsMeetMinimum(page, 'lesson');
 });
 
 test('milestone controls meet the AAA minimum', async ({ page }) => {
   await page.goto('/milestone/milestone-2');
+  await expect(page.locator('aside h1')).toBeVisible();
   await expectVisibleTargetsMeetMinimum(page, 'milestone');
 });
 
 test('representative tool controls meet the AAA minimum', async ({ page }) => {
   await page.goto('/lesson/u2-l2');
-  await page.getByRole('button', { name: 'next', exact: true }).click();
-  await page.getByRole('button', { name: 'next', exact: true }).click();
+  await advanceToLastLessonStep(page, 'RGB light mixer');
   await expectVisibleTargetsMeetMinimum(page, 'RGB mixer');
 });
 
 test('System Comparison targets meet the AAA minimum', async ({ page }) => {
   await page.goto('/lesson/u6-l1');
-  await advanceToLastLessonStep(page);
+  await advanceToLastLessonStep(page, 'system comparison');
   await expectVisibleTargetsMeetMinimum(page, 'System Comparison');
 });
 
 test('invalid-route recovery links meet the AAA minimum', async ({ page }) => {
   for (const route of ['/lesson/not-a-lesson', '/milestone/not-a-milestone']) {
     await page.goto(route);
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     await expectMinimumTargetSize(page.getByRole('link', { name: 'back to home' }), route);
   }
 });
 
 test('exercise routes reflow with text-spacing overrides', async ({ page }) => {
-  for (const lessonId of ['u1-l5', 'u3-l1', 'u4-l3', 'u4-l4', 'u5-l1', 'u5-l4', 'u5-l6', 'u6-l5']) {
+  const routes = {
+    'u1-l5': 'hierarchy tuner',
+    'u3-l1': 'format explorer',
+    'u4-l3': 'interface gallery',
+    'u4-l4': 'color-only detector',
+    'u5-l1': 'text contrast lab',
+    'u5-l4': 'pattern repair workshop',
+    'u5-l6': 'inclusive review',
+    'u6-l5': 'chart tuner',
+  } as const;
+  for (const [lessonId, toolName] of Object.entries(routes)) {
     await page.goto(`/lesson/${lessonId}`);
-    await advanceToLastLessonStep(page);
+    await advanceToLastLessonStep(page, toolName);
     await page.addStyleTag({ content: `
       * { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
       p { margin-bottom: 2em !important; }
@@ -158,6 +174,7 @@ test('exercise routes reflow with text-spacing overrides', async ({ page }) => {
 
 test('Palette Builder controls meet the AAA minimum in each picker mode', async ({ page }) => {
   await page.goto('/palette-builder');
+  await expect(page.getByRole('heading', { level: 1, name: 'palette builder' })).toBeVisible();
 
   for (const tabName of ['RGB', 'HSL', 'Swatches']) {
     await page.getByRole('button', { name: tabName }).click();
