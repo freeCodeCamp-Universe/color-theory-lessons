@@ -64,7 +64,7 @@ Global state is split across three files:
 
 The global record contains completed lessons, completed quizzes, best quiz scores, completed milestones, theme preference, reduced-motion preference, and color-vision simulation preference.
 
-Active lesson and milestone attempts use `sessionStorage` instead of the global record. This keeps in-progress phase, answer, and challenge state available after a reload in the same browser tab. The dashboard's reset control dispatches `RESET_PROGRESS`; the reducer clears completed progress, and the provider removes milestone and milestone-challenge session records.
+Active lesson and milestone attempts use `sessionStorage` instead of the global record. This keeps in-progress phase, answer, and challenge state available after a reload in the same browser tab. The dashboard's reset control dispatches `RESET_PROGRESS`; the reducer clears completed progress, and the provider removes current lesson sessions, legacy lesson-step records, milestone sessions, and milestone-challenge sessions. Other `sessionStorage` records remain intact.
 
 ## Routing
 
