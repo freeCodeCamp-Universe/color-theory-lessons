@@ -30,7 +30,7 @@ describe('HomePage dashboard', () => {
     expect(unitOneDisclosure).toHaveAttribute('aria-controls', 'unit-1-lessons');
     expect(within(getUnit('Color Systems and Advanced Topics')).queryByRole('button'))
       .not.toBeInTheDocument();
-    expect(screen.getAllByRole('link', { name: 'Start: What Color Does in Interface Design' })[0]).toHaveAttribute('href', '/lesson/u1-l1');
+    expect(screen.getByRole('link', { name: 'Start learning: What Color Does in Interface Design' })).toHaveAttribute('href', '/lesson/u1-l1');
     expect(screen.getByRole('link', { name: 'Continue: What Color Does in Interface Design' })).toHaveAttribute('href', '/lesson/u1-l1');
     expect(within(getUnit('How Screens Make Color')).getByText('locked')).toBeInTheDocument();
     expect(within(getLessonRow('Hue, Saturation, and Lightness')).getByText('locked')).toBeInTheDocument();
@@ -175,7 +175,7 @@ describe('HomePage dashboard', () => {
 
     await user.click(screen.getByRole('button', { name: 'reset progress' }));
 
-    expect(screen.getAllByRole('link', { name: 'Start: What Color Does in Interface Design' })[0]).toHaveAttribute('href', '/lesson/u1-l1');
+    expect(screen.getByRole('link', { name: 'Start learning: What Color Does in Interface Design' })).toHaveAttribute('href', '/lesson/u1-l1');
     expect(within(getUnit('Seeing and Describing Color')).getByRole('link', { name: 'Start: What Color Does in Interface Design' })).toHaveAttribute('href', '/lesson/u1-l1');
     expect(screen.queryByText('1/6')).not.toBeInTheDocument();
   });

@@ -65,7 +65,7 @@ test('client navigation and browser history focus the rendered route heading', a
 
 test('lesson loading waits for the final heading before moving focus', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('link', { name: 'Start: What Color Does in Interface Design' }).first().click();
+  await page.getByRole('link', { name: 'Start learning: What Color Does in Interface Design' }).click();
 
   await expect(page).toHaveTitle('What Color Does in Interface Design | Color Theory Course');
   await expect(page.getByRole('heading', { name: 'What Color Does in Interface Design' })).toBeFocused();

@@ -169,7 +169,7 @@ test('production progression redirects locked routes and keeps the hero on the m
 
 test('a new learner completes a lesson and keeps progress after a browser reload', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('link', { name: 'Start: What Color Does in Interface Design' }).first().click();
+  await page.getByRole('link', { name: 'Start learning: What Color Does in Interface Design' }).click();
   await expect(page).toHaveURL(/\/lesson\/u1-l1$/);
 
   for (let index = 0; index < 4; index += 1) {

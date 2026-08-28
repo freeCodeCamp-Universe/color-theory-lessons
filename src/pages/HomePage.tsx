@@ -63,7 +63,7 @@ export function HomePage() {
         <Link
           to={nextLearningPath}
           className={styles.startBtn}
-          aria-label={`${completedLessons.length === 0 ? 'Start' : 'Continue'}: ${nextLearningName}`}
+          aria-label={`${completedLessons.length === 0 ? 'Start learning' : 'Continue'}: ${nextLearningName}`}
         >
           {completedLessons.length === 0 ? 'start learning' : 'continue →'}
         </Link>
