@@ -11,4 +11,9 @@ describe('HomePage locked rows', () => {
     expect(css).not.toMatch(/\.lessonLocked\s*{[^}]*opacity:/s);
     expect(source).not.toMatch(/styles\.lessonLocked(?!Label)/);
   });
+
+  it('uses the global visible focus treatment for the native disclosure button', () => {
+    expect(source).toMatch(/<button[\s\S]*className={styles\.unitDisclosure}/);
+    expect(css).not.toMatch(/\.unitDisclosure:focus(?:-visible)?\s*{[^}]*(?:outline:\s*none|outline:\s*0)/s);
+  });
 });
