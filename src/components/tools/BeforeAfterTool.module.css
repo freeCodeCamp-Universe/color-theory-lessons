@@ -49,6 +49,10 @@
 }
 
 /* Good mockup accent colors */
+.mockupGood {
+  background-color: var(--gray-80);
+}
+
 .mockupGood .nav {
   background-color: #1b1b32;
   border-radius: var(--radius-sm);
@@ -66,7 +70,7 @@
 
 .mockupGood .navLink {
   font-size: 0.75rem;
-  color: var(--gray-45);
+  color: var(--gray-15);
   margin-left: auto;
 }
 

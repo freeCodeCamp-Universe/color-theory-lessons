@@ -48,6 +48,59 @@ async function storedCourseState(page: Page) {
   return page.evaluate((key) => JSON.parse(localStorage.getItem(key) ?? 'null'), STORAGE_KEY);
 }
 
+async function purposefulMockupColors(page: Page) {
+  return page.evaluate(() => {
+    function opaqueBackground(element: Element): string {
+      let current: Element | null = element;
+      while (current) {
+        const background = getComputedStyle(current).backgroundColor;
+        if (background !== 'rgba(0, 0, 0, 0)') return background;
+        current = current.parentElement;
+      }
+      throw new Error('Expected the mockup text to have an opaque background');
+    }
+
+    return [
+      'color-theory-course$',
+      'settings',
+      'Learn color theory',
+      'Six interactive units for developers.',
+      'start learning',
+      '✓ Unit 1 complete',
+      'Lesson 2: Hue, saturation, and lightness →',
+    ].map((text) => {
+      const element = [...document.querySelectorAll('span, div')]
+        .find((candidate) => candidate.textContent === text);
+      if (!element) throw new Error(`Could not find mockup text: ${text}`);
+
+      return {
+        text,
+        foreground: getComputedStyle(element).color,
+        background: opaqueBackground(element),
+      };
+    });
+  });
+}
+
+function contrastRatio(foreground: string, background: string): number {
+  function luminance(color: string): number {
+    const channels = color.match(/\d+/g)?.slice(0, 3).map(Number);
+    if (!channels || channels.length !== 3) {
+      throw new Error(`Expected an RGB color, received "${color}"`);
+    }
+    const linear = channels.map((channel) => {
+      const value = channel / 255;
+      return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+  }
+
+  const foregroundLuminance = luminance(foreground);
+  const backgroundLuminance = luminance(background);
+  return (Math.max(foregroundLuminance, backgroundLuminance) + 0.05)
+    / (Math.min(foregroundLuminance, backgroundLuminance) + 0.05);
+}
+
 async function solveFirstLessonChallenge(page: Page) {
   const answers = [
     ['Click to identify what the nav bar color is doing', 'separating sections'],
@@ -145,6 +198,35 @@ test('every navigation destination remains visible and usable at the mobile brea
 
   await page.getByRole('link', { name: 'Color Theory Course' }).click();
   await expect(page).toHaveURL(/\/$/);
+});
+
+test('the first lesson preview and exercise keep AAA colors in both themes', async ({ page }) => {
+  await seedCourseState(page, { theme: 'dark' });
+  await page.goto('/lesson/u1-l1');
+  await expect(page.getByText('Learn color theory', { exact: true })).toBeVisible();
+
+  const darkColors = await purposefulMockupColors(page);
+  await page.getByRole('combobox', { name: 'Theme preference' }).selectOption('light');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  const lightColors = await purposefulMockupColors(page);
+
+  expect(lightColors).toEqual(darkColors);
+  for (const pair of lightColors) {
+    expect(contrastRatio(pair.foreground, pair.background), pair.text).toBeGreaterThanOrEqual(7);
+  }
+
+  for (let index = 0; index < 4; index += 1) {
+    await page.getByRole('button', { name: 'next', exact: true }).click();
+  }
+  await expect(page.getByText('identify each color\'s role')).toBeVisible();
+
+  const lightExerciseColors = await purposefulMockupColors(page);
+  await page.getByRole('combobox', { name: 'Theme preference' }).selectOption('dark');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  const darkExerciseColors = await purposefulMockupColors(page);
+
+  expect(darkExerciseColors).toEqual(lightExerciseColors);
+  expect(lightExerciseColors).toEqual(lightColors);
 });
 
 test('production progression redirects locked routes and keeps the hero on the milestone', async ({ page }) => {
