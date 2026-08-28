@@ -17,7 +17,7 @@ export const lessonX_Y: LessonConfig = {
   id: 'uX-lY',            // Unique ID (e.g., 'u1-l7')
   unitId: 'unit-X',       // Parent unit ID
   title: LESSON_TITLES['uX-lY'],
-  interactionType: 'tool-name', // Must exist in InteractionType enum
+  interactionType: 'tool-name', // Must exist in INTERACTION_TYPES
   steps: [
     { text: 'First instruction...' },
     { text: 'Second instruction...' }
@@ -36,13 +36,24 @@ export const lessonX_Y: LessonConfig = {
       ]
     }
   ],
-  reviewTags: ['foundations'] // For grouping in the Review page
+  reviewTags: ['foundations'], // Keys from TAG_LABELS
+  keyPoints: [
+    'A fact shown on the Review page after the learner completes this lesson.'
+  ]
 };
 ```
 
 Each quiz choice needs a unique `stableId` within its question. Keep that ID with
 the same logical choice when answers are reordered or their wording changes. The
 learner-facing A, B, C, and D labels come from the choices' array order.
+
+Use an existing interaction type from `INTERACTION_TYPES` in
+`src/types/lesson.ts`. To add a new lesson tool, complete the registration steps
+in [the tool development guide](TOOL_GUIDE.md#2-register-the-tool).
+
+Use review-tag keys from `TAG_LABELS` in `src/data/reviewTags.ts`. The Review
+page groups a completed lesson's `keyPoints` under those tags. A lesson without
+`keyPoints` does not appear on the Review page.
 
 ### 2. Add the Lesson Title
 
@@ -73,7 +84,7 @@ export const lessonRegistry: LessonConfig[] = [
 Ensure the lesson's ID is included in the `lessons` array for its parent unit in `src/data/units.ts`.
 
 ## Adding a Milestone
-Milestones are "capstone" challenges that appear at the end of each unit. They are defined in `src/data/milestones.ts`.
+Milestones are capstone assessments that appear at the end of each unit. They are defined in `src/data/milestones.ts`.
 
 A milestone requires:
 - `id`: Unique ID (e.g., `milestone-1`).
@@ -98,10 +109,11 @@ Current supported values:
 - `semantic-audit`
 - `dark-mode-stress`
 
-When adding a new challenge type, update all three:
-1. `MilestoneChallengeType` union in `src/types/milestone.ts`
+When adding a new challenge type, update all four:
+1. `MILESTONE_CHALLENGE_TYPES` in `src/types/milestone.ts`. The `MilestoneChallengeType` union is derived from this registry.
 2. Switch mapping in `src/components/milestone/ChallengeRenderer.tsx`
-3. Milestone content in `src/data/milestones.ts`
+3. Milestone challenge inventory in `docs/ACCESSIBLE_VISUALS.md`
+4. Milestone content in `src/data/milestones.ts`
 
 If a challenge type is not mapped in `ChallengeRenderer`, it now renders an unavailable state and cannot be completed.
 
@@ -123,7 +135,7 @@ Current configured structure in `src/data/milestones.ts`:
 - Milestone 6: two challenges (3 + 3 pts) + 4-question quiz, pass 7
 
 ## Adding Glossary Terms
-New terms should be added to `src/data/glossary.ts`. Each entry has a `relatedLessons` array — the IDs of lessons whose completion will make that term visible in the learner's glossary. To link a term to a new lesson, add the lesson's `id` to that term's `relatedLessons` array.
+New terms should be added to `src/data/glossary.ts`. Each entry has a `relatedLessons` array containing the IDs of lessons whose completion will make that term visible in the learner's glossary. To link a term to a new lesson, add the lesson's `id` to that term's `relatedLessons` array.
 
 ## Content Best Practices
 - **Quiz Explanations**: Always provide an `explanation` for both correct and incorrect choices. This is where the actual teaching happens for users who guess.
