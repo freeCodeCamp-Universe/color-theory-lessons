@@ -48,7 +48,7 @@ async function storedCourseState(page: Page) {
   return page.evaluate((key) => JSON.parse(localStorage.getItem(key) ?? 'null'), STORAGE_KEY);
 }
 
-async function purposefulMockupColors(page: Page) {
+async function mockupColors(page: Page) {
   return page.evaluate(() => {
     function opaqueBackground(element: Element): string {
       let current: Element | null = element;
@@ -200,33 +200,56 @@ test('every navigation destination remains visible and usable at the mobile brea
   await expect(page).toHaveURL(/\/$/);
 });
 
-test('the first lesson preview and exercise keep AAA colors in both themes', async ({ page }) => {
+test('the first lesson mockups keep their colors in both themes', async ({ page }) => {
   await seedCourseState(page, { theme: 'dark' });
   await page.goto('/lesson/u1-l1');
   await expect(page.getByText('Learn color theory', { exact: true })).toBeVisible();
 
-  const darkColors = await purposefulMockupColors(page);
+  const darkColors = await mockupColors(page);
   await page.getByRole('combobox', { name: 'Theme preference' }).selectOption('light');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-  const lightColors = await purposefulMockupColors(page);
+  const lightColors = await mockupColors(page);
 
   expect(lightColors).toEqual(darkColors);
   for (const pair of lightColors) {
     expect(contrastRatio(pair.foreground, pair.background), pair.text).toBeGreaterThanOrEqual(7);
   }
 
-  for (let index = 0; index < 4; index += 1) {
+  for (let index = 0; index < 3; index += 1) {
     await page.getByRole('button', { name: 'next', exact: true }).click();
   }
-  await expect(page.getByText('identify each color\'s role')).toBeVisible();
+  await expect(page.getByText(/Colors without a defined role add competing signals/)).toBeVisible();
 
-  const lightExerciseColors = await purposefulMockupColors(page);
+  const lightNoisyColors = await mockupColors(page);
   await page.getByRole('combobox', { name: 'Theme preference' }).selectOption('dark');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  const darkExerciseColors = await purposefulMockupColors(page);
+  const darkNoisyColors = await mockupColors(page);
+
+  expect(darkNoisyColors).toEqual(lightNoisyColors);
+
+  await page.getByRole('button', { name: 'next', exact: true }).click();
+  await expect(page.getByText('identify each color\'s role')).toBeVisible();
+
+  const darkExerciseColors = await mockupColors(page);
+  await page.getByRole('combobox', { name: 'Theme preference' }).selectOption('light');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  const lightExerciseColors = await mockupColors(page);
 
   expect(darkExerciseColors).toEqual(lightExerciseColors);
   expect(lightExerciseColors).toEqual(lightColors);
+
+  const navRegion = page.getByRole('button', {
+    name: 'Click to identify what the nav bar color is doing',
+  });
+  for (let index = 0; index < 20 && await navRegion.evaluate((element) => document.activeElement !== element); index += 1) {
+    await page.keyboard.press('Tab');
+  }
+  const focusColors = await navRegion.evaluate((element) => ({
+    outline: getComputedStyle(element).outlineColor,
+    background: getComputedStyle(element.parentElement!).backgroundColor,
+  }));
+
+  expect(contrastRatio(focusColors.outline, focusColors.background)).toBeGreaterThanOrEqual(3);
 });
 
 test('production progression redirects locked routes and keeps the hero on the milestone', async ({ page }) => {

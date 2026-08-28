@@ -39,7 +39,7 @@
 }
 
 .mockup {
-  background-color: var(--surface);
+  background-color: var(--gray-80);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
@@ -49,10 +49,6 @@
 }
 
 /* Good mockup accent colors */
-.mockupGood {
-  background-color: var(--gray-80);
-}
-
 .mockupGood .nav {
   background-color: #1b1b32;
   border-radius: var(--radius-sm);
@@ -202,7 +198,7 @@
 }
 
 .region:focus-visible {
-  outline-color: var(--focus-ring);
+  outline-color: var(--blue-light);
 }
 
 .regionActive {
