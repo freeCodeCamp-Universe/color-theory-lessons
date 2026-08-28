@@ -18,9 +18,15 @@ export function TopNav() {
 
   return (
     <nav className={styles.nav} aria-label="Main navigation">
-      <NavLink to="/" end className={styles.logo} onClick={() => setMenuOpen(false)}>
-        <span className={styles.fullLogo}>color-theory-course$</span>
-        <span className={styles.shortLogo}>color$</span>
+      <NavLink
+        to="/"
+        end
+        className={styles.logo}
+        aria-label="Color Theory Course"
+        onClick={() => setMenuOpen(false)}
+      >
+        <span className={styles.fullLogo} aria-hidden="true">Color Theory Course</span>
+        <span className={styles.shortLogo} aria-hidden="true">Color Theory</span>
       </NavLink>
       <ul className={styles.links}>
         {NAV_ITEMS.map((item) => (

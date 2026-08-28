@@ -126,7 +126,7 @@ test('every navigation destination remains visible and usable at the mobile brea
   await page.goto('/');
 
   const menuButton = page.getByRole('button', { name: 'Menu' });
-  await expect(page.getByRole('link', { name: 'color$' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Color Theory Course' })).toBeVisible();
   await expect(page.getByRole('combobox', { name: 'Theme preference' })).toBeVisible();
   await expect(menuButton).toBeVisible();
 
@@ -143,7 +143,7 @@ test('every navigation destination remains visible and usable at the mobile brea
     await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
   }
 
-  await page.getByRole('link', { name: 'color$' }).click();
+  await page.getByRole('link', { name: 'Color Theory Course' }).click();
   await expect(page).toHaveURL(/\/$/);
 });
 
@@ -245,7 +245,7 @@ test('a failed milestone retry clears the attempt and leaves progression locked'
 
   await page.reload();
   await expect(page.getByText('0 / 5 answered')).toBeVisible();
-  await page.getByRole('link', { name: 'color-theory-course$' }).click();
+  await page.getByRole('link', { name: 'Color Theory Course' }).click();
   const unitTwoCard = page.getByText('How Screens Make Color', { exact: true })
     .locator('..')
     .locator('..')
