@@ -12,9 +12,9 @@
 }
 
 .logo {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 1rem;
-  color: var(--accent-warning);
+  color: var(--primary-foreground);
   text-decoration: none;
   white-space: nowrap;
   flex-shrink: 0;
