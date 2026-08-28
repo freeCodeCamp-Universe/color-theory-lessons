@@ -4,9 +4,9 @@ import { expect, test } from '@playwright/test';
 test('home unit disclosures expose native semantics and keyboard behavior', async ({ page }) => {
   await page.goto('/');
 
-  const heroLink = page.getByRole('link', { name: 'start learning' });
-  const startLink = page.getByRole('link', { name: 'start →' }).first();
-  const lessonLink = page.getByRole('link', { name: 'continue →' }).first();
+  const heroLink = page.getByRole('link', { name: 'Start: What Color Does in Interface Design' }).first();
+  const startLink = page.getByRole('link', { name: 'Start: What Color Does in Interface Design' }).nth(1);
+  const lessonLink = page.getByRole('link', { name: 'Continue: What Color Does in Interface Design' });
 
   await heroLink.focus();
   await page.keyboard.press('Tab');

@@ -54,6 +54,7 @@ describe('LessonPage', () => {
     expect(screen.getByText('loading lesson...')).toBeInTheDocument();
 
     expect(await screen.findByText('lesson not found: not-a-lesson')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'lesson not found' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /back to home/i })).toHaveAttribute('href', '/');
   });
 

@@ -38,6 +38,7 @@ describe('MilestonePage', () => {
     renderWithAppState(milestoneRoute, { route: '/milestone/not-a-milestone' });
 
     expect(screen.getByText('milestone not found: not-a-milestone')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'milestone not found' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /back to home/i })).toHaveAttribute('href', '/');
   });
 
