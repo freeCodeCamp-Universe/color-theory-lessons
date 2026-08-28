@@ -8,20 +8,29 @@ working in those areas.
 
 ## Set up the project
 
+Use Node.js 22, which matches the version used by continuous integration.
+
 1. Fork the repository and clone your fork.
-2. Install the dependencies:
+2. Add the main repository as the `upstream` remote:
+
+   ```sh
+   git remote add upstream https://github.com/freeCodeCamp-Universe/color-theory-lessons.git
+   ```
+
+3. Install the dependencies and the Chromium browser used by Playwright:
 
    ```sh
    npm install
+   npx playwright install chromium
    ```
 
-3. Create a branch for one issue or focused change:
+4. Create a branch for one issue or focused change:
 
    ```sh
    git switch -c <type>/<short-description>
    ```
 
-4. Start the development server:
+5. Start the development server:
 
    ```sh
    npm run dev
