@@ -82,6 +82,27 @@ async function mockupColors(page: Page) {
   });
 }
 
+async function mockupBoundaryColors(page: Page) {
+  return page.getByText('Learn color theory', { exact: true }).evaluate((heading) => {
+    const canvas = heading.closest('[data-authored-visual]');
+    if (!canvas) throw new Error('Expected the mockup to have an authored visual root');
+
+    let boundary: Element | null = canvas;
+    while (boundary) {
+      const styles = getComputedStyle(boundary);
+      if (styles.borderTopStyle !== 'none' && styles.borderTopWidth !== '0px') {
+        return {
+          background: getComputedStyle(canvas).backgroundColor,
+          border: styles.borderTopColor,
+        };
+      }
+      boundary = boundary.parentElement;
+    }
+
+    throw new Error('Expected the mockup to have a visible boundary');
+  });
+}
+
 function contrastRatio(foreground: string, background: string): number {
   function luminance(color: string): number {
     const channels = color.match(/\d+/g)?.slice(0, 3).map(Number);
@@ -206,11 +227,14 @@ test('the first lesson mockups keep their colors in both themes', async ({ page 
   await expect(page.getByText('Learn color theory', { exact: true })).toBeVisible();
 
   const darkColors = await mockupColors(page);
+  const darkBoundary = await mockupBoundaryColors(page);
   await page.getByRole('combobox', { name: 'Theme preference' }).selectOption('light');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   const lightColors = await mockupColors(page);
+  const lightBoundary = await mockupBoundaryColors(page);
 
   expect(lightColors).toEqual(darkColors);
+  expect(lightBoundary).toEqual(darkBoundary);
   for (const pair of lightColors) {
     expect(contrastRatio(pair.foreground, pair.background), pair.text).toBeGreaterThanOrEqual(7);
   }
@@ -221,21 +245,27 @@ test('the first lesson mockups keep their colors in both themes', async ({ page 
   await expect(page.getByText(/Colors without a defined role add competing signals/)).toBeVisible();
 
   const lightNoisyColors = await mockupColors(page);
+  const lightNoisyBoundary = await mockupBoundaryColors(page);
   await page.getByRole('combobox', { name: 'Theme preference' }).selectOption('dark');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   const darkNoisyColors = await mockupColors(page);
+  const darkNoisyBoundary = await mockupBoundaryColors(page);
 
   expect(darkNoisyColors).toEqual(lightNoisyColors);
+  expect(darkNoisyBoundary).toEqual(lightNoisyBoundary);
 
   await page.getByRole('button', { name: 'next', exact: true }).click();
   await expect(page.getByText('identify each color\'s role')).toBeVisible();
 
   const darkExerciseColors = await mockupColors(page);
+  const darkExerciseBoundary = await mockupBoundaryColors(page);
   await page.getByRole('combobox', { name: 'Theme preference' }).selectOption('light');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   const lightExerciseColors = await mockupColors(page);
+  const lightExerciseBoundary = await mockupBoundaryColors(page);
 
   expect(darkExerciseColors).toEqual(lightExerciseColors);
+  expect(darkExerciseBoundary).toEqual(lightExerciseBoundary);
   expect(lightExerciseColors).toEqual(lightColors);
 
   const navRegion = page.getByRole('button', {
@@ -244,12 +274,45 @@ test('the first lesson mockups keep their colors in both themes', async ({ page 
   for (let index = 0; index < 20 && await navRegion.evaluate((element) => document.activeElement !== element); index += 1) {
     await page.keyboard.press('Tab');
   }
+  await expect(navRegion).toBeFocused();
+  await expect.poll(() => navRegion.evaluate((element) => getComputedStyle(element).outlineColor))
+    .toBe('rgb(153, 201, 255)');
   const focusColors = await navRegion.evaluate((element) => ({
     outline: getComputedStyle(element).outlineColor,
     background: getComputedStyle(element.parentElement!).backgroundColor,
   }));
 
   expect(contrastRatio(focusColors.outline, focusColors.background)).toBeGreaterThanOrEqual(3);
+
+  await page.locator('body').click({ position: { x: 1, y: 1 } });
+  await navRegion.hover();
+  await expect.poll(() => navRegion.evaluate((element) => getComputedStyle(element).outlineColor))
+    .toBe('rgb(241, 190, 50)');
+  const hoverOutline = await navRegion.evaluate((element) => getComputedStyle(element).outlineColor);
+  expect(contrastRatio(hoverOutline, focusColors.background)).toBeGreaterThanOrEqual(3);
+
+  await navRegion.click();
+  await expect.poll(() => navRegion.evaluate((element) => getComputedStyle(element).outlineColor))
+    .toBe('rgb(153, 201, 255)');
+  const activeOutline = await navRegion.evaluate((element) => getComputedStyle(element).outlineColor);
+  expect(contrastRatio(activeOutline, focusColors.background)).toBeGreaterThanOrEqual(3);
+
+  await page.getByRole('button', { name: 'separating sections' }).click();
+  await page.getByRole('button', { name: 'check role' }).click();
+  await expect.poll(() => navRegion.evaluate((element) => getComputedStyle(element).outlineColor))
+    .toBe('rgb(172, 209, 87)');
+  const solvedColors = await navRegion.evaluate((element) => {
+    const badge = element.querySelector('span:last-child');
+    if (!badge) throw new Error('Expected the solved region to include a badge');
+    return {
+      outline: getComputedStyle(element).outlineColor,
+      badgeForeground: getComputedStyle(badge).color,
+      badgeBackground: getComputedStyle(badge).backgroundColor,
+    };
+  });
+
+  expect(contrastRatio(solvedColors.outline, focusColors.background)).toBeGreaterThanOrEqual(3);
+  expect(contrastRatio(solvedColors.badgeForeground, solvedColors.badgeBackground)).toBeGreaterThanOrEqual(7);
 });
 
 test('production progression redirects locked routes and keeps the hero on the milestone', async ({ page }) => {

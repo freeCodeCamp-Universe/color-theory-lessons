@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  border: 1px solid var(--border);
+  border: 1px solid var(--gray-75);
   border-radius: var(--radius-md);
   overflow: hidden;
 }
@@ -40,7 +40,7 @@
 
 .mockup {
   background-color: var(--gray-80);
-  border: 1px solid var(--border);
+  border: 1px solid var(--gray-75);
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
   display: flex;
@@ -194,7 +194,7 @@
 }
 
 .region:hover {
-  outline-color: var(--accent-warning);
+  outline-color: var(--yellow-light);
 }
 
 .region:focus-visible {
@@ -202,11 +202,11 @@
 }
 
 .regionActive {
-  outline-color: var(--accent-link) !important;
+  outline-color: var(--blue-light) !important;
 }
 
 .regionSolved {
-  outline-color: var(--accent-success) !important;
+  outline-color: var(--green-light) !important;
   cursor: default;
 }
 
@@ -214,7 +214,7 @@
   position: absolute;
   top: -8px;
   right: -8px;
-  background: var(--accent-success);
+  background: var(--green-light);
   color: var(--gray-90);
   font-size: 0.65rem;
   font-weight: 700;
