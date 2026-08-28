@@ -22,6 +22,13 @@ function getLessonRow(name: string) {
 }
 
 describe('HomePage dashboard', () => {
+  it('uses course copy without a fictional terminal prompt', () => {
+    renderWithAppState(<HomePage />);
+
+    expect(screen.getByRole('heading', { name: /Color Theory.*for Developers/ })).toBeInTheDocument();
+    expect(screen.queryByText(/color-theory-course|learn --interactive/)).not.toBeInTheDocument();
+  });
+
   it('starts with the first unit expanded and locks later units and lessons', () => {
     renderWithAppState(<HomePage />);
 

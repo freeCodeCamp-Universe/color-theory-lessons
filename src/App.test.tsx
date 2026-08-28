@@ -61,7 +61,7 @@ describe('App routes', () => {
 
     expect(await screen.findByRole('heading', { name: /Color Theory.*for Developers/ })).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: 'Main navigation' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /color-theory-course\$/ })).toHaveAttribute('href', '/');
+    expect(screen.getByRole('link', { name: 'Color Theory Course' })).toHaveAttribute('href', '/');
     expect(screen.getByRole('combobox', { name: 'Theme preference' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Seeing and Describing Color/ })).toHaveAttribute('aria-expanded', 'true');
     expect(screen.getByRole('button', { name: 'reset progress' })).toBeInTheDocument();

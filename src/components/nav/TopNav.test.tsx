@@ -22,6 +22,14 @@ function renderNavigation(route = '/') {
 }
 
 describe('TopNav', () => {
+  it('uses plain course branding for both responsive logo variants', () => {
+    renderNavigation();
+
+    expect(screen.getByText('Color Theory Course')).toBeInTheDocument();
+    expect(screen.getByText('Color Theory')).toBeInTheDocument();
+    expect(screen.queryByText(/\$/)).not.toBeInTheDocument();
+  });
+
   it('navigates with desktop links and marks the current page', async () => {
     const user = userEvent.setup();
     renderNavigation('/glossary');
@@ -57,7 +65,7 @@ describe('TopNav', () => {
     renderNavigation('/review');
 
     await user.click(screen.getByRole('button', { name: 'Menu' }));
-    await user.click(screen.getByRole('link', { name: /color-theory-course\$color\$/ }));
+    await user.click(screen.getByRole('link', { name: 'Color Theory Course' }));
 
     expect(screen.getByText('current path: /')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Menu' })).toHaveAttribute('aria-expanded', 'false');
