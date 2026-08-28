@@ -46,7 +46,7 @@ This timeline outlines the progression of topics, lessons, and hands-on mileston
 *Understand how the visual system constructs color and how perception varies.*
 
 - **Lesson 4.1: How Humans Perceive Color**: The biology of rods, cones, and brain-based color processing.
-- **Lesson 4.2: Types of Color Vision Deficiency**: Understanding Protan, Deutan, and Tritan variations.
+- **Lesson 4.2: Types of Color Vision Deficiency**: Understanding protan, deutan, tritan, and achromatopsia.
 - **Lesson 4.3: Seeing Through Simulated Eyes**: Using simulations to find design risks caused by reliance on color distinctions.
 - **Lesson 4.4: What Color Perception Means for Design**: Diagnosing where meaning becomes ambiguous when hue is the only signal.
 - **Milestone 4: Design Beyond Your Own Eyes**: Find interface elements that rely on color alone, choose fixes, then answer three questions about Unit 4.
@@ -57,7 +57,7 @@ This timeline outlines the progression of topics, lessons, and hands-on mileston
 *Apply WCAG contrast and color guidance to real interfaces.*
 
 - **Lesson 5.1: Text Contrast in Practice**: Mastering the 4.5:1 and 3:1 WCAG thresholds for readability.
-- **Lesson 5.2: Non-Text Contrast for Controls and Graphics**: Ensuring buttons, icons, and states are visible.
+- **Lesson 5.2: Non-Text Contrast for Controls and Graphics**: Checking input boundaries, focus indicators, meaningful icons, and state indicators.
 - **Lesson 5.3: Color-Only Problems and Redundant Cues**: Adding icons, patterns, and text to support color signals.
 - **Lesson 5.4: Accessible Patterns for Real Interfaces**: Repairing form validation, body-text links, service statuses, and charts with reusable cues.
 - **Lesson 5.5: Accessibility Audit Workflow**: A screen/task-level workflow for contrast, color-only checks, simulation, and task verification.
