@@ -149,6 +149,7 @@ test('invalid-route recovery links meet the AAA minimum', async ({ page }) => {
 test('exercise routes reflow with text-spacing overrides', async ({ page }) => {
   const routes = {
     'u1-l5': 'hierarchy tuner',
+    'u2-l1': 'additive vs subtractive',
     'u3-l1': 'format explorer',
     'u4-l3': 'interface gallery',
     'u4-l4': 'color-only detector',
@@ -160,6 +161,10 @@ test('exercise routes reflow with text-spacing overrides', async ({ page }) => {
   for (const [lessonId, toolName] of Object.entries(routes)) {
     await page.goto(`/lesson/${lessonId}`);
     await advanceToLastLessonStep(page, toolName);
+    await expect.poll(
+      () => page.evaluate(() => document.documentElement.scrollWidth),
+      { message: `${lessonId} should not overflow horizontally before text spacing` },
+    ).toBeLessThanOrEqual(320);
     await page.addStyleTag({ content: `
       * { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
       p { margin-bottom: 2em !important; }
