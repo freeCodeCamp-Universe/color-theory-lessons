@@ -48,6 +48,80 @@ async function storedCourseState(page: Page) {
   return page.evaluate((key) => JSON.parse(localStorage.getItem(key) ?? 'null'), STORAGE_KEY);
 }
 
+async function mockupColors(page: Page) {
+  return page.evaluate(() => {
+    function opaqueBackground(element: Element): string {
+      let current: Element | null = element;
+      while (current) {
+        const background = getComputedStyle(current).backgroundColor;
+        if (background !== 'rgba(0, 0, 0, 0)') return background;
+        current = current.parentElement;
+      }
+      throw new Error('Expected the mockup text to have an opaque background');
+    }
+
+    return [
+      'color-theory-course$',
+      'settings',
+      'Learn color theory',
+      'Six interactive units for developers.',
+      'start learning',
+      '✓ Unit 1 complete',
+      'Lesson 2: Hue, saturation, and lightness →',
+    ].map((text) => {
+      const element = [...document.querySelectorAll('span, div')]
+        .find((candidate) => candidate.textContent === text);
+      if (!element) throw new Error(`Could not find mockup text: ${text}`);
+
+      return {
+        text,
+        foreground: getComputedStyle(element).color,
+        background: opaqueBackground(element),
+      };
+    });
+  });
+}
+
+async function mockupBoundaryColors(page: Page) {
+  return page.getByText('Learn color theory', { exact: true }).evaluate((heading) => {
+    const canvas = heading.closest('[data-authored-visual]');
+    if (!canvas) throw new Error('Expected the mockup to have an authored visual root');
+
+    let boundary: Element | null = canvas;
+    while (boundary) {
+      const styles = getComputedStyle(boundary);
+      if (styles.borderTopStyle !== 'none' && styles.borderTopWidth !== '0px') {
+        return {
+          background: getComputedStyle(canvas).backgroundColor,
+          border: styles.borderTopColor,
+        };
+      }
+      boundary = boundary.parentElement;
+    }
+
+    throw new Error('Expected the mockup to have a visible boundary');
+  });
+}
+
+function contrastRatio(foreground: string, background: string): number {
+  function luminance(color: string): number {
+    const channels = color.match(/\d+/g)?.slice(0, 3).map(Number);
+    if (!channels || channels.length !== 3) {
+      throw new Error(`Expected an RGB color, received "${color}"`);
+    }
+    const linear = channels.map((channel) => {
+      const value = channel / 255;
+      return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+  }
+
+  const foregroundLuminance = luminance(foreground);
+  const backgroundLuminance = luminance(background);
+  return (Math.max(foregroundLuminance, backgroundLuminance) + 0.05)
+    / (Math.min(foregroundLuminance, backgroundLuminance) + 0.05);
+}
+
 async function solveFirstLessonChallenge(page: Page) {
   const answers = [
     ['Click to identify what the nav bar color is doing', 'separating sections'],
@@ -145,6 +219,100 @@ test('every navigation destination remains visible and usable at the mobile brea
 
   await page.getByRole('link', { name: 'Color Theory Course' }).click();
   await expect(page).toHaveURL(/\/$/);
+});
+
+test('the first lesson mockups keep their colors in both themes', async ({ page }) => {
+  await seedCourseState(page, { theme: 'dark' });
+  await page.goto('/lesson/u1-l1');
+  await expect(page.getByText('Learn color theory', { exact: true })).toBeVisible();
+
+  const darkColors = await mockupColors(page);
+  const darkBoundary = await mockupBoundaryColors(page);
+  await page.getByRole('combobox', { name: 'Theme preference' }).selectOption('light');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  const lightColors = await mockupColors(page);
+  const lightBoundary = await mockupBoundaryColors(page);
+
+  expect(lightColors).toEqual(darkColors);
+  expect(lightBoundary).toEqual(darkBoundary);
+  for (const pair of lightColors) {
+    expect(contrastRatio(pair.foreground, pair.background), pair.text).toBeGreaterThanOrEqual(7);
+  }
+
+  for (let index = 0; index < 3; index += 1) {
+    await page.getByRole('button', { name: 'next', exact: true }).click();
+  }
+  await expect(page.getByText(/Colors without a defined role add competing signals/)).toBeVisible();
+
+  const lightNoisyColors = await mockupColors(page);
+  const lightNoisyBoundary = await mockupBoundaryColors(page);
+  await page.getByRole('combobox', { name: 'Theme preference' }).selectOption('dark');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  const darkNoisyColors = await mockupColors(page);
+  const darkNoisyBoundary = await mockupBoundaryColors(page);
+
+  expect(darkNoisyColors).toEqual(lightNoisyColors);
+  expect(darkNoisyBoundary).toEqual(lightNoisyBoundary);
+
+  await page.getByRole('button', { name: 'next', exact: true }).click();
+  await expect(page.getByText('identify each color\'s role')).toBeVisible();
+
+  const darkExerciseColors = await mockupColors(page);
+  const darkExerciseBoundary = await mockupBoundaryColors(page);
+  await page.getByRole('combobox', { name: 'Theme preference' }).selectOption('light');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  const lightExerciseColors = await mockupColors(page);
+  const lightExerciseBoundary = await mockupBoundaryColors(page);
+
+  expect(darkExerciseColors).toEqual(lightExerciseColors);
+  expect(darkExerciseBoundary).toEqual(lightExerciseBoundary);
+  expect(lightExerciseColors).toEqual(lightColors);
+
+  const navRegion = page.getByRole('button', {
+    name: 'Click to identify what the nav bar color is doing',
+  });
+  for (let index = 0; index < 20 && await navRegion.evaluate((element) => document.activeElement !== element); index += 1) {
+    await page.keyboard.press('Tab');
+  }
+  await expect(navRegion).toBeFocused();
+  await expect.poll(() => navRegion.evaluate((element) => getComputedStyle(element).outlineColor))
+    .toBe('rgb(153, 201, 255)');
+  const focusColors = await navRegion.evaluate((element) => ({
+    outline: getComputedStyle(element).outlineColor,
+    background: getComputedStyle(element.parentElement!).backgroundColor,
+  }));
+
+  expect(contrastRatio(focusColors.outline, focusColors.background)).toBeGreaterThanOrEqual(3);
+
+  await page.locator('body').click({ position: { x: 1, y: 1 } });
+  await navRegion.hover();
+  await expect.poll(() => navRegion.evaluate((element) => getComputedStyle(element).outlineColor))
+    .toBe('rgb(241, 190, 50)');
+  const hoverOutline = await navRegion.evaluate((element) => getComputedStyle(element).outlineColor);
+  expect(contrastRatio(hoverOutline, focusColors.background)).toBeGreaterThanOrEqual(3);
+
+  await navRegion.click();
+  await expect.poll(() => navRegion.evaluate((element) => getComputedStyle(element).outlineColor))
+    .toBe('rgb(153, 201, 255)');
+  const activeOutline = await navRegion.evaluate((element) => getComputedStyle(element).outlineColor);
+  expect(contrastRatio(activeOutline, focusColors.background)).toBeGreaterThanOrEqual(3);
+
+  await page.getByRole('button', { name: 'separating sections' }).click();
+  await page.getByRole('button', { name: 'check role' }).click();
+  await expect.poll(() => navRegion.evaluate((element) => getComputedStyle(element).outlineColor))
+    .toBe('rgb(172, 209, 87)');
+  const solvedColors = await navRegion.evaluate((element) => {
+    const badge = element.querySelector('span:last-child');
+    if (!badge) throw new Error('Expected the solved region to include a badge');
+    return {
+      outline: getComputedStyle(element).outlineColor,
+      badgeForeground: getComputedStyle(badge).color,
+      badgeBackground: getComputedStyle(badge).backgroundColor,
+    };
+  });
+
+  expect(contrastRatio(solvedColors.outline, focusColors.background)).toBeGreaterThanOrEqual(3);
+  expect(contrastRatio(solvedColors.badgeForeground, solvedColors.badgeBackground)).toBeGreaterThanOrEqual(7);
 });
 
 test('production progression redirects locked routes and keeps the hero on the milestone', async ({ page }) => {
