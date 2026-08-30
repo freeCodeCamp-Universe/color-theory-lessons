@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { Link } from 'react-router-dom';
-import type { LessonConfig } from '../../types/lesson.ts';
+import type { LessonConfig, QuizItem } from '../../types/lesson.ts';
 import { useLessonCompletion, type QuizAnswer } from '../../hooks/useLessonCompletion.ts';
 import { units } from '../../data/units.ts';
 import {
@@ -11,6 +11,7 @@ import {
 import { ToolRenderer } from '../tools/ToolRenderer.tsx';
 import type { ActiveExerciseStage } from '../tools/exercise-stage.ts';
 import { ChallengeHints } from './ChallengeHints.tsx';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import StepPanelRenderer from './StepPanelRenderer.tsx';
 import {
@@ -160,6 +161,91 @@ function saveLessonSession(lessonId: string, state: LessonSessionState) {
   }
 }
 
+interface LessonProgress {
+  position: number;
+  total: number;
+  text: string;
+}
+
+function getLessonProgress(
+  lesson: LessonConfig,
+  phase: Phase,
+  stepIndex: number,
+  quizIndex: number,
+  challengeDone: boolean,
+  activeStage: ActiveExerciseStage | null,
+): LessonProgress {
+  const challengePosition = lesson.steps.length + 1;
+  const total = challengePosition + lesson.quizItems.length;
+
+  if (phase === 'complete') {
+    return { position: total, total, text: 'Lesson complete' };
+  }
+
+  if (phase === 'quiz') {
+    return {
+      position: challengePosition + quizIndex + 1,
+      total,
+      text: `Quiz question ${quizIndex + 1} of ${lesson.quizItems.length}`,
+    };
+  }
+
+  if (
+    phase === 'challenge'
+    || (stepIndex === lesson.steps.length - 1 && challengeDone)
+  ) {
+    const stagePosition = activeStage
+      ? `, stage ${activeStage.position} of ${activeStage.total}`
+      : '';
+    return {
+      position: challengePosition,
+      total,
+      text: challengeDone ? 'Challenge complete' : `Challenge${stagePosition}`,
+    };
+  }
+
+  if (stepIndex === lesson.steps.length - 1) {
+    const stagePosition = activeStage
+      ? `, challenge stage ${activeStage.position} of ${activeStage.total}`
+      : ', challenge';
+    return {
+      position: stepIndex + 1,
+      total,
+      text: `Lesson step ${stepIndex + 1} of ${lesson.steps.length}${stagePosition}`,
+    };
+  }
+
+  return {
+    position: stepIndex + 1,
+    total,
+    text: `Lesson step ${stepIndex + 1} of ${lesson.steps.length}`,
+  };
+}
+
+type QuizSwatch = NonNullable<QuizItem['colorSwatches']>[number];
+
+function QuizColorSwatch({ swatch }: { swatch: QuizSwatch }) {
+  const labelId = useId();
+  const descriptionId = useId();
+
+  return (
+    <div
+      className={styles.swatchItem}
+      role="img"
+      aria-labelledby={labelId}
+      aria-describedby={swatch.accessibleDescription ? descriptionId : undefined}
+    >
+      <div aria-hidden="true" className={styles.swatchColor} style={{ backgroundColor: swatch.color }} />
+      <span id={labelId} className={styles.swatchLabel}>{swatch.label}</span>
+      {swatch.accessibleDescription && (
+        <VisualDescription id={descriptionId}>
+          {swatch.accessibleDescription} Color value: {swatch.color.toUpperCase()}.
+        </VisualDescription>
+      )}
+    </div>
+  );
+}
+
 export function LessonPlayer({ lesson }: LessonPlayerProps) {
   const { completeLesson } = useLessonCompletion(lesson);
   const [initialSession] = useState(() => loadLessonSession(lesson));
@@ -175,6 +261,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
     stage: ActiveExerciseStage;
   } | null>(null);
   const [challengeAttempt, setChallengeAttempt] = useState(0);
+  const [announcement, setAnnouncement] = useState('');
   const activeStage = activeStageState?.lessonId === lesson.id ? activeStageState.stage : null;
 
   useEffect(() => {
@@ -193,29 +280,43 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
 
   function handleNextStep() {
     if (stepIndex < lesson.steps.length - 1) {
+      const nextStepIndex = stepIndex + 1;
       setStepIndex((i) => i + 1);
+      setAnnouncement(
+        nextStepIndex === lesson.steps.length - 1
+          ? `Challenge. Read lesson step ${nextStepIndex + 1} of ${lesson.steps.length}, then complete the exercise.`
+          : `Lesson step ${nextStepIndex + 1} of ${lesson.steps.length}.`,
+      );
     } else {
       setPhase('challenge');
+      setAnnouncement('Challenge. Complete the exercise.');
     }
   }
 
   function handlePrevStep() {
-    if (stepIndex > 0) setStepIndex((i) => i - 1);
+    if (stepIndex > 0) {
+      setStepIndex((i) => i - 1);
+      setAnnouncement(`Lesson step ${stepIndex} of ${lesson.steps.length}.`);
+    }
   }
 
   function handleChallengeComplete() {
     setChallengeDone(true);
     if (lesson.quizItems.length > 0) {
       setPhase('quiz');
+      setAnnouncement(`Quiz. Question 1 of ${lesson.quizItems.length}.`);
     } else {
       completeLesson([]);
       setPhase('complete');
+      setAnnouncement('Lesson complete. This lesson has no quiz questions.');
     }
   }
 
   function handleChoiceSelect(choiceId: string) {
     if (submitted) return;
     setSelectedChoice(choiceId);
+    const choice = question?.choices.find((item) => getQuizChoiceStableId(item) === choiceId);
+    if (choice) setAnnouncement(`Selected ${choice.label}.`);
   }
 
   function handleRedo() {
@@ -228,6 +329,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
     setSubmitted(false);
     setActiveStageState(null);
     setChallengeAttempt((attempt) => attempt + 1);
+    setAnnouncement(`Lesson restarted. Lesson step 1 of ${lesson.steps.length}.`);
   }
 
   function handleSubmitAnswer() {
@@ -240,6 +342,14 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
       ...prev,
       { questionId: question.id, choiceId: selectedChoice, isCorrect: choice.isCorrect },
     ]);
+    const explanation = choice.explanation ? ` ${choice.explanation}` : '';
+    if (choice.isCorrect) {
+      setAnnouncement(`Correct.${explanation}`);
+    } else {
+      const correctChoice = question.choices.find((item) => item.isCorrect);
+      const correctAnswer = correctChoice ? ` Correct answer: ${correctChoice.label}.` : '';
+      setAnnouncement(`Incorrect.${correctAnswer}${explanation}`);
+    }
   }
 
   function handleNextQuestion() {
@@ -247,9 +357,13 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
     setSubmitted(false);
     if (quizIndex < lesson.quizItems.length - 1) {
       setQuizIndex((i) => i + 1);
+      setAnnouncement(`Quiz question ${quizIndex + 2} of ${lesson.quizItems.length}.`);
     } else {
       completeLesson(answers);
       setPhase('complete');
+      setAnnouncement(
+        `Lesson complete. ${answers.filter((answer) => answer.isCorrect).length} of ${lesson.quizItems.length} quiz questions correct.`,
+      );
     }
   }
 
@@ -259,6 +373,14 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
   const selectedQuestionChoice = submitted && question
     ? question.choices.find((choice) => getQuizChoiceStableId(choice) === selectedChoice)
     : null;
+  const lessonProgress = getLessonProgress(
+    lesson,
+    phase,
+    stepIndex,
+    quizIndex,
+    challengeDone,
+    activeStage,
+  );
 
   const hasRightPanel =
     phase !== 'quiz' && phase !== 'complete' && (
@@ -278,42 +400,37 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
           <h1 className={styles.lessonTitle}>{lesson.title}</h1>
         </div>
 
-        {/* Progress dots */}
-        <div className={styles.progress} aria-label="Lesson progress">
-          {lesson.steps.map((_, i) => (
-            <span
-              key={`step-${i}`}
-              className={`${styles.progressDot} ${
-                phase === 'steps' && i < stepIndex
-                  ? styles.done
-                  : phase === 'steps' && i === stepIndex
-                    ? styles.current
-                    : phase !== 'steps'
+        <div
+          className={styles.progress}
+          role="progressbar"
+          aria-label={`Lesson progress: ${lessonProgress.text}`}
+          aria-valuemin={1}
+          aria-valuemax={lessonProgress.total}
+          aria-valuenow={lessonProgress.position}
+          aria-valuetext={lessonProgress.text}
+        >
+          <span className={styles.progressText}>{lessonProgress.text}</span>
+          <span className={styles.progressDots} aria-hidden="true">
+            {Array.from({ length: lessonProgress.total }, (_, index) => {
+              const position = index + 1;
+              const isComplete = phase === 'complete';
+              const isChallengeComplete = challengeDone && position === lesson.steps.length + 1;
+              return (
+                <span
+                  key={position}
+                  className={`${styles.progressDot} ${
+                    isComplete || position < lessonProgress.position || isChallengeComplete
                       ? styles.done
-                      : ''
-              }`}
-            />
-          ))}
-          <span
-            className={`${styles.progressDot} ${
-              challengeDone || phase === 'quiz' || phase === 'complete' || phase === 'challenge' ? styles.done : ''
-            }`}
-          />
-          {lesson.quizItems.map((_, i) => (
-            <span
-              key={`q${i}`}
-              className={`${styles.progressDot} ${
-                phase === 'quiz' && i < quizIndex
-                  ? styles.done
-                  : phase === 'quiz' && i === quizIndex
-                    ? styles.current
-                    : phase === 'complete'
-                      ? styles.done
-                      : ''
-              }`}
-            />
-          ))}
+                      : position === lessonProgress.position
+                        ? styles.current
+                        : ''
+                  }`}
+                />
+              );
+            })}
+          </span>
         </div>
+        <StatusAnnouncement message={announcement} />
 
         {/* ── Steps phase ── */}
         {phase === 'steps' && (
@@ -367,7 +484,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
                 resetKey={`${lesson.id}:${challengeAttempt}`}
               />
             </div>
-            <div aria-live="polite">
+            <div>
               {challengeDone && (
                 <div className={styles.stepActions}>
                   <button className={styles.btnPrimary} onClick={handleChallengeComplete}>
@@ -389,15 +506,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
               {question.colorSwatches && question.colorSwatches.length > 0 && (
                 <div className={styles.quizSwatches}>
                   {question.colorSwatches.map((swatch) => (
-                    <div key={swatch.label} className={styles.swatchItem}>
-                      <div aria-hidden="true" className={styles.swatchColor} style={{ backgroundColor: swatch.color }} />
-                      <span className={styles.swatchLabel}>{swatch.label}</span>
-                      {swatch.accessibleDescription && (
-                        <VisualDescription>
-                          {swatch.accessibleDescription} Color value: {swatch.color.toUpperCase()}.
-                        </VisualDescription>
-                      )}
-                    </div>
+                    <QuizColorSwatch key={swatch.label} swatch={swatch} />
                   ))}
                 </div>
               )}
@@ -420,16 +529,23 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
                               : ''
                       }`}
                       onClick={() => handleChoiceSelect(choiceId)}
+                      aria-pressed={isSelected}
                       disabled={submitted && !choice.isCorrect && selectedChoice !== choiceId}
                     >
                       <span className={styles.choiceKey}>{getLessonChoiceLabel(index)}.</span>
                       <span>{choice.label}</span>
+                      {showResult && choice.isCorrect && (
+                        <span className={styles.choiceResult}>correct</span>
+                      )}
+                      {showResult && isSelected && !choice.isCorrect && (
+                        <span className={styles.choiceResult}>your answer: incorrect</span>
+                      )}
                     </button>
                   );
                 })}
               </div>
 
-              <div aria-live="polite" aria-atomic="true">
+              <div>
                 {selectedQuestionChoice?.explanation && (
                   <p className={styles.explanation}>
                     {selectedQuestionChoice.explanation}
@@ -517,7 +633,15 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
                 <legend className={styles.panelExampleLabel}>exercise</legend>
                 <ToolRenderer
                   lesson={lesson}
-                  onChallengeComplete={() => setChallengeDone(true)}
+                  onChallengeComplete={() => {
+                    if (challengeDone) return;
+                    setChallengeDone(true);
+                    setAnnouncement(
+                      lesson.quizItems.length > 0
+                        ? 'The quiz is ready.'
+                        : 'The lesson is ready to finish.',
+                    );
+                  }}
                   onStageChange={(stage) => setActiveStageState({ lessonId: lesson.id, stage })}
                 />
               </fieldset>

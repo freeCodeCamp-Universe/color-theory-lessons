@@ -25,8 +25,13 @@ describe('StepPanelRenderer accessibility contract', () => {
 
     const visual = screen.getByText('HSL preview').closest('[data-authored-visual]');
     const description = screen.getByText(/Three controls change/);
+    expect(screen.getByRole('group', { name: 'HSL color preview' })).toBe(visual);
     expect(visual).toHaveAttribute('aria-describedby', description.id);
     expect(description).toHaveClass('sr-only');
+    expect(visual).toHaveAccessibleDescription(
+      'Three controls change the displayed hue, saturation, and lightness. Colors: current color: hsl(200 70% 50%).',
+    );
+    expect(description).not.toHaveTextContent('HSL color preview');
     expect(description).toHaveTextContent('current color: hsl(200 70% 50%)');
   });
 

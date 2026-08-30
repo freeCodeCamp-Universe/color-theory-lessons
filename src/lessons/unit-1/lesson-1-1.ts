@@ -1,5 +1,6 @@
 import type { LessonConfig } from '../../types/lesson.ts';
 import { LESSON_TITLES } from '../lesson-titles.ts';
+import { BEFORE_AFTER_PREVIEWS } from '../preview-accessibility.ts';
 
 export const lesson1_1: LessonConfig = {
   id: 'u1-l1',
@@ -10,19 +11,19 @@ export const lesson1_1: LessonConfig = {
   steps: [
     {
       text: 'Color directs attention and communicates structure in an interface. In the example, notice which element stands out first, how the navigation is separated from the content, and which color marks progress.',
-      panel: { type: 'before-after-preview', mockup: 'purposeful' },
+      panel: { type: 'before-after-preview', mockup: 'purposeful', accessibility: BEFORE_AFTER_PREVIEWS.purposeful },
     },
     {
       text: 'A shared color cue can mark related items as one group. A different background color can also separate navigation from the page content.',
-      panel: { type: 'before-after-preview', mockup: 'purposeful' },
+      panel: { type: 'before-after-preview', mockup: 'purposeful', accessibility: BEFORE_AFTER_PREVIEWS.purposeful },
     },
     {
       text: 'Many interfaces use green for success, red for errors, and yellow for warnings. Users learn these meanings through repeated use, so the colors act as status cues.',
-      panel: { type: 'before-after-preview', mockup: 'purposeful' },
+      panel: { type: 'before-after-preview', mockup: 'purposeful', accessibility: BEFORE_AFTER_PREVIEWS.purposeful },
     },
     {
       text: 'Colors without a defined role add competing signals. In the noisy example, several unrelated elements use saturated colors, so the primary action no longer stands out.',
-      panel: { type: 'before-after-preview', mockup: 'noisy' },
+      panel: { type: 'before-after-preview', mockup: 'noisy', accessibility: BEFORE_AFTER_PREVIEWS.noisy },
     },
     {
       text: 'The same interface can use color for several jobs at once.',

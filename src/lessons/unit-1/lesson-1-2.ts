@@ -1,5 +1,6 @@
 import type { LessonConfig } from '../../types/lesson.ts';
 import { LESSON_TITLES } from '../lesson-titles.ts';
+import { HSL_DIMENSION_PREVIEWS } from '../preview-accessibility.ts';
 
 export const lesson1_2: LessonConfig = {
   id: 'u1-l2',
@@ -13,15 +14,15 @@ export const lesson1_2: LessonConfig = {
     },
     {
       text: 'Hue identifies a color family, such as red, orange, yellow, green, blue, or purple. In HSL, hue is represented by an angle around the color wheel.',
-      panel: { type: 'hsl-slider-preview', dimension: 'h' },
+      panel: { type: 'hsl-slider-preview', dimension: 'h', accessibility: HSL_DIMENSION_PREVIEWS.h },
     },
     {
       text: 'In HSL, saturation controls how vivid or muted a color appears. With hue and lightness fixed, lowering saturation moves the color toward gray.',
-      panel: { type: 'hsl-slider-preview', dimension: 's' },
+      panel: { type: 'hsl-slider-preview', dimension: 's', accessibility: HSL_DIMENSION_PREVIEWS.s },
     },
     {
       text: 'In HSL, lightness controls how light or dark a color appears. At 0% the color is black, and at 100% it is white. With hue and saturation fixed, changing lightness produces lighter or darker versions of the color.',
-      panel: { type: 'hsl-slider-preview', dimension: 'l' },
+      panel: { type: 'hsl-slider-preview', dimension: 'l', accessibility: HSL_DIMENSION_PREVIEWS.l },
     },
     {
       text: 'Change one HSL value while the other two stay fixed. This isolates the effect of hue, saturation, or lightness on the resulting color.',

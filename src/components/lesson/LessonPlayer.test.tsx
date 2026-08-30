@@ -6,6 +6,7 @@ import { AppProvider } from '../../state/app-provider.tsx';
 import { useAppState } from '../../state/app-context.tsx';
 import { ErrorBoundary } from '../ErrorBoundary.tsx';
 import type { LessonConfig } from '../../types/lesson.ts';
+import { lesson1_2 } from '../../lessons/unit-1/lesson-1-2.ts';
 import { lesson1_6 } from '../../lessons/unit-1/lesson-1-6.ts';
 
 const sessionKey = (lessonId: string) => `color-theory-course-lesson-session:${lessonId}`;
@@ -127,30 +128,97 @@ async function advanceThroughChallenge() {
 }
 
 describe('LessonPlayer', () => {
-  it('renders an assessment-safe description and value for a quiz swatch', async () => {
-    const lesson = makeLesson({
-      quizItems: [{
-        id: 'q1',
-        prompt: 'Which property differs?',
-        colorSwatches: [{
-          label: 'muted blue green',
-          color: '#287F83',
-          accessibleDescription: 'A muted blue-green swatch.',
-        }],
-        choices: [
-          { stableId: 'hue', label: 'Hue', isCorrect: true },
-          { stableId: 'lightness', label: 'Lightness', isCorrect: false },
-        ],
-      }],
+  it.each(lesson1_2.quizItems.filter((item) => item.colorSwatches))(
+    'renders the authored assessment-safe swatches for $id',
+    async (quizItem) => {
+      renderLesson(makeLesson({ quizItems: [quizItem] }));
+      await advanceThroughChallenge();
+
+      for (const swatch of quizItem.colorSwatches ?? []) {
+        const visual = screen.getByRole('img', { name: swatch.label });
+        const descriptionId = visual.getAttribute('aria-describedby');
+        expect(descriptionId).toBeTruthy();
+        const description = document.getElementById(descriptionId!);
+        expect(description).toHaveClass('sr-only');
+        expect(description).toHaveTextContent(swatch.accessibleDescription!);
+        expect(description).toHaveTextContent(`Color value: ${swatch.color.toUpperCase()}.`);
+        expect(screen.getByText(swatch.label).previousElementSibling).toHaveAttribute('aria-hidden', 'true');
+      }
+    },
+  );
+
+  it('exposes progress and announces lesson, challenge, quiz, result, and completion changes once', async () => {
+    renderLesson(makeLesson({
+      steps: [{ text: 'Step one' }, { text: 'Step two' }, { text: 'Step three' }],
+      quizItems: [
+        {
+          id: 'q1',
+          prompt: 'First question?',
+          choices: [
+            { stableId: 'correct-answer', label: 'Correct Answer', isCorrect: true },
+            {
+              stableId: 'wrong-answer',
+              label: 'Wrong Answer',
+              isCorrect: false,
+              explanation: 'The selected answer does not match the lesson.',
+            },
+          ],
+        },
+      ],
+    }));
+
+    const progress = screen.getByRole('progressbar', { name: /^Lesson progress:/ });
+    const status = screen.getByRole('status');
+    expect(progress).toHaveAttribute('aria-valuemin', '1');
+    expect(progress).toHaveAttribute('aria-valuemax', '5');
+    expect(progress).toHaveAttribute('aria-valuenow', '1');
+    expect(progress).toHaveAttribute('aria-valuetext', 'Lesson step 1 of 3');
+    expect(progress).toHaveAccessibleName('Lesson progress: Lesson step 1 of 3');
+    expect(screen.getByText('Lesson step 1 of 3')).toBeInTheDocument();
+    expect(status).toBeEmptyDOMElement();
+
+    fireEvent.click(screen.getByRole('button', { name: 'next' }));
+    expect(status).toHaveTextContent('Lesson step 2 of 3.');
+    expect(progress).toHaveAttribute('aria-valuenow', '2');
+
+    fireEvent.click(screen.getByRole('button', { name: 'next' }));
+    expect(status).toHaveTextContent(
+      'Challenge. Read lesson step 3 of 3, then complete the exercise.',
+    );
+    expect(progress).toHaveAttribute('aria-valuenow', '3');
+    await waitFor(() => {
+      expect(progress).toHaveAttribute(
+        'aria-valuetext',
+        'Lesson step 3 of 3, challenge stage 1 of 3',
+      );
     });
 
-    renderLesson(lesson);
-    await advanceThroughChallenge();
+    fireEvent.click(screen.getByRole('button', { name: 'complete mock challenge' }));
+    expect(status).toHaveTextContent(/^The quiz is ready\.$/);
+    expect(progress).toHaveAttribute('aria-valuetext', 'Challenge complete');
 
-    const description = screen.getByText(/A muted blue-green swatch/);
-    expect(description).toHaveClass('sr-only');
-    expect(description).toHaveTextContent('Color value: #287F83.');
-    expect(screen.getByText('muted blue green').previousElementSibling).toHaveAttribute('aria-hidden', 'true');
+    fireEvent.click(await screen.findByRole('button', { name: 'take the quiz →' }));
+    expect(status).toHaveTextContent('Quiz. Question 1 of 1.');
+    expect(progress).toHaveAttribute('aria-valuenow', '5');
+    expect(progress).toHaveAttribute('aria-valuetext', 'Quiz question 1 of 1');
+
+    const wrongAnswer = screen.getByRole('button', { name: /Wrong Answer/i });
+    fireEvent.click(wrongAnswer);
+    expect(wrongAnswer).toHaveAttribute('aria-pressed', 'true');
+    expect(status).toHaveTextContent(/^Selected Wrong Answer\.$/);
+
+    fireEvent.click(screen.getByRole('button', { name: 'check' }));
+    expect(status).toHaveTextContent(
+      'Incorrect. Correct answer: Correct Answer. The selected answer does not match the lesson.',
+    );
+    expect(screen.getByRole('button', { name: /Correct Answer.*correct/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Wrong Answer.*your answer: incorrect/ }))
+      .toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'finish lesson →' }));
+    expect(status).toHaveTextContent('Lesson complete. 0 of 1 quiz questions correct.');
+    expect(progress).toHaveAttribute('aria-valuetext', 'Lesson complete');
+    expect(progress).toHaveAccessibleName('Lesson progress: Lesson complete');
   });
 
   describe('session storage failures', () => {

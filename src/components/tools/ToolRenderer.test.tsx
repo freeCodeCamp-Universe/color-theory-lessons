@@ -1,4 +1,4 @@
-import { cleanup, render, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { LessonConfig } from '../../types/lesson.ts';
 import { ToolRenderer } from './ToolRenderer.tsx';
@@ -17,6 +17,34 @@ const lesson: LessonConfig = {
 };
 
 describe('ToolRenderer stage reporting', () => {
+  it('associates an authored exercise description with the active tool', async () => {
+    render(
+      <ToolRenderer
+        lesson={{
+          ...lesson,
+          challenge: {
+            ...lesson.challenge,
+            accessibility: {
+              classification: 'assessment',
+              accessibleName: 'HSL matching exercise',
+              accessibleDescription: 'A target swatch and a current swatch show the colors to match.',
+            },
+          },
+        }}
+        onChallengeComplete={vi.fn()}
+      />,
+    );
+
+    const tool = await screen.findByRole('group', { name: 'HSL matching exercise' });
+    const description = screen.getByText(/A target swatch and a current swatch/);
+    expect(tool).toHaveAttribute('aria-describedby', description.id);
+    expect(description).toHaveClass('sr-only');
+    expect(tool).toHaveAccessibleDescription(
+      'A target swatch and a current swatch show the colors to match.',
+    );
+    expect(description).not.toHaveTextContent('HSL matching exercise');
+  });
+
   it('forwards a staged tool active-stage data to the lesson flow', async () => {
     const onStageChange = vi.fn();
     render(

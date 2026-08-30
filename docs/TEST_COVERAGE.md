@@ -13,7 +13,7 @@ There are no accepted manual-only exceptions in the current inventory. Open acce
 
 Paths in the evidence column are relative to the repository root. `npm test` runs the Vitest files, and `npm run test:e2e` runs the Playwright files against the production build.
 
-The inventory contains 120 behaviors: 117 have full automated coverage, 2 have partial coverage, and 1 is missing coverage. There are no manual-only rows.
+The inventory contains 121 behaviors: 118 have full automated coverage, 2 have partial coverage, and 1 is missing coverage. There are no manual-only rows.
 
 ## App entry, routes, and navigation
 
@@ -61,6 +61,7 @@ The inventory contains 120 behaviors: 117 have full automated coverage, 2 have p
 | Keep quiz and completion actions unavailable until the interactive challenge reports success. | Full | `src/components/lesson/LessonPlayer.test.tsx` |
 | Show the challenge prompt with hints closed initially. | Full | `src/components/lesson/LessonPlayer.test.tsx`, `src/components/lesson/ChallengeHints.test.tsx` |
 | Show only hints assigned to the active exercise stage and reset hint state after a stage change. | Full | `src/components/lesson/LessonPlayer.test.tsx`, `src/components/lesson/ChallengeHints.test.tsx` |
+| Expose the current lesson phase and position, describe authored previews and quiz swatches, and announce lesson, challenge, quiz, result, and completion changes. | Full | `src/accessibility-contract.test.ts`, `src/components/lesson/LessonPlayer.test.tsx`, `src/components/lesson/StepPanelRenderer.test.tsx`, `src/components/tools/ExerciseStage.test.tsx`, `src/components/tools/ToolRenderer.test.tsx`, `e2e/lesson-flow-accessibility.spec.ts` |
 | Select a quiz choice, submit it explicitly, see its feedback, and advance through the quiz. | Full | `src/components/lesson/LessonPlayer.test.tsx` |
 | Calculate and save a quiz score from the submitted answers. | Full | `src/components/lesson/LessonPlayer.test.tsx`, `src/hooks/useLessonCompletion.test.tsx` |
 | Complete a lesson without a quiz only after its tool reports success. | Full | `src/components/lesson/LessonPlayer.test.tsx` |
@@ -173,7 +174,7 @@ The inventory contains 120 behaviors: 117 have full automated coverage, 2 have p
 | Main behavior | Status | Automated test or accountable issue |
 |---|---|---|
 | Complete Format Reveal, Color-only Detector, and System Comparison with keyboard-only controls. | Missing | [#54](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/54) records the known click-only or independently unreachable controls and owns keyboard testing of every main learner flow. |
-| Hear equivalent descriptions for informative visuals, quiz swatches, live tool results, stage transitions, milestone previews, chart alternatives, and Palette Builder contrast rows. | Partial | `src/components/accessibility/accessibility-components.test.tsx`, `src/components/lesson/StepPanelRenderer.test.tsx`, `src/components/lesson/LessonPlayer.test.tsx`, `src/components/milestone/MilestonePlayer.test.tsx`, `src/components/lesson/ChallengeHints.test.tsx`, `src/components/tools/ExerciseStage.test.tsx`, and `src/components/tools/ChartTunerTool.test.tsx` verify shared description and announcement semantics, informative and decorative step panels, lesson and milestone quiz swatches, selected hints, stage focus and status, and chart-table results. [#107](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/107) owns the remaining live-result and visual-equivalence assertions plus screen-reader, browser, and operating-system results; Palette Builder work remains in [#111](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/111). |
+| Hear equivalent descriptions for informative visuals, quiz swatches, live tool results, stage transitions, milestone previews, chart alternatives, and Palette Builder contrast rows. | Partial | `src/components/accessibility/accessibility-components.test.tsx`, `src/components/lesson/StepPanelRenderer.test.tsx`, `src/components/lesson/LessonPlayer.test.tsx`, `src/components/milestone/MilestonePlayer.test.tsx`, `src/components/lesson/ChallengeHints.test.tsx`, `src/components/tools/ExerciseStage.test.tsx`, `src/components/tools/ChartTunerTool.test.tsx`, and `e2e/lesson-flow-accessibility.spec.ts` verify shared description and announcement semantics, informative and decorative step panels, lesson and milestone quiz swatches, selected hints, stage focus and status, and chart-table results. [#107](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/107) owns the remaining live-result and visual-equivalence assertions plus screen-reader, browser, and operating-system results; Palette Builder work remains in [#111](https://github.com/freeCodeCamp-Universe/color-theory-lessons/issues/111). |
 
 ## Course completion
 

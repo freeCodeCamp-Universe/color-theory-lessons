@@ -1,5 +1,6 @@
 import type { LessonConfig } from '../../types/lesson.ts';
 import { LESSON_TITLES } from '../lesson-titles.ts';
+import { RGB_MIXER_PREVIEWS } from '../preview-accessibility.ts';
 
 export const lesson2_2: LessonConfig = {
   id: 'u2-l2',
@@ -13,15 +14,15 @@ export const lesson2_2: LessonConfig = {
     },
     {
       text: 'In 8-bit RGB notation, R:0 G:0 B:0 represents black, while R:255 G:255 B:255 represents white. Raising all three channel values together increases the emitted light and moves the result from black through gray toward white.',
-      panel: { type: 'rgb-mixer-preview', mode: 'extremes' },
+      panel: { type: 'rgb-mixer-preview', mode: 'extremes', accessibility: RGB_MIXER_PREVIEWS.extremes },
     },
     {
       text: 'At full intensity, each pair of RGB channels produces an additive secondary color. Red and green produce yellow, green and blue produce cyan, and red and blue produce magenta.',
-      panel: { type: 'rgb-mixer-preview', mode: 'channel-pairs' },
+      panel: { type: 'rgb-mixer-preview', mode: 'channel-pairs', accessibility: RGB_MIXER_PREVIEWS['channel-pairs'] },
     },
     {
       text: 'In RGB notation, equal values across all three channels represent neutral grays. Lower equal values make darker grays, while higher equal values make lighter grays. When the values differ, the result gains a color cast. For example, raising red above the other two shifts a gray toward red.',
-      panel: { type: 'rgb-mixer-preview', mode: 'neutral-grays' },
+      panel: { type: 'rgb-mixer-preview', mode: 'neutral-grays', accessibility: RGB_MIXER_PREVIEWS['neutral-grays'] },
     },
     {
       text: 'Use the RGB mixer to recreate five interface colors. Before moving a slider, predict which channels should be high, low, or close to equal.',

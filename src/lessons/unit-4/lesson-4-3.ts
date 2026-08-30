@@ -1,5 +1,6 @@
 import type { LessonConfig } from '../../types/lesson.ts';
 import { LESSON_TITLES } from '../lesson-titles.ts';
+import { INTERFACE_GALLERY_PREVIEWS } from '../preview-accessibility.ts';
 
 export const lesson4_3: LessonConfig = {
   id: 'u4-l3',
@@ -13,15 +14,15 @@ export const lesson4_3: LessonConfig = {
     },
     {
       text: 'Under protan and deutan simulation, some red and green hues become hard to tell apart. In the gallery, the Active and Error badge backgrounds may look alike, but their text labels identify each status. A status system without those labels or another cue can become ambiguous.',
-      panel: { type: 'interface-gallery-preview', simulation: 'protanopia' },
+      panel: { type: 'interface-gallery-preview', simulation: 'protanopia', accessibility: INTERFACE_GALLERY_PREVIEWS.protanopia },
     },
     {
       text: 'Under tritan simulation, some blue and green hues become hard to tell apart. Some yellow hues can also look similar to reds or pinks. Interface elements that rely only on those hue differences can become ambiguous.',
-      panel: { type: 'interface-gallery-preview', simulation: 'tritanopia' },
+      panel: { type: 'interface-gallery-preview', simulation: 'tritanopia', accessibility: INTERFACE_GALLERY_PREVIEWS.tritanopia },
     },
     {
       text: 'Charts and maps can rely on hue to distinguish data. If a bar chart uses only green and red to identify two series, a protan or deutan simulation may make the series hard to tell apart. Body text can remain readable when it has enough lightness contrast with its background and does not use hue alone to convey meaning.',
-      panel: { type: 'interface-gallery-preview', simulation: 'deuteranopia' },
+      panel: { type: 'interface-gallery-preview', simulation: 'deuteranopia', accessibility: INTERFACE_GALLERY_PREVIEWS.deuteranopia },
     },
     {
       text: 'Keep color, but add cues such as icons, labels, patterns, or shapes that carry the same information. These cues preserve the information when a viewer cannot distinguish the colors.',
