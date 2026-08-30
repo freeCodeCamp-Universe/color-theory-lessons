@@ -1,4 +1,4 @@
-import type { VisualAccessibility } from './accessibility.ts';
+import type { DescribedVisual, VisualAccessibility } from './accessibility.ts';
 
 export interface UnitConfig {
   id: string;
@@ -81,6 +81,8 @@ export interface LessonStep {
 export interface Challenge {
   prompt: string;
   hints: ChallengeHint[];
+  /** Authored equivalent for informative or assessment content in the exercise panel. */
+  accessibility?: DescribedVisual;
 }
 
 export type ChallengeHint = string | {

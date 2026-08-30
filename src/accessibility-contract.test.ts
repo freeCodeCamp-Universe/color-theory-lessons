@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { INTERACTION_TYPES } from './types/lesson.ts';
 import { MILESTONE_CHALLENGE_TYPES } from './types/milestone.ts';
+import { lessonRegistry } from './lessons/lesson-registry.ts';
 
 const inventoryPath = resolve(process.cwd(), 'docs/ACCESSIBLE_VISUALS.md');
 const inventory = readFileSync(inventoryPath, 'utf8');
@@ -27,5 +28,20 @@ describe('accessible visual inventory', () => {
     expect(inventory).toContain('| MilestonePlayer |');
     expect(inventory).toContain('## Palette Builder inventory');
     expect(inventory).toContain('| Picker tabs, hue ring, and current picker marker |');
+  });
+
+  it('gives every authored lesson preview an informative description and name', () => {
+    const panels = lessonRegistry.flatMap((lesson) =>
+      lesson.steps.flatMap((step) => step.panel ? [step.panel] : []),
+    );
+
+    expect(panels.length).toBeGreaterThan(0);
+    for (const panel of panels) {
+      expect(panel.accessibility?.classification).toBe('informative');
+      if (panel.accessibility?.classification === 'informative') {
+        expect(panel.accessibility.accessibleName).toBeTruthy();
+        expect(panel.accessibility.accessibleDescription).toBeTruthy();
+      }
+    }
   });
 });

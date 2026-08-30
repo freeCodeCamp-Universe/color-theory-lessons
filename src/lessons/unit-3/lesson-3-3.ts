@@ -1,5 +1,6 @@
 import type { LessonConfig } from '../../types/lesson.ts';
 import { LESSON_TITLES } from '../lesson-titles.ts';
+import { HSL_PLAYGROUND_PREVIEW } from '../preview-accessibility.ts';
 
 export const lesson3_3: LessonConfig = {
   id: 'u3-l3',
@@ -13,11 +14,11 @@ export const lesson3_3: LessonConfig = {
     },
     {
       text: 'Hue is an angle around the color wheel from 0 to 360 degrees. Saturation and lightness are percentages. At 0% saturation, the result is gray; at 100%, it is fully saturated. At 0% lightness, the result is black; at 100%, it is white.',
-      panel: { type: 'hsl-playground-preview' },
+      panel: { type: 'hsl-playground-preview', accessibility: HSL_PLAYGROUND_PREVIEW },
     },
     {
       text: 'Each HSL component maps to one type of adjustment. Lower saturation to mute a color, raise lightness to make it lighter, or shift hue to move around the color wheel. Comparable RGB adjustments can require changing multiple channels.',
-      panel: { type: 'hsl-playground-preview' },
+      panel: { type: 'hsl-playground-preview', accessibility: HSL_PLAYGROUND_PREVIEW },
     },
     {
       text: 'CSS can add an alpha value after a slash to control transparency. For example, hsl(220 60% 50% / 0.5) represents that blue at 50% opacity. An alpha value of 0 is transparent, and 1 is opaque.',

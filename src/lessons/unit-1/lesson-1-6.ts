@@ -1,5 +1,6 @@
 import type { LessonConfig } from '../../types/lesson.ts';
 import { LESSON_TITLES } from '../lesson-titles.ts';
+import { COLOR_WHEEL_PREVIEWS } from '../preview-accessibility.ts';
 
 export const lesson1_6: LessonConfig = {
   id: 'u1-l6',
@@ -13,15 +14,15 @@ export const lesson1_6: LessonConfig = {
     },
     {
       text: 'Analogous colors sit next to each other on the color wheel. Their hue angles are close together, so the changes from one color to the next are gradual. An analogous palette can use one hue as the dominant color and nearby hues as supporting colors.',
-      panel: { type: 'color-wheel-preview', relationship: 'analogous' },
+      panel: { type: 'color-wheel-preview', relationship: 'analogous', accessibility: COLOR_WHEEL_PREVIEWS.analogous },
     },
     {
       text: 'Complementary colors sit opposite each other on the color wheel, 180 degrees apart. This is the largest possible separation between two hue angles. In an interface, one hue can be dominant while the other appears in smaller areas as an accent.',
-      panel: { type: 'color-wheel-preview', relationship: 'complementary' },
+      panel: { type: 'color-wheel-preview', relationship: 'complementary', accessibility: COLOR_WHEEL_PREVIEWS.complementary },
     },
     {
       text: 'Triadic palettes use three hues spaced 120 degrees apart around the color wheel. The hues have equal angular separation, but they do not need equal visual weight. One hue can be dominant while the other two support it.',
-      panel: { type: 'color-wheel-preview', relationship: 'triadic' },
+      panel: { type: 'color-wheel-preview', relationship: 'triadic', accessibility: COLOR_WHEEL_PREVIEWS.triadic },
     },
     {
       text: 'Color harmony describes how the colors in a palette relate to one another. A simple interface palette can start with one dominant hue, supporting hues chosen from a color-wheel relationship, and neutral colors for surfaces or text. Use the tool to choose a relationship and base hue.',

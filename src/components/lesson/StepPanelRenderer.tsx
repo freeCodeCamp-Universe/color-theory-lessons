@@ -51,7 +51,12 @@ function StepPanelVisual({ panel, children }: { panel: StepPanelConfig; children
   if (!accessibility) return children;
 
   return (
-    <div data-authored-visual aria-describedby={descriptionId}>
+    <div
+      data-authored-visual
+      role="group"
+      aria-label={accessibility.accessibleName ?? 'Lesson preview'}
+      aria-describedby={descriptionId}
+    >
       {children}
       <VisualDescription id={descriptionId} visual={accessibility} />
     </div>

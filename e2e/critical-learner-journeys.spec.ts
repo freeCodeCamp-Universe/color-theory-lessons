@@ -347,7 +347,7 @@ test('a new learner completes a lesson and keeps progress after a browser reload
   await page.getByRole('button', { name: 'take the quiz →' }).click();
   await answerLessonQuiz(page);
 
-  await expect(page.getByText('lesson complete')).toBeVisible();
+  await expect(page.getByText('lesson complete', { exact: true })).toBeVisible();
   await page.getByRole('link', { name: '← all units' }).click();
   await expect(page).toHaveURL(/\/$/);
   await expect(page.getByRole('link', { name: 'Redo: What Color Does in Interface Design' })).toBeVisible();

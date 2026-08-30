@@ -1,5 +1,6 @@
 import type { LessonConfig } from '../../types/lesson.ts';
 import { LESSON_TITLES } from '../lesson-titles.ts';
+import { VISION_CARD_PREVIEWS } from '../preview-accessibility.ts';
 
 export const lesson4_2: LessonConfig = {
   id: 'u4-l2',
@@ -13,15 +14,15 @@ export const lesson4_2: LessonConfig = {
     },
     {
       text: 'Protan, deutan, and tritan categories describe which cone photopigment is affected. Protan types involve the long-wavelength-sensitive (L) cones; deutan types involve the medium-wavelength-sensitive (M) cones; tritan types involve the short-wavelength-sensitive (S) cones. In inherited red-green color vision deficiency, "-anomaly" describes altered photopigment sensitivity, while "-anopia" describes loss of function from one cone photopigment.',
-      panel: { type: 'vision-cards-preview', expandedNames: ['Protanopia', 'Deuteranopia', 'Tritanopia'] },
+      panel: { type: 'vision-cards-preview', expandedNames: ['Protanopia', 'Deuteranopia', 'Tritanopia'], accessibility: VISION_CARD_PREVIEWS.coneTypes },
     },
     {
       text: 'Deuteranomaly is the most common inherited type of color vision deficiency. Red-green color vision deficiency as a group occurs in about 1 in 12 males with Northern European ancestry and is less common in many other populations. Inherited tritan types occur in fewer than 1 in 10,000 people.',
-      panel: { type: 'vision-cards-preview', expandedNames: ['Deuteranomaly', 'Protanomaly'] },
+      panel: { type: 'vision-cards-preview', expandedNames: ['Deuteranomaly', 'Protanomaly'], accessibility: VISION_CARD_PREVIEWS.commonTypes },
     },
     {
       text: 'Achromatopsia affects fewer than 1 in 30,000 people. Complete achromatopsia causes a lack of color discrimination because all three cone types lack function. In incomplete achromatopsia, some cone function remains and color discrimination varies. Both forms can also reduce visual acuity and cause sensitivity to light.',
-      panel: { type: 'vision-cards-preview', expandedNames: ['Achromatopsia'] },
+      panel: { type: 'vision-cards-preview', expandedNames: ['Achromatopsia'], accessibility: VISION_CARD_PREVIEWS.achromatopsia },
     },
     {
       text: 'Design for differences in color vision rather than trying to diagnose viewers. You do not know how each user perceives color, so check whether information remains available without a particular color distinction. Color vision deficiency simulations can reveal risks, but they only approximate users\' experiences.',

@@ -1,6 +1,7 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useId } from 'react';
 import type { ReactNode } from 'react';
 import type { LessonConfig } from '../../types/lesson.ts';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import type { ExerciseStageChangeHandler } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
 
@@ -56,6 +57,7 @@ interface ToolRendererProps {
  * specific logic of 30+ different tools.
  */
 export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: ToolRendererProps) {
+  const descriptionId = useId();
   let tool: ReactNode;
 
   switch (lesson.interactionType) {
@@ -302,16 +304,33 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
     }
   }
 
+  const describedTool = lesson.challenge.accessibility ? (
+    <div
+      data-authored-visual
+      role="group"
+      aria-label={lesson.challenge.accessibility.accessibleName ?? 'Interactive exercise'}
+      aria-describedby={descriptionId}
+    >
+      {tool}
+      <VisualDescription id={descriptionId} visual={lesson.challenge.accessibility} />
+    </div>
+  ) : tool;
+
   return (
     <Suspense
       fallback={
-        <div className={shellStyles.shell}>
+        <div
+          className={shellStyles.shell}
+          role="status"
+          aria-label="Loading interactive tool"
+          aria-live="polite"
+        >
           <span className={shellStyles.toolLabel}>interactive tool</span>
           <p style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>loading tool...</p>
         </div>
       }
     >
-      {tool}
+      {describedTool}
     </Suspense>
   );
 }
