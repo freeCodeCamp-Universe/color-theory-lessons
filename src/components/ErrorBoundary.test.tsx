@@ -16,7 +16,8 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    expect(screen.getByText('something went wrong.')).toHaveClass(styles.message);
+    expect(screen.getByRole('heading', { level: 1, name: 'something went wrong.' }))
+      .toHaveClass(styles.message);
     expect(screen.getByRole('button', { name: 'try again' })).toHaveClass(styles.retryButton);
 
     view.rerender(

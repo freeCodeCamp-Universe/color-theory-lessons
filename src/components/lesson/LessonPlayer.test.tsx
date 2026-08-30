@@ -128,6 +128,13 @@ async function advanceThroughChallenge() {
 }
 
 describe('LessonPlayer', () => {
+  it('makes the scrollable instruction area keyboard focusable', () => {
+    renderLesson(makeLesson());
+
+    expect(screen.getByRole('region', { name: 'Lesson instructions' }))
+      .toHaveAttribute('tabindex', '0');
+  });
+
   it.each(lesson1_2.quizItems.filter((item) => item.colorSwatches))(
     'renders the authored assessment-safe swatches for $id',
     async (quizItem) => {

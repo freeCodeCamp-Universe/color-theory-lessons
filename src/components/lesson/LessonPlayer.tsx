@@ -435,7 +435,12 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
         {/* ── Steps phase ── */}
         {phase === 'steps' && (
           <div className={styles.stepContent}>
-            <div className={styles.scrollArea}>
+            <div
+              className={styles.scrollArea}
+              role="region"
+              aria-label="Lesson instructions"
+              tabIndex={0}
+            >
               <span className={styles.stepNumber}>
                 {stepIndex + 1} / {lesson.steps.length}
               </span>
@@ -475,7 +480,12 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
         {/* ── Challenge phase ── */}
         {phase === 'challenge' && challenge && (
           <div className={styles.stepContent}>
-            <div className={styles.scrollArea}>
+            <div
+              className={styles.scrollArea}
+              role="region"
+              aria-label="Challenge instructions"
+              tabIndex={0}
+            >
               <span className={styles.stepNumber}>challenge</span>
               <p className={styles.challengePrompt}>{challenge.prompt}</p>
               <ChallengeHints
@@ -499,7 +509,12 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
         {/* ── Quiz phase ── */}
         {phase === 'quiz' && question && (
           <div className={styles.stepContent}>
-            <div className={styles.scrollArea}>
+            <div
+              className={styles.scrollArea}
+              role="region"
+              aria-label="Quiz question"
+              tabIndex={0}
+            >
               <span className={styles.quizHeader}>
                 question {quizIndex + 1} of {lesson.quizItems.length}
               </span>
