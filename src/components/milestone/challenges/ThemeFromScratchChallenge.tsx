@@ -250,7 +250,12 @@ export function ThemeFromScratchChallenge({
           ))}
         </div>
 
-        <div data-authored-visual className={styles.preview} style={{ backgroundColor: hex.bg }}>
+        <div
+          data-authored-visual
+          data-a11y-scan-exclude="milestone-3-theme-preview"
+          className={styles.preview}
+          style={{ backgroundColor: hex.bg }}
+        >
           <p className={styles.backgroundText} style={{ color: hex.primaryText }}>Page background</p>
           <div className={styles.previewCard} style={{ backgroundColor: hex.surface }}>
             <p className={styles.previewTitle} style={{ color: hex.primaryText }}>Palette preview</p>
