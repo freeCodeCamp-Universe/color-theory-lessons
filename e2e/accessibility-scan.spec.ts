@@ -129,8 +129,9 @@ for (const theme of ['light', 'dark'] as const) {
 
     for (const route of staticRoutes) {
       await page.goto(route);
+      await expect(page.locator('[data-route-loading-heading]')).toHaveCount(0);
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-      await expect(page.getByText(/loading (lesson|milestone|tool|\.\.\.)/i)).toHaveCount(0);
+      await expect(page.getByText(/loading (lesson|milestone|tool)\.\.\./i)).toHaveCount(0);
 
       const exclusions = authoredVisualExclusions[route] ?? [];
       for (const exclusion of exclusions) {

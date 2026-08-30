@@ -1,5 +1,9 @@
 import AxeBuilder from '@axe-core/playwright';
 import type { Page } from '@playwright/test';
+import {
+  AXE_CONTRAST_RULES,
+  formatAccessibilityViolations,
+} from '../src/accessibility-test-config.ts';
 
 export interface AccessibilityScanContext {
   route: string;
@@ -18,29 +22,27 @@ export async function expectNoAccessibilityViolations(
   context: AccessibilityScanContext,
   exclusions: readonly AccessibilityScanExclusion[] = [],
 ) {
-  let builder = new AxeBuilder({ page });
+  const nonContrastResults = await new AxeBuilder({ page })
+    .disableRules([...AXE_CONTRAST_RULES])
+    .analyze();
+  let contrastBuilder = new AxeBuilder({ page }).withRules([...AXE_CONTRAST_RULES]);
 
   for (const exclusion of exclusions) {
-    builder = builder.exclude(exclusion.selector);
+    contrastBuilder = contrastBuilder.exclude(exclusion.selector);
   }
 
-  const results = await builder.analyze();
-  if (results.violations.length === 0) return;
-
-  const details = results.violations.flatMap((violation) =>
-    violation.nodes.map((node) => [
-      `rule: ${violation.id}`,
-      `element: ${node.target.join(' ')}`,
-      `impact: ${node.impact ?? violation.impact ?? 'unknown'}`,
-      `failure: ${node.failureSummary ?? violation.description}`,
-    ].join('\n')),
-  );
+  const contrastResults = await contrastBuilder.analyze();
+  const violations = [
+    ...nonContrastResults.violations,
+    ...contrastResults.violations,
+  ];
+  if (violations.length === 0) return;
 
   throw new Error([
     'Automated accessibility scan failed.',
     `route: ${context.route}`,
     `theme: ${context.theme}`,
     `state: ${context.state}`,
-    ...details,
+    ...formatAccessibilityViolations(violations),
   ].join('\n'));
 }
