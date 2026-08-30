@@ -39,6 +39,10 @@ describe('ToolRenderer stage reporting', () => {
     const description = screen.getByText(/A target swatch and a current swatch/);
     expect(tool).toHaveAttribute('aria-describedby', description.id);
     expect(description).toHaveClass('sr-only');
+    expect(tool).toHaveAccessibleDescription(
+      'A target swatch and a current swatch show the colors to match.',
+    );
+    expect(description).not.toHaveTextContent('HSL matching exercise');
   });
 
   it('forwards a staged tool active-stage data to the lesson flow', async () => {

@@ -58,7 +58,7 @@ function StepPanelVisual({ panel, children }: { panel: StepPanelConfig; children
       aria-describedby={descriptionId}
     >
       {children}
-      <VisualDescription id={descriptionId} visual={accessibility} />
+      <VisualDescription id={descriptionId} includeName={false} visual={accessibility} />
     </div>
   );
 }

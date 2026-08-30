@@ -312,7 +312,11 @@ export function ToolRenderer({ lesson, onChallengeComplete, onStageChange }: Too
       aria-describedby={descriptionId}
     >
       {tool}
-      <VisualDescription id={descriptionId} visual={lesson.challenge.accessibility} />
+      <VisualDescription
+        id={descriptionId}
+        includeName={false}
+        visual={lesson.challenge.accessibility}
+      />
     </div>
   ) : tool;
 
