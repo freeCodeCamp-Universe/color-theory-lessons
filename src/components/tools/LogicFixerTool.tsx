@@ -3,6 +3,7 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 
 interface Choice { id: string; label: string; isCorrect: boolean }
 interface Scenario { id: string; title: string; statement: string; choices: Choice[] }
@@ -70,7 +71,7 @@ export const LogicFixerTool = memo(function LogicFixerTool({
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>paint logic vs screen logic</span>
-      <div style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
+      <div role="group" aria-label="Paint and screen color logic comparison" aria-describedby="logic-comparison-description" style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
         <div style={{ flex: 1, minWidth: '120px', background: '#ede8e0', borderRadius: 'var(--radius-sm)', padding: 'var(--spacing-sm) var(--spacing-md)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <span style={{ fontSize: '1rem', textTransform: 'uppercase', color: 'var(--yellow-dark)', letterSpacing: '0.05em' }}>paint logic</span>
           <span style={{ fontSize: '1rem', color: '#4a3000' }}>pigment mixtures often look darker and less saturated</span>
@@ -82,6 +83,9 @@ export const LogicFixerTool = memo(function LogicFixerTool({
           <span style={{ fontSize: '1rem', color: 'var(--secondary-foreground)' }}>full RGB primaries → white</span>
         </div>
       </div>
+      <VisualDescription id="logic-comparison-description">
+        Two panels compare color models. Paint uses pigments that absorb and reflect light; mixtures often become darker and less saturated. Screens emit light, so higher RGB values add light and full red, green, and blue produces white.
+      </VisualDescription>
       {interactive && (
         <ExerciseStage
           controller={stageController}

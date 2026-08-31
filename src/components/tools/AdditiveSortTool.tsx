@@ -2,6 +2,7 @@ import { memo, useState } from 'react';
 import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import shellStyles from './ToolShell.module.css';
 
 type Model = 'additive' | 'subtractive';
@@ -75,6 +76,9 @@ function MixingDiagram({ mode }: { mode: Model }) {
         {isAdditive ? 'additive' : 'subtractive'}
       </span>
       <div
+        role="img"
+        aria-label={`${isAdditive ? 'Additive' : 'Subtractive'} mixing diagram`}
+        aria-describedby={`${mode}-mixing-description`}
         style={{
           position: 'relative',
           width: '192px',
@@ -82,6 +86,7 @@ function MixingDiagram({ mode }: { mode: Model }) {
           isolation: 'isolate',
         }}
       >
+        <div aria-hidden="true" style={{ position: 'relative', width: '192px', height: '168px', isolation: 'isolate' }}>
         {circles.map((c) => (
           <div
             key={c.color}
@@ -97,7 +102,13 @@ function MixingDiagram({ mode }: { mode: Model }) {
             }}
           />
         ))}
+        </div>
       </div>
+      <VisualDescription id={`${mode}-mixing-description`}>
+        {isAdditive
+          ? 'Additive mixing diagram. Red, green, and blue light overlap. Their combined center is white.'
+          : 'Subtractive mixing diagram. Cyan, magenta, and yellow pigments overlap. Their combined center is black in the ideal model.'}
+      </VisualDescription>
       <p
         style={{
           fontSize: '1rem',

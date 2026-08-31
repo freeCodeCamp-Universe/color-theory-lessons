@@ -28,6 +28,35 @@ function RGBMixerWithHints() {
 }
 
 describe('Unit 2 exercise stages', () => {
+  it('provides screen-reader equivalents for the five Unit 2 tool visuals', () => {
+    render(<AdditiveSortTool />);
+    expect(screen.getByText(/Red, green, and blue light overlap/)).toBeInTheDocument();
+    expect(screen.getByText(/Cyan, magenta, and yellow pigments overlap/)).toBeInTheDocument();
+    cleanup();
+
+    render(<RGBMixerTool />);
+    expect(screen.getByText(/vivid pink with a warm red cast/i)).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /warm pink accent target color/i })).toHaveAccessibleDescription(/vivid pink/i);
+    cleanup();
+
+    render(<LogicFixerTool />);
+    expect(screen.getByText(/Paint uses pigments that absorb and reflect light/)).toBeInTheDocument();
+    cleanup();
+
+    render(<MismatchExplainerTool />);
+    expect(screen.getByText(/screen swatch is #1a5fe8/i)).toBeInTheDocument();
+    cleanup();
+
+    render(<BackgroundShiftTool />);
+    expect(screen.getByText(/Zoomed out. One blue swatch represents/)).toBeInTheDocument();
+    expect(screen.getByText(/same vivid blue accent, #3b82f6/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'zoom in' }));
+    expect(screen.getByText('Pixel explorer zoomed in to RGB subpixels.')).toHaveAttribute('role', 'status');
+    const correctChoice = screen.getByRole('button', { name: /accent has greater luminance contrast/i });
+    fireEvent.click(correctChoice);
+    expect(correctChoice).toHaveAttribute('aria-pressed', 'true');
+  });
+
   it('keeps the additive and subtractive sort as one retryable stage', () => {
     const onComplete = vi.fn();
     render(<AdditiveSortTool onComplete={onComplete} />);

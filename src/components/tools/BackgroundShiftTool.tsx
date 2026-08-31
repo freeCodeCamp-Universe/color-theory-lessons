@@ -3,6 +3,8 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 
 /* ── Pixel zoom explorer ─────────────────────────────────────────────── */
 
@@ -21,6 +23,18 @@ const GRID_ROWS = 4;
 
 function PixelZoomExplorer({ interactive }: { interactive: boolean }) {
   const [zoomed, setZoomed] = useState(false);
+  const [zoomAnnouncement, setZoomAnnouncement] = useState('');
+
+  function toggleZoom() {
+    if (!interactive) return;
+    setZoomed((current) => {
+      const next = !current;
+      setZoomAnnouncement(next
+        ? 'Pixel explorer zoomed in to RGB subpixels.'
+        : 'Pixel explorer zoomed out to the combined color.');
+      return next;
+    });
+  }
 
   return (
     <div
@@ -34,6 +48,9 @@ function PixelZoomExplorer({ interactive }: { interactive: boolean }) {
       }}
     >
       <div
+        role="group"
+        aria-label="Pixel explorer"
+        aria-describedby="pixel-explorer-description"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -53,7 +70,7 @@ function PixelZoomExplorer({ interactive }: { interactive: boolean }) {
           pixel explorer
         </span>
         <button
-          onClick={() => interactive && setZoomed((z) => !z)}
+          onClick={toggleZoom}
           disabled={!interactive}
           style={{
             padding: '0.2rem 0.6rem',
@@ -70,9 +87,16 @@ function PixelZoomExplorer({ interactive }: { interactive: boolean }) {
         </button>
       </div>
 
+      <VisualDescription id="pixel-explorer-description">
+        {zoomed
+          ? `Zoomed in. A grid of ${GRID_ROWS} rows and ${GRID_COLS} columns shows each blue pixel as red, green, and blue vertical subpixels. The blue subpixel is brightest.`
+          : `Zoomed out. One blue swatch represents the combined light from red ${ACCENT_RGB.r}, green ${ACCENT_RGB.g}, and blue ${ACCENT_RGB.b} subpixels.`}
+      </VisualDescription>
+      {zoomAnnouncement && <StatusAnnouncement message={zoomAnnouncement} />}
+
       {zoomed ? (
         /* Subpixel grid view */
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+        <div aria-hidden="true" style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
           {Array.from({ length: GRID_ROWS }).map((_, row) => (
             <div key={row} style={{ display: 'flex', gap: '2px' }}>
               {Array.from({ length: GRID_COLS }).map((_, col) => (
@@ -105,7 +129,7 @@ function PixelZoomExplorer({ interactive }: { interactive: boolean }) {
         </div>
       ) : (
         /* Blended swatch view */
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <div aria-hidden="true" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
           <div
             style={{
               height: '80px',
@@ -284,7 +308,7 @@ export const BackgroundShiftTool = memo(function BackgroundShiftTool({
         >
 
           {/* Side-by-side background comparison */}
-          <div style={{ display: 'flex', gap: 'var(--spacing-sm)' }}>
+          <div role="group" aria-label={`${scenario.accentLabel} background comparison`} aria-describedby={`background-${scenario.id}-description`} style={{ display: 'flex', gap: 'var(--spacing-sm)' }}>
             {[
               { bg: '#0f0f0f', label: 'dark background' },
               { bg: '#f4f4f5', label: 'light background' },
@@ -332,6 +356,9 @@ export const BackgroundShiftTool = memo(function BackgroundShiftTool({
               </div>
             ))}
           </div>
+          <VisualDescription id={`background-${scenario.id}-description`}>
+            The same {scenario.accentLabel} accent, {scenario.accentHex}, appears as a circle on two backgrounds: dark background #0F0F0F and light background #F4F4F5. Compare its appearance before choosing an explanation.
+          </VisualDescription>
 
           {/* Choices */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
@@ -367,6 +394,7 @@ export const BackgroundShiftTool = memo(function BackgroundShiftTool({
                   key={choice.id}
                   onClick={() => handleSelect(choice.id)}
                   disabled={submitted}
+                  aria-pressed={isSelected}
                   style={{
                     padding: 'var(--spacing-sm) var(--spacing-md)',
                     background: bg,

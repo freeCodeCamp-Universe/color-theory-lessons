@@ -3,10 +3,11 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 
 interface RGB { r: number; g: number; b: number }
 interface Prediction { id: string; label: string }
-interface Target { id: string; name: string; value: RGB; correctPrediction: string }
+interface Target { id: string; name: string; description: string; value: RGB; correctPrediction: string }
 
 const PREDICTIONS: readonly Prediction[] = [
   { id: 'red-high-blue-mid-green-low', label: 'Red high, blue in the middle, green low' },
@@ -16,11 +17,11 @@ const PREDICTIONS: readonly Prediction[] = [
 ];
 
 const TARGETS: readonly Target[] = [
-  { id: 'warm-pink', name: 'warm pink accent', value: { r: 220, g: 45, b: 110 }, correctPrediction: 'red-high-blue-mid-green-low' },
-  { id: 'pale-sky-blue', name: 'pale sky blue', value: { r: 155, g: 195, b: 230 }, correctPrediction: 'blue-high-green-mid-red-low' },
-  { id: 'soft-gray', name: 'soft gray surface', value: { r: 115, g: 115, b: 122 }, correctPrediction: 'channels-close' },
-  { id: 'warning-yellow', name: 'warning yellow', value: { r: 240, g: 195, b: 10 }, correctPrediction: 'red-green-high-blue-low' },
-  { id: 'dark-navy', name: 'dark navy panel', value: { r: 18, g: 28, b: 72 }, correctPrediction: 'blue-high-green-mid-red-low' },
+  { id: 'warm-pink', name: 'warm pink accent', description: 'A vivid pink with a warm red cast and a little blue.', value: { r: 220, g: 45, b: 110 }, correctPrediction: 'red-high-blue-mid-green-low' },
+  { id: 'pale-sky-blue', name: 'pale sky blue', description: 'A pale, cool blue that is lighter than the other targets.', value: { r: 155, g: 195, b: 230 }, correctPrediction: 'blue-high-green-mid-red-low' },
+  { id: 'soft-gray', name: 'soft gray surface', description: 'A medium neutral gray with a slight blue cast.', value: { r: 115, g: 115, b: 122 }, correctPrediction: 'channels-close' },
+  { id: 'warning-yellow', name: 'warning yellow', description: 'A bright, saturated yellow.', value: { r: 240, g: 195, b: 10 }, correctPrediction: 'red-green-high-blue-low' },
+  { id: 'dark-navy', name: 'dark navy panel', description: 'A very dark blue with little lightness.', value: { r: 18, g: 28, b: 72 }, correctPrediction: 'blue-high-green-mid-red-low' },
 ];
 
 const STAGES: readonly ExerciseStageDefinition[] = TARGETS.flatMap((target) => [
@@ -135,7 +136,8 @@ export const RGBMixerTool = memo(function RGBMixerTool({
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>target</span>
-            <div aria-label={`${target.name} target color`} style={{ height: '72px', borderRadius: 'var(--radius-sm)', backgroundColor: rgbString(target.value), border: '1px solid rgba(255,255,255,0.08)' }} />
+            <div role="img" aria-label={`${target.name} target color`} aria-describedby={`rgb-target-${target.id}`} style={{ height: '72px', borderRadius: 'var(--radius-sm)', backgroundColor: rgbString(target.value), border: '1px solid rgba(255,255,255,0.08)' }} />
+            <VisualDescription id={`rgb-target-${target.id}`}>{target.description}</VisualDescription>
           </div>
 
           {isPredictionStage ? (
@@ -154,7 +156,7 @@ export const RGBMixerTool = memo(function RGBMixerTool({
             <>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>your mix</span>
-                <div aria-label="current RGB mix" style={{ height: '72px', borderRadius: 'var(--radius-sm)', backgroundColor: rgbString(current), border: '1px solid rgba(255,255,255,0.08)' }} />
+                <div role="img" aria-label={`current RGB mix: red ${current.r}, green ${current.g}, blue ${current.b}`} style={{ height: '72px', borderRadius: 'var(--radius-sm)', backgroundColor: rgbString(current), border: '1px solid rgba(255,255,255,0.08)' }} />
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)' }}>R:{current.r} G:{current.g} B:{current.b}</span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
