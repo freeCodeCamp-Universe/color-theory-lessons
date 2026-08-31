@@ -55,6 +55,7 @@ describe('Unit 4 exploration stages', () => {
     await user.click(screen.getByRole('button', { name: 'Complete achromatopsia' }));
 
     expect(screen.getByText('4/4 simulation modes explored')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('The filter removes saturation from the dashboard.');
     expect(onComplete).toHaveBeenCalledTimes(1);
   });
 });

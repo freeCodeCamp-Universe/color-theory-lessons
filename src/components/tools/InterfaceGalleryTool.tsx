@@ -62,6 +62,7 @@ export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({
     next.add(m);
     setSeen(next);
     if (next.size === MODES.length) {
+      setModeAnnouncement('');
       stageController.markPassed();
     } else {
       const selectedMode = MODES.find(({ id }) => id === m);
@@ -169,7 +170,7 @@ export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({
       {interactive ? (
         <ExerciseStage
           controller={stageController}
-          completionFeedback="Complete achromatopsia selected. All four simulation modes explored. Notice which elements became harder to distinguish in each simulation."
+          completionFeedback={`Complete achromatopsia selected. ${MODES.find((mode) => mode.id === 'achromatopsia')?.description} All four simulation modes explored.`}
         >
           {gallery}
         </ExerciseStage>
