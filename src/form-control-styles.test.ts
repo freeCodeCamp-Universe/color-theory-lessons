@@ -48,7 +48,7 @@ describe('form control boundary styles', () => {
     expect(paletteSource).toMatch(
       /aria-invalid={getEditHexError\(i\) !== ''}\s+aria-describedby={getEditHexError\(i\) \? `palette-color-\$\{i}-hex-error` : undefined}/,
     );
-    expect(paletteSource.match(/Error: enter a 3- or 6-digit hex color\./g)).toHaveLength(2);
+    expect(paletteSource.match(/Error: enter a 3- or 6-digit hex color\./g)).toHaveLength(3);
     expect(paletteCss).toMatch(
       /\.inputError\s*{[^}]*color: var\(--accent-danger\);[^}]*font-family: var\(--font-sans\);[^}]*font-size: 1rem;/s,
     );
