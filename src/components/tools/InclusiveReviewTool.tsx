@@ -27,12 +27,12 @@ const SIMULATION_FILTERS = `
   </defs>
 </svg>`;
 
-const SIMULATION_MODES: { id: SimulationMode; label: string; filter: string }[] = [
-  { id: 'normal', label: 'Original', filter: 'none' },
-  { id: 'deuteranopia', label: 'Deuteranopia', filter: 'url(#inclusive-review-deuteranopia)' },
-  { id: 'protanopia', label: 'Protanopia', filter: 'url(#inclusive-review-protanopia)' },
-  { id: 'tritanopia', label: 'Tritanopia', filter: 'url(#inclusive-review-tritanopia)' },
-  { id: 'achromatopsia', label: 'Complete achromatopsia', filter: 'url(#inclusive-review-achromatopsia)' },
+const SIMULATION_MODES: { id: SimulationMode; label: string; filter: string; description: string }[] = [
+  { id: 'normal', label: 'Original', filter: 'none', description: 'The original view shows green Active and red Error pills, green, red, and blue chart bars, and a red input border.' },
+  { id: 'deuteranopia', label: 'Deuteranopia', filter: 'url(#inclusive-review-deuteranopia)', description: 'The simulation shifts the green and red status and chart colors toward similar yellow-brown tones. The Active and Error pill labels remain visible; the chart bars still have no labels or patterns.' },
+  { id: 'protanopia', label: 'Protanopia', filter: 'url(#inclusive-review-protanopia)', description: 'The simulation shifts the green and red status and chart colors toward similar yellow-brown tones. The Active and Error pill labels remain visible; the chart bars still have no labels or patterns.' },
+  { id: 'tritanopia', label: 'Tritanopia', filter: 'url(#inclusive-review-tritanopia)', description: 'The simulation changes the blue and yellow color relationship. The status pill labels remain visible; the chart bars still have no labels or patterns.' },
+  { id: 'achromatopsia', label: 'Complete achromatopsia', filter: 'url(#inclusive-review-achromatopsia)', description: 'The simulation removes hue, leaving the status pills and chart bars as shades of gray. The status pill labels remain visible; the chart bars still have no labels or patterns.' },
 ];
 
 interface ChecklistItem {
@@ -161,7 +161,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
 
       {/* Compact mockup reference */}
       <VisualDescription id="inclusive-review-mockup-description">
-        {`${SIMULATION_MODES.find((mode) => mode.id === simulationMode)?.label ?? 'Original'} view. A dark blue #1E3A5F navigation bar contains Dashboard in light blue #4DA6FF, Reports and Settings in gray #9CA3AF. The light #F8FAFC content area shows green #22C55E Active and red #EF4444 Error status pills; a three-bar chart with green, red, and blue #3B82F6 bars at 80, 50, and 65 percent; and a bad-input field with a red #EF4444 border. The status pills are labelled, but the chart bars have no labels or patterns and the input has no written error message.`}
+        {`${SIMULATION_MODES.find((mode) => mode.id === simulationMode)?.label ?? 'Original'} view. A dark blue #1E3A5F navigation bar contains Dashboard in light blue #4DA6FF, Reports and Settings in gray #9CA3AF. The light #F8FAFC content area has status pills, a three-bar chart at 80, 50, and 65 percent, and a bad-input field with a red #EF4444 border and no written error message. ${SIMULATION_MODES.find((mode) => mode.id === simulationMode)?.description ?? ''}`}
       </VisualDescription>
       <div data-authored-visual data-testid="inclusive-review-mockup" style={{
         border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)',
@@ -214,6 +214,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
                   <button
                     key={opt!}
                     disabled={!interactive || submitted}
+                    aria-pressed={answer === opt}
                     onClick={() => setAnswer(item.id, opt)}
                     style={{
                       padding: '0.2rem 0.5rem',

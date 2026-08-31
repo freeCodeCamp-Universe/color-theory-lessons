@@ -227,7 +227,8 @@ export const PatternRepairTool = memo(function PatternRepairTool({
   function handleCheck() {
     if (!interactive || submitted) return;
     const allRepaired = MODULES.every((mod) => mod.isValidRepair(checked[mod.id]));
-    setAnnouncement(allRepaired ? 'All four patterns are repaired.' : 'Validation complete. One or more patterns still need a non-color repair.');
+    const validRepairCount = MODULES.filter((mod) => mod.isValidRepair(checked[mod.id])).length;
+    setAnnouncement(allRepaired ? 'All four patterns are repaired.' : `Validation complete. ${validRepairCount} of ${MODULES.length} patterns are repaired.`);
     if (allRepaired) stageController.markPassed(); else stageController.markIncorrect();
   }
 

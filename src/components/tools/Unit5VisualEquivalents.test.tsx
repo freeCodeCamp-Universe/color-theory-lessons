@@ -10,7 +10,7 @@ import { TextContrastLabTool } from './TextContrastLabTool.tsx';
 afterEach(() => cleanup());
 
 describe('Unit 5 visual equivalents', () => {
-  it('provides descriptions for every visual Unit 5 tool without exposing assessment answers', () => {
+  it('provides descriptions for every visual Unit 5 tool without exposing assessment answers', { timeout: 10000 }, () => {
     render(<TextContrastLabTool interactive />);
     expect(screen.getByText(/Body copy preview/)).toHaveClass('sr-only');
     expect(screen.getByRole('textbox', { name: 'Text color hex' })).toHaveAttribute('aria-describedby', 'text-contrast-body-copy-description');

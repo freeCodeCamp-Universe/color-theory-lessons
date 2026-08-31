@@ -96,7 +96,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
 
   const passedCount = Object.values(passed).filter(Boolean).length;
   const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
-  const visualDescription = `${pair.label} preview. Normal sample text and a large heading use text color ${textColor} on background ${bgColor}. The current contrast ratio is ${formatRatio(ratio, 2)} to 1. Normal text requires ${pair.thresholdLabel}; large text requires at least 3 to 1.`;
+  const visualDescription = `${pair.label} preview. Normal sample text and a large heading use text color ${textColor} on background ${bgColor}. The current contrast ratio is ${formatRatio(ratio, 2)} to 1. Normal text requires ${pair.thresholdLabel}; large text requires at least 3 to 1.${showResults ? ` Submitted result: normal text ${normalPass ? 'passes' : 'fails'} and large text ${largePass ? 'passes' : 'fails'}.` : ''}`;
 
   return (
     <div className={shellStyles.shell}>
