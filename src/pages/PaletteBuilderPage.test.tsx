@@ -163,7 +163,8 @@ describe('PaletteBuilderPage color input', () => {
 
     const input = screen.getByRole('textbox', { name: 'Hex color value' });
     expect(input).toHaveAttribute('aria-invalid', 'true');
-    expect(screen.getByText('Error: enter a 3- or 6-digit hex color.')).toBeVisible();
+    expect(screen.getByText('Error: enter a 3- or 6-digit hex color.', { selector: '[class*="inputError"]' })).toBeVisible();
+    expect(screen.getByRole('alert')).toHaveTextContent('Error: enter a 3- or 6-digit hex color.');
     expect(screen.getByText('Pick a primary color to get started.')).toBeVisible();
 
     await enterPrimary(user, '#abc');
@@ -188,10 +189,14 @@ describe('PaletteBuilderPage color input', () => {
     await user.click(screen.getByRole('tab', { name: 'HSL' }));
     const hueSliders = screen.getAllByRole('slider', { name: 'Hue' });
     fireEvent.change(hueSliders.at(-1)!, { target: { value: '120' } });
+    fireEvent.pointerUp(hueSliders.at(-1)!);
 
     expect(screen.getByRole('textbox', { name: 'Hex color value' })).toHaveValue('#00FF00');
     expect(screen.getByRole('slider', { name: 'Saturation' })).toHaveValue('100');
     expect(screen.getByRole('slider', { name: 'Lightness' })).toHaveValue('50');
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Primary color set to #00FF00 with the HSL picker. Harmony and accessibility suggestions updated.',
+    );
 
     await user.click(screen.getByRole('tab', { name: 'RGB' }));
     expect(screen.getByRole('slider', { name: 'R channel' })).toHaveValue('0');
@@ -359,9 +364,24 @@ describe('PaletteBuilderPage palette editing', () => {
     await user.keyboard('{Enter}');
 
     expect(editInput).toHaveAttribute('aria-invalid', 'true');
-    expect(screen.getByText('Error: that color is already in your palette.')).toBeVisible();
+    expect(screen.getByText('Error: that color is already in your palette.', { selector: '[class*="inputError"]' })).toBeVisible();
     expect(screen.getByRole('button', { name: 'Edit custom 1 — #808080' })).toBeVisible();
     expect(screen.getAllByRole('button', { name: /Edit .* — #336699/ })).toHaveLength(1);
+  });
+
+  it('announces an invalid palette color edit', async () => {
+    const user = userEvent.setup();
+    render(<PaletteBuilderPage />);
+    await enterPrimary(user, '#336699');
+    await user.click(screen.getByRole('button', { name: '+ add color' }));
+    await user.click(screen.getByRole('button', { name: 'Edit custom 1 — #808080' }));
+
+    const editInput = screen.getAllByRole('textbox', { name: 'Hex color value' })[1];
+    await user.clear(editInput);
+    await user.type(editInput, '#12');
+    await user.keyboard('{Enter}');
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Error: enter a 3- or 6-digit hex color.');
   });
 
   it('updates palette-dependent displays when a color is edited or removed', async () => {
@@ -425,6 +445,7 @@ describe('PaletteBuilderPage contrast pairings', () => {
 
     const matrix = screen.getByRole('heading', { name: 'contrast pairings' }).parentElement!;
     expect(within(matrix).getByText('foreground #000000 on background #FFFFFF')).toBeVisible();
+    expect(within(matrix).getByText('text size: 18px')).toBeVisible();
     expect(within(matrix).getByText('21.0:1', { selector: '[class*="matrixRatio"]' })).toBeVisible();
     expect(within(matrix).getByText('AAA 21.0:1')).toBeVisible();
   });

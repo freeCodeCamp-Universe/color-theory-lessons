@@ -504,6 +504,8 @@ export function PaletteBuilderPage() {
     if (parsed) {
       const canonical = rgbToHex(parsed);
       applyPrimary(canonical, `Primary color set to ${canonical}.`);
+    } else {
+      setAnnouncement('Error: enter a 3- or 6-digit hex color.');
     }
   };
 
@@ -808,7 +810,7 @@ export function PaletteBuilderPage() {
   return (
     <div className={styles.container}>
       <DocumentTitle page="Palette Builder" />
-      <StatusAnnouncement message={announcement} priority={paletteError ? 'assertive' : 'polite'} />
+      <StatusAnnouncement message={announcement} priority={paletteError || announcement.startsWith('Error:') ? 'assertive' : 'polite'} />
       <h1 className={styles.heading}>palette builder</h1>
       <p className={styles.subtitle}>
         Pick a primary color, explore harmony suggestions, and build your
@@ -915,9 +917,10 @@ export function PaletteBuilderPage() {
                         handleHslChange('h', Math.round(hue));
                         announcePickerChange('HSL');
                       }}
-                      onKeyUp={(event) => handlePickerKeyUp(event, 'HSL')}
                       role="slider"
                       aria-label="Hue"
+                      onPointerUp={() => announcePickerChange('HSL')}
+                      onKeyUp={(event) => handlePickerKeyUp(event, 'HSL')}
                       onPointerUp={() => announcePickerChange('HSL')}
                       onKeyUp={(event) => handlePickerKeyUp(event, 'HSL')}
                       aria-valuemin={0}
@@ -970,6 +973,8 @@ export function PaletteBuilderPage() {
                       className={styles.slider}
                       style={{ '--slider-color': hslToHex(hslSliders.h, 100, 50) } as React.CSSProperties}
                       aria-label="Hue"
+                      onPointerUp={() => announcePickerChange('HSL')}
+                      onKeyUp={(event) => handlePickerKeyUp(event, 'HSL')}
                     />
                     <span className={styles.sliderValue}>{hslSliders.h}°</span>
                   </label>
@@ -1297,7 +1302,11 @@ export function PaletteBuilderPage() {
                                 if (parsed) {
                                   const canonical = rgbToHex(parsed);
                                   setEditHexInput(canonical);
-                                  updatePaletteColor(i, canonical);
+                                  if (!updatePaletteColor(i, canonical)) {
+                                    setAnnouncement(getEditHexError(i));
+                                  }
+                                } else {
+                                  setAnnouncement(getEditHexError(i));
                                 }
                               }}
                               onKeyDown={(e) => {
@@ -1308,7 +1317,11 @@ export function PaletteBuilderPage() {
                                     setEditHexInput(canonical);
                                     if (updatePaletteColor(i, canonical)) {
                                       setEditingIndex(null);
+                                    } else {
+                                      setAnnouncement(getEditHexError(i));
                                     }
+                                  } else {
+                                    setAnnouncement(getEditHexError(i));
                                   }
                                 }
                                 if (e.key === 'Escape') setEditingIndex(null);
@@ -1388,6 +1401,7 @@ export function PaletteBuilderPage() {
                                 aria-hidden="true"
                               />
                             </span>
+                            <span className={styles.matrixRatio}>text size: 18px</span>
                           </div>
                           <div className={`${styles.matrixCell} ${cellCls}`}>
                             <span className={styles.matrixRatio}>
