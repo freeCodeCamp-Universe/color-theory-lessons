@@ -3,6 +3,8 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 
 type Assessment = 'pass' | 'needs-work' | null;
 type SimulationMode = 'normal' | 'deuteranopia' | 'protanopia' | 'tritanopia' | 'achromatopsia';
@@ -25,12 +27,12 @@ const SIMULATION_FILTERS = `
   </defs>
 </svg>`;
 
-const SIMULATION_MODES: { id: SimulationMode; label: string; filter: string }[] = [
-  { id: 'normal', label: 'Original', filter: 'none' },
-  { id: 'deuteranopia', label: 'Deuteranopia', filter: 'url(#inclusive-review-deuteranopia)' },
-  { id: 'protanopia', label: 'Protanopia', filter: 'url(#inclusive-review-protanopia)' },
-  { id: 'tritanopia', label: 'Tritanopia', filter: 'url(#inclusive-review-tritanopia)' },
-  { id: 'achromatopsia', label: 'Complete achromatopsia', filter: 'url(#inclusive-review-achromatopsia)' },
+const SIMULATION_MODES: { id: SimulationMode; label: string; filter: string; description: string }[] = [
+  { id: 'normal', label: 'Original', filter: 'none', description: 'The original view shows green Active and red Error pills, green, red, and blue chart bars, and a red input border.' },
+  { id: 'deuteranopia', label: 'Deuteranopia', filter: 'url(#inclusive-review-deuteranopia)', description: 'The simulation shifts the green and red status and chart colors toward similar yellow-brown tones. The Active and Error pill labels remain visible; the chart bars still have no labels or patterns.' },
+  { id: 'protanopia', label: 'Protanopia', filter: 'url(#inclusive-review-protanopia)', description: 'The simulation shifts the green and red status and chart colors toward similar yellow-brown tones. The Active and Error pill labels remain visible; the chart bars still have no labels or patterns.' },
+  { id: 'tritanopia', label: 'Tritanopia', filter: 'url(#inclusive-review-tritanopia)', description: 'The simulation changes the blue and yellow color relationship. The status pill labels remain visible; the chart bars still have no labels or patterns.' },
+  { id: 'achromatopsia', label: 'Complete achromatopsia', filter: 'url(#inclusive-review-achromatopsia)', description: 'The simulation removes hue, leaving the status pills and chart bars as shades of gray. The status pill labels remain visible; the chart bars still have no labels or patterns.' },
 ];
 
 interface ChecklistItem {
@@ -88,19 +90,27 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
   const [answers, setAnswers] = useState<Record<string, Assessment>>(
     Object.fromEntries(CHECKLIST.map((c) => [c.id, null])),
   );
+  const [announcement, setAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
   const submitted = stageController.result !== 'idle';
 
   function setAnswer(id: string, value: Assessment) {
     if (!interactive || submitted) return;
     setAnswers((current) => ({ ...current, [id]: value }));
+    const item = CHECKLIST.find((check) => check.id === id);
+    setAnnouncement(`${item?.label ?? 'Checklist item'} marked ${value === 'pass' ? 'Pass' : 'Needs work'}.`);
   }
 
   function checkReview() {
     if (!interactive || submitted) return;
     const allCorrect = CHECKLIST.every((item) => answers[item.id] === item.correctAnswer);
-    if (allCorrect) stageController.markPassed();
-    else stageController.markIncorrect();
+    if (allCorrect) {
+      setAnnouncement('Review validation complete. All five checklist items are assessed.');
+      stageController.markPassed();
+    } else {
+      setAnnouncement('Review validation complete. One or more checklist items need another assessment.');
+      stageController.markIncorrect();
+    }
   }
 
   const answeredCount = Object.values(answers).filter((a) => a !== null).length;
@@ -116,6 +126,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
         incorrectFeedback="One or more assessments do not match the mockup evidence. Review the item feedback and try the stage again."
         completionFeedback="Review complete. The mockup needs work on all five checks."
       >
+      {announcement && <StatusAnnouncement message={announcement} />}
 
       <div
         role="group"
@@ -128,7 +139,10 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
             type="button"
             disabled={!interactive}
             aria-pressed={simulationMode === mode.id}
-            onClick={() => setSimulationMode(mode.id)}
+            onClick={() => {
+              setSimulationMode(mode.id);
+              setAnnouncement(`${mode.label} simulation selected. The mockup description has updated.`);
+            }}
             style={{
               padding: '0.25rem 0.5rem',
               fontSize: '0.72rem',
@@ -146,10 +160,13 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
       </div>
 
       {/* Compact mockup reference */}
+      <VisualDescription id="inclusive-review-mockup-description">
+        {`${SIMULATION_MODES.find((mode) => mode.id === simulationMode)?.label ?? 'Original'} view. A dark blue #1E3A5F navigation bar contains Dashboard in light blue #4DA6FF, Reports and Settings in gray #9CA3AF. The light #F8FAFC content area has status pills, a three-bar chart at 80, 50, and 65 percent, and a bad-input field with a red #EF4444 border and no written error message. ${SIMULATION_MODES.find((mode) => mode.id === simulationMode)?.description ?? ''}`}
+      </VisualDescription>
       <div data-authored-visual data-testid="inclusive-review-mockup" style={{
         border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)',
         overflow: 'hidden', marginBottom: '0.75rem', fontSize: '0.72rem', filter: simulationFilter,
-      }}>
+      }} aria-describedby="inclusive-review-mockup-description">
         <div style={{ background: '#1e3a5f', padding: '0.35rem 0.6rem', display: 'flex', gap: '0.75rem' }}>
           <span style={{ color: '#4da6ff', fontWeight: 600 }}>Dashboard</span>
           <span style={{ color: '#9ca3af' }}>Reports</span>
@@ -165,7 +182,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
               <div key={b.c} style={{ flex: 1, height: `${b.h}%`, background: b.c, borderRadius: '2px 2px 0 0' }} />
             ))}
           </div>
-          <input readOnly value="bad-input" style={{ padding: '0.2rem 0.35rem', border: '2px solid #ef4444', borderRadius: 3, background: '#fff', color: '#111', width: '100%', boxSizing: 'border-box' }} />
+          <input readOnly tabIndex={-1} aria-hidden="true" value="bad-input" style={{ padding: '0.2rem 0.35rem', border: '2px solid #ef4444', borderRadius: 3, background: '#fff', color: '#111', width: '100%', boxSizing: 'border-box' }} />
         </div>
       </div>
 
@@ -197,6 +214,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
                   <button
                     key={opt!}
                     disabled={!interactive || submitted}
+                    aria-pressed={answer === opt}
                     onClick={() => setAnswer(item.id, opt)}
                     style={{
                       padding: '0.2rem 0.5rem',

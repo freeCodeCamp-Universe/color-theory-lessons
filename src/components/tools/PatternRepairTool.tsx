@@ -3,6 +3,8 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 
 interface Module {
   id: string;
@@ -12,6 +14,7 @@ interface Module {
   invalidFeedback: (checked: string[]) => string;
   brokenPreview: React.ReactNode;
   repairedPreview: (checked: string[]) => React.ReactNode;
+  visualDescription: (checked: string[]) => string;
 }
 
 const CHART_SERIES = [
@@ -39,13 +42,13 @@ const MODULES: Module[] = [
     brokenPreview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
         <label style={{ fontSize: '0.72rem', color: '#374151' }}>Email address</label>
-        <input readOnly value="not-valid" style={{ padding: '0.3rem 0.4rem', fontSize: '0.75rem', border: '2px solid #ef4444', borderRadius: 3, width: '100%', boxSizing: 'border-box', background: '#fff' }} />
+        <input readOnly tabIndex={-1} aria-hidden="true" value="not-valid" style={{ padding: '0.3rem 0.4rem', fontSize: '0.75rem', border: '2px solid #ef4444', borderRadius: 3, width: '100%', boxSizing: 'border-box', background: '#fff' }} />
       </div>
     ),
     repairedPreview: (checked) => (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
         <label style={{ fontSize: '0.72rem', color: checked.includes('Make label bold and red') ? '#ef4444' : '#374151', fontWeight: checked.includes('Make label bold and red') ? 700 : 400 }}>Email address</label>
-        <input readOnly value="not-valid" style={{ padding: '0.3rem 0.4rem', fontSize: '0.75rem', border: '2px solid #ef4444', borderRadius: 3, width: '100%', boxSizing: 'border-box', background: '#fff' }} />
+        <input readOnly tabIndex={-1} aria-hidden="true" value="not-valid" style={{ padding: '0.3rem 0.4rem', fontSize: '0.75rem', border: '2px solid #ef4444', borderRadius: 3, width: '100%', boxSizing: 'border-box', background: '#fff' }} />
         {(checked.includes('Add error icon ✕') || checked.includes('Add error message text')) && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
             {checked.includes('Add error icon ✕') && <span style={{ color: '#ef4444', fontWeight: 700, fontSize: '0.8rem' }}>✕</span>}
@@ -54,6 +57,7 @@ const MODULES: Module[] = [
         )}
       </div>
     ),
+    visualDescription: (checked) => `Before: a form has an Email address field with value not-valid and a red #EF4444 border, with no written error. After: the same field${checked.includes('Add error icon ✕') ? ' includes an error icon' : ''}${checked.includes('Add error message text') ? ' and the text Please enter a valid email address' : ''}.`,
   },
   {
     id: 'link-paragraph',
@@ -88,6 +92,7 @@ const MODULES: Module[] = [
         </span>.
       </p>
     ),
+    visualDescription: (checked) => `Before: a paragraph contains blue #2563EB terms of service and privacy policy links in dark gray #374151 text, with no non-color distinction. After: the same links${checked.includes('Add underline to links') ? ' are underlined' : ''}${checked.includes('Add bold weight to links') ? ' are bold' : ''}${checked.includes('Add › arrow indicator') ? ' include arrow indicators' : ''}.`,
   },
   {
     id: 'service-status',
@@ -128,6 +133,7 @@ const MODULES: Module[] = [
         ))}
       </div>
     ),
+    visualDescription: (checked) => `Before: Payments API, Email service, and User database each have a green #22C55E, yellow #EAB308, or red #EF4444 dot without a text status. After: the same services${checked.includes('Add status icons (✓/⚠/✕)') ? ' include status icons' : ''}${checked.includes('Add status text labels') ? ' include Operational, Degraded, and Offline labels' : ''}${checked.includes('Add colored outlines') ? ' have colored outlines' : ''}.`,
   },
   {
     id: 'chart-series',
@@ -186,6 +192,7 @@ const MODULES: Module[] = [
         )}
       </div>
     ),
+    visualDescription: (checked) => `Before: a two-bar chart uses green #22C55E and red #EF4444 bars, at 75 and 50, with no series identification. After: the chart${checked.includes('Add direct labels') ? ' includes Series A and Series B labels' : ''}${checked.includes('Add pattern fills') ? ' uses diagonal and horizontal pattern fills' : ''}${checked.includes('Add value labels at top') ? ' shows values 75 and 50' : ''}.`,
   },
 ];
 
@@ -203,6 +210,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({
   const [checked, setChecked] = useState<Record<string, string[]>>(
     Object.fromEntries(MODULES.map((m) => [m.id, []])),
   );
+  const [announcement, setAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
   const submitted = stageController.result !== 'idle';
 
@@ -213,13 +221,15 @@ export const PatternRepairTool = memo(function PatternRepairTool({
       const next = current.includes(option) ? current.filter((o) => o !== option) : [...current, option];
       return { ...prev, [moduleId]: next };
     });
+    setAnnouncement(`${MODULES.find((module) => module.id === moduleId)?.name ?? 'Pattern'}: ${option} ${checked[moduleId].includes(option) ? 'removed' : 'selected'}.`);
   }
 
   function handleCheck() {
     if (!interactive || submitted) return;
     const allRepaired = MODULES.every((mod) => mod.isValidRepair(checked[mod.id]));
-    if (allRepaired) stageController.markPassed();
-    else stageController.markIncorrect();
+    const validRepairCount = MODULES.filter((mod) => mod.isValidRepair(checked[mod.id])).length;
+    setAnnouncement(allRepaired ? 'All four patterns are repaired.' : `Validation complete. ${validRepairCount} of ${MODULES.length} patterns are repaired.`);
+    if (allRepaired) stageController.markPassed(); else stageController.markIncorrect();
   }
 
   const repairedCount = submitted
@@ -235,6 +245,7 @@ export const PatternRepairTool = memo(function PatternRepairTool({
         incorrectFeedback="Some patterns still rely on color alone. Review the item feedback and try the stage again."
         completionFeedback="All patterns are repaired. Components that use these patterns receive the same cues."
       >
+        {announcement && <StatusAnnouncement message={announcement} />}
         {interactive && (
           <p style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>
             Repaired patterns: {repairedCount} of {MODULES.length}.
@@ -259,18 +270,21 @@ export const PatternRepairTool = memo(function PatternRepairTool({
               <div style={{ marginBottom: '0.4rem' }}>
                 <p style={{ fontWeight: 600, fontSize: '0.8rem', margin: 0, color: 'var(--primary-foreground)' }}>{mod.name}</p>
               </div>
+              <VisualDescription id={`pattern-${mod.id}-description`}>
+                {mod.visualDescription(modChecked)}
+              </VisualDescription>
 
               {/* Before / After */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '0.5rem' }}>
                 <div>
                   <p style={{ fontSize: '1rem', color: 'var(--muted)', marginBottom: '0.2rem', fontFamily: 'var(--font-sans)', textTransform: 'uppercase' }}>Before</p>
-                  <div data-authored-visual style={{ background: '#ffffff', borderRadius: 'var(--radius-sm)', padding: '0.5rem', border: '1px solid #eee', minHeight: 60 }}>
+                  <div data-authored-visual aria-describedby={`pattern-${mod.id}-description`} style={{ background: '#ffffff', borderRadius: 'var(--radius-sm)', padding: '0.5rem', border: '1px solid #eee', minHeight: 60 }}>
                     {mod.brokenPreview}
                   </div>
                 </div>
                 <div>
                   <p style={{ fontSize: '1rem', color: 'var(--muted)', marginBottom: '0.2rem', fontFamily: 'var(--font-sans)', textTransform: 'uppercase' }}>After</p>
-                  <div data-authored-visual style={{ background: '#ffffff', borderRadius: 'var(--radius-sm)', padding: '0.5rem', border: `1px solid ${isRepaired ? '#bbf7d0' : '#eee'}`, minHeight: 60 }}>
+                  <div data-authored-visual aria-describedby={`pattern-${mod.id}-description`} style={{ background: '#ffffff', borderRadius: 'var(--radius-sm)', padding: '0.5rem', border: `1px solid ${isRepaired ? '#bbf7d0' : '#eee'}`, minHeight: 60 }}>
                     {modChecked.length > 0 ? mod.repairedPreview(modChecked) : mod.brokenPreview}
                   </div>
                 </div>

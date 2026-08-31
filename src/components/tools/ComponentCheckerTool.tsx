@@ -4,6 +4,8 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 
 const WHITE: ReturnType<typeof hexToRgb> = { r: 255, g: 255, b: 255 };
 const THRESHOLD = 3;
@@ -25,6 +27,8 @@ const COMPONENTS: Component[] = [
     renderPreview: (color) => (
       <input
         readOnly
+        tabIndex={-1}
+        aria-hidden="true"
         value="Enter email…"
         style={{
           padding: '0.4rem 0.6rem', fontSize: '0.8rem',
@@ -53,6 +57,9 @@ const COMPONENTS: Component[] = [
     description: 'Focus outline against white.',
     renderPreview: (color) => (
       <button
+        type="button"
+        tabIndex={-1}
+        aria-hidden="true"
         style={{
           padding: '0.35rem 0.8rem', fontSize: '0.8rem',
           background: '#ffffff', color: '#111',
@@ -141,6 +148,7 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
         incorrectFeedback="Not all components meet 3:1 yet. Adjust the failing colors and check again."
         completionFeedback="All four components have at least 3:1 contrast against white."
       >
+        {interactive && showResults && <StatusAnnouncement message={`Validation complete. ${passedCount} of ${COMPONENTS.length} components meet the 3 to 1 contrast threshold.`} />}
         {interactive && showResults && (
           <p style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>
             Passing components: {passedCount} of {COMPONENTS.length}.
@@ -172,8 +180,11 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
                 </span>
               </div>
 
+              <VisualDescription id={`component-${comp.id}-description`}>
+                {`${comp.label} preview. ${comp.description} Component color: ${color}. White background: #FFFFFF. Current contrast ratio: ${formatRatio(ratio)} to 1.${showResults ? ` Result: ${pass ? 'pass' : 'fail'}.` : ''}`}
+              </VisualDescription>
               {/* Preview on white */}
-              <div data-authored-visual style={{ background: '#ffffff', padding: '0.5rem', borderRadius: 'var(--radius-sm)', marginBottom: '0.4rem', border: '1px solid #f0f0f0' }}>
+              <div data-authored-visual aria-describedby={`component-${comp.id}-description`} style={{ background: '#ffffff', padding: '0.5rem', borderRadius: 'var(--radius-sm)', marginBottom: '0.4rem', border: '1px solid #f0f0f0' }}>
                 {comp.renderPreview(isValidHex(color) ? color : comp.defaultColor)}
               </div>
 
@@ -192,6 +203,7 @@ export const ComponentCheckerTool = memo(function ComponentCheckerTool({
                       color: 'var(--primary-foreground)', width: '7rem', maxWidth: '100%', minWidth: 0, flex: '1 1 7rem',
                     }}
                     aria-label={`${comp.label} hex color`}
+                    aria-describedby={`component-${comp.id}-description`}
                   />
                   <span style={{ fontSize: '0.72rem', color: 'var(--muted)', flex: '1 1 100%' }}>{comp.description}</span>
                 </div>

@@ -3,6 +3,8 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 
 interface StateConfig {
   name: string;
@@ -48,6 +50,7 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({
   const [cues, setCues] = useState<Record<string, Record<CueKey, boolean>>>(
     Object.fromEntries(STATES.map((s) => [s.name, { icon: false, label: false, border: false }])),
   );
+  const [announcement, setAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
   const stagePassed = stageController.result === 'passed';
 
@@ -59,13 +62,15 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({
         [stateName]: { ...prev[stateName], [cue]: !prev[stateName][cue] },
       };
     });
+    setAnnouncement(`${stateName} ${cue} cue ${cues[stateName][cue] ? 'removed' : 'applied'}.`);
     stageController.retry();
   }
 
   function checkStates() {
     if (!interactive) return;
-    if (hasDistinctNonColorTreatments(cues)) stageController.markPassed();
-    else stageController.markIncorrect();
+    const repaired = hasDistinctNonColorTreatments(cues);
+    setAnnouncement(repaired ? 'All four semantic states are repaired with distinct non-color treatments.' : 'Validation complete. Every state still needs a distinct non-color treatment.');
+    if (repaired) stageController.markPassed(); else stageController.markIncorrect();
   }
 
   return (
@@ -77,6 +82,7 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({
         incorrectFeedback="Every state needs a non-color treatment, and no two treatments can match. Change the cues and check again."
         completionFeedback="Each state has a distinct non-color treatment."
       >
+        {announcement && <StatusAnnouncement message={announcement} />}
 
       <div className={shellStyles.twoColumnGrid} style={{ gap: '0.5rem' }}>
         {STATES.map((state) => {
@@ -95,8 +101,11 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({
                   : 'transparent',
               }}
             >
+              <VisualDescription id={`state-${state.name.toLowerCase()}-description`}>
+                {`${state.name} state preview. Base color: ${state.color}. ${stateCues.icon ? `Icon ${state.icon} is applied. ` : 'No icon is applied. '}${stateCues.label ? `Text label ${state.label} is applied. ` : 'No text label is applied. '}${stateCues.border ? `${state.borderPattern} border is applied.` : 'A solid color border is shown without a selected border-style cue.'}`}
+              </VisualDescription>
               {/* State preview */}
-              <div data-authored-visual style={{
+              <div data-authored-visual aria-describedby={`state-${state.name.toLowerCase()}-description`} style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.35rem',
@@ -147,6 +156,7 @@ export const StateWorkshopTool = memo(function StateWorkshopTool({
                       checked={stateCues[cue]}
                       disabled={!interactive || stageController.result === 'passed'}
                       onChange={() => toggleCue(state.name, cue)}
+                      aria-describedby={`state-${state.name.toLowerCase()}-description`}
                       style={{ accentColor: state.color }}
                     />
                     {cue === 'icon' ? `Icon (${state.icon})` : cue === 'label' ? `Label "${state.label}"` : 'Border style'}

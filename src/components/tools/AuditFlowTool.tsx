@@ -3,6 +3,7 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 
 interface AuditStage extends ExerciseStageDefinition {
   id: string;
@@ -79,6 +80,7 @@ export const AuditFlowTool = memo(function AuditFlowTool({
 }: ExerciseToolProps) {
   const [multiSelected, setMultiSelected] = useState<string[]>([]);
   const [singleSelected, setSingleSelected] = useState<string | null>(null);
+  const [announcement, setAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
   const stage = STAGES.find(({ id }) => id === stageController.activeStage.id) ?? STAGES[0];
 
@@ -87,12 +89,14 @@ export const AuditFlowTool = memo(function AuditFlowTool({
     setMultiSelected((prev) =>
       prev.includes(option) ? prev.filter((o) => o !== option) : [...prev, option],
     );
+    setAnnouncement(`${option} ${multiSelected.includes(option) ? 'unselected' : 'selected'}.`);
     stageController.retry();
   }
 
   function selectSingle(option: string) {
     if (!interactive || stageController.result === 'passed') return;
     setSingleSelected(option);
+    setAnnouncement(`${option} selected.`);
     stageController.retry();
   }
 
@@ -106,13 +110,14 @@ export const AuditFlowTool = memo(function AuditFlowTool({
     } else {
       correct = singleSelected === stage.correctSingle;
     }
-    if (correct) stageController.markPassed();
-    else stageController.markIncorrect();
+    setAnnouncement(correct ? `${stage.title} complete.` : `${stage.title} needs another answer.`);
+    if (correct) stageController.markPassed(); else stageController.markIncorrect();
   }
 
   function prepareNextStage() {
     setMultiSelected([]);
     setSingleSelected(null);
+    setAnnouncement(`Moved to the next audit stage.`);
     stageController.advance();
   }
 
@@ -134,6 +139,7 @@ export const AuditFlowTool = memo(function AuditFlowTool({
           </span>
         )}
       >
+        {announcement && <StatusAnnouncement message={announcement} />}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
           {stage.options.map((option) => {
             const isSelected = stage.type === 'multi-select'
