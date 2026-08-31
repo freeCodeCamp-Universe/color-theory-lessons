@@ -135,6 +135,8 @@ export const ContrastTool = memo(function ContrastTool({
           return (
             <div
               key={area.id}
+              aria-label={`${area.label} contrast pair`}
+              role="group"
               style={{
                 background: 'var(--surface)',
                 border: `1px solid ${showResult && fixed ? 'var(--accent-success)' : 'var(--border)'}`,
@@ -156,13 +158,15 @@ export const ContrastTool = memo(function ContrastTool({
               </div>
 
               {/* Ratio display */}
-              <div style={{ fontSize: '1rem', color: showResult && fixed ? 'var(--accent-success)' : showResult ? 'var(--accent-warning)' : 'var(--muted)' }}>
+              <div id={`${area.id}-contrast-result`} style={{ fontSize: '1rem', color: showResult && fixed ? 'var(--accent-success)' : showResult ? 'var(--accent-warning)' : 'var(--muted)' }}>
                 ratio: {ratio.toFixed(2)}:1. WCAG AA requires {area.threshold}:1.
               </div>
 
               {/* Preview */}
               <div
                 data-authored-visual
+                aria-label={`${area.label} preview. ${area.fixBg ? 'White text on an adjustable button background.' : 'Adjustable text on a dark blue-gray background.'}`}
+                role="img"
                 style={{
                   background: bgColor,
                   borderRadius: 'var(--radius-sm)',
@@ -207,6 +211,7 @@ export const ContrastTool = memo(function ContrastTool({
                     cursor: checked ? 'not-allowed' : 'pointer',
                   }}
                   onChange={(e) => handleChange(area.id, Number(e.target.value))}
+                  aria-describedby={`${area.id}-contrast-result`}
                   aria-label={`Lightness for ${area.label}: ${l}%`}
                 />
               </div>

@@ -84,6 +84,13 @@ describe('BeforeAfterTool color-role keyboard activation', () => {
     }
   });
 
+  it('names each region by its visible color and interface element', () => {
+    render(<BeforeAfterTool />);
+
+    expect(screen.getByRole('button', { name: /nav bar color/i })).toHaveAccessibleDescription('Dark navy navigation bar.');
+    expect(screen.getByRole('button', { name: /gold button color/i })).toHaveAccessibleDescription('Gold start learning button.');
+  });
+
   it('opens a color-role question with Enter and Space, and prevents Space scrolling', () => {
     render(<BeforeAfterTool />);
 

@@ -88,6 +88,7 @@ function ColorWheel({ baseH, relatedH, interactive, onChange }: ColorWheelProps)
       aria-valuemin={0}
       aria-valuemax={359}
       aria-valuenow={baseH}
+      aria-valuetext={`${baseH} degrees`}
       aria-disabled={!interactive}
       aria-label={`Color wheel hue selector: ${baseH}°`}
       style={{ cursor: interactive ? 'crosshair' : 'default', flexShrink: 0, outline: 'none' }}
@@ -96,16 +97,16 @@ function ColorWheel({ baseH, relatedH, interactive, onChange }: ColorWheelProps)
         <circle cx={cx} cy={cy} r={r + 8} fill="none" stroke="var(--focus-ring)" strokeWidth={2} strokeDasharray="4 3" />
       )}
       {segments.map((seg) => (
-        <path key={seg.hue} d={seg.d} fill={`hsl(${seg.hue}, 80%, 55%)`} />
+        <path aria-hidden="true" key={seg.hue} d={seg.d} fill={`hsl(${seg.hue}, 80%, 55%)`} />
       ))}
       {/* Center */}
-      <circle cx={cx} cy={cy} r={r - 28} fill="var(--surface)" />
+      <circle aria-hidden="true" cx={cx} cy={cy} r={r - 28} fill="var(--surface)" />
       {/* Related hue dots */}
       {relatedDots.map((dot, i) => (
-        <circle key={relatedH[i]} cx={dot.x} cy={dot.y} r={dotR - 2} fill={`hsl(${relatedH[i]}, 80%, 60%)`} stroke="var(--gray-00)" strokeWidth={2} />
+        <circle aria-hidden="true" key={relatedH[i]} cx={dot.x} cy={dot.y} r={dotR - 2} fill={`hsl(${relatedH[i]}, 80%, 60%)`} stroke="var(--gray-00)" strokeWidth={2} />
       ))}
       {/* Base hue dot */}
-      <circle cx={baseDot.x} cy={baseDot.y} r={dotR} fill={`hsl(${baseH}, 80%, 55%)`} stroke="var(--gray-00)" strokeWidth={2} />
+      <circle aria-hidden="true" cx={baseDot.x} cy={baseDot.y} r={dotR} fill={`hsl(${baseH}, 80%, 55%)`} stroke="var(--gray-00)" strokeWidth={2} />
     </svg>
   );
 }
@@ -293,12 +294,12 @@ export const ColorWheelTool = memo(function ColorWheelTool({
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
           <span style={{ fontFamily: isAuthoredPreview ? 'var(--font-mono)' : 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>palette preview</span>
-          <div style={{ display: 'flex', gap: '4px' }}>
-            <div title={`Base: hsl(${baseH} 70% 50%)`} style={{ flex: 3, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: baseColor }} />
+          <div aria-label={`Palette preview. Base hue: ${baseH} degrees, ${baseColor}. Related hues: ${relatedH.map((h, index) => `${h} degrees, ${relatedColors[index]}`).join('; ')}. Neutral: dark gray.`} role="img" style={{ display: 'flex', gap: '4px' }}>
+            <div aria-hidden="true" title={`Base: hsl(${baseH} 70% 50%)`} style={{ flex: 3, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: baseColor }} />
             {relatedColors.map((color, index) => (
-              <div key={color} title={`Related: hsl(${relatedH[index]} 70% 50%)`} style={{ flex: 1, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: color }} />
+              <div aria-hidden="true" key={color} title={`Related: hsl(${relatedH[index]} 70% 50%)`} style={{ flex: 1, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: color }} />
             ))}
-            <div style={{ flex: 1, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--gray-80)' }} title="Neutral" />
+            <div aria-hidden="true" style={{ flex: 1, height: '40px', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--gray-80)' }} title="Neutral" />
           </div>
           <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>base · related hues · neutral</span>
         </div>

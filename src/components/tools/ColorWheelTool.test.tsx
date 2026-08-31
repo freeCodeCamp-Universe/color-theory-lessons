@@ -69,6 +69,12 @@ describe('ColorWheelTool preview mode', () => {
     expect(screen.queryByRole('button', { name: /lock palette/i })).toBeNull();
     expect(screen.queryByRole('button', { name: /build palette/i })).toBeNull();
   });
+
+  it('describes the base and related hue values in the palette preview', () => {
+    render(<ColorWheelTool interactive={false} previewRelationship="complementary" />);
+
+    expect(screen.getByRole('img', { name: /Palette preview. Base hue: 210 degrees.*Related hues: 30 degrees/i })).toBeInTheDocument();
+  });
 });
 
 describe('ColorWheelTool buildPalette role assignment', () => {
