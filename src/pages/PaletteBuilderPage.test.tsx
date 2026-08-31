@@ -173,6 +173,9 @@ describe('PaletteBuilderPage color input', () => {
     expect(input).toHaveAttribute('aria-invalid', 'false');
     expect(screen.queryByText('Error: enter a 3- or 6-digit hex color.')).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Edit primary — #AABBCC' })).toBeVisible();
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Primary color set to #AABBCC. Harmony and accessibility suggestions updated.',
+    );
   });
 
   it('keeps RGB, HSL, and hex values synchronized', async () => {
@@ -213,6 +216,9 @@ describe('PaletteBuilderPage color input', () => {
 
     expect(screen.getByRole('textbox', { name: 'Hex color value' })).toHaveValue('#663399');
     expect(screen.getByText(/H 270 .* S 50 .* L 40/)).toBeVisible();
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Primary color set to rebeccapurple, #663399. Harmony and accessibility suggestions updated.',
+    );
 
     await user.click(screen.getByRole('tab', { name: 'RGB' }));
     expect(screen.getByRole('slider', { name: 'R channel' })).toHaveValue('102');

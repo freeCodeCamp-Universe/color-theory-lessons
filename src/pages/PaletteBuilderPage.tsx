@@ -505,7 +505,7 @@ export function PaletteBuilderPage() {
     const parsed = parseHex(hexInput);
     if (parsed) {
       const canonical = rgbToHex(parsed);
-      applyPrimary(canonical, `Primary color set to ${canonical}.`);
+      applyPrimary(canonical, `Primary color set to ${canonical}. Harmony and accessibility suggestions updated.`);
     } else {
       setAnnouncement('Error: enter a 3- or 6-digit hex color.');
     }
@@ -571,7 +571,7 @@ export function PaletteBuilderPage() {
   };
 
   const handleSwatchPick = (name: string, hex: string) => {
-    applyPrimary(hex, `Primary color set to ${name}, ${hex}.`);
+    applyPrimary(hex, `Primary color set to ${name}, ${hex}. Harmony and accessibility suggestions updated.`);
   };
 
   const handleRoleClick = (mode: 'dark' | 'light', role: RoleKey) => {
