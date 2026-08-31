@@ -37,6 +37,14 @@ function advanceToGoalStage() {
 }
 
 describe('TemperatureSorterTool stages', () => {
+  it('associates every temperature control with its swatch name and color value', () => {
+    render(<TemperatureSorterTool />);
+
+    expect(screen.getByRole('combobox', { name: 'Temperature for Coral' })).toHaveAccessibleDescription(
+      'Coral swatch. Color value: #FF6B6B.',
+    );
+  });
+
   it('reports both stable stages in order', () => {
     const onStageChange = vi.fn();
     render(<TemperatureSorterTool onStageChange={onStageChange} />);

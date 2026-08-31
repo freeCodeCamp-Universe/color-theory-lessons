@@ -134,6 +134,7 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({
                   }}
                 >
                   <div
+                    aria-hidden="true"
                     style={{
                       height: '40px',
                       borderRadius: '3px',
@@ -142,6 +143,7 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({
                       transition: 'border-color 0.2s ease',
                     }}
                   />
+                  <span id={`${s.id}-swatch-description`} className="sr-only">{s.label} swatch. Color value: {s.color.toUpperCase()}.</span>
                   <span style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>{s.label}</span>
                   <select
                     value={swatchAnswers[s.id]}
@@ -158,6 +160,7 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({
                       cursor: swatchesChecked ? 'not-allowed' : 'pointer',
                     }}
                     aria-label={`Temperature for ${s.label}`}
+                    aria-describedby={`${s.id}-swatch-description`}
                   >
                     <option value="">choose temperature</option>
                     <option value="warm">warm</option>
@@ -165,7 +168,7 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({
                     <option value="neutral">neutral</option>
                   </select>
                   {swatchesChecked && (
-                    <span style={{ fontSize: '1rem', color: isCorrect ? 'var(--accent-success)' : isWrong ? 'var(--accent-danger)' : 'var(--muted)' }}>
+                    <span aria-hidden="true" style={{ fontSize: '1rem', color: isCorrect ? 'var(--accent-success)' : isWrong ? 'var(--accent-danger)' : 'var(--muted)' }}>
                       {isCorrect ? '✓' : isWrong ? `→ ${s.correct}` : 'not answered'}
                     </span>
                   )}
@@ -240,7 +243,7 @@ export const TemperatureSorterTool = memo(function TemperatureSorterTool({
                   <option value="neutral">neutral</option>
                 </select>
                 {goalsChecked && (
-                  <span style={{ fontSize: '1rem', color: isCorrect ? 'var(--accent-success)' : isWrong ? 'var(--accent-danger)' : 'var(--muted)', width: '80px' }}>
+                    <span aria-hidden="true" style={{ fontSize: '1rem', color: isCorrect ? 'var(--accent-success)' : isWrong ? 'var(--accent-danger)' : 'var(--muted)', width: '80px' }}>
                     {isCorrect ? '✓ correct' : isWrong ? `→ ${g.correct}` : 'not answered'}
                   </span>
                 )}

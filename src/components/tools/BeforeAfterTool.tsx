@@ -193,12 +193,14 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
               role={interactive ? 'button' : undefined}
               tabIndex={interactive ? 0 : undefined}
               onKeyDown={(e) => handleRegionKeyDown(e, 'nav')}
+              aria-describedby={interactive ? 'nav-region-description' : undefined}
               aria-label={interactive ? 'Click to identify what the nav bar color is doing' : undefined}
               aria-disabled={interactive && results['nav'] === true ? true : undefined}
             >
               <span className={styles.navLogo}>color-theory-course$</span>
               <span className={styles.navLink}>settings</span>
-              {results['nav'] === true && <span className={styles.regionBadge}>✓</span>}
+              <span id="nav-region-description" className="sr-only">Dark navy navigation bar.</span>
+              {results['nav'] === true && <span aria-hidden="true" className={styles.regionBadge}>✓</span>}
             </div>
             <div className={styles.hero}>
               <span className={styles.heroHeading}>Learn color theory</span>
@@ -209,11 +211,13 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
                 role={interactive ? 'button' : undefined}
                 tabIndex={interactive ? 0 : undefined}
                 onKeyDown={(e) => handleRegionKeyDown(e, 'cta')}
+                aria-describedby={interactive ? 'cta-region-description' : undefined}
                 aria-label={interactive ? 'Click to identify what the gold button color is doing' : undefined}
                 aria-disabled={interactive && results['cta'] === true ? true : undefined}
               >
                 start learning
-                {results['cta'] === true && <span className={styles.regionBadge}>✓</span>}
+                <span id="cta-region-description" className="sr-only">Gold start learning button.</span>
+                {results['cta'] === true && <span aria-hidden="true" className={styles.regionBadge}>✓</span>}
               </span>
             </div>
             <span
@@ -222,11 +226,13 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
               role={interactive ? 'button' : undefined}
               tabIndex={interactive ? 0 : undefined}
               onKeyDown={(e) => handleRegionKeyDown(e, 'success')}
+              aria-describedby={interactive ? 'success-region-description' : undefined}
               aria-label={interactive ? 'Click to identify what the green text color is doing' : undefined}
               aria-disabled={interactive && results['success'] === true ? true : undefined}
             >
               ✓ Unit 1 complete
-              {results['success'] === true && <span className={styles.regionBadge} style={{ marginLeft: '4px' }}>✓</span>}
+              <span id="success-region-description" className="sr-only">Green Unit 1 complete text.</span>
+              {results['success'] === true && <span aria-hidden="true" className={styles.regionBadge} style={{ marginLeft: '4px' }}>✓</span>}
             </span>
             <div
               className={`${styles.card} ${interactive ? styles.region : ''} ${results['card'] === true ? styles.regionSolved : activeId === 'card' ? styles.regionActive : ''}`}
@@ -234,11 +240,13 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
               role={interactive ? 'button' : undefined}
               tabIndex={interactive ? 0 : undefined}
               onKeyDown={(e) => handleRegionKeyDown(e, 'card')}
+              aria-describedby={interactive ? 'card-region-description' : undefined}
               aria-label={interactive ? 'Click to identify what the blue card border color is doing' : undefined}
               aria-disabled={interactive && results['card'] === true ? true : undefined}
             >
               Lesson 2: Hue, saturation, and lightness →
-              {results['card'] === true && <span className={styles.regionBadge}>✓</span>}
+              <span id="card-region-description" className="sr-only">Blue card border around Lesson 2.</span>
+              {results['card'] === true && <span aria-hidden="true" className={styles.regionBadge}>✓</span>}
             </div>
           </div>
           {interactive && <p className={styles.hint}>Click each colored element ↑</p>}
@@ -356,7 +364,12 @@ function HierarchyDemo({
       )}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
-      <div data-authored-visual style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '6px', padding: 'var(--spacing-lg)', display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
+      <div
+        aria-label={`Action hierarchy preview. Submit is ${roles.submit}, Save Draft is ${roles.draft}, and Cancel is ${roles.cancel}.`}
+        data-authored-visual
+        role="img"
+        style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '6px', padding: 'var(--spacing-lg)', display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}
+      >
         {HIERARCHY_ITEMS.map((item) => (
           <span key={item.id} style={btnStyle(roles[item.id])}>{item.label}</span>
         ))}

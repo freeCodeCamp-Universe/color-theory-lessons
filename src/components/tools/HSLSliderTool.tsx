@@ -133,7 +133,7 @@ export const HSLSliderTool = memo(function HSLSliderTool({
               <div className={styles.swatchRow}>
                 <div className={styles.swatchBox}>
                   <span className={styles.swatchLabel}>color</span>
-                  <div className={styles.swatch} style={{ backgroundColor: hslString(preview) }} />
+                  <div aria-hidden="true" className={styles.swatch} style={{ backgroundColor: hslString(preview) }} />
                   <span className={styles.hslValue}>H:{preview.h} S:{preview.s}% L:{preview.l}%</span>
                 </div>
               </div>
@@ -189,14 +189,19 @@ export const HSLSliderTool = memo(function HSLSliderTool({
           <div className={styles.swatchRow} style={{ flex: 1, minWidth: '180px' }}>
             <div className={styles.swatchBox}>
               <span className={styles.swatchLabel}>your color</span>
-              <div className={styles.swatch} style={{ backgroundColor: hslString(current) }} />
+              <div aria-hidden="true" className={styles.swatch} style={{ backgroundColor: hslString(current) }} />
               <span className={styles.hslValue}>
                 H:{current.h} S:{current.s}% L:{current.l}%
               </span>
             </div>
             <div className={styles.swatchBox}>
               <span className={styles.swatchLabel}>target</span>
-              <div className={styles.swatch} style={{ backgroundColor: hslString(target.target) }} />
+              <div
+                aria-label={`Target color for the ${target.name.toLowerCase()} stage. Compare its appearance with your color without reading an exact target value.`}
+                className={styles.swatch}
+                role="img"
+                style={{ backgroundColor: hslString(target.target) }}
+              />
               <span className={styles.hslValue}>
                 {target.locked === 'h' ? `H:?` : `H:${target.target.h}`}{' '}
                 {target.locked === 's' ? `S:?` : `S:${target.target.s}%`}{' '}

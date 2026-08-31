@@ -31,6 +31,13 @@ function ratioPattern(ratio: string): RegExp {
 }
 
 describe('ContrastTool', () => {
+  it('associates each lightness control with its live ratio and threshold', () => {
+    render(<ContrastTool interactive={true} />);
+
+    const slider = screen.getByRole('slider', { name: /Lightness for Section label/i });
+    expect(slider).toHaveAccessibleDescription(/ratio:.*WCAG AA requires 4.5:1/i);
+  });
+
   it('reports the three-pair repair as one named stage', () => {
     const onStageChange = vi.fn();
     render(<ContrastTool onStageChange={onStageChange} />);
