@@ -27,6 +27,8 @@ const COMPONENTS: Component[] = [
     renderPreview: (color) => (
       <input
         readOnly
+        tabIndex={-1}
+        aria-hidden="true"
         value="Enter email…"
         style={{
           padding: '0.4rem 0.6rem', fontSize: '0.8rem',

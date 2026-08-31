@@ -182,7 +182,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
               <div key={b.c} style={{ flex: 1, height: `${b.h}%`, background: b.c, borderRadius: '2px 2px 0 0' }} />
             ))}
           </div>
-          <input readOnly value="bad-input" style={{ padding: '0.2rem 0.35rem', border: '2px solid #ef4444', borderRadius: 3, background: '#fff', color: '#111', width: '100%', boxSizing: 'border-box' }} />
+          <input readOnly tabIndex={-1} aria-hidden="true" value="bad-input" style={{ padding: '0.2rem 0.35rem', border: '2px solid #ef4444', borderRadius: 3, background: '#fff', color: '#111', width: '100%', boxSizing: 'border-box' }} />
         </div>
       </div>
 

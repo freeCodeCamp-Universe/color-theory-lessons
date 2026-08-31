@@ -42,13 +42,13 @@ const MODULES: Module[] = [
     brokenPreview: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
         <label style={{ fontSize: '0.72rem', color: '#374151' }}>Email address</label>
-        <input readOnly value="not-valid" style={{ padding: '0.3rem 0.4rem', fontSize: '0.75rem', border: '2px solid #ef4444', borderRadius: 3, width: '100%', boxSizing: 'border-box', background: '#fff' }} />
+        <input readOnly tabIndex={-1} aria-hidden="true" value="not-valid" style={{ padding: '0.3rem 0.4rem', fontSize: '0.75rem', border: '2px solid #ef4444', borderRadius: 3, width: '100%', boxSizing: 'border-box', background: '#fff' }} />
       </div>
     ),
     repairedPreview: (checked) => (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
         <label style={{ fontSize: '0.72rem', color: checked.includes('Make label bold and red') ? '#ef4444' : '#374151', fontWeight: checked.includes('Make label bold and red') ? 700 : 400 }}>Email address</label>
-        <input readOnly value="not-valid" style={{ padding: '0.3rem 0.4rem', fontSize: '0.75rem', border: '2px solid #ef4444', borderRadius: 3, width: '100%', boxSizing: 'border-box', background: '#fff' }} />
+        <input readOnly tabIndex={-1} aria-hidden="true" value="not-valid" style={{ padding: '0.3rem 0.4rem', fontSize: '0.75rem', border: '2px solid #ef4444', borderRadius: 3, width: '100%', boxSizing: 'border-box', background: '#fff' }} />
         {(checked.includes('Add error icon ✕') || checked.includes('Add error message text')) && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
             {checked.includes('Add error icon ✕') && <span style={{ color: '#ef4444', fontWeight: 700, fontSize: '0.8rem' }}>✕</span>}
