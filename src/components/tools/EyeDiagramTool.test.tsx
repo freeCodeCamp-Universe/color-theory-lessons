@@ -29,6 +29,7 @@ describe('EyeDiagramTool stage flow', () => {
       await user.click(screen.getByRole('button', { name: 'next pathway stage' }));
       expect(screen.getByText(`Stage ${position} of 4`)).toBeInTheDocument();
       expect(screen.getByRole('heading', { level: 2 })).toHaveFocus();
+      expect(screen.getByText(`Stage ${position} of 4:`, { exact: false })).toBeInTheDocument();
     }
 
     await user.click(screen.getByRole('button', { name: 'finish pathway' }));
