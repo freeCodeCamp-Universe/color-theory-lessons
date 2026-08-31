@@ -4,6 +4,8 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 
 interface Pair {
   id: string;
@@ -55,6 +57,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
   const [bgColors, setBgColors] = useState<Record<string, string>>(
     Object.fromEntries(PAIRS.map((p) => [p.id, p.defaultBg])),
   );
+  const [announcement, setAnnouncement] = useState('');
   const passed = Object.fromEntries(PAIRS.map((p) => [
     p.id,
     isValidHex(textColors[p.id])
@@ -74,23 +77,26 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
   function handleTextChange(val: string) {
     if (!interactive || stageController.result === 'passed') return;
     setTextColors((prev) => ({ ...prev, [pair.id]: val }));
+    setAnnouncement(`${pair.label} text color changed to ${val}.`);
     stageController.retry();
   }
 
   function handleBgChange(val: string) {
     if (!interactive || stageController.result === 'passed') return;
     setBgColors((prev) => ({ ...prev, [pair.id]: val }));
+    setAnnouncement(`${pair.label} background color changed to ${val}.`);
     stageController.retry();
   }
 
   function checkRepairs() {
     if (!interactive) return;
-    if (completed) stageController.markPassed();
-    else stageController.markIncorrect();
+    setAnnouncement(completed ? 'All three text pairs pass the normal-text contrast threshold.' : `${passedCount} of ${PAIRS.length} text pairs pass the normal-text contrast threshold.`);
+    if (completed) stageController.markPassed(); else stageController.markIncorrect();
   }
 
   const passedCount = Object.values(passed).filter(Boolean).length;
   const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
+  const visualDescription = `${pair.label} preview. Normal sample text and a large heading use text color ${textColor} on background ${bgColor}. The current contrast ratio is ${formatRatio(ratio, 2)} to 1. Normal text requires ${pair.thresholdLabel}; large text requires at least 3 to 1.`;
 
   return (
     <div className={shellStyles.shell}>
@@ -101,6 +107,10 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
         incorrectFeedback="Not all text pairs meet 4.5:1 yet. Adjust the failing pairs and check again."
         completionFeedback="All three pairs meet the 4.5:1 threshold for normal text."
       >
+        <VisualDescription id={`text-contrast-${pair.id}-description`}>
+          {visualDescription}
+        </VisualDescription>
+        {announcement && <StatusAnnouncement message={announcement} />}
         {interactive && showResults && (
           <p style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>
             Passing pairs: {passedCount} of {PAIRS.length}.
@@ -112,7 +122,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
         {PAIRS.map((p, i) => (
           <button
             key={p.id}
-            onClick={() => interactive && setActivePair(i)}
+            onClick={() => { if (interactive) { setActivePair(i); setAnnouncement(`${p.label} selected.`); } }}
             style={{
               padding: '0.3rem 0.65rem',
               fontSize: '0.75rem',
@@ -134,6 +144,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
       {/* Preview */}
       <div
         data-authored-visual
+        aria-describedby={`text-contrast-${pair.id}-description`}
         style={{
           background: isValidHex(bgColor) ? bgColor : '#ffffff',
           borderRadius: 'var(--radius-sm)',
@@ -200,6 +211,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
                 color: 'var(--primary-foreground)', width: '7rem',
               }}
               aria-label="Text color hex"
+              aria-describedby={`text-contrast-${pair.id}-description`}
             />
           </div>
         </label>
@@ -219,6 +231,7 @@ export const TextContrastLabTool = memo(function TextContrastLabTool({
                 color: 'var(--primary-foreground)', width: '7rem',
               }}
               aria-label="Background color hex"
+              aria-describedby={`text-contrast-${pair.id}-description`}
             />
           </div>
         </label>

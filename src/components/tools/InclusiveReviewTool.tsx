@@ -3,6 +3,8 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 
 type Assessment = 'pass' | 'needs-work' | null;
 type SimulationMode = 'normal' | 'deuteranopia' | 'protanopia' | 'tritanopia' | 'achromatopsia';
@@ -88,19 +90,27 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
   const [answers, setAnswers] = useState<Record<string, Assessment>>(
     Object.fromEntries(CHECKLIST.map((c) => [c.id, null])),
   );
+  const [announcement, setAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
   const submitted = stageController.result !== 'idle';
 
   function setAnswer(id: string, value: Assessment) {
     if (!interactive || submitted) return;
     setAnswers((current) => ({ ...current, [id]: value }));
+    const item = CHECKLIST.find((check) => check.id === id);
+    setAnnouncement(`${item?.label ?? 'Checklist item'} marked ${value === 'pass' ? 'Pass' : 'Needs work'}.`);
   }
 
   function checkReview() {
     if (!interactive || submitted) return;
     const allCorrect = CHECKLIST.every((item) => answers[item.id] === item.correctAnswer);
-    if (allCorrect) stageController.markPassed();
-    else stageController.markIncorrect();
+    if (allCorrect) {
+      setAnnouncement('Review validation complete. All five checklist items are assessed.');
+      stageController.markPassed();
+    } else {
+      setAnnouncement('Review validation complete. One or more checklist items need another assessment.');
+      stageController.markIncorrect();
+    }
   }
 
   const answeredCount = Object.values(answers).filter((a) => a !== null).length;
@@ -116,6 +126,7 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
         incorrectFeedback="One or more assessments do not match the mockup evidence. Review the item feedback and try the stage again."
         completionFeedback="Review complete. The mockup needs work on all five checks."
       >
+      {announcement && <StatusAnnouncement message={announcement} />}
 
       <div
         role="group"
@@ -128,7 +139,10 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
             type="button"
             disabled={!interactive}
             aria-pressed={simulationMode === mode.id}
-            onClick={() => setSimulationMode(mode.id)}
+            onClick={() => {
+              setSimulationMode(mode.id);
+              setAnnouncement(`${mode.label} simulation selected. The mockup description has updated.`);
+            }}
             style={{
               padding: '0.25rem 0.5rem',
               fontSize: '0.72rem',
@@ -146,10 +160,13 @@ export const InclusiveReviewTool = memo(function InclusiveReviewTool({
       </div>
 
       {/* Compact mockup reference */}
+      <VisualDescription id="inclusive-review-mockup-description">
+        {`${SIMULATION_MODES.find((mode) => mode.id === simulationMode)?.label ?? 'Original'} view. A dark blue #1E3A5F navigation bar contains Dashboard in light blue #4DA6FF, Reports and Settings in gray #9CA3AF. The light #F8FAFC content area shows green #22C55E Active and red #EF4444 Error status pills; a three-bar chart with green, red, and blue #3B82F6 bars at 80, 50, and 65 percent; and a bad-input field with a red #EF4444 border. The status pills are labelled, but the chart bars have no labels or patterns and the input has no written error message.`}
+      </VisualDescription>
       <div data-authored-visual data-testid="inclusive-review-mockup" style={{
         border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)',
         overflow: 'hidden', marginBottom: '0.75rem', fontSize: '0.72rem', filter: simulationFilter,
-      }}>
+      }} aria-describedby="inclusive-review-mockup-description">
         <div style={{ background: '#1e3a5f', padding: '0.35rem 0.6rem', display: 'flex', gap: '0.75rem' }}>
           <span style={{ color: '#4da6ff', fontWeight: 600 }}>Dashboard</span>
           <span style={{ color: '#9ca3af' }}>Reports</span>
