@@ -3,6 +3,7 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 
 interface Reason { id: string; label: string; isCorrect: boolean }
 interface Scenario { id: string; title: string; description: string; screenColor: string; reasons: Reason[] }
@@ -89,7 +90,7 @@ export const MismatchExplainerTool = memo(function MismatchExplainerTool({
           passedFeedback="✓ The relevant factors are selected."
           completionFeedback="✓ All three screen-to-material mismatches are explained."
         >
-          <div style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
+          <div role="group" aria-label="Screen and material simulation comparison" aria-describedby={`mismatch-${scenario.id}-description`} style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: '110px' }}>
               <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase' }}>on screen</span>
               <div style={{ height: '60px', borderRadius: 'var(--radius-sm)', backgroundColor: scenario.screenColor, border: '1px solid rgba(255,255,255,0.08)' }} />
@@ -101,6 +102,9 @@ export const MismatchExplainerTool = memo(function MismatchExplainerTool({
               <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.7rem', color: 'var(--muted)' }}>reflects light</span>
             </div>
           </div>
+          <VisualDescription id={`mismatch-${scenario.id}-description`}>
+            The screen swatch is {scenario.screenColor} and is labeled as emitted light. The material simulation uses the same base color but appears darker and less saturated; it is labeled as reflected light.
+          </VisualDescription>
           <p style={{ fontSize: '0.9rem', color: 'var(--secondary-foreground)', margin: 0 }}>{scenario.description}</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
             {scenario.reasons.map((reason) => {
