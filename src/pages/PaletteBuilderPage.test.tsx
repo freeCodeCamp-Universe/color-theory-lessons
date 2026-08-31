@@ -185,7 +185,7 @@ describe('PaletteBuilderPage color input', () => {
     expect(screen.getByRole('textbox', { name: 'Hex color value' })).toHaveValue('#FF0000');
     expect(screen.getByText(/H 0 .* S 100 .* L 50/)).toBeVisible();
 
-    await user.click(screen.getByRole('button', { name: 'HSL' }));
+    await user.click(screen.getByRole('tab', { name: 'HSL' }));
     const hueSliders = screen.getAllByRole('slider', { name: 'Hue' });
     fireEvent.change(hueSliders.at(-1)!, { target: { value: '120' } });
 
@@ -193,7 +193,7 @@ describe('PaletteBuilderPage color input', () => {
     expect(screen.getByRole('slider', { name: 'Saturation' })).toHaveValue('100');
     expect(screen.getByRole('slider', { name: 'Lightness' })).toHaveValue('50');
 
-    await user.click(screen.getByRole('button', { name: 'RGB' }));
+    await user.click(screen.getByRole('tab', { name: 'RGB' }));
     expect(screen.getByRole('slider', { name: 'R channel' })).toHaveValue('0');
     expect(screen.getByRole('slider', { name: 'G channel' })).toHaveValue('255');
     expect(screen.getByRole('slider', { name: 'B channel' })).toHaveValue('0');
@@ -203,16 +203,31 @@ describe('PaletteBuilderPage color input', () => {
     const user = userEvent.setup();
     render(<PaletteBuilderPage />);
 
-    await user.click(screen.getByRole('button', { name: 'SWATCHES' }));
+    await user.click(screen.getByRole('tab', { name: 'SWATCHES' }));
     await user.click(screen.getByRole('button', { name: 'rebeccapurple (#663399)' }));
 
     expect(screen.getByRole('textbox', { name: 'Hex color value' })).toHaveValue('#663399');
     expect(screen.getByText(/H 270 .* S 50 .* L 40/)).toBeVisible();
 
-    await user.click(screen.getByRole('button', { name: 'RGB' }));
+    await user.click(screen.getByRole('tab', { name: 'RGB' }));
     expect(screen.getByRole('slider', { name: 'R channel' })).toHaveValue('102');
     expect(screen.getByRole('slider', { name: 'G channel' })).toHaveValue('51');
     expect(screen.getByRole('slider', { name: 'B channel' })).toHaveValue('153');
+  });
+
+  it('exposes the selected picker state and supports the hue ring with a keyboard', async () => {
+    const user = userEvent.setup();
+    render(<PaletteBuilderPage />);
+
+    const hslTab = screen.getByRole('tab', { name: 'HSL' });
+    expect(screen.getByRole('tab', { name: 'RGB' })).toHaveAttribute('aria-selected', 'true');
+    await user.click(hslTab);
+    expect(hslTab).toHaveAttribute('aria-selected', 'true');
+
+    const hueRing = screen.getAllByRole('slider', { name: 'Hue' })[0];
+    expect(hueRing).toHaveAttribute('aria-valuetext', '217 degrees');
+    fireEvent.keyDown(hueRing, { key: 'ArrowRight' });
+    expect(hueRing).toHaveAttribute('aria-valuetext', '218 degrees');
   });
 });
 
@@ -271,6 +286,17 @@ describe('PaletteBuilderPage suggestions', () => {
 });
 
 describe('PaletteBuilderPage palette editing', () => {
+  it('announces an added palette color and exposes its position and value', async () => {
+    const user = userEvent.setup();
+    render(<PaletteBuilderPage />);
+    await enterPrimary(user, '#336699');
+
+    await user.click(screen.getByRole('button', { name: 'Add complement to palette' }));
+
+    expect(screen.getByRole('status')).toHaveTextContent('Added complement #996633 to your palette.');
+    expect(screen.getByRole('button', { name: 'Edit complement — #996633' }))
+      .toHaveAttribute('aria-description', 'Palette color 2 of 2.');
+  });
   it('adds suggested and custom colors without offering an added suggestion twice', async () => {
     const user = userEvent.setup();
     render(<PaletteBuilderPage />);
@@ -297,8 +323,8 @@ describe('PaletteBuilderPage palette editing', () => {
 
     expect(screen.getAllByRole('button', { name: /Edit custom \d+ — #808080/ }))
       .toHaveLength(1);
-    expect(screen.getByRole('status')).toHaveTextContent(
-      '#808080 is already in your palette.',
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'Cannot add #808080; it is already in your palette.',
     );
     expect(screen.getAllByRole('textbox', { name: 'Hex color value' })[1])
       .toHaveValue('#808080');
@@ -375,6 +401,17 @@ describe('PaletteBuilderPage palette editing', () => {
 });
 
 describe('PaletteBuilderPage contrast pairings', () => {
+  it('names both colors, the ratio, and WCAG level for each contrast row', async () => {
+    const user = userEvent.setup();
+    render(<PaletteBuilderPage />);
+    await enterPrimary(user, '#000000');
+    await addCustomColor(user, '#FFFFFF');
+
+    const matrix = screen.getByRole('heading', { name: 'contrast pairings' }).parentElement!;
+    expect(within(matrix).getByText('foreground #000000 on background #FFFFFF')).toBeVisible();
+    expect(within(matrix).getByText('21.0:1', { selector: '[class*="matrixRatio"]' })).toBeVisible();
+    expect(within(matrix).getByText('AAA 21.0:1')).toBeVisible();
+  });
   it.each([
     ['fail', '#777777'],
     ['AA', '#767676'],
@@ -460,6 +497,24 @@ describe('PaletteBuilderPage contrast pairings', () => {
 });
 
 describe('PaletteBuilderPage theme arranger', () => {
+  it('describes each theme preview and announces role assignments', async () => {
+    const user = userEvent.setup();
+    render(<PaletteBuilderPage />);
+    await enterPrimary(user, '#000000');
+    await addCustomColor(user, '#FFFFFF');
+
+    const darkPanel = getModePanel('dark');
+    const preview = within(darkPanel).getByText('Card heading').closest('[data-authored-visual]')!;
+    const description = document.getElementById(preview.getAttribute('aria-describedby')!);
+    expect(description).toHaveTextContent('dark theme preview. Background #000000; surface #FFFFFF;');
+
+    await user.click(within(getRoleRow(darkPanel, 'accent')).getByRole('button', {
+      name: 'Change dark accent color',
+    }));
+    await user.click(within(darkPanel).getByRole('button', { name: 'Select #FFFFFF' }));
+    expect(screen.getByRole('status')).toHaveTextContent('Assigned #FFFFFF as dark accent.');
+  });
+
   it('assigns all light and dark roles from palette order and luminance', async () => {
     const user = userEvent.setup();
     render(<PaletteBuilderPage />);
