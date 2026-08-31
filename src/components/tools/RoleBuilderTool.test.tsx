@@ -185,3 +185,12 @@ describe('RoleBuilderTool', () => {
     expect(onComplete).toHaveBeenCalledOnce();
   });
 });
+
+describe('RoleBuilderTool accessible equivalent', () => {
+  it('describes the live preview and announces a role change', () => {
+    render(<RoleBuilderTool interactive />);
+    fireEvent.change(screen.getByRole('textbox', { name: 'action hex color' }), { target: { value: '#052e16' } });
+    expect(screen.getByText(/Live preview.*Action background: #052e16/s)).toBeInTheDocument();
+    expect(screen.getAllByRole('status')[0]).toHaveTextContent('action changed to #052e16.');
+  });
+});

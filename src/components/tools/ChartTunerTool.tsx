@@ -1,4 +1,6 @@
 import { memo, useState } from 'react';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import { hexToRgb, colorDistance, simulateDeuteranopia } from '../../utils/color.ts';
 import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
@@ -99,8 +101,10 @@ function getWeakPairs(colors: string[]) {
 function ChartBars({ colors, patterns, simulated }: { colors: string[]; patterns: Pattern[]; simulated: boolean }) {
   const displayColors = simulated ? colors.map(simulateDeuteranopia) : colors;
   const maxVal = 100;
+  const dataDescription = SERIES.map((series, seriesIndex) => `${series}: ${MONTHS.map((month, monthIndex) => `${month} ${CHART_DATA[monthIndex][seriesIndex]}`).join(', ')}. Color ${displayColors[seriesIndex].toUpperCase()}, ${patternLabel(patterns[seriesIndex])} pattern.`).join(' ');
   return (
-    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end', height: 110, width: '100%', maxWidth: '100%', overflowX: 'auto' }}>
+    <div aria-describedby="chart-tuner-data-description" aria-label="Grouped bar chart data" role="img" style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end', height: 110, width: '100%', maxWidth: '100%', overflowX: 'auto' }}>
+      <VisualDescription id="chart-tuner-data-description">{`${simulated ? 'Deuteranopia simulation' : 'Normal view'} grouped bar chart. ${dataDescription}`}</VisualDescription>
       {MONTHS.map((month, mi) => (
         <div key={month} style={{ flex: '0 0 44px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
           <div style={{ display: 'flex', gap: 1, alignItems: 'flex-end', height: 80 }}>
@@ -187,6 +191,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({
   const [patterns, setPatterns] = useState<Pattern[]>(DEFAULT_PATTERNS);
   const [simulated, setSimulated] = useState(false);
   const [showDataTable, setShowDataTable] = useState(false);
+  const [announcement, setAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
   const activeStageId = stageController.activeStage.id;
 
@@ -236,6 +241,7 @@ export const ChartTunerTool = memo(function ChartTunerTool({
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>chart tuner</span>
+      <StatusAnnouncement message={announcement} />
 
       <ExerciseStage
         controller={stageController}
@@ -247,8 +253,9 @@ export const ChartTunerTool = memo(function ChartTunerTool({
       >
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.5rem' }}>
         <button
-          onClick={() => setSimulated(false)}
+          onClick={() => { setSimulated(false); setAnnouncement('Normal chart view selected.'); }}
           disabled={!interactive}
+          aria-pressed={!simulated}
           style={{
             fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: 4, cursor: interactive ? 'pointer' : 'default',
             background: !simulated ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'var(--border)', color: !simulated ? 'var(--accent-warning)' : 'var(--primary-foreground)',
@@ -258,8 +265,9 @@ export const ChartTunerTool = memo(function ChartTunerTool({
           Normal view
         </button>
         <button
-          onClick={() => setSimulated(true)}
+          onClick={() => { setSimulated(true); setAnnouncement('Deuteranopia simulation selected.'); }}
           disabled={!interactive}
+          aria-pressed={simulated}
           style={{
             fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: 4, cursor: interactive ? 'pointer' : 'default',
             background: simulated ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'var(--border)', color: simulated ? 'var(--accent-warning)' : 'var(--primary-foreground)',

@@ -1,4 +1,6 @@
 import { memo, useState } from 'react';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import { hexToRgb, contrastRatioWcag, hexToHsl } from '../../utils/color.ts';
 import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
@@ -144,12 +146,14 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
 }: ExerciseToolProps) {
   const [roles, setRoles] = useState<Record<RoleKey, string>>(DEFAULTS);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [announcement, setAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
   function update(key: RoleKey, val: string) {
     if (!interactive || stageController.result === 'passed') return;
     setHasInteracted(true);
     setRoles((prev) => ({ ...prev, [key]: val }));
+    setAnnouncement(`${ROLE_LABELS[key]} changed to ${val}.`);
     stageController.retry();
   }
 
@@ -181,10 +185,12 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
   const suc = isValidHex(roles['success']) ? roles['success'] : '#22c55e';
   const warn = isValidHex(roles['warning']) ? roles['warning'] : '#f59e0b';
   const err = isValidHex(roles['error']) ? roles['error'] : '#ef4444';
+  const previewDescription = `Live preview. Page background: ${bg}. Card surface: ${surf}. Primary text: ${pt}. Supporting text: ${st}. Action background: ${act}. Success: ${suc}. Warning: ${warn}. Error: ${err}.`;
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>role builder</span>
+      <StatusAnnouncement message={announcement} />
 
       <ExerciseStage
         controller={stageController}
@@ -201,7 +207,7 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
             const errorId = `role-builder-${roleKey}-hex-error`;
             return (
               <div key={roleKey} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem', flexWrap: 'wrap' }}>
-                <div style={{ width: 18, height: 18, borderRadius: 3, background: isValidHex(val) ? val : '#888', border: '1px solid var(--border)', flexShrink: 0 }} />
+                <div aria-hidden="true" style={{ width: 18, height: 18, borderRadius: 3, background: isValidHex(val) ? val : '#888', border: '1px solid var(--border)', flexShrink: 0 }} />
                 <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{ROLE_LABELS[roleKey]}</span>
                 <input
                   type="text"
@@ -232,7 +238,8 @@ export const RoleBuilderTool = memo(function RoleBuilderTool({
         {/* Preview */}
         <div style={{ flex: '1 1 200px', minWidth: 180 }}>
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>LIVE PREVIEW</p>
-          <div data-authored-visual style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
+          <VisualDescription id="role-builder-preview-description">{previewDescription}</VisualDescription>
+          <div aria-describedby="role-builder-preview-description" data-authored-visual style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
             <div style={{ background: surf, borderRadius: 4, padding: '0.5rem', marginBottom: '0.5rem', border: '1px solid #e5e7eb' }}>
               <div style={{ color: pt, fontWeight: 600, fontSize: '0.85rem' }}>Card Title</div>
               <div style={{ color: st, fontSize: '0.75rem' }}>Supporting information</div>

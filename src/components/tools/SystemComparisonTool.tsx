@@ -1,4 +1,6 @@
 import { memo, useState } from 'react';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
@@ -30,6 +32,7 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
   onStageChange,
 }: ExerciseToolProps) {
   const [found, setFound] = useState<Set<string>>(new Set());
+  const [announcement, setAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
   function handleClick(id: string) {
@@ -40,6 +43,8 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
       else next.add(id);
       return next;
     });
+    const item = INCONSISTENCIES.find((inconsistency) => inconsistency.id === id);
+    setAnnouncement(`${item?.label ?? 'Region'} ${found.has(id) ? 'cleared' : 'selected'}.`);
     stageController.retry();
   }
 
@@ -68,6 +73,7 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>system comparison</span>
+      <StatusAnnouncement message={announcement} />
 
       <ExerciseStage
         controller={stageController}
@@ -80,7 +86,8 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.4rem' }}>
             AD-HOC {interactive && <span style={{ color: 'var(--accent-warning)' }}>(click inconsistencies)</span>}
           </p>
-          <div data-authored-visual style={{ border: '1px solid #e5e7eb', borderRadius: 6, overflow: 'hidden', fontSize: '0.8rem' }}>
+          <VisualDescription id="system-comparison-ad-hoc-description">Ad-hoc preview. Header background: #2563EB. Account card background: #F9FAFB. The selectable secondary text is #9CA3AF, action background is #3B82F6, success badge background is #14B8A6, and Settings card background is #FFFFFF.</VisualDescription>
+          <div aria-describedby="system-comparison-ad-hoc-description" data-authored-visual style={{ border: '1px solid #e5e7eb', borderRadius: 6, overflow: 'hidden', fontSize: '0.8rem' }}>
             {/* Header */}
             <div style={{ background: '#2563EB', padding: '0.4rem 0.6rem', color: '#fff', fontWeight: 600 }}>My App</div>
             {/* Card 1 */}
@@ -92,18 +99,20 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
                 style={clickableStyle('text-weight')}
                 onClick={() => handleClick('text-weight')}
                 disabled={!interactive || stageController.result === 'passed'}
+                aria-label="Secondary text region, color #9CA3AF"
+                aria-pressed={found.has('text-weight')}
               >
                 <div style={{ color: '#9ca3af', fontSize: '0.75rem' }}>Last updated: today</div>
               </button>
               <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.4rem', alignItems: 'center' }}>
                 {/* Inconsistency 1: different blue than header */}
-                <button type="button" style={clickableStyle('btn-color')} onClick={() => handleClick('btn-color')} disabled={!interactive || stageController.result === 'passed'}>
+                <button type="button" style={clickableStyle('btn-color')} onClick={() => handleClick('btn-color')} disabled={!interactive || stageController.result === 'passed'} aria-label="View action region, background #3B82F6" aria-pressed={found.has('btn-color')}>
                   <div style={{ background: '#3b82f6', color: '#fff', padding: '0.2rem 0.5rem', borderRadius: 4, fontSize: '0.75rem', display: 'inline-block' }}>
                     View
                   </div>
                 </button>
                 {/* Inconsistency 2: teal success badge */}
-                <button type="button" style={clickableStyle('success-color')} onClick={() => handleClick('success-color')} disabled={!interactive || stageController.result === 'passed'}>
+                <button type="button" style={clickableStyle('success-color')} onClick={() => handleClick('success-color')} disabled={!interactive || stageController.result === 'passed'} aria-label="Active status region, background #14B8A6" aria-pressed={found.has('success-color')}>
                   <div style={{ background: '#14b8a6', color: '#fff', padding: '0.2rem 0.4rem', borderRadius: 99, fontSize: '0.7rem', display: 'inline-block' }}>
                     Active
                   </div>
@@ -116,6 +125,8 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
               style={{ ...clickableStyle('surface-color'), display: 'block', width: 'calc(100% - 1rem)', background: '#ffffff', border: '1px solid #e5e7eb', margin: '0 0.5rem 0.5rem', padding: '0.5rem', borderRadius: 4 }}
               onClick={() => handleClick('surface-color')}
               disabled={!interactive || stageController.result === 'passed'}
+              aria-label="Settings card region, background #FFFFFF"
+              aria-pressed={found.has('surface-color')}
             >
               <div style={{ color: '#111827', fontWeight: 600, marginBottom: '0.25rem' }}>Settings</div>
               <div style={{ color: '#6b7280', fontSize: '0.75rem' }}>Manage your preferences</div>
@@ -131,7 +142,8 @@ export const SystemComparisonTool = memo(function SystemComparisonTool({
         {/* System mockup */}
         <div style={{ flex: '1 1 220px', minWidth: 200 }}>
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.4rem' }}>SYSTEM (consistent)</p>
-          <div data-authored-visual style={{ border: '1px solid #e5e7eb', borderRadius: 6, overflow: 'hidden', fontSize: '0.8rem' }}>
+          <VisualDescription id="system-comparison-system-description">Consistent system preview. Header and View action background: #1E40AF. Both card surfaces: #F3F4F6. Secondary text: #4B5563. Active badge background: #15803D.</VisualDescription>
+          <div aria-describedby="system-comparison-system-description" data-authored-visual style={{ border: '1px solid #e5e7eb', borderRadius: 6, overflow: 'hidden', fontSize: '0.8rem' }}>
             <div style={{ background: '#1e40af', padding: '0.4rem 0.6rem', color: '#fff', fontWeight: 600 }}>My App</div>
             <div style={{ background: SYSTEM_COLORS.surface, border: '1px solid #e5e7eb', margin: '0.5rem', padding: '0.5rem', borderRadius: 4 }}>
               <div style={{ color: '#111827', fontWeight: 600, marginBottom: '0.25rem' }}>Account Overview</div>

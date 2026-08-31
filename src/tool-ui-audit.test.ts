@@ -117,7 +117,7 @@ describe('tool UI audit regressions', () => {
 
   it('marks instructional previews as authored visuals without exempting their controls', () => {
     expect(read('src/components/tools/ColorSpaceLabTool.tsx')).toMatch(
-      /<div data-authored-visual style={{ display: 'flex', gap: '0\.5rem', overflowX: 'auto' }}>/,
+      /<div aria-describedby="color-space-comparison-description" data-authored-visual style={{ display: 'flex', gap: '0\.5rem', overflowX: 'auto' }}>/,
     );
     expect(read('src/pages/PaletteBuilderPage.tsx')).toMatch(
       /className={styles\.miniPreview}\s+data-authored-visual/,
