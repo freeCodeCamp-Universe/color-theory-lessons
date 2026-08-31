@@ -25,7 +25,7 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div className={styles.fallback}>
-          <p className={styles.message}>something went wrong.</p>
+          <h1 className={styles.message}>something went wrong.</h1>
           <button
             type="button"
             className={styles.retryButton}

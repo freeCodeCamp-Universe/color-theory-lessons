@@ -17,7 +17,9 @@ export function RouteAccessibility() {
     let focused = false;
     function focusHeading() {
       if (focused) return true;
-      const heading = mainContent.querySelector<HTMLElement>('h1');
+      const heading = mainContent.querySelector<HTMLElement>(
+        'h1:not([data-route-loading-heading])',
+      );
       if (!heading) return false;
 
       heading.tabIndex = -1;

@@ -139,7 +139,14 @@ export function AccessibilityRescueChallenge({
       >
         {stageController.activeStage.id === 'body-text-contrast' && (
           <section className={styles.block}>
-            <p data-authored-visual className={styles.sample} style={{ color: checks.textColor, backgroundColor: '#f5f7fb' }}>This paragraph starts below the required contrast ratio.</p>
+            <p
+              data-authored-visual
+              data-a11y-scan-exclude="milestone-5-body-text-sample"
+              className={styles.sample}
+              style={{ color: checks.textColor, backgroundColor: '#f5f7fb' }}
+            >
+              This paragraph starts below the required contrast ratio.
+            </p>
             <label className={styles.sliderLabel}>
               Text lightness: {textLightness}
               <input type="range" min={20} max={70} value={textLightness} disabled={stageController.result !== 'idle'} onChange={(event) => setTextLightness(Number(event.target.value))} />
