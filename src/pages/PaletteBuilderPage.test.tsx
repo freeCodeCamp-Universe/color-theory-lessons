@@ -452,7 +452,7 @@ describe('PaletteBuilderPage contrast pairings', () => {
     await addCustomColor(user, '#FFFFFF');
 
     const matrix = screen.getByRole('heading', { name: 'contrast pairings' }).parentElement!;
-    expect(within(matrix).getByText('foreground #000000 on background #FFFFFF')).toBeVisible();
+    expect(within(matrix).getByText('foreground primary #000000 on background custom 1 #FFFFFF')).toBeVisible();
     expect(within(matrix).getByText('text size: 18px')).toBeVisible();
     expect(within(matrix).getByText('21.0:1', { selector: '[class*="matrixRatio"]' })).toBeVisible();
     expect(within(matrix).getByText('AAA 21.0:1')).toBeVisible();

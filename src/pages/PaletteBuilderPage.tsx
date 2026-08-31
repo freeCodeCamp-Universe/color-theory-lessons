@@ -684,24 +684,24 @@ export function PaletteBuilderPage() {
 
   const uniqueColors = useMemo(() => {
     const seen = new Set<string>();
-    return paletteHexes.filter((c) => {
-      const upper = c.toUpperCase();
+    return paletteColors.filter((color) => {
+      const upper = color.hex.toUpperCase();
       if (seen.has(upper)) return false;
       seen.add(upper);
       return true;
     });
-  }, [paletteHexes]);
+  }, [paletteColors]);
 
   const matrixPairs = useMemo(() => {
-    const pairs: { fg: string; bg: string; ratio: number }[] = [];
+    const pairs: { fg: PaletteColor; bg: PaletteColor; ratio: number }[] = [];
     for (let i = 0; i < uniqueColors.length; i++) {
       for (let j = i + 1; j < uniqueColors.length; j++) {
         const a = uniqueColors[i];
         const b = uniqueColors[j];
-        const lA = hexToHsl(a).l;
-        const lB = hexToHsl(b).l;
+        const lA = hexToHsl(a.hex).l;
+        const lB = hexToHsl(b.hex).l;
         if (Math.abs(lA - lB) < 30) continue;
-        pairs.push({ fg: a, bg: b, ratio: ratioOf(a, b) });
+        pairs.push({ fg: a, bg: b, ratio: ratioOf(a.hex, b.hex) });
       }
     }
     pairs.sort((a, b) => b.ratio - a.ratio);
@@ -1413,18 +1413,18 @@ export function PaletteBuilderPage() {
                         ? styles.matrixCellEven
                         : styles.matrixCellOdd;
                       return (
-                        <Fragment key={`${fg}-${bg}`}>
+                        <Fragment key={`${fg.hex}-${bg.hex}`}>
                           <div className={`${styles.matrixCell} ${cellCls}`}>
                             <span style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
                               <span
                                 className={styles.matrixHeaderSwatch}
-                                style={{ backgroundColor: fg }}
+                                style={{ backgroundColor: fg.hex }}
                                 aria-hidden="true"
                               />
-                              <span>foreground {fg.toUpperCase()} on background {bg.toUpperCase()}</span>
+                              <span>foreground {fg.label} {fg.hex.toUpperCase()} on background {bg.label} {bg.hex.toUpperCase()}</span>
                               <span
                                 className={styles.matrixHeaderSwatch}
-                                style={{ backgroundColor: bg }}
+                                style={{ backgroundColor: bg.hex }}
                                 aria-hidden="true"
                               />
                             </span>
@@ -1442,8 +1442,8 @@ export function PaletteBuilderPage() {
                             <span
                               aria-hidden="true"
                               style={{
-                                backgroundColor: bg,
-                                color: fg,
+                                backgroundColor: bg.hex,
+                                color: fg.hex,
                                 padding: '2px 8px',
                                 borderRadius: 'var(--radius-sm)',
                                 fontFamily: 'var(--font-mono)',
