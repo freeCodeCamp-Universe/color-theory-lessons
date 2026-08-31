@@ -115,7 +115,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
           background: `linear-gradient(135deg, ${gradStart}, ${gradEnd})`,
           borderRadius: 'var(--radius-sm)', padding: '1rem', marginBottom: '0.6rem',
         }}>
-          <span style={{ color: HERO_TEXT_COLOR, fontFamily: 'var(--font-mono)', fontSize: '0.82rem' }}>
+          <span aria-hidden="true" style={{ color: HERO_TEXT_COLOR, fontFamily: 'var(--font-mono)', fontSize: '0.82rem' }}>
             Hero gradient
           </span>
         </div>
@@ -132,19 +132,19 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
             Secondary text for supporting details
           </p>
           <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-            <span style={{
+            <span aria-hidden="true" style={{
               padding: '0.2rem 0.5rem', borderRadius: 3, fontSize: '0.72rem',
               background: colors.accent, color: '#fff', fontFamily: 'var(--font-mono)',
             }}>Action</span>
-            <span style={{
+            <span aria-hidden="true" style={{
               padding: '0.2rem 0.5rem', borderRadius: 3, fontSize: '0.72rem',
               background: colors.success, color: '#111', fontFamily: 'var(--font-mono)',
             }}>Success</span>
-            <span style={{
+            <span aria-hidden="true" style={{
               padding: '0.2rem 0.5rem', borderRadius: 3, fontSize: '0.72rem',
               background: colors.warning, color: '#111', fontFamily: 'var(--font-mono)',
             }}>Warning</span>
-            <span style={{
+            <span aria-hidden="true" style={{
               padding: '0.2rem 0.5rem', borderRadius: 3, fontSize: '0.72rem',
               background: colors.error, color: '#fff', fontFamily: 'var(--font-mono)',
             }}>Error</span>

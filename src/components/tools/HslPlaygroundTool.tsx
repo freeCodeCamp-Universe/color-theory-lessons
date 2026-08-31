@@ -84,7 +84,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({
             <div style={{
               width: 80, minHeight: 80, borderRadius: 'var(--radius-md)',
               background: hex, border: '2px solid var(--border)',
-            }} />
+            }} aria-hidden="true" />
             <VisualDescription id="hsl-current-description">{currentDescription}</VisualDescription>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', lineHeight: 1.7 }}>
               <div><span style={{ color: 'var(--muted)' }}>HSL</span> {hslValue}</div>

@@ -159,7 +159,7 @@ export const TokenMapTool = memo(function TokenMapTool({
                 width: 20, height: 20, borderRadius: 3,
                 background: d.color, border: '1px solid var(--border)',
                 flexShrink: 0,
-              }} />
+              }} aria-hidden="true" />
               <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--primary-foreground)' }}>
                 {d.name}
               </span>
@@ -181,7 +181,7 @@ export const TokenMapTool = memo(function TokenMapTool({
         background: derived.find((d) => d.name === '--color-surface')!.color,
         border: `1px solid ${derived.find((d) => d.name === '--color-border')!.color}`,
         borderRadius: 'var(--radius-sm)', padding: '0.6rem', marginBottom: '0.75rem',
-      }}>
+      }} aria-describedby="token-map-description">
         <p style={{
           color: derived.find((d) => d.name === '--color-text-primary')!.color,
           fontSize: '0.82rem', margin: '0 0 0.4rem',

@@ -43,6 +43,7 @@ describe('Unit 3 visual equivalents', () => {
     render(<HslPlaygroundTool interactive />);
     expect(screen.getByText(/Current color: HSL 200 degrees.*RGB 64, 149, 191/)).toBeInTheDocument();
     expect(screen.getByText(/Its exact HSL values are not disclosed before checking/)).toBeInTheDocument();
+    expect(document.querySelector('[style*="min-height: 80px"]')).toHaveAttribute('aria-hidden', 'true');
   });
 
   it('describes alpha composition and its blended result', () => {
@@ -50,6 +51,7 @@ describe('Unit 3 visual equivalents', () => {
     expect(screen.getByText(/Modal scrim.*Background: Light page, #e8e8e8.*Blended result: rgb\(116 116 116\)/)).toBeInTheDocument();
     fireEvent.change(screen.getByRole('slider', { name: /Alpha:/ }), { target: { value: '60' } });
     expect(screen.getAllByRole('status').some((status) => status.textContent?.includes('Foreground: black at 60 percent opacity'))).toBe(true);
+    expect(document.querySelector('[style*="width: 40px"]')).toHaveAttribute('aria-hidden', 'true');
   });
 
   it('describes theme roles, gradient endpoints, and contrast results', () => {
@@ -65,5 +67,6 @@ describe('Unit 3 visual equivalents', () => {
     expect(screen.getAllByText(/Base hue 220 degrees.*--color-action-primary #/)).not.toHaveLength(0);
     fireEvent.change(screen.getByRole('slider', { name: /Base hue:/ }), { target: { value: '180' } });
     expect(screen.getAllByRole('status').some((status) => status.textContent?.includes('Base hue 180 degrees'))).toBe(true);
+    expect(screen.getByText('Sample card text').closest('[data-authored-visual]')).toHaveAttribute('aria-describedby', 'token-map-description');
   });
 });

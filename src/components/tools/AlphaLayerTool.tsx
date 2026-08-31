@@ -151,7 +151,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
         <div style={{
           position: 'absolute', inset: 0,
           background: `rgba(${fgR}, ${fgG}, ${fgB}, ${alpha})`,
-        }} />
+        }} aria-hidden="true" />
         {ctx.id === 'image' && (
           <div style={{
             position: 'absolute',
@@ -182,7 +182,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
         <div style={{
           width: 40, height: 40, borderRadius: 'var(--radius-sm)',
           background: blended, border: '1px solid var(--border)',
-        }} />
+        }} aria-hidden="true" />
         <div style={{ fontSize: '0.8rem', fontFamily: 'var(--font-sans)' }}>
           <span style={{ color: 'var(--muted)' }}>Result:</span>{' '}
           <span style={{ fontFamily: 'var(--font-mono)' }}>{blended}</span>
