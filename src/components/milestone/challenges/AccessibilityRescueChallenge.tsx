@@ -7,6 +7,7 @@ import { useExerciseStages } from '../../tools/useExerciseStages.ts';
 import styles from './AccessibilityRescueChallenge.module.css';
 import type { MilestoneChallengeProps, StoredMilestoneStage } from './milestone-stage.ts';
 import { restoreMilestoneStage } from './milestone-stage.ts';
+import { VisualDescription } from '../../accessibility/VisualDescription.tsx';
 
 interface AccessibilityRescueSession extends StoredMilestoneStage {
   version: 1;
@@ -123,6 +124,7 @@ export function AccessibilityRescueChallenge({
 
   const stagePassed = checks[stageController.activeStage.id as keyof typeof checks] === true;
   const showResult = stageController.attemptedStageIds.includes(stageController.activeStage.id);
+  const repairCount = STAGES.filter((stage) => checks[stage.id as keyof typeof checks] === true).length;
 
   function checkRepair() {
     if (stagePassed) stageController.markPassed();
@@ -134,7 +136,7 @@ export function AccessibilityRescueChallenge({
       <ExerciseStage
         controller={stageController}
         incorrectFeedback="This repair does not pass its target yet. Adjust it and try again."
-        passedFeedback={`This accessibility repair passes. Next action: ${stageController.activeStage.nextActionLabel}.`}
+        passedFeedback={`This accessibility repair passes. ${repairCount} of ${STAGES.length} repairs complete. Next action: ${stageController.activeStage.nextActionLabel}.`}
         completionFeedback="The icon reaches 3:1 contrast. All four repairs are complete."
       >
         {stageController.activeStage.id === 'body-text-contrast' && (
@@ -144,9 +146,11 @@ export function AccessibilityRescueChallenge({
               data-a11y-scan-exclude="milestone-5-body-text-sample"
               className={styles.sample}
               style={{ color: checks.textColor, backgroundColor: '#f5f7fb' }}
+              aria-describedby="body-text-preview-description"
             >
               This paragraph starts below the required contrast ratio.
             </p>
+            <VisualDescription id="body-text-preview-description">Body-text preview. Text color {checks.textColor.toUpperCase()} on background #F5F7FB. Current contrast is {checks.textContrast.toFixed(2)} to 1.</VisualDescription>
             <label className={styles.sliderLabel}>
               Text lightness: {textLightness}
               <input type="range" min={20} max={70} value={textLightness} disabled={stageController.result !== 'idle'} onChange={(event) => setTextLightness(Number(event.target.value))} />
@@ -160,7 +164,8 @@ export function AccessibilityRescueChallenge({
         {stageController.activeStage.id === 'required-field-cue' && (
           <section className={styles.block}>
             <div className={styles.row}>
-              <span data-authored-visual className={styles.colorOnlyLabel}>Email address</span>
+              <span data-authored-visual className={styles.colorOnlyLabel} aria-describedby="required-cue-preview-description">Email address</span>
+              <VisualDescription id="required-cue-preview-description">Email field preview. The required cue is currently {requiredCueOn ? 'an icon and text' : 'color only'}.</VisualDescription>
               <button type="button" className={styles.toggle} aria-pressed={requiredCueOn} disabled={stageController.result !== 'idle'} onClick={() => setRequiredCueOn((previous) => !previous)}>
                 {requiredCueOn ? 'remove icon and text cue' : 'add icon and text cue'}
               </button>
@@ -175,7 +180,8 @@ export function AccessibilityRescueChallenge({
         {stageController.activeStage.id === 'focus-indicator' && (
           <section className={styles.block}>
             <div className={styles.row}>
-              <button data-authored-visual type="button" className={`${styles.fakeButton} ${focusVisible ? styles.focusOn : ''}`}>Submit</button>
+              <button data-authored-visual type="button" className={`${styles.fakeButton} ${focusVisible ? styles.focusOn : ''}`} aria-describedby="focus-preview-description">Submit</button>
+              <VisualDescription id="focus-preview-description">Submit control preview. Its visible keyboard focus indicator is currently {focusVisible ? 'shown' : 'not shown'}.</VisualDescription>
               <button type="button" className={styles.toggle} aria-pressed={focusVisible} disabled={stageController.result !== 'idle'} onClick={() => setFocusVisible((previous) => !previous)}>
                 {focusVisible ? 'remove focus indicator' : 'add focus indicator'}
               </button>
@@ -188,9 +194,10 @@ export function AccessibilityRescueChallenge({
 
         {stageController.activeStage.id === 'icon-contrast' && (
           <section className={styles.block}>
-            <div data-authored-visual className={styles.iconPreview}>
+            <div data-authored-visual className={styles.iconPreview} aria-describedby="icon-preview-description">
               <span className={styles.icon} style={{ color: checks.iconColor }} role="img" aria-label="Settings">⚙</span>
             </div>
+            <VisualDescription id="icon-preview-description">Settings icon preview. Icon color {checks.iconColor.toUpperCase()} on white. Current contrast is {checks.iconContrast.toFixed(2)} to 1.</VisualDescription>
             <label className={styles.sliderLabel}>
               Icon lightness: {iconLightness}
               <input type="range" min={20} max={90} value={iconLightness} disabled={stageController.result !== 'idle'} onChange={(event) => setIconLightness(Number(event.target.value))} />
