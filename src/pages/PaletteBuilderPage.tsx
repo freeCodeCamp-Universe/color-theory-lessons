@@ -522,8 +522,8 @@ export function PaletteBuilderPage() {
     applyPrimary(hex);
   };
 
-  const announcePickerChange = (picker: 'RGB' | 'HSL') => {
-    setAnnouncement(`Primary color set to ${hexInput.toUpperCase()} with the ${picker} picker. Harmony and accessibility suggestions updated.`);
+  const announcePickerChange = (picker: 'RGB' | 'HSL', hex = hexInput) => {
+    setAnnouncement(`Primary color set to ${hex.toUpperCase()} with the ${picker} picker. Harmony and accessibility suggestions updated.`);
   };
 
   const handlePickerKeyUp = (
@@ -914,12 +914,13 @@ export function PaletteBuilderPage() {
                         const dy = e.clientY - rect.top - cy;
                         const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
                         const hue = ((angle + 90) % 360 + 360) % 360;
-                        handleHslChange('h', Math.round(hue));
-                        announcePickerChange('HSL');
+                        const nextHue = Math.round(hue);
+                        const nextHex = hslToHex(nextHue, hslSliders.s, hslSliders.l).toUpperCase();
+                        handleHslChange('h', nextHue);
+                        announcePickerChange('HSL', nextHex);
                       }}
                       role="slider"
                       aria-label="Hue"
-                      onPointerUp={() => announcePickerChange('HSL')}
                       onKeyUp={(event) => handlePickerKeyUp(event, 'HSL')}
                       aria-valuemin={0}
                       aria-valuemax={360}
