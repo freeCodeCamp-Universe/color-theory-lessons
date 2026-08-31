@@ -225,6 +225,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                   onClick={(e) => { e.stopPropagation(); handleSelect('cta'); }}
                   aria-label="Primary action button"
                   aria-describedby="format-selection-description"
+                  data-target-size-exception="essential"
                 />
                 <button
                   className={`${styles.ctaText} ${selectedId === 'cta-text' ? styles.selected : ''} ${revealed.has('cta-text') ? styles.visited : ''}`}
@@ -232,6 +233,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                   onClick={(e) => { e.stopPropagation(); handleSelect('cta-text'); }}
                   aria-label="Button text"
                   aria-describedby="format-selection-description"
+                  data-target-size-exception="essential"
                 >
                   Try it free →
                 </button>
