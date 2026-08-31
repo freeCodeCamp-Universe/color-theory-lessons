@@ -228,6 +228,8 @@ describe('PaletteBuilderPage color input', () => {
     expect(screen.getByRole('tab', { name: 'RGB' })).toHaveAttribute('aria-selected', 'true');
     await user.click(hslTab);
     expect(hslTab).toHaveAttribute('aria-selected', 'true');
+    expect(hslTab).toHaveAttribute('tabindex', '0');
+    expect(screen.getByRole('tab', { name: 'RGB' })).toHaveAttribute('tabindex', '-1');
     await user.keyboard('{ArrowRight}');
     expect(screen.getByRole('tab', { name: 'SWATCHES' })).toHaveAttribute('aria-selected', 'true');
     expect(screen.getByRole('tab', { name: 'SWATCHES' })).toHaveFocus();

@@ -892,6 +892,7 @@ export function PaletteBuilderPage() {
                   onKeyDown={(event) => handlePickerTabKeyDown(event, tab)}
                   role="tab"
                   aria-selected={pickerTab === tab}
+                  tabIndex={pickerTab === tab ? 0 : -1}
                   aria-controls={`palette-picker-${tab}`}
                   id={`palette-picker-tab-${tab}`}
                 >
