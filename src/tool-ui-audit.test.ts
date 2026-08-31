@@ -169,10 +169,16 @@ describe('tool UI audit regressions', () => {
       'src/components/milestone/challenges/AccessibilityRescueChallenge.tsx',
     );
     expect(accessibilityRescue).toContain(
-      '<span data-authored-visual className={styles.colorOnlyLabel}>Email address</span>',
+      '<span data-authored-visual className={styles.colorOnlyLabel} aria-describedby="required-cue-preview-description">Email address</span>',
     );
     expect(accessibilityRescue).toContain(
-      '<div data-authored-visual className={styles.iconPreview}>',
+      '<VisualDescription id="required-cue-preview-description">Email field preview.',
+    );
+    expect(accessibilityRescue).toContain(
+      '<div data-authored-visual className={styles.iconPreview} aria-describedby="icon-preview-description">',
+    );
+    expect(accessibilityRescue).toContain(
+      '<VisualDescription id="icon-preview-description">Settings icon preview.',
     );
     expect(accessibilityRescue).not.toMatch(
       /<section data-authored-visual[^>]*className={styles\.block}/,
