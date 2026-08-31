@@ -3,6 +3,8 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 
 interface Example {
   id: string;
@@ -11,6 +13,7 @@ interface Example {
   visual: React.ReactNode;
   correctFeedback: string;
   incorrectFeedback: string;
+  description: string;
 }
 
 const EXAMPLES: Example[] = [
@@ -37,6 +40,7 @@ const EXAMPLES: Example[] = [
     ),
     correctFeedback: 'Correct. Color is the only status cue. Labels such as Error, Active, and Warning would identify each status.',
     incorrectFeedback: '',
+    description: 'Three unlabeled circular dots: red, green, and amber. No text, icon, pattern, or shape distinguishes their statuses.',
   },
   {
     id: 'form-validation',
@@ -55,6 +59,7 @@ const EXAMPLES: Example[] = [
     ),
     correctFeedback: 'Correct. The red border is the only error cue. An error icon and message would identify the field and explain the problem.',
     incorrectFeedback: '',
+    description: 'A text input reading “Sample input” has a red border. No error icon or explanatory message appears.',
   },
   {
     id: 'chart-series',
@@ -98,6 +103,7 @@ const EXAMPLES: Example[] = [
     ),
     correctFeedback: 'Correct. Color is the only series cue. Direct labels or patterns would distinguish the series.',
     incorrectFeedback: '',
+    description: 'Three chart bars have heights of 80%, 55%, and 70% and are green, red, and amber. The legend names Series A, Series B, and Series C beside matching color chips; the bars themselves have no direct labels or patterns.',
   },
   {
     id: 'link-text',
@@ -119,6 +125,7 @@ const EXAMPLES: Example[] = [
     ),
     correctFeedback: '',
     incorrectFeedback: 'This link also has an underline, so viewers do not need its blue hue to identify it as a link.',
+    description: 'The words “privacy policy” appear in blue and underlined within a sentence.',
   },
   {
     id: 'error-message',
@@ -142,6 +149,7 @@ const EXAMPLES: Example[] = [
     ),
     correctFeedback: '',
     incorrectFeedback: 'The icon and message identify the error even if the red hue is hard to perceive.',
+    description: 'A text input reading “bad@” has a red border. A nearby X icon precedes the text “Please enter a valid email.”',
   },
   {
     id: 'selected-tab',
@@ -168,6 +176,7 @@ const EXAMPLES: Example[] = [
     ),
     correctFeedback: '',
     incorrectFeedback: 'Bold text and a bottom border identify the selected tab without color.',
+    description: 'Three tabs read Overview, Details, and Settings. Overview is bold with a bottom border as well as blue text.',
   },
 ];
 
@@ -185,6 +194,7 @@ export const ColorOnlyDetectorTool = memo(function ColorOnlyDetectorTool({
   onStageChange,
 }: ExerciseToolProps) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [selectionAnnouncement, setSelectionAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
   function toggleExample(id: string) {
@@ -193,6 +203,8 @@ export const ColorOnlyDetectorTool = memo(function ColorOnlyDetectorTool({
     if (next.has(id)) next.delete(id);
     else next.add(id);
     setSelected(next);
+    const example = EXAMPLES.find((candidate) => candidate.id === id);
+    setSelectionAnnouncement(`${example?.name} ${next.has(id) ? 'selected' : 'not selected'}. ${next.size} of ${PROBLEM_COUNT} examples selected.`);
   }
 
   function checkAnswer() {
@@ -205,6 +217,7 @@ export const ColorOnlyDetectorTool = memo(function ColorOnlyDetectorTool({
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>color-only detector</span>
+      {selectionAnnouncement && <StatusAnnouncement message={selectionAnnouncement} />}
 
       <ExerciseStage
         controller={stageController}
@@ -237,11 +250,17 @@ export const ColorOnlyDetectorTool = memo(function ColorOnlyDetectorTool({
                 <p style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '0.4rem', color: 'var(--primary-foreground)' }}>
                   {example.name}
                 </p>
-                <div data-authored-visual style={{ marginBottom: '0.4rem' }}>{example.visual}</div>
+                <div data-authored-visual aria-describedby={`color-only-example-${example.id}-description`} style={{ marginBottom: '0.4rem' }}>
+                  <div aria-hidden={example.id === 'link-text' ? undefined : 'true'}>{example.visual}</div>
+                </div>
+                <VisualDescription id={`color-only-example-${example.id}-description`}>
+                  {example.description}
+                </VisualDescription>
                 {interactive && (
                   <button
                     type="button"
                     aria-pressed={isSelected}
+                    aria-label={`${isSelected ? 'Deselect' : 'Select'} ${example.name} example`}
                     disabled={stageController.result !== 'idle'}
                     onClick={() => toggleExample(example.id)}
                   >
