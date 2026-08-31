@@ -251,7 +251,7 @@ export const ColorOnlyDetectorTool = memo(function ColorOnlyDetectorTool({
                   {example.name}
                 </p>
                 <div data-authored-visual aria-describedby={`color-only-example-${example.id}-description`} style={{ marginBottom: '0.4rem' }}>
-                  <div aria-hidden="true">{example.visual}</div>
+                  <div aria-hidden={example.id === 'link-text' ? undefined : 'true'}>{example.visual}</div>
                 </div>
                 <VisualDescription id={`color-only-example-${example.id}-description`}>
                   {example.description}

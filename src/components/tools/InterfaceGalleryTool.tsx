@@ -28,9 +28,9 @@ type SimMode = 'normal' | 'deuteranopia' | 'protanopia' | 'tritanopia' | 'achrom
 
 const MODES: { id: SimMode; label: string; filter: string; description: string }[] = [
   { id: 'normal', label: 'Original', filter: 'none', description: 'Original colors. The dashboard navigation is dark blue with a light-blue Dashboard label. Status chips read Active in green, Error in red, and Warning in amber. The monthly chart has green, red, and blue bars at 80%, 50%, and 65% height. The Email field contains “not-an-email” and has a red border.' },
-  { id: 'deuteranopia', label: 'Deuteranopia', filter: 'url(#ig-deuteranopia)', description: 'Deuteranopia simulation. The filter changes the dashboard colors. The status chips still read Active, Error, and Warning; the chart bars remain at 80%, 50%, and 65% height; and the Email field still contains “not-an-email” with its validation border.' },
-  { id: 'protanopia', label: 'Protanopia', filter: 'url(#ig-protanopia)', description: 'Protanopia simulation. The filter changes the dashboard colors. The status chips still read Active, Error, and Warning; the chart bars remain at 80%, 50%, and 65% height; and the Email field still contains “not-an-email” with its validation border.' },
-  { id: 'tritanopia', label: 'Tritanopia', filter: 'url(#ig-tritanopia)', description: 'Tritanopia simulation. The filter changes the dashboard colors. The status chips still read Active, Error, and Warning; the chart bars remain at 80%, 50%, and 65% height; and the Email field still contains “not-an-email” with its validation border.' },
+  { id: 'deuteranopia', label: 'Deuteranopia', filter: 'url(#ig-deuteranopia)', description: 'Deuteranopia simulation. The navigation becomes deep purple, #292654. The Active chip and 80% chart bar become muted purple, #5F537D; the Error chip, the 50% chart bar, and the Email validation border become yellow-green, #AFBC44; and the Warning chip becomes yellow-green, #D4DB37. Their labels, bar heights, and the Email value “not-an-email” do not change.' },
+  { id: 'protanopia', label: 'Protanopia', filter: 'url(#ig-protanopia)', description: 'Protanopia simulation. The navigation becomes deep indigo, #2A2A56. The Active chip and 80% chart bar become gray-purple, #696A77; the Error chip, the 50% chart bar, and the Email validation border become olive, #A5A344; and the Warning chip becomes yellow-green, #CFCF2F. Their labels, bar heights, and the Email value “not-an-email” do not change.' },
+  { id: 'tritanopia', label: 'Tritanopia', filter: 'url(#ig-tritanopia)', description: 'Tritanopia simulation. The navigation becomes dark teal, #1F4F4D. The Active chip and 80% chart bar become teal, #2A8B8F; the Error chip, the 50% chart bar, and the Email validation border remain red, #E64444; and the Warning chip becomes coral red, #F14B51. Their labels, bar heights, and the Email value “not-an-email” do not change.' },
   { id: 'achromatopsia', label: 'Complete achromatopsia', filter: 'url(#ig-achromatopsia)', description: 'Complete achromatopsia simulation. The filter removes saturation from the dashboard. The status chips still read Active, Error, and Warning; the chart bars remain at 80%, 50%, and 65% height; and the Email field still contains “not-an-email” with its validation border.' },
 ];
 
@@ -169,7 +169,7 @@ export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({
       {interactive ? (
         <ExerciseStage
           controller={stageController}
-          completionFeedback="All four simulation modes explored. Notice which elements became harder to distinguish in each simulation."
+          completionFeedback="Complete achromatopsia selected. All four simulation modes explored. Notice which elements became harder to distinguish in each simulation."
         >
           {gallery}
         </ExerciseStage>

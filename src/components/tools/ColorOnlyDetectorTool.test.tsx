@@ -23,6 +23,7 @@ describe('ColorOnlyDetectorTool', () => {
     expect(screen.getByDisplayValue('Sample input')).toBeInTheDocument();
     expect(screen.getByText('Series A')).toBeInTheDocument();
     expect(screen.getAllByRole('button', { name: /Select .* example/ })).toHaveLength(6);
+    expect(screen.getByRole('link', { name: 'privacy policy' })).toBeInTheDocument();
     expect(screen.getByText(/Three unlabeled circular dots/)).toBeInTheDocument();
     expect(screen.queryByText(/This link also has an underline/)).not.toBeInTheDocument();
   });
