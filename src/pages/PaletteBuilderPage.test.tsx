@@ -228,7 +228,13 @@ describe('PaletteBuilderPage color input', () => {
     expect(screen.getByRole('tab', { name: 'RGB' })).toHaveAttribute('aria-selected', 'true');
     await user.click(hslTab);
     expect(hslTab).toHaveAttribute('aria-selected', 'true');
+    await user.keyboard('{ArrowRight}');
+    expect(screen.getByRole('tab', { name: 'SWATCHES' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByRole('tab', { name: 'SWATCHES' })).toHaveFocus();
+    await user.keyboard('{Home}');
+    expect(screen.getByRole('tab', { name: 'RGB' })).toHaveAttribute('aria-selected', 'true');
 
+    await user.click(hslTab);
     const hueRing = screen.getAllByRole('slider', { name: 'Hue' })[0];
     expect(hueRing).toHaveAttribute('aria-valuetext', '217 degrees');
     fireEvent.keyDown(hueRing, { key: 'ArrowRight' });

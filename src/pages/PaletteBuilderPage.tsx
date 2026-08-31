@@ -51,6 +51,8 @@ const ROLE_KEYS: RoleKey[] = [
 
 type PickerTab = 'rgb' | 'hsl' | 'swatches';
 
+const PICKER_TABS: PickerTab[] = ['rgb', 'hsl', 'swatches'];
+
 const CSS_NAMED_COLORS_RAW: { name: string; hex: string }[] = [
   { name: 'red', hex: '#FF0000' },
   { name: 'crimson', hex: '#DC143C' },
@@ -535,6 +537,30 @@ export function PaletteBuilderPage() {
     }
   };
 
+  const handlePickerTabKeyDown = (
+    event: React.KeyboardEvent<HTMLButtonElement>,
+    tab: PickerTab,
+  ) => {
+    const currentIndex = PICKER_TABS.indexOf(tab);
+    const nextIndex = event.key === 'Home'
+      ? 0
+      : event.key === 'End'
+        ? PICKER_TABS.length - 1
+        : event.key === 'ArrowRight'
+          ? (currentIndex + 1) % PICKER_TABS.length
+          : event.key === 'ArrowLeft'
+            ? (currentIndex + PICKER_TABS.length - 1) % PICKER_TABS.length
+            : null;
+    if (nextIndex === null) return;
+
+    event.preventDefault();
+    const nextTab = PICKER_TABS[nextIndex];
+    setPickerTab(nextTab);
+    requestAnimationFrame(() => {
+      document.getElementById(`palette-picker-tab-${nextTab}`)?.focus();
+    });
+  };
+
   const handleHslChange = (channel: 'h' | 's' | 'l', value: number) => {
     const next = { ...hslSliders, [channel]: value };
     setHslSliders(next);
@@ -858,11 +884,12 @@ export function PaletteBuilderPage() {
 
             {/* Tab buttons */}
             <div className={styles.pickerTabs} role="tablist" aria-label="Color picker method">
-              {(['rgb', 'hsl', 'swatches'] as PickerTab[]).map((tab) => (
+              {PICKER_TABS.map((tab) => (
                 <button
                   key={tab}
                   className={`${styles.pickerTab} ${pickerTab === tab ? styles.pickerTabActive : ''}`}
                   onClick={() => setPickerTab(tab)}
+                  onKeyDown={(event) => handlePickerTabKeyDown(event, tab)}
                   role="tab"
                   aria-selected={pickerTab === tab}
                   aria-controls={`palette-picker-${tab}`}
