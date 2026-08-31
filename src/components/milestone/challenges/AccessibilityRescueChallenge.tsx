@@ -124,6 +124,7 @@ export function AccessibilityRescueChallenge({
 
   const stagePassed = checks[stageController.activeStage.id as keyof typeof checks] === true;
   const showResult = stageController.attemptedStageIds.includes(stageController.activeStage.id);
+  const repairCount = STAGES.filter((stage) => checks[stage.id as keyof typeof checks] === true).length;
 
   function checkRepair() {
     if (stagePassed) stageController.markPassed();
@@ -135,7 +136,7 @@ export function AccessibilityRescueChallenge({
       <ExerciseStage
         controller={stageController}
         incorrectFeedback="This repair does not pass its target yet. Adjust it and try again."
-        passedFeedback={`This accessibility repair passes. Next action: ${stageController.activeStage.nextActionLabel}.`}
+        passedFeedback={`This accessibility repair passes. ${repairCount} of ${STAGES.length} repairs complete. Next action: ${stageController.activeStage.nextActionLabel}.`}
         completionFeedback="The icon reaches 3:1 contrast. All four repairs are complete."
       >
         {stageController.activeStage.id === 'body-text-contrast' && (

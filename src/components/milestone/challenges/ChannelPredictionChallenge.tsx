@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { CHANNEL_PREDICTION_SESSION_PREFIX } from '../../../state/persistence.ts';
 import { hexToRgb, rgbToHex } from '../../../utils/color.ts';
 import { ExerciseStage } from '../../tools/ExerciseStage.tsx';
@@ -7,6 +7,7 @@ import { useExerciseStages } from '../../tools/useExerciseStages.ts';
 import styles from './ChannelPredictionChallenge.module.css';
 import type { MilestoneChallengeProps, StoredMilestoneStage } from './milestone-stage.ts';
 import { restoreMilestoneStage } from './milestone-stage.ts';
+import { VisualDescription } from '../../accessibility/VisualDescription.tsx';
 
 type Channel = 'R' | 'G' | 'B';
 
@@ -28,6 +29,15 @@ const ROUNDS: Round[] = [
 ];
 
 const MIN_PER_STAGE = 3;
+const SWATCH_DESCRIPTIONS: Record<string, string> = {
+  '#ff0000': 'A fully saturated red swatch.',
+  '#00ff00': 'A fully saturated green swatch.',
+  '#0000ff': 'A fully saturated blue swatch.',
+  '#ff00ff': 'A fully saturated magenta swatch, combining red and blue light.',
+  '#ffff00': 'A fully saturated yellow swatch, combining red and green light.',
+  '#00ffff': 'A fully saturated cyan swatch, combining green and blue light.',
+  '#ffffff': 'A white swatch with all three channels at their maximum.',
+};
 const STAGES: readonly ExerciseStageDefinition[] = [
   {
     id: 'dominant-channel',
@@ -206,8 +216,9 @@ export function ChannelPredictionChallenge({
                   <legend className={styles.prompt}>What does <code>{round.mixA}</code> + <code>{round.mixB}</code> produce?</legend>
                   <div className={styles.swatches}>
                     {round.swatches.map((swatch) => (
+                      <Fragment key={swatch}>
                       <button
-                        key={swatch}
+                        aria-describedby={`${round.id}-${swatch.slice(1)}-description`}
                         type="button"
                         className={`${styles.swatch} ${mixAnswers[round.id] === swatch ? styles.active : ''}`}
                         onClick={() => setMixAnswers((previous) => ({ ...previous, [round.id]: swatch }))}
@@ -217,6 +228,10 @@ export function ChannelPredictionChallenge({
                         <span className={styles.chip} style={{ backgroundColor: swatch }} aria-hidden="true" />
                         <span className={styles.swatchLabel}>{swatch.toUpperCase()}</span>
                       </button>
+                      <VisualDescription id={`${round.id}-${swatch.slice(1)}-description`}>
+                        {SWATCH_DESCRIPTIONS[swatch]}
+                      </VisualDescription>
+                      </Fragment>
                     ))}
                   </div>
                 </fieldset>
