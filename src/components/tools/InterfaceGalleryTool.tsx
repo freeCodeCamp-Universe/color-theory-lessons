@@ -3,6 +3,8 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 
 const SVG_FILTERS = `
 <svg style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -24,12 +26,12 @@ const SVG_FILTERS = `
 
 type SimMode = 'normal' | 'deuteranopia' | 'protanopia' | 'tritanopia' | 'achromatopsia';
 
-const MODES: { id: SimMode; label: string; filter: string }[] = [
-  { id: 'normal', label: 'Original', filter: 'none' },
-  { id: 'deuteranopia', label: 'Deuteranopia', filter: 'url(#ig-deuteranopia)' },
-  { id: 'protanopia', label: 'Protanopia', filter: 'url(#ig-protanopia)' },
-  { id: 'tritanopia', label: 'Tritanopia', filter: 'url(#ig-tritanopia)' },
-  { id: 'achromatopsia', label: 'Complete achromatopsia', filter: 'url(#ig-achromatopsia)' },
+const MODES: { id: SimMode; label: string; filter: string; description: string }[] = [
+  { id: 'normal', label: 'Original', filter: 'none', description: 'Original colors. The dashboard navigation is dark blue with a light-blue Dashboard label. Status chips read Active in green, Error in red, and Warning in amber. The monthly chart has green, red, and blue bars at 80%, 50%, and 65% height. The Email field contains “not-an-email” and has a red border.' },
+  { id: 'deuteranopia', label: 'Deuteranopia', filter: 'url(#ig-deuteranopia)', description: 'Deuteranopia simulation. The filter changes the dashboard colors. The status chips still read Active, Error, and Warning; the chart bars remain at 80%, 50%, and 65% height; and the Email field still contains “not-an-email” with its validation border.' },
+  { id: 'protanopia', label: 'Protanopia', filter: 'url(#ig-protanopia)', description: 'Protanopia simulation. The filter changes the dashboard colors. The status chips still read Active, Error, and Warning; the chart bars remain at 80%, 50%, and 65% height; and the Email field still contains “not-an-email” with its validation border.' },
+  { id: 'tritanopia', label: 'Tritanopia', filter: 'url(#ig-tritanopia)', description: 'Tritanopia simulation. The filter changes the dashboard colors. The status chips still read Active, Error, and Warning; the chart bars remain at 80%, 50%, and 65% height; and the Email field still contains “not-an-email” with its validation border.' },
+  { id: 'achromatopsia', label: 'Complete achromatopsia', filter: 'url(#ig-achromatopsia)', description: 'Complete achromatopsia simulation. The filter removes saturation from the dashboard. The status chips still read Active, Error, and Warning; the chart bars remain at 80%, 50%, and 65% height; and the Email field still contains “not-an-email” with its validation border.' },
 ];
 
 interface InterfaceGalleryToolProps extends ExerciseToolProps {
@@ -50,6 +52,7 @@ export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({
 }: InterfaceGalleryToolProps) {
   const [mode, setMode] = useState<SimMode>(previewSimulation ?? 'normal');
   const [seen, setSeen] = useState<Set<SimMode>>(new Set(['normal']));
+  const [modeAnnouncement, setModeAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
   function selectMode(m: SimMode) {
@@ -58,11 +61,17 @@ export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({
     const next = new Set(seen);
     next.add(m);
     setSeen(next);
-    if (next.size === MODES.length) stageController.markPassed();
+    if (next.size === MODES.length) {
+      stageController.markPassed();
+    } else {
+      const selectedMode = MODES.find(({ id }) => id === m);
+      setModeAnnouncement(`${selectedMode?.label} selected. ${selectedMode?.description} ${[...next].filter((id) => id !== 'normal').length} of 4 simulation modes explored.`);
+    }
   }
 
   const currentFilter = MODES.find((m) => m.id === mode)?.filter ?? 'none';
   const simulationsExplored = [...seen].filter((id) => id !== 'normal').length;
+  const activeMode = MODES.find((m) => m.id === mode) ?? MODES[0];
 
   const gallery = (
     <>
@@ -74,6 +83,7 @@ export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({
 
       {/* Hidden SVG filter definitions */}
       <div dangerouslySetInnerHTML={{ __html: SVG_FILTERS }} />
+      {modeAnnouncement && <StatusAnnouncement message={modeAnnouncement} />}
 
       {/* Mode selector */}
       <div style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
@@ -101,7 +111,7 @@ export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({
       </div>
 
       {/* Mockup panel with filter applied */}
-      <div data-authored-visual style={{ filter: currentFilter, borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid var(--border)' }}>
+      <div data-authored-visual aria-describedby="interface-gallery-description" style={{ filter: currentFilter, borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid var(--border)' }}>
         {/* Nav */}
         <div style={{ background: '#1e3a5f', padding: '0.5rem 0.75rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <span style={{ color: '#4da6ff', fontSize: '0.8rem', fontWeight: 600 }}>Dashboard</span>
@@ -147,6 +157,7 @@ export const InterfaceGalleryTool = memo(function InterfaceGalleryTool({
           </div>
         </div>
       </div>
+      <VisualDescription id="interface-gallery-description">{activeMode.description}</VisualDescription>
 
     </>
   );

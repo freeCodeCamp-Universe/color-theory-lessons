@@ -28,6 +28,7 @@ describe('Unit 4 exploration stages', () => {
     }
 
     expect(screen.getByText('5/6 cards explored')).toBeInTheDocument();
+    expect(screen.getByText('Tritanopia expanded. 5 of 6 cards explored.')).toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
 
     await user.click(screen.getByRole('button', { name: /Achromatopsia/ }));
@@ -48,6 +49,7 @@ describe('Unit 4 exploration stages', () => {
       await user.click(screen.getByRole('button', { name: mode }));
     }
     expect(screen.getByText('3/4 simulation modes explored')).toBeInTheDocument();
+    expect(screen.getByText(/Tritanopia selected. Tritanopia simulation/)).toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
 
     await user.click(screen.getByRole('button', { name: 'Complete achromatopsia' }));
