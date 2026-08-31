@@ -6,6 +6,7 @@ import { useExerciseStages } from '../../tools/useExerciseStages.ts';
 import styles from './SemanticAuditChallenge.module.css';
 import type { MilestoneChallengeProps, StoredMilestoneStage } from './milestone-stage.ts';
 import { restoreMilestoneStage } from './milestone-stage.ts';
+import { VisualDescription } from '../../accessibility/VisualDescription.tsx';
 
 type Role = 'page-bg' | 'surface' | 'primary-text' | 'secondary-text' | 'action' | 'success' | 'warning' | 'error';
 
@@ -171,13 +172,15 @@ export function SemanticAuditChallenge({
               aria-pressed={activeSwatch === swatch.id}
               disabled={stageController.result !== 'idle'}
             >
-              <span className={styles.color} style={{ backgroundColor: swatch.hex }} />
+              <span className={styles.color} style={{ backgroundColor: swatch.hex }} aria-hidden="true" />
               <code>{swatch.hex.toUpperCase()}</code>
+              <VisualDescription>Color value: {swatch.hex.toUpperCase()}.</VisualDescription>
             </button>
           ) : (
             <div key={swatch.id} className={styles.swatch}>
-              <span className={styles.color} style={{ backgroundColor: swatch.hex }} />
+              <span className={styles.color} style={{ backgroundColor: swatch.hex }} aria-hidden="true" />
               <code>{swatch.hex.toUpperCase()}</code>
+              <VisualDescription>Color value: {swatch.hex.toUpperCase()}.</VisualDescription>
             </div>
           ))}
         </div>

@@ -7,6 +7,7 @@ import styles from './ReadInterfaceChallenge.module.css';
 import type { MilestoneChallengeProps, StoredMilestoneStage } from './milestone-stage.ts';
 import { restoreMilestoneStage } from './milestone-stage.ts';
 import { InterfaceMockup } from '../InterfaceMockup.tsx';
+import { VisualDescription } from '../../accessibility/VisualDescription.tsx';
 
 type RoleId = 'focal' | 'low-contrast' | 'competing-accent' | 'readable-text' | 'section-separator';
 
@@ -144,6 +145,9 @@ export function ReadInterfaceChallenge({
               : `${correctCount} / 5 correct`}
           </span>
         </div>
+        <VisualDescription>
+          Five interface regions are available for classification. The mockup description supplies each region's colors, contrast relationships, and visual emphasis without identifying a classification.
+        </VisualDescription>
 
         <div className={styles.grid}>
           {TARGETS.map((target) => {
