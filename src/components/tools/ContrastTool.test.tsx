@@ -38,6 +38,19 @@ describe('ContrastTool', () => {
     expect(slider).toHaveAccessibleDescription(/ratio:.*WCAG AA requires 4.5:1/i);
   });
 
+  it('announces the changed value, ratio, and pass state', () => {
+    render(<ContrastTool interactive={true} />);
+
+    fireEvent.change(
+      screen.getByRole('slider', { name: /Lightness for Section label/i }),
+      { target: { value: '60' } },
+    );
+
+    expect(screen.getAllByRole('status').map((status) => status.textContent)).toContain(
+      'Section label: text lightness 60%. Contrast ratio 4.65 to 1; meets the 4.5 to 1 requirement.',
+    );
+  });
+
   it('reports the three-pair repair as one named stage', () => {
     const onStageChange = vi.fn();
     render(<ContrastTool onStageChange={onStageChange} />);

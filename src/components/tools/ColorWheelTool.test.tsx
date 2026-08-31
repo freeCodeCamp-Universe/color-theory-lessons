@@ -7,6 +7,18 @@ beforeEach(() => localStorage.clear());
 afterEach(() => cleanup());
 
 describe('ColorWheelTool keyboard accessibility', () => {
+  it('exposes the selected color relationship', () => {
+    render(<ColorWheelTool interactive={true} />);
+
+    const analogous = screen.getByRole('button', { name: 'analogous' });
+    const complementary = screen.getByRole('button', { name: 'complementary' });
+    expect(complementary).toHaveAttribute('aria-pressed', 'true');
+
+    fireEvent.click(analogous);
+    expect(analogous).toHaveAttribute('aria-pressed', 'true');
+    expect(complementary).toHaveAttribute('aria-pressed', 'false');
+  });
+
   it('SVG wheel is focusable (tabIndex 0) in interactive mode', () => {
     render(<ColorWheelTool interactive={true} />);
     const svg = screen.getByRole('slider', { name: /Color wheel hue selector/i });

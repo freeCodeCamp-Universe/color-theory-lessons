@@ -108,7 +108,7 @@ describe('HSLSliderTool exercise', () => {
     render(<HSLSliderTool interactive={true} />);
 
     expect(screen.getByRole('img', { name: /Target color for the match the hue stage/i })).toHaveAccessibleName(
-      /without reading an exact target value/i,
+      /medium-light, saturated blue.*without reading an exact target value/i,
     );
     expect(screen.queryByText('H:200 S:70% L:55%')).not.toBeInTheDocument();
   });

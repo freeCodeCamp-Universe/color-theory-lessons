@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 
 const STORAGE_KEY = 'color-theory-course-state';
 const MILESTONE_SESSION_KEY = 'color-theory-course-milestone-session:';
+const LESSON_SESSION_KEY = 'color-theory-course-lesson-session:';
 
 const unitLessons = [
   ['u1-l1', 'u1-l2', 'u1-l3', 'u1-l4', 'u1-l5', 'u1-l6'],
@@ -44,6 +45,25 @@ async function seedCourseState(page: Page, options: SeedOptions) {
   });
 }
 
+async function seedLessonStep(page: Page, lessonId: string, stepIndex: number) {
+  await page.addInitScript(({ key, value }) => {
+    sessionStorage.setItem(key, JSON.stringify(value));
+  }, {
+    key: `${LESSON_SESSION_KEY}${lessonId}`,
+    value: {
+      version: 2,
+      phase: 'steps',
+      stepIndex,
+      challengeDone: false,
+      quizIndex: 0,
+      answers: [],
+      selectedChoice: null,
+      submitted: false,
+      quizSignature: null,
+    },
+  });
+}
+
 async function storedCourseState(page: Page) {
   return page.evaluate((key) => JSON.parse(localStorage.getItem(key) ?? 'null'), STORAGE_KEY);
 }
@@ -69,8 +89,10 @@ async function mockupColors(page: Page) {
       '✓ Unit 1 complete',
       'Lesson 2: Hue, saturation, and lightness →',
     ].map((text) => {
-      const element = [...document.querySelectorAll('span, div')]
-        .find((candidate) => candidate.textContent === text);
+      const element = [...document.querySelectorAll<HTMLElement>('span, div')]
+        .find((candidate) => [...candidate.childNodes].some(
+          (node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim() === text,
+        ));
       if (!element) throw new Error(`Could not find mockup text: ${text}`);
 
       return {
@@ -223,6 +245,7 @@ test('every navigation destination remains visible and usable at the mobile brea
 
 test('the first lesson mockups keep their colors in both themes', async ({ page }) => {
   await seedCourseState(page, { theme: 'dark' });
+  await seedLessonStep(page, 'u1-l1', 0);
   await page.goto('/lesson/u1-l1');
   await expect(page.getByText('Learn color theory', { exact: true })).toBeVisible();
 

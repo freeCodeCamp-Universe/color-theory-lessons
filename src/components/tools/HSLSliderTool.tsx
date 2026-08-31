@@ -42,6 +42,12 @@ const TARGETS: Target[] = [
 
 const TOLERANCE = 8;
 
+const TARGET_DESCRIPTIONS: Record<Target['id'], string> = {
+  hue: 'A medium-light, saturated blue.',
+  saturation: 'A muted medium blue-gray.',
+  lightness: 'A dark, saturated blue.',
+};
+
 interface HSLSliderToolProps extends ExerciseToolProps {
   previewDimension?: 'h' | 's' | 'l';
 }
@@ -197,7 +203,7 @@ export const HSLSliderTool = memo(function HSLSliderTool({
             <div className={styles.swatchBox}>
               <span className={styles.swatchLabel}>target</span>
               <div
-                aria-label={`Target color for the ${target.name.toLowerCase()} stage. Compare its appearance with your color without reading an exact target value.`}
+                aria-label={`Target color for the ${target.name.toLowerCase()} stage. ${TARGET_DESCRIPTIONS[target.id]} Compare its appearance with your color without reading an exact target value.`}
                 className={styles.swatch}
                 role="img"
                 style={{ backgroundColor: hslString(target.target) }}

@@ -268,6 +268,7 @@ export const ColorWheelTool = memo(function ColorWheelTool({
           {(['analogous', 'complementary', 'triadic'] as Relationship[]).map((option) => (
             <button
               key={option}
+              aria-pressed={relationship === option}
               onClick={() => controlsInteractive && setInternalRelationship(option)}
               disabled={!controlsInteractive}
               style={{

@@ -123,7 +123,7 @@ describe('tool UI audit regressions', () => {
       /className={styles\.miniPreview}\s+data-authored-visual/,
     );
     expect(read('src/components/tools/BeforeAfterTool.tsx')).toMatch(
-      /<div data-authored-visual style={{ background: 'var\(--surface\)'[^>]*>\s*{HIERARCHY_ITEMS\.map/,
+      /aria-label={`Action hierarchy preview[\s\S]*?data-authored-visual\s*role="img"[\s\S]*?{HIERARCHY_ITEMS\.map/,
     );
     expect(read('src/components/tools/RGBMixerTool.tsx')).toMatch(
       /<div data-authored-visual style={{ display: 'flex', gap: 'var\(--spacing-md\)'/,
