@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import type { Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import {
   AXE_CONTRAST_RULES,
   formatAccessibilityViolations,
@@ -22,6 +22,8 @@ export async function expectNoAccessibilityViolations(
   context: AccessibilityScanContext,
   exclusions: readonly AccessibilityScanExclusion[] = [],
 ) {
+  await expect(page.locator('html')).toHaveAttribute('data-theme', context.theme);
+
   const nonContrastResults = await new AxeBuilder({ page })
     .disableRules([...AXE_CONTRAST_RULES])
     .analyze();

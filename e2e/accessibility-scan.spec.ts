@@ -129,6 +129,7 @@ for (const theme of ['light', 'dark'] as const) {
 
     for (const route of staticRoutes) {
       await page.goto(route);
+      await expect(page).toHaveURL(route);
       await expect(page.locator('[data-route-loading-heading]')).toHaveCount(0);
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
       await expect(page.getByText(/loading (lesson|milestone|tool)\.\.\./i)).toHaveCount(0);
@@ -323,7 +324,7 @@ test('the static route inventory covers 45 routes', () => {
 
 test('accessibility failures report the route, theme, state, rule, and element', async ({ page }) => {
   await page.setContent(`
-    <html lang="en">
+    <html lang="en" data-theme="light">
       <head><title>Accessibility fixture</title></head>
       <body><main><h1>Fixture</h1><button></button></main></body>
     </html>
