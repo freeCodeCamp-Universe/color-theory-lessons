@@ -212,7 +212,7 @@ test('Palette Builder controls meet the AAA minimum in each picker mode', async 
   await expect(page.getByRole('heading', { level: 1, name: 'palette builder' })).toBeVisible();
 
   for (const tabName of ['RGB', 'HSL', 'Swatches']) {
-    await page.getByRole('button', { name: tabName }).click();
+    await page.getByRole('tab', { name: tabName }).click();
     await expectVisibleTargetsMeetMinimum(page, `Palette Builder ${tabName}`);
   }
 });

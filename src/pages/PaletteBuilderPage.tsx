@@ -13,6 +13,8 @@ import {
 import type { RGB, Relationship } from '../utils/color.ts';
 import styles from './PaletteBuilderPage.module.css';
 import { DocumentTitle } from '../components/accessibility/DocumentTitle.tsx';
+import { StatusAnnouncement } from '../components/accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../components/accessibility/VisualDescription.tsx';
 
 /* ── Types ────────────────────────────────────────────────────────────────── */
 
@@ -48,6 +50,8 @@ const ROLE_KEYS: RoleKey[] = [
 ];
 
 type PickerTab = 'rgb' | 'hsl' | 'swatches';
+
+const PICKER_TABS: PickerTab[] = ['rgb', 'hsl', 'swatches'];
 
 const CSS_NAMED_COLORS_RAW: { name: string; hex: string }[] = [
   { name: 'red', hex: '#FF0000' },
@@ -355,6 +359,7 @@ export function PaletteBuilderPage() {
   const [pickerTab, setPickerTab] = useState<PickerTab>('rgb');
   const [rgbSliders, setRgbSliders] = useState<RGB>({ r: 59, g: 130, b: 246 });
   const [hslSliders, setHslSliders] = useState({ h: 217, s: 91, l: 60 });
+  const [announcement, setAnnouncement] = useState('');
 
   const isValid = parseHex(hexInput) !== null;
 
@@ -478,7 +483,7 @@ export function PaletteBuilderPage() {
     setHslSliders(hsl);
   }, []);
 
-  const applyPrimary = useCallback((hex: string) => {
+  const applyPrimary = useCallback((hex: string, announcementMessage = '') => {
     setPrimaryHex(hex);
     syncPickerStates(hex);
     if (paletteColors.length === 0) {
@@ -493,13 +498,16 @@ export function PaletteBuilderPage() {
     setDarkRoles(null);
     setLightRoles(null);
     setOpenPicker(null);
+    setAnnouncement(announcementMessage);
   }, [paletteColors.length, syncPickerStates]);
 
   const handleHexBlur = () => {
     const parsed = parseHex(hexInput);
     if (parsed) {
       const canonical = rgbToHex(parsed);
-      applyPrimary(canonical);
+      applyPrimary(canonical, `Primary color set to ${canonical}. Harmony and accessibility suggestions updated.`);
+    } else {
+      setAnnouncement('Error: enter a 3- or 6-digit hex color.');
     }
   };
 
@@ -516,6 +524,43 @@ export function PaletteBuilderPage() {
     applyPrimary(hex);
   };
 
+  const announcePickerChange = (picker: 'RGB' | 'HSL', hex = hexInput) => {
+    setAnnouncement(`Primary color set to ${hex.toUpperCase()} with the ${picker} picker. Harmony and accessibility suggestions updated.`);
+  };
+
+  const handlePickerKeyUp = (
+    event: React.KeyboardEvent<HTMLInputElement | HTMLDivElement>,
+    picker: 'RGB' | 'HSL',
+  ) => {
+    if (['ArrowRight', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'].includes(event.key)) {
+      announcePickerChange(picker);
+    }
+  };
+
+  const handlePickerTabKeyDown = (
+    event: React.KeyboardEvent<HTMLButtonElement>,
+    tab: PickerTab,
+  ) => {
+    const currentIndex = PICKER_TABS.indexOf(tab);
+    const nextIndex = event.key === 'Home'
+      ? 0
+      : event.key === 'End'
+        ? PICKER_TABS.length - 1
+        : event.key === 'ArrowRight'
+          ? (currentIndex + 1) % PICKER_TABS.length
+          : event.key === 'ArrowLeft'
+            ? (currentIndex + PICKER_TABS.length - 1) % PICKER_TABS.length
+            : null;
+    if (nextIndex === null) return;
+
+    event.preventDefault();
+    const nextTab = PICKER_TABS[nextIndex];
+    setPickerTab(nextTab);
+    requestAnimationFrame(() => {
+      document.getElementById(`palette-picker-tab-${nextTab}`)?.focus();
+    });
+  };
+
   const handleHslChange = (channel: 'h' | 's' | 'l', value: number) => {
     const next = { ...hslSliders, [channel]: value };
     setHslSliders(next);
@@ -525,8 +570,8 @@ export function PaletteBuilderPage() {
     applyPrimary(hex.toUpperCase());
   };
 
-  const handleSwatchPick = (hex: string) => {
-    applyPrimary(hex);
+  const handleSwatchPick = (name: string, hex: string) => {
+    applyPrimary(hex, `Primary color set to ${name}, ${hex}. Harmony and accessibility suggestions updated.`);
   };
 
   const handleRoleClick = (mode: 'dark' | 'light', role: RoleKey) => {
@@ -545,6 +590,7 @@ export function PaletteBuilderPage() {
     mode: 'dark' | 'light',
     role: RoleKey,
     hex: string,
+    announcementMessage?: string,
   ) => {
     if (mode === 'dark') {
       setDarkRoles((prev) => ({ ...(prev ?? effectiveDark!), [role]: hex }));
@@ -552,6 +598,7 @@ export function PaletteBuilderPage() {
       setLightRoles((prev) => ({ ...(prev ?? effectiveLight!), [role]: hex }));
     }
     setOpenPicker(null);
+    setAnnouncement(announcementMessage ?? `Assigned ${hex.toUpperCase()} as ${mode} ${ROLE_LABELS[role]}.`);
   };
 
   /* ── Palette edit helpers ───────────────────────────────────────────────── */
@@ -579,6 +626,7 @@ export function PaletteBuilderPage() {
 
     setPaletteIsCustom(true);
     setPaletteError('');
+    setAnnouncement(`Updated ${paletteColors[index]?.label ?? 'palette color'} to ${newHex.toUpperCase()}.`);
     return true;
   };
 
@@ -590,6 +638,7 @@ export function PaletteBuilderPage() {
       );
       setEditingIndex(existingIndex);
       setEditHexInput(hex.toUpperCase());
+      setAnnouncement(`Cannot add ${hex.toUpperCase()}; it is already in your palette.`);
       return false;
     }
 
@@ -602,10 +651,12 @@ export function PaletteBuilderPage() {
     setPaletteIsCustom(true);
     setEditingIndex(null);
     setPaletteError('');
+    setAnnouncement(`Added ${label ?? `custom ${paletteColors.filter((color) => color.label.startsWith('custom')).length + 1}`} ${hex.toUpperCase()} to your palette.`);
     return true;
   };
 
   const removePaletteColor = (index: number) => {
+    const removedColor = paletteColors[index];
     setPaletteColors((prev) => prev.filter((_, i) => i !== index));
     setDarkRoles(null);
     setLightRoles(null);
@@ -614,6 +665,7 @@ export function PaletteBuilderPage() {
     setEditingIndex((prev) =>
       prev === index ? null : prev !== null && prev > index ? prev - 1 : prev,
     );
+    if (removedColor) setAnnouncement(`Removed ${removedColor.label} ${removedColor.hex.toUpperCase()} from your palette.`);
   };
 
   const handleResetPalette = () => {
@@ -625,30 +677,31 @@ export function PaletteBuilderPage() {
     setPaletteIsCustom(false);
     setEditingIndex(null);
     setPaletteError('');
+    setAnnouncement('Reset your palette to the primary color.');
   };
 
   /* ── Contrast matrix data ───────────────────────────────────────────────── */
 
   const uniqueColors = useMemo(() => {
     const seen = new Set<string>();
-    return paletteHexes.filter((c) => {
-      const upper = c.toUpperCase();
+    return paletteColors.filter((color) => {
+      const upper = color.hex.toUpperCase();
       if (seen.has(upper)) return false;
       seen.add(upper);
       return true;
     });
-  }, [paletteHexes]);
+  }, [paletteColors]);
 
   const matrixPairs = useMemo(() => {
-    const pairs: { fg: string; bg: string; ratio: number }[] = [];
+    const pairs: { fg: PaletteColor; bg: PaletteColor; ratio: number }[] = [];
     for (let i = 0; i < uniqueColors.length; i++) {
       for (let j = i + 1; j < uniqueColors.length; j++) {
         const a = uniqueColors[i];
         const b = uniqueColors[j];
-        const lA = hexToHsl(a).l;
-        const lB = hexToHsl(b).l;
+        const lA = hexToHsl(a.hex).l;
+        const lB = hexToHsl(b.hex).l;
         if (Math.abs(lA - lB) < 30) continue;
-        pairs.push({ fg: a, bg: b, ratio: ratioOf(a, b) });
+        pairs.push({ fg: a, bg: b, ratio: ratioOf(a.hex, b.hex) });
       }
     }
     pairs.sort((a, b) => b.ratio - a.ratio);
@@ -783,6 +836,7 @@ export function PaletteBuilderPage() {
   return (
     <div className={styles.container}>
       <DocumentTitle page="Palette Builder" />
+      <StatusAnnouncement message={announcement} priority={paletteError || announcement.startsWith('Error:') ? 'assertive' : 'polite'} />
       <h1 className={styles.heading}>palette builder</h1>
       <p className={styles.subtitle}>
         Pick a primary color, explore harmony suggestions, and build your
@@ -829,12 +883,18 @@ export function PaletteBuilderPage() {
             </div>
 
             {/* Tab buttons */}
-            <div className={styles.pickerTabs}>
-              {(['rgb', 'hsl', 'swatches'] as PickerTab[]).map((tab) => (
+            <div className={styles.pickerTabs} role="tablist" aria-label="Color picker method">
+              {PICKER_TABS.map((tab) => (
                 <button
                   key={tab}
                   className={`${styles.pickerTab} ${pickerTab === tab ? styles.pickerTabActive : ''}`}
                   onClick={() => setPickerTab(tab)}
+                  onKeyDown={(event) => handlePickerTabKeyDown(event, tab)}
+                  role="tab"
+                  aria-selected={pickerTab === tab}
+                  tabIndex={pickerTab === tab ? 0 : -1}
+                  aria-controls={`palette-picker-${tab}`}
+                  id={`palette-picker-tab-${tab}`}
                 >
                   {tab.toUpperCase()}
                 </button>
@@ -842,7 +902,7 @@ export function PaletteBuilderPage() {
             </div>
 
             {/* Tab content */}
-            <div className={styles.pickerPanel}>
+            <div className={styles.pickerPanel} role="tabpanel" id={`palette-picker-${pickerTab}`} aria-labelledby={`palette-picker-tab-${pickerTab}`}>
               {pickerTab === 'rgb' && (
                 <div className={styles.sliderGroup}>
                   {(['r', 'g', 'b'] as const).map((ch) => (
@@ -859,6 +919,8 @@ export function PaletteBuilderPage() {
                           '--slider-color': ch === 'r' ? '#ff4444' : ch === 'g' ? '#44bb44' : '#4488ff',
                         } as React.CSSProperties}
                         aria-label={`${ch.toUpperCase()} channel`}
+                        onPointerUp={() => announcePickerChange('RGB')}
+                        onKeyUp={(event) => handlePickerKeyUp(event, 'RGB')}
                       />
                       <span className={styles.sliderValue}>{rgbSliders[ch]}</span>
                     </label>
@@ -880,14 +942,39 @@ export function PaletteBuilderPage() {
                         const dy = e.clientY - rect.top - cy;
                         const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
                         const hue = ((angle + 90) % 360 + 360) % 360;
-                        handleHslChange('h', Math.round(hue));
+                        const nextHue = Math.round(hue);
+                        const nextHex = hslToHex(nextHue, hslSliders.s, hslSliders.l).toUpperCase();
+                        handleHslChange('h', nextHue);
+                        announcePickerChange('HSL', nextHex);
                       }}
                       role="slider"
                       aria-label="Hue"
+                      onKeyUp={(event) => handlePickerKeyUp(event, 'HSL')}
                       aria-valuemin={0}
                       aria-valuemax={360}
                       aria-valuenow={hslSliders.h}
+                      aria-valuetext={`${hslSliders.h} degrees`}
                       tabIndex={0}
+                      onKeyDown={(event) => {
+                        const increments: Record<string, number> = {
+                          ArrowRight: 1,
+                          ArrowUp: 1,
+                          ArrowLeft: -1,
+                          ArrowDown: -1,
+                          PageUp: 10,
+                          PageDown: -10,
+                        };
+                        if (event.key === 'Home') {
+                          event.preventDefault();
+                          handleHslChange('h', 0);
+                        } else if (event.key === 'End') {
+                          event.preventDefault();
+                          handleHslChange('h', 360);
+                        } else if (increments[event.key] !== undefined) {
+                          event.preventDefault();
+                          handleHslChange('h', clamp(hslSliders.h + increments[event.key], 0, 360));
+                        }
+                      }}
                     >
                       <div
                         className={styles.hueIndicator}
@@ -913,6 +1000,8 @@ export function PaletteBuilderPage() {
                       className={styles.slider}
                       style={{ '--slider-color': hslToHex(hslSliders.h, 100, 50) } as React.CSSProperties}
                       aria-label="Hue"
+                      onPointerUp={() => announcePickerChange('HSL')}
+                      onKeyUp={(event) => handlePickerKeyUp(event, 'HSL')}
                     />
                     <span className={styles.sliderValue}>{hslSliders.h}°</span>
                   </label>
@@ -927,6 +1016,8 @@ export function PaletteBuilderPage() {
                       className={styles.slider}
                       style={{ '--slider-color': hslToHex(hslSliders.h, 100, 50) } as React.CSSProperties}
                       aria-label="Saturation"
+                      onPointerUp={() => announcePickerChange('HSL')}
+                      onKeyUp={(event) => handlePickerKeyUp(event, 'HSL')}
                     />
                     <span className={styles.sliderValue}>{hslSliders.s}%</span>
                   </label>
@@ -941,6 +1032,8 @@ export function PaletteBuilderPage() {
                       className={styles.slider}
                       style={{ '--slider-color': hslToHex(hslSliders.h, hslSliders.s, 50) } as React.CSSProperties}
                       aria-label="Lightness"
+                      onPointerUp={() => announcePickerChange('HSL')}
+                      onKeyUp={(event) => handlePickerKeyUp(event, 'HSL')}
                     />
                     <span className={styles.sliderValue}>{hslSliders.l}%</span>
                   </label>
@@ -954,9 +1047,10 @@ export function PaletteBuilderPage() {
                       key={name}
                       className={`${styles.namedSwatch} ${hex.toUpperCase() === previewHex.toUpperCase() ? styles.namedSwatchActive : ''}`}
                       style={{ backgroundColor: hex }}
-                      onClick={() => handleSwatchPick(hex)}
+                      onClick={() => handleSwatchPick(name, hex)}
                       title={name}
                       aria-label={`${name} (${hex})`}
+                      aria-pressed={hex.toUpperCase() === previewHex.toUpperCase()}
                     />
                   ))}
                 </div>
@@ -994,6 +1088,7 @@ export function PaletteBuilderPage() {
                       onClick={() => addPaletteColor(hex, label)}
                       title={`${label} — ${hex.toUpperCase()} — click to add`}
                       aria-label={`Add ${label} to palette`}
+                      aria-description={`${label} color value ${hex.toUpperCase()}.`}
                     >
                     </button>
                   ))}
@@ -1007,7 +1102,7 @@ export function PaletteBuilderPage() {
             <div className={styles.harmonySection}>
               <h2 className={styles.sectionHeading}>missing lighter colors</h2>
               <div className={styles.harmonySwatches}>
-                {missingLighter.map(({ hex }) => {
+                {missingLighter.map(({ hex, from }) => {
                   const isAdded = paletteHexSet.has(hex.toUpperCase());
                   return (
                     <button
@@ -1018,6 +1113,7 @@ export function PaletteBuilderPage() {
                       disabled={isAdded}
                       title={isAdded ? `${hex.toUpperCase()} — already added` : `${hex.toUpperCase()} — click to add`}
                       aria-label={isAdded ? 'Already in palette' : `Add ${hex.toUpperCase()} to palette`}
+                      aria-description={isAdded ? `${hex.toUpperCase()} is already in your palette.` : `Lighter color ${hex.toUpperCase()}, derived from ${from.toUpperCase()}.`}
                     >
                       {isAdded && <span className={styles.harmonySwatchCheck}>✓</span>}
                     </button>
@@ -1032,7 +1128,7 @@ export function PaletteBuilderPage() {
             <div className={styles.harmonySection}>
               <h2 className={styles.sectionHeading}>missing darker colors</h2>
               <div className={styles.harmonySwatches}>
-                {missingDarker.map(({ hex }) => {
+                {missingDarker.map(({ hex, from }) => {
                   const isAdded = paletteHexSet.has(hex.toUpperCase());
                   return (
                     <button
@@ -1043,6 +1139,7 @@ export function PaletteBuilderPage() {
                       disabled={isAdded}
                       title={isAdded ? `${hex.toUpperCase()} — already added` : `${hex.toUpperCase()} — click to add`}
                       aria-label={isAdded ? 'Already in palette' : `Add ${hex.toUpperCase()} to palette`}
+                      aria-description={isAdded ? `${hex.toUpperCase()} is already in your palette.` : `Darker color ${hex.toUpperCase()}, derived from ${from.toUpperCase()}.`}
                     >
                       {isAdded && <span className={styles.harmonySwatchCheck}>✓</span>}
                     </button>
@@ -1057,7 +1154,7 @@ export function PaletteBuilderPage() {
             <div className={styles.harmonySection}>
               <h2 className={styles.sectionHeading}>missing neutral colors</h2>
               <div className={styles.harmonySwatches}>
-                {missingNeutrals.map(({ hex }) => {
+                {missingNeutrals.map(({ hex, from }) => {
                   const isAdded = paletteHexSet.has(hex.toUpperCase());
                   return (
                     <button
@@ -1068,6 +1165,7 @@ export function PaletteBuilderPage() {
                       disabled={isAdded}
                       title={isAdded ? `${hex.toUpperCase()} — already added` : `${hex.toUpperCase()} — click to add`}
                       aria-label={isAdded ? 'Already in palette' : `Add ${hex.toUpperCase()} to palette`}
+                      aria-description={isAdded ? `${hex.toUpperCase()} is already in your palette.` : `Muted color ${hex.toUpperCase()}, derived from ${from.toUpperCase()}.`}
                     >
                       {isAdded && <span className={styles.harmonySwatchCheck}>✓</span>}
                     </button>
@@ -1087,8 +1185,9 @@ export function PaletteBuilderPage() {
                     <p className={styles.a11ySuggestionMsg}>{s.msg}</p>
                     <div className={styles.a11ySuggestionFix}>
                       <div
-                        className={styles.a11ySuggestionSwatch}
-                        style={{ backgroundColor: s.hex }}
+                          className={styles.a11ySuggestionSwatch}
+                          style={{ backgroundColor: s.hex }}
+                          aria-hidden="true"
                       />
                       <span className={styles.a11ySuggestionHex}>
                         {s.hex.toUpperCase()}
@@ -1096,8 +1195,8 @@ export function PaletteBuilderPage() {
                       <button
                         className={styles.a11ySuggestionApply}
                         onClick={() => {
-                          addPaletteColor(s.hex, s.label);
-                          handleRolePick(s.mode, s.role, s.hex);
+                          const added = addPaletteColor(s.hex, s.label);
+                          handleRolePick(s.mode, s.role, s.hex, `${added ? `Added ${s.hex.toUpperCase()} to your palette and ` : ''}assigned it as ${s.mode} ${ROLE_LABELS[s.role]}.`);
                         }}
                         aria-label={`Add ${s.hex.toUpperCase()} and assign as ${ROLE_LABELS[s.role]}`}
                       >
@@ -1124,6 +1223,7 @@ export function PaletteBuilderPage() {
                         <div
                           className={styles.a11ySuggestionSwatch}
                           style={{ backgroundColor: s.suggestedHex }}
+                          aria-hidden="true"
                         />
                         <span className={styles.a11ySuggestionHex}>
                           {s.suggestedHex.toUpperCase()}
@@ -1135,7 +1235,7 @@ export function PaletteBuilderPage() {
                           className={styles.a11ySuggestionApply}
                           onClick={() => {
                             if (!alreadyInPalette) addPaletteColor(s.suggestedHex, s.suggestedLabel);
-                            handleRolePick(s.mode, s.role, s.suggestedHex);
+                            handleRolePick(s.mode, s.role, s.suggestedHex, `${alreadyInPalette ? 'Assigned' : 'Added and assigned'} ${s.suggestedHex.toUpperCase()} as ${s.mode} ${ROLE_LABELS[s.role]}.`);
                           }}
                           aria-label={alreadyInPalette
                             ? `Assign ${s.suggestedHex.toUpperCase()} as ${ROLE_LABELS[s.role]}`
@@ -1182,6 +1282,7 @@ export function PaletteBuilderPage() {
                             className={styles.removeBtn}
                             onClick={() => removePaletteColor(i)}
                             aria-label={`Remove ${color.label}`}
+                            aria-description={`${color.hex.toUpperCase()} removed from your palette.`}
                             title="Remove color"
                           >
                             ×
@@ -1200,6 +1301,8 @@ export function PaletteBuilderPage() {
                           }
                         }}
                         aria-label={`Edit ${color.label} — ${color.hex.toUpperCase()}`}
+                        aria-description={`Palette color ${i + 1} of ${paletteColors.length}.`}
+                        aria-expanded={editingIndex === i}
                         title="Click to edit"
                       />
                       {editingIndex === i && (
@@ -1213,7 +1316,7 @@ export function PaletteBuilderPage() {
                               setEditHexInput(val);
                               updatePaletteColor(i, val);
                             }}
-                            aria-label="Pick color"
+                            aria-label={`Pick a replacement for ${color.label}, currently ${color.hex.toUpperCase()}`}
                           />
                           <div className={styles.editInlineMeta}>
                             <input
@@ -1226,7 +1329,11 @@ export function PaletteBuilderPage() {
                                 if (parsed) {
                                   const canonical = rgbToHex(parsed);
                                   setEditHexInput(canonical);
-                                  updatePaletteColor(i, canonical);
+                                  if (!updatePaletteColor(i, canonical)) {
+                                    setAnnouncement(getEditHexError(i));
+                                  }
+                                } else {
+                                  setAnnouncement(getEditHexError(i));
                                 }
                               }}
                               onKeyDown={(e) => {
@@ -1237,7 +1344,11 @@ export function PaletteBuilderPage() {
                                     setEditHexInput(canonical);
                                     if (updatePaletteColor(i, canonical)) {
                                       setEditingIndex(null);
+                                    } else {
+                                      setAnnouncement(getEditHexError(i));
                                     }
+                                  } else {
+                                    setAnnouncement(getEditHexError(i));
                                   }
                                 }
                                 if (e.key === 'Escape') setEditingIndex(null);
@@ -1267,7 +1378,7 @@ export function PaletteBuilderPage() {
                   + add color
                 </button>
                 {paletteError && (
-                  <p className={styles.inputError} role="status">
+                  <p className={styles.inputError}>
                     {paletteError}
                   </p>
                 )}
@@ -1302,19 +1413,22 @@ export function PaletteBuilderPage() {
                         ? styles.matrixCellEven
                         : styles.matrixCellOdd;
                       return (
-                        <Fragment key={`${fg}-${bg}`}>
+                        <Fragment key={`${fg.hex}-${bg.hex}`}>
                           <div className={`${styles.matrixCell} ${cellCls}`}>
                             <span style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
                               <span
                                 className={styles.matrixHeaderSwatch}
-                                style={{ backgroundColor: fg }}
+                                style={{ backgroundColor: fg.hex }}
+                                aria-hidden="true"
                               />
-                              <span style={{ color: 'var(--muted)' }}>on</span>
+                              <span>foreground {fg.label} {fg.hex.toUpperCase()} on background {bg.label} {bg.hex.toUpperCase()}</span>
                               <span
                                 className={styles.matrixHeaderSwatch}
-                                style={{ backgroundColor: bg }}
+                                style={{ backgroundColor: bg.hex }}
+                                aria-hidden="true"
                               />
                             </span>
+                            <span className={styles.matrixRatio}>text size: 18px</span>
                           </div>
                           <div className={`${styles.matrixCell} ${cellCls}`}>
                             <span className={styles.matrixRatio}>
@@ -1326,9 +1440,10 @@ export function PaletteBuilderPage() {
                           </div>
                           <div className={`${styles.matrixCell} ${cellCls}`}>
                             <span
+                              aria-hidden="true"
                               style={{
-                                backgroundColor: bg,
-                                color: fg,
+                                backgroundColor: bg.hex,
+                                color: fg.hex,
                                 padding: '2px 8px',
                                 borderRadius: 'var(--radius-sm)',
                                 fontFamily: 'var(--font-mono)',
@@ -1372,13 +1487,15 @@ export function PaletteBuilderPage() {
                             style={{ backgroundColor: roles[role] }}
                             onClick={() => handleRoleClick(mode, role)}
                             aria-label={`Change ${mode} ${ROLE_LABELS[role]} color`}
+                            aria-description={`Currently ${roles[role].toUpperCase()}.`}
+                            aria-expanded={openPicker?.mode === mode && openPicker?.role === role}
                           />
                           <span className={styles.roleHex}>
                             {roles[role].toUpperCase()}
                           </span>
                         </div>
                         {openPicker?.mode === mode && openPicker?.role === role && (
-                          <div className={styles.rolePickerPopover}>
+                          <div className={styles.rolePickerPopover} role="group" aria-label={`Choose a palette color for ${mode} ${ROLE_LABELS[role]}`}>
                             {paletteHexes.map((hex, i) => (
                               <button
                                 key={`${hex}-${i}`}
@@ -1386,6 +1503,7 @@ export function PaletteBuilderPage() {
                                 style={{ backgroundColor: hex }}
                                 onClick={() => handleRolePick(mode, role, hex)}
                                 aria-label={`Select ${hex.toUpperCase()}`}
+                                aria-description={`Assign ${hex.toUpperCase()} as ${mode} ${ROLE_LABELS[role]}.`}
                               />
                             ))}
                           </div>
@@ -1397,6 +1515,7 @@ export function PaletteBuilderPage() {
                     <div
                       className={styles.miniPreview}
                       data-authored-visual
+                      aria-describedby={`${mode}-theme-preview-description`}
                       style={{
                         backgroundColor: roles.background,
                         borderColor: roles.surface,
@@ -1441,6 +1560,9 @@ export function PaletteBuilderPage() {
                         secondary action
                       </span>
                     </div>
+                    <VisualDescription id={`${mode}-theme-preview-description`}>
+                      {`${mode} theme preview. Background ${roles.background.toUpperCase()}; surface ${roles.surface.toUpperCase()}; primary text ${roles.primaryText.toUpperCase()}; secondary text ${roles.secondaryText.toUpperCase()}; accent ${roles.accent.toUpperCase()}; secondary accent ${roles.accentSecondary.toUpperCase()}. The preview contains a surface card with primary and secondary text, plus accent and secondary action buttons.`}
+                    </VisualDescription>
 
                     {/* Contrast checks */}
                     <div className={styles.contrastChecks}>

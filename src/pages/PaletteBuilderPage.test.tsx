@@ -163,7 +163,8 @@ describe('PaletteBuilderPage color input', () => {
 
     const input = screen.getByRole('textbox', { name: 'Hex color value' });
     expect(input).toHaveAttribute('aria-invalid', 'true');
-    expect(screen.getByText('Error: enter a 3- or 6-digit hex color.')).toBeVisible();
+    expect(screen.getByText('Error: enter a 3- or 6-digit hex color.', { selector: '[class*="inputError"]' })).toBeVisible();
+    expect(screen.getByRole('alert')).toHaveTextContent('Error: enter a 3- or 6-digit hex color.');
     expect(screen.getByText('Pick a primary color to get started.')).toBeVisible();
 
     await enterPrimary(user, '#abc');
@@ -172,6 +173,9 @@ describe('PaletteBuilderPage color input', () => {
     expect(input).toHaveAttribute('aria-invalid', 'false');
     expect(screen.queryByText('Error: enter a 3- or 6-digit hex color.')).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Edit primary — #AABBCC' })).toBeVisible();
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Primary color set to #AABBCC. Harmony and accessibility suggestions updated.',
+    );
   });
 
   it('keeps RGB, HSL, and hex values synchronized', async () => {
@@ -185,15 +189,19 @@ describe('PaletteBuilderPage color input', () => {
     expect(screen.getByRole('textbox', { name: 'Hex color value' })).toHaveValue('#FF0000');
     expect(screen.getByText(/H 0 .* S 100 .* L 50/)).toBeVisible();
 
-    await user.click(screen.getByRole('button', { name: 'HSL' }));
+    await user.click(screen.getByRole('tab', { name: 'HSL' }));
     const hueSliders = screen.getAllByRole('slider', { name: 'Hue' });
     fireEvent.change(hueSliders.at(-1)!, { target: { value: '120' } });
+    fireEvent.pointerUp(hueSliders.at(-1)!);
 
     expect(screen.getByRole('textbox', { name: 'Hex color value' })).toHaveValue('#00FF00');
     expect(screen.getByRole('slider', { name: 'Saturation' })).toHaveValue('100');
     expect(screen.getByRole('slider', { name: 'Lightness' })).toHaveValue('50');
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Primary color set to #00FF00 with the HSL picker. Harmony and accessibility suggestions updated.',
+    );
 
-    await user.click(screen.getByRole('button', { name: 'RGB' }));
+    await user.click(screen.getByRole('tab', { name: 'RGB' }));
     expect(screen.getByRole('slider', { name: 'R channel' })).toHaveValue('0');
     expect(screen.getByRole('slider', { name: 'G channel' })).toHaveValue('255');
     expect(screen.getByRole('slider', { name: 'B channel' })).toHaveValue('0');
@@ -203,16 +211,58 @@ describe('PaletteBuilderPage color input', () => {
     const user = userEvent.setup();
     render(<PaletteBuilderPage />);
 
-    await user.click(screen.getByRole('button', { name: 'SWATCHES' }));
+    await user.click(screen.getByRole('tab', { name: 'SWATCHES' }));
     await user.click(screen.getByRole('button', { name: 'rebeccapurple (#663399)' }));
 
     expect(screen.getByRole('textbox', { name: 'Hex color value' })).toHaveValue('#663399');
     expect(screen.getByText(/H 270 .* S 50 .* L 40/)).toBeVisible();
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Primary color set to rebeccapurple, #663399. Harmony and accessibility suggestions updated.',
+    );
 
-    await user.click(screen.getByRole('button', { name: 'RGB' }));
+    await user.click(screen.getByRole('tab', { name: 'RGB' }));
     expect(screen.getByRole('slider', { name: 'R channel' })).toHaveValue('102');
     expect(screen.getByRole('slider', { name: 'G channel' })).toHaveValue('51');
     expect(screen.getByRole('slider', { name: 'B channel' })).toHaveValue('153');
+  });
+
+  it('exposes the selected picker state and supports the hue ring with a keyboard', async () => {
+    const user = userEvent.setup();
+    render(<PaletteBuilderPage />);
+
+    const hslTab = screen.getByRole('tab', { name: 'HSL' });
+    expect(screen.getByRole('tab', { name: 'RGB' })).toHaveAttribute('aria-selected', 'true');
+    await user.click(hslTab);
+    expect(hslTab).toHaveAttribute('aria-selected', 'true');
+    expect(hslTab).toHaveAttribute('tabindex', '0');
+    expect(screen.getByRole('tab', { name: 'RGB' })).toHaveAttribute('tabindex', '-1');
+    await user.keyboard('{ArrowRight}');
+    expect(screen.getByRole('tab', { name: 'SWATCHES' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByRole('tab', { name: 'SWATCHES' })).toHaveFocus();
+    await user.keyboard('{Home}');
+    expect(screen.getByRole('tab', { name: 'RGB' })).toHaveAttribute('aria-selected', 'true');
+
+    await user.click(hslTab);
+    const hueRing = screen.getAllByRole('slider', { name: 'Hue' })[0];
+    expect(hueRing).toHaveAttribute('aria-valuetext', '217 degrees');
+    fireEvent.keyDown(hueRing, { key: 'ArrowRight' });
+    fireEvent.keyUp(hueRing, { key: 'ArrowRight' });
+    expect(hueRing).toHaveAttribute('aria-valuetext', '218 degrees');
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Primary color set to #3C80F6 with the HSL picker. Harmony and accessibility suggestions updated.',
+    );
+  });
+
+  it('announces committed RGB picker changes', () => {
+    render(<PaletteBuilderPage />);
+    const red = screen.getByRole('slider', { name: 'R channel' });
+
+    fireEvent.change(red, { target: { value: '60' } });
+    fireEvent.pointerUp(red);
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Primary color set to #3C82F6 with the RGB picker. Harmony and accessibility suggestions updated.',
+    );
   });
 });
 
@@ -271,6 +321,17 @@ describe('PaletteBuilderPage suggestions', () => {
 });
 
 describe('PaletteBuilderPage palette editing', () => {
+  it('announces an added palette color and exposes its position and value', async () => {
+    const user = userEvent.setup();
+    render(<PaletteBuilderPage />);
+    await enterPrimary(user, '#336699');
+
+    await user.click(screen.getByRole('button', { name: 'Add complement to palette' }));
+
+    expect(screen.getByRole('status')).toHaveTextContent('Added complement #996633 to your palette.');
+    expect(screen.getByRole('button', { name: 'Edit complement — #996633' }))
+      .toHaveAttribute('aria-description', 'Palette color 2 of 2.');
+  });
   it('adds suggested and custom colors without offering an added suggestion twice', async () => {
     const user = userEvent.setup();
     render(<PaletteBuilderPage />);
@@ -297,8 +358,8 @@ describe('PaletteBuilderPage palette editing', () => {
 
     expect(screen.getAllByRole('button', { name: /Edit custom \d+ — #808080/ }))
       .toHaveLength(1);
-    expect(screen.getByRole('status')).toHaveTextContent(
-      '#808080 is already in your palette.',
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'Cannot add #808080; it is already in your palette.',
     );
     expect(screen.getAllByRole('textbox', { name: 'Hex color value' })[1])
       .toHaveValue('#808080');
@@ -317,9 +378,24 @@ describe('PaletteBuilderPage palette editing', () => {
     await user.keyboard('{Enter}');
 
     expect(editInput).toHaveAttribute('aria-invalid', 'true');
-    expect(screen.getByText('Error: that color is already in your palette.')).toBeVisible();
+    expect(screen.getByText('Error: that color is already in your palette.', { selector: '[class*="inputError"]' })).toBeVisible();
     expect(screen.getByRole('button', { name: 'Edit custom 1 — #808080' })).toBeVisible();
     expect(screen.getAllByRole('button', { name: /Edit .* — #336699/ })).toHaveLength(1);
+  });
+
+  it('announces an invalid palette color edit', async () => {
+    const user = userEvent.setup();
+    render(<PaletteBuilderPage />);
+    await enterPrimary(user, '#336699');
+    await user.click(screen.getByRole('button', { name: '+ add color' }));
+    await user.click(screen.getByRole('button', { name: 'Edit custom 1 — #808080' }));
+
+    const editInput = screen.getAllByRole('textbox', { name: 'Hex color value' })[1];
+    await user.clear(editInput);
+    await user.type(editInput, '#12');
+    await user.keyboard('{Enter}');
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Error: enter a 3- or 6-digit hex color.');
   });
 
   it('updates palette-dependent displays when a color is edited or removed', async () => {
@@ -375,6 +451,18 @@ describe('PaletteBuilderPage palette editing', () => {
 });
 
 describe('PaletteBuilderPage contrast pairings', () => {
+  it('names both colors, the ratio, and WCAG level for each contrast row', async () => {
+    const user = userEvent.setup();
+    render(<PaletteBuilderPage />);
+    await enterPrimary(user, '#000000');
+    await addCustomColor(user, '#FFFFFF');
+
+    const matrix = screen.getByRole('heading', { name: 'contrast pairings' }).parentElement!;
+    expect(within(matrix).getByText('foreground primary #000000 on background custom 1 #FFFFFF')).toBeVisible();
+    expect(within(matrix).getByText('text size: 18px')).toBeVisible();
+    expect(within(matrix).getByText('21.0:1', { selector: '[class*="matrixRatio"]' })).toBeVisible();
+    expect(within(matrix).getByText('AAA 21.0:1')).toBeVisible();
+  });
   it.each([
     ['fail', '#777777'],
     ['AA', '#767676'],
@@ -460,6 +548,24 @@ describe('PaletteBuilderPage contrast pairings', () => {
 });
 
 describe('PaletteBuilderPage theme arranger', () => {
+  it('describes each theme preview and announces role assignments', async () => {
+    const user = userEvent.setup();
+    render(<PaletteBuilderPage />);
+    await enterPrimary(user, '#000000');
+    await addCustomColor(user, '#FFFFFF');
+
+    const darkPanel = getModePanel('dark');
+    const preview = within(darkPanel).getByText('Card heading').closest('[data-authored-visual]')!;
+    const description = document.getElementById(preview.getAttribute('aria-describedby')!);
+    expect(description).toHaveTextContent('dark theme preview. Background #000000; surface #FFFFFF;');
+
+    await user.click(within(getRoleRow(darkPanel, 'accent')).getByRole('button', {
+      name: 'Change dark accent color',
+    }));
+    await user.click(within(darkPanel).getByRole('button', { name: 'Select #FFFFFF' }));
+    expect(screen.getByRole('status')).toHaveTextContent('Assigned #FFFFFF as dark accent.');
+  });
+
   it('assigns all light and dark roles from palette order and luminance', async () => {
     const user = userEvent.setup();
     render(<PaletteBuilderPage />);
