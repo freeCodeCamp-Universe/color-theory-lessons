@@ -3,6 +3,8 @@ import { contrastRatioWcag } from '../../utils/color.ts';
 import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 import shellStyles from './ToolShell.module.css';
 
 interface OverlayContext {
@@ -112,6 +114,11 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
     : null;
   const imageTextPassesContrast = imageTextContrast !== null && imageTextContrast >= IMAGE_TEXT_CONTRAST_TARGET;
   const inputsDisabled = !interactive || stageController.result !== 'idle';
+  const imageContrastDescription = imageTextContrast === null
+    ? ''
+    : ` White overlay text contrast is ${formatContrastRatio(imageTextContrast)} to 1 and ${imageTextPassesContrast ? 'passes' : 'does not pass'} the ${IMAGE_TEXT_CONTRAST_TARGET} to 1 target.`;
+  const compositionDescription = `${ctx.label}. ${ctx.description} Background: ${ctx.bgLabel}, ${ctx.bgColor}. Foreground: ${fgLabel} at ${(alpha * 100).toFixed(0)} percent opacity. The foreground sits above the background. Blended result: ${blended}.${imageContrastDescription}`;
+  const compositionChanged = alpha !== 0.5 || !isDark;
 
   function checkOverlay() {
     if (!interactive || stageController.result !== 'idle') return;
@@ -125,6 +132,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>layer stack simulator</span>
+      <StatusAnnouncement message={compositionChanged ? compositionDescription : ''} />
 
       <ExerciseStage
         controller={stageController}
@@ -139,10 +147,11 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
         background: ctx.bgColor, marginBottom: '0.75rem', overflow: 'hidden',
         border: '1px solid var(--border)',
       }}>
+        <VisualDescription id="alpha-composition-description">{compositionDescription}</VisualDescription>
         <div style={{
           position: 'absolute', inset: 0,
           background: `rgba(${fgR}, ${fgG}, ${fgB}, ${alpha})`,
-        }} />
+        }} aria-hidden="true" />
         {ctx.id === 'image' && (
           <div style={{
             position: 'absolute',
@@ -173,7 +182,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
         <div style={{
           width: 40, height: 40, borderRadius: 'var(--radius-sm)',
           background: blended, border: '1px solid var(--border)',
-        }} />
+        }} aria-hidden="true" />
         <div style={{ fontSize: '0.8rem', fontFamily: 'var(--font-sans)' }}>
           <span style={{ color: 'var(--muted)' }}>Result:</span>{' '}
           <span style={{ fontFamily: 'var(--font-mono)' }}>{blended}</span>
@@ -197,6 +206,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
             onChange={(e) => setAlpha(Number(e.target.value) / 100)}
             style={{ width: '100%', accentColor: 'var(--accent-warning)' }}
             aria-label={`Alpha: ${(alpha * 100).toFixed(0)} percent`}
+            aria-describedby="alpha-composition-description"
           />
         </label>
         <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.3rem' }}>

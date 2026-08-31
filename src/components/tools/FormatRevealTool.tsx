@@ -3,6 +3,8 @@ import { hexToRgb, hslToHex } from '../../utils/color.ts';
 import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 import shellStyles from './ToolShell.module.css';
 import styles from './FormatRevealTool.module.css';
 
@@ -162,10 +164,14 @@ export const FormatRevealTool = memo(function FormatRevealTool({
   const hsl = selected ? getRoundTripHsl(selected.hex) : null;
 
   const remaining = ELEMENTS.length - revealed.size;
+  const selectionMessage = selected && rgb && hsl
+    ? `${selected.label} selected. ${selected.description} HEX ${selected.hex.toUpperCase()}; RGB ${rgb.r}, ${rgb.g}, ${rgb.b}; HSL ${formatHslValue(hsl.h)} degrees, ${formatHslValue(hsl.s)} percent saturation, ${formatHslValue(hsl.l)} percent lightness.`
+    : '';
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>format explorer</span>
+      <StatusAnnouncement message={selectionMessage} />
 
       <ExerciseStage
         controller={stageController}
@@ -186,12 +192,8 @@ export const FormatRevealTool = memo(function FormatRevealTool({
             <div
               className={`${styles.nav} ${selectedId === 'nav-bg' ? styles.selected : ''} ${revealed.has('nav-bg') ? styles.visited : ''}`}
               style={{ backgroundColor: '#1e3a5f' }}
-              onClick={() => handleSelect('nav-bg')}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleSelect('nav-bg')}
-              aria-label="Nav background"
             >
+              <button className={styles.regionBackgroundControl} onClick={() => handleSelect('nav-bg')} aria-label="Nav background" aria-describedby="format-selection-description" />
               <span
                 className={`${styles.navText} ${selectedId === 'nav-text' ? styles.selected : ''} ${revealed.has('nav-text') ? styles.visited : ''}`}
                 style={{ color: '#e2e8f0' }}
@@ -200,6 +202,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                 tabIndex={0}
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.stopPropagation(), handleSelect('nav-text'))}
                 aria-label="Nav text"
+                aria-describedby="format-selection-description"
                 data-target-size-exception="essential"
               >
                 site.ui
@@ -210,42 +213,37 @@ export const FormatRevealTool = memo(function FormatRevealTool({
             <div
               className={`${styles.hero} ${selectedId === 'hero-bg' ? styles.selected : ''} ${revealed.has('hero-bg') ? styles.visited : ''}`}
               style={{ backgroundColor: '#f0f4f8' }}
-              onClick={() => handleSelect('hero-bg')}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleSelect('hero-bg')}
-              aria-label="Hero surface"
             >
+              <button className={styles.regionBackgroundControl} onClick={() => handleSelect('hero-bg')} aria-label="Hero surface" aria-describedby="format-selection-description" />
               <p className={styles.heroTitle}>The design tool for developers.</p>
-              <button
+              <div
                 className={`${styles.cta} ${selectedId === 'cta' ? styles.selected : ''} ${revealed.has('cta') ? styles.visited : ''}`}
                 style={{ backgroundColor: '#2563eb' }}
-                onClick={(e) => { e.stopPropagation(); handleSelect('cta'); }}
-                aria-label="Primary action button"
-                data-target-size-exception="essential"
               >
-                <span
-                  className={`${selectedId === 'cta-text' ? styles.selected : ''} ${revealed.has('cta-text') ? styles.visited : ''}`}
+                <button
+                  className={styles.ctaColorControl}
+                  onClick={(e) => { e.stopPropagation(); handleSelect('cta'); }}
+                  aria-label="Primary action button"
+                  aria-describedby="format-selection-description"
+                />
+                <button
+                  className={`${styles.ctaText} ${selectedId === 'cta-text' ? styles.selected : ''} ${revealed.has('cta-text') ? styles.visited : ''}`}
                   style={{ color: '#ffffff' }}
                   onClick={(e) => { e.stopPropagation(); handleSelect('cta-text'); }}
                   aria-label="Button text"
-                  data-target-size-exception="essential"
+                  aria-describedby="format-selection-description"
                 >
                   Try it free →
-                </span>
-              </button>
+                </button>
+              </div>
             </div>
 
             {/* Card */}
             <div
               className={`${styles.card} ${selectedId === 'card-bg' ? styles.selected : ''} ${revealed.has('card-bg') ? styles.visited : ''}`}
               style={{ backgroundColor: '#ffffff', borderColor: '#cbd5e1' }}
-              onClick={() => handleSelect('card-bg')}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleSelect('card-bg')}
-              aria-label="Card background"
             >
+              <button className={styles.regionBackgroundControl} onClick={() => handleSelect('card-bg')} aria-label="Card background" aria-describedby="format-selection-description" />
               <div
                 className={`${styles.cardBorder} ${selectedId === 'card-border' ? styles.selected : ''} ${revealed.has('card-border') ? styles.visited : ''}`}
                 onClick={(e) => { e.stopPropagation(); handleSelect('card-border'); }}
@@ -253,6 +251,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                 tabIndex={0}
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.stopPropagation(), handleSelect('card-border'))}
                 aria-label="Card border"
+                aria-describedby="format-selection-description"
                 data-target-size-exception="essential"
               >
                 border →
@@ -265,6 +264,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                 tabIndex={0}
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.stopPropagation(), handleSelect('accent'))}
                 aria-label="Success accent"
+                aria-describedby="format-selection-description"
                 data-target-size-exception="essential"
               >
                 ✓ success
@@ -275,10 +275,10 @@ export const FormatRevealTool = memo(function FormatRevealTool({
             {/* Legend */}
             <div className={styles.legend}>
               <span className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: 'var(--accent-warning)' }} /> selected
+                <span className={styles.legendDot} style={{ background: 'var(--accent-warning)' }} aria-hidden="true" /> selected
               </span>
               <span className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: 'var(--accent-success)' }} /> explored
+                <span className={styles.legendDot} style={{ background: 'var(--accent-success)' }} aria-hidden="true" /> explored
               </span>
             </div>
           </div>
@@ -286,12 +286,14 @@ export const FormatRevealTool = memo(function FormatRevealTool({
 
         {/* ── Right: Format panel ── */}
         <div className={styles.panel}>
+          <VisualDescription id="format-selection-description">{selectionMessage}</VisualDescription>
           {selected && rgb && hsl ? (
             <>
               <div className={styles.swatchRow}>
                 <div
                   className={styles.swatch}
                   style={{ backgroundColor: selected.hex }}
+                  aria-hidden="true"
                 />
                 <div className={styles.swatchMeta}>
                   <span className={styles.elementLabel}>{selected.label}</span>

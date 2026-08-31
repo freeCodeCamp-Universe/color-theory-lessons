@@ -3,6 +3,8 @@ import { hexToRgb, contrastRatioWcag } from '../../utils/color.ts';
 import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 import shellStyles from './ToolShell.module.css';
 
 interface RoleDef {
@@ -78,6 +80,9 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
     && heroOnGradStart >= TEXT_CONTRAST_TARGET
     && heroOnGradEnd >= TEXT_CONTRAST_TARGET;
   const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
+  const themeDescription = `Theme preview. Background ${colors.bg}; surface ${colors.surface}; primary text ${colors.textPri}; secondary text ${colors.textSec}; border ${colors.border}; action ${colors.accent}; success ${colors.success}; warning ${colors.warning}; error ${colors.error}. Gradient starts at ${gradStart} and ends at ${gradEnd}.`;
+  const hasChangedTheme = Object.entries(colors).some(([key, value]) => value !== ROLES.find((role) => role.key === key)?.defaultValue)
+    || gradStart !== GRADIENT_DEFAULTS.start || gradEnd !== GRADIENT_DEFAULTS.end;
 
   function resultColor(passes: boolean) {
     if (!showResults) return 'var(--muted)';
@@ -92,6 +97,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>theme sandbox</span>
+      <StatusAnnouncement message={hasChangedTheme ? themeDescription : ''} />
 
       <ExerciseStage
         controller={stageController}
@@ -103,12 +109,13 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
         background: colors.bg, borderRadius: 'var(--radius-md)', padding: '0.75rem',
         border: `1px solid ${colors.border}`, marginBottom: '0.75rem',
       }}>
+        <VisualDescription id="theme-description">{themeDescription}</VisualDescription>
         {/* Hero gradient */}
         <div style={{
           background: `linear-gradient(135deg, ${gradStart}, ${gradEnd})`,
           borderRadius: 'var(--radius-sm)', padding: '1rem', marginBottom: '0.6rem',
         }}>
-          <span style={{ color: HERO_TEXT_COLOR, fontFamily: 'var(--font-mono)', fontSize: '0.82rem' }}>
+          <span aria-hidden="true" style={{ color: HERO_TEXT_COLOR, fontFamily: 'var(--font-mono)', fontSize: '0.82rem' }}>
             Hero gradient
           </span>
         </div>
@@ -125,19 +132,19 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
             Secondary text for supporting details
           </p>
           <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-            <span style={{
+            <span aria-hidden="true" style={{
               padding: '0.2rem 0.5rem', borderRadius: 3, fontSize: '0.72rem',
               background: colors.accent, color: '#fff', fontFamily: 'var(--font-mono)',
             }}>Action</span>
-            <span style={{
+            <span aria-hidden="true" style={{
               padding: '0.2rem 0.5rem', borderRadius: 3, fontSize: '0.72rem',
               background: colors.success, color: '#111', fontFamily: 'var(--font-mono)',
             }}>Success</span>
-            <span style={{
+            <span aria-hidden="true" style={{
               padding: '0.2rem 0.5rem', borderRadius: 3, fontSize: '0.72rem',
               background: colors.warning, color: '#111', fontFamily: 'var(--font-mono)',
             }}>Warning</span>
-            <span style={{
+            <span aria-hidden="true" style={{
               padding: '0.2rem 0.5rem', borderRadius: 3, fontSize: '0.72rem',
               background: colors.error, color: '#fff', fontFamily: 'var(--font-mono)',
             }}>Error</span>
@@ -154,6 +161,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
               onChange={(e) => setColor(role.key, e.target.value)}
               style={{ width: 24, height: 24, border: 'none', padding: 0, cursor: interactive ? 'pointer' : 'default' }}
               aria-label={role.label}
+              aria-describedby="theme-description"
             />
             <span style={{ color: 'var(--muted)' }}>{role.label}</span>
           </label>
@@ -167,6 +175,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
             onChange={(e) => setGradStart(e.target.value)}
             style={{ width: 24, height: 24, border: 'none', padding: 0 }}
             aria-label="Gradient start"
+            aria-describedby="theme-description"
           />
           <span style={{ color: 'var(--muted)' }}>Gradient start</span>
         </label>
@@ -175,13 +184,14 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
             onChange={(e) => setGradEnd(e.target.value)}
             style={{ width: 24, height: 24, border: 'none', padding: 0 }}
             aria-label="Gradient end"
+            aria-describedby="theme-description"
           />
           <span style={{ color: 'var(--muted)' }}>Gradient end</span>
         </label>
       </div>
 
       {/* Contrast readout */}
-      <div style={{ fontSize: '0.78rem', fontFamily: 'var(--font-sans)', marginBottom: '0.5rem' }}>
+      <div aria-live="polite" aria-atomic="true" style={{ fontSize: '0.78rem', fontFamily: 'var(--font-sans)', marginBottom: '0.5rem' }}>
         <div style={{ color: resultColor(priOnBg >= TEXT_CONTRAST_TARGET) }}>
           {resultSymbol(priOnBg >= TEXT_CONTRAST_TARGET)}Primary text on background: {formatContrastRatio(priOnBg)}:1 (target: 4.5:1)
         </div>

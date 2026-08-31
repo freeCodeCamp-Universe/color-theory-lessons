@@ -3,6 +3,8 @@ import { hslToHex, hexToHsl } from '../../utils/color.ts';
 import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 import shellStyles from './ToolShell.module.css';
 
 interface TokenRole {
@@ -101,10 +103,16 @@ export const TokenMapTool = memo(function TokenMapTool({
 
   const sortCorrectCount = SORT_ITEMS.filter((item) => sortAnswers[item.label] === item.category).length;
   const sortAnsweredCount = SORT_ITEMS.filter((item) => sortAnswers[item.label]).length;
+  const derivedDescription = `Base hue ${baseHue} degrees and base saturation ${baseSat} percent. Derived roles: ${derived.map((role) => `${role.name} ${role.color}`).join('; ')}. The preview uses the surface as its background, primary text for its text, action for Action, success background for Success, and error background for Error.`;
+  const hasAdjustedBase = baseHue !== INITIAL_BASE_HUE || baseSat !== INITIAL_BASE_SATURATION;
+  const tokenAnnouncement = !hasAdjustedBase ? '' : !hueOk
+    ? 'Action and error hues are too similar. Adjust the base hue so they are distinct.'
+    : derivedDescription;
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>token map</span>
+      <StatusAnnouncement message={tokenAnnouncement} />
 
       <ExerciseStage
         controller={stageController}
@@ -118,6 +126,7 @@ export const TokenMapTool = memo(function TokenMapTool({
         <>
       {/* Base controls */}
       <div style={{ marginBottom: '0.75rem' }}>
+        <VisualDescription id="token-map-description">{derivedDescription}</VisualDescription>
         <label style={{ fontSize: '0.82rem', display: 'block', marginBottom: '0.3rem' }}>
           Base hue: {baseHue}°
           <input type="range" min={0} max={360} value={baseHue}
@@ -125,6 +134,7 @@ export const TokenMapTool = memo(function TokenMapTool({
             onChange={(e) => setBaseHue(Number(e.target.value))}
             style={{ width: '100%', accentColor: 'var(--accent-warning)' }}
             aria-label={`Base hue: ${baseHue} degrees`}
+            aria-describedby="token-map-description"
           />
         </label>
         <label style={{ fontSize: '0.82rem', display: 'block' }}>
@@ -134,6 +144,7 @@ export const TokenMapTool = memo(function TokenMapTool({
             onChange={(e) => setBaseSat(Number(e.target.value))}
             style={{ width: '100%', accentColor: 'var(--accent-warning)' }}
             aria-label={`Base saturation: ${baseSat} percent`}
+            aria-describedby="token-map-description"
           />
         </label>
       </div>
@@ -148,7 +159,7 @@ export const TokenMapTool = memo(function TokenMapTool({
                 width: 20, height: 20, borderRadius: 3,
                 background: d.color, border: '1px solid var(--border)',
                 flexShrink: 0,
-              }} />
+              }} aria-hidden="true" />
               <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--primary-foreground)' }}>
                 {d.name}
               </span>
@@ -170,7 +181,7 @@ export const TokenMapTool = memo(function TokenMapTool({
         background: derived.find((d) => d.name === '--color-surface')!.color,
         border: `1px solid ${derived.find((d) => d.name === '--color-border')!.color}`,
         borderRadius: 'var(--radius-sm)', padding: '0.6rem', marginBottom: '0.75rem',
-      }}>
+      }} aria-describedby="token-map-description">
         <p style={{
           color: derived.find((d) => d.name === '--color-text-primary')!.color,
           fontSize: '0.82rem', margin: '0 0 0.4rem',
