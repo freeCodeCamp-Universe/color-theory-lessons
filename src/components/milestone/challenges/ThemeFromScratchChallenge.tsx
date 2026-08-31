@@ -7,6 +7,7 @@ import { useExerciseStages } from '../../tools/useExerciseStages.ts';
 import styles from './ThemeFromScratchChallenge.module.css';
 import type { MilestoneChallengeProps, StoredMilestoneStage } from './milestone-stage.ts';
 import { restoreMilestoneStage } from './milestone-stage.ts';
+import { VisualDescription } from '../../accessibility/VisualDescription.tsx';
 
 type RoleKey = 'bg' | 'surface' | 'primaryText' | 'secondaryText' | 'accent';
 
@@ -255,6 +256,7 @@ export function ThemeFromScratchChallenge({
           data-a11y-scan-exclude="milestone-3-theme-preview"
           className={styles.preview}
           style={{ backgroundColor: hex.bg }}
+          aria-describedby="theme-preview-description"
         >
           <p className={styles.backgroundText} style={{ color: hex.primaryText }}>Page background</p>
           <div className={styles.previewCard} style={{ backgroundColor: hex.surface }}>
@@ -262,6 +264,9 @@ export function ThemeFromScratchChallenge({
             <p className={styles.previewBody} style={{ color: hex.secondaryText }}>Secondary text supports the primary heading.</p>
             <span className={styles.previewButton} style={{ backgroundColor: hex.accent, color: hex.primaryText }} aria-hidden="true">Primary action</span>
           </div>
+          <VisualDescription id="theme-preview-description">
+            Theme preview. Background {hex.bg.toUpperCase()}; surface {hex.surface.toUpperCase()}; primary text {hex.primaryText.toUpperCase()}; secondary text {hex.secondaryText.toUpperCase()}; accent {hex.accent.toUpperCase()}. The card sits on the page background and contains the primary and secondary text with an accent action.
+          </VisualDescription>
         </div>
 
         <div className={styles.checks} role="list" aria-label="Current stage checks">

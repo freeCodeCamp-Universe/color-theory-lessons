@@ -137,6 +137,7 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
   const [completedChallenges, setCompletedChallenges] = useState<string[]>(initialSession.completedChallenges);
   const [attemptId, setAttemptId] = useState(initialSession.attemptId);
   const [phase, setPhase] = useState<Phase>(initialSession.phase);
+  const [announcement, setAnnouncement] = useState('');
   const activeContentRef = useRef<HTMLDivElement>(null);
   const partInstructionsRef = useRef<HTMLDivElement>(null);
 
@@ -210,6 +211,7 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
     if (!selectedChoice || submitted || !currentQuestion) return;
     const choice = currentQuestion.choices.find((c) => c.id === selectedChoice);
     if (!choice) return;
+    setAnnouncement(`Question result: ${choice.isCorrect ? 'correct' : 'not correct'}.`);
     setSubmitted(true);
     setAnswers((prev) => [
       ...prev,
@@ -228,9 +230,11 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
       setSelectedChoice(null);
       setSubmitted(false);
     } else if (!isLastPart) {
+      setAnnouncement(`Part ${partIndex + 1} complete. ${partCorrect} of ${partMaxScore} questions correct.`);
       setPhase('part-summary');
     } else {
       if (passed) completeMilestone();
+      setAnnouncement(`Milestone ${passed ? 'passed' : 'not passed'}. Score: ${totalScore} of ${totalPossiblePoints}.`);
       setPhase('complete');
     }
   }
@@ -242,6 +246,7 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
     setQuestionIndex(0);
     setSelectedChoice(null);
     setSubmitted(false);
+    setAnnouncement(`Part ${nextPartIndex + 1} of ${milestone.parts.length}: ${milestone.parts[nextPartIndex].title}.`);
     setPhase(phaseForPart(milestone, nextPartIndex));
   }
 
@@ -254,10 +259,12 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
       const alreadyCompleted = completedChallenges.includes(currentPart.id);
       const finalScore = totalScore + (alreadyCompleted ? 0 : currentPart.pointValue);
       if (finalScore >= milestone.passThreshold) completeMilestone();
+      setAnnouncement(`Milestone ${finalScore >= milestone.passThreshold ? 'passed' : 'not passed'}. Score: ${finalScore} of ${totalPossiblePoints}.`);
       setPhase('complete');
       return;
     }
 
+    setAnnouncement(`Part ${partIndex + 1} complete. ${currentPart.pointValue} of ${currentPart.pointValue} points earned.`);
     setPhase('part-summary');
   }
 
@@ -270,6 +277,7 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
     setCompletedChallenges([]);
     setAttemptId((id) => id + 1);
     setPhase(phaseForPart(milestone, 0));
+    setAnnouncement(`Retrying milestone. Part 1 of ${milestone.parts.length}.`);
   }
 
   // Determine right-panel content
@@ -407,7 +415,7 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
             </fieldset>
 
             {submitted && currentQuestion.choices.find((c) => c.id === selectedChoice)?.explanation && (
-              <p className={styles.explanation} role="status" aria-live="polite">
+              <p className={styles.explanation}>
                 <strong>
                   {currentQuestion.choices.find((c) => c.id === selectedChoice)!.isCorrect ? 'Correct. ' : 'Not quite. '}
                 </strong>
@@ -537,6 +545,9 @@ export function MilestonePlayer({ milestone }: MilestonePlayerProps) {
 
   return (
     <div className={styles.layout}>
+      {phase !== 'complete' && (
+        <span className="sr-only" aria-live="polite" aria-atomic="true">{announcement}</span>
+      )}
       {phase === 'question' ? (
         <>
           {contextPanel}

@@ -7,6 +7,7 @@ import { useExerciseStages } from '../../tools/useExerciseStages.ts';
 import styles from './SimulationSpotterChallenge.module.css';
 import type { MilestoneChallengeProps, StoredMilestoneStage } from './milestone-stage.ts';
 import { restoreMilestoneStage } from './milestone-stage.ts';
+import { VisualDescription } from '../../accessibility/VisualDescription.tsx';
 
 type Fix = 'icon' | 'pattern' | 'label' | 'contrast';
 
@@ -212,7 +213,7 @@ export function SimulationSpotterChallenge({
             const visibleColors = item.colors.map((color) => (simulated ? simulateDeuteranopia(color) : color));
             const isFlagged = Boolean(flagged[item.id]);
             return (
-              <div key={item.id} className={styles.row} role="group" aria-labelledby={`simulation-item-${item.id}`}>
+              <div key={item.id} className={styles.row} role="group" aria-labelledby={`simulation-item-${item.id}`} aria-describedby={`simulation-item-${item.id}-description`}>
                 {isIdentifyStage && (
                   <button
                     type="button"
@@ -231,6 +232,9 @@ export function SimulationSpotterChallenge({
                   ))}
                 </div>
                 <span id={`simulation-item-${item.id}`} className={styles.label}>{item.label}</span>
+                <VisualDescription id={`simulation-item-${item.id}-description`}>
+                  Visible color values {visibleColors.map((color) => color.toUpperCase()).join(', ')}. Deuteranopia simulation is {simulated ? 'on' : 'off'}.
+                </VisualDescription>
                 {!isIdentifyStage && (
                   <select
                     className={styles.select}

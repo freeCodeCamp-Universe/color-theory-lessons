@@ -1,25 +1,14 @@
 import styles from './InterfaceMockup.module.css';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 
-/**
- * A CSS-rendered landing page mockup with intentional design strengths and weaknesses.
- * Used as the persistent visual context for the Unit 1 milestone.
- *
- * Intentional issues:
- * - Nav links: medium-gray (#9ca3af) on saturated blue (#1e40af) — low contrast
- * - Card accent labels: orange (#c2410c) competing with the green button for attention
- * - Footer text: dark gray (#4b5563) on near-black (#0a0a0a) — poor contrast
- *
- * Intentional strengths:
- * - Green button: saturated focal point on the blue hero with readable dark text
- * - Hero headline: white on dark blue — clearly readable
- * - Cards: dark text on light surface — accessible
- */
+/** CSS-rendered landing-page context for the Unit 1 milestone. */
 export function InterfaceMockup() {
   return (
     <div
       data-authored-visual
       data-a11y-scan-exclude="milestone-1-interface-mockup"
       className={styles.mockup}
+      aria-describedby="interface-mockup-description"
     >
       <span className={styles.mockupBadge}>interface mockup</span>
 
@@ -62,6 +51,9 @@ export function InterfaceMockup() {
         <span className={styles.regionLabel}>footer</span>
         <span className={styles.footerText}>© 2025 site.ui · Privacy · Terms</span>
       </footer>
+      <VisualDescription id="interface-mockup-description">
+        Landing-page mockup. The navigation header is saturated blue, #1E40AF, with medium-gray links, #9CA3AF. The hero is the same dark blue, with a white headline and a green #22C55E Try it free control with dark text. Three light cards have dark body text and orange #C2410C labels. The footer is near-black, #0A0A0A, with dark-gray #4B5563 text. The green control and orange labels are both visually prominent.
+      </VisualDescription>
     </div>
   );
 }

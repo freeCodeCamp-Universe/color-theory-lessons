@@ -7,6 +7,7 @@ import { useExerciseStages } from '../../tools/useExerciseStages.ts';
 import styles from './DarkModeStressChallenge.module.css';
 import type { MilestoneChallengeProps, StoredMilestoneStage } from './milestone-stage.ts';
 import { restoreMilestoneStage } from './milestone-stage.ts';
+import { VisualDescription } from '../../accessibility/VisualDescription.tsx';
 
 interface DarkModeStressSession extends StoredMilestoneStage {
   version: 1;
@@ -141,11 +142,14 @@ export function DarkModeStressChallenge({
         passedFeedback={`This dark-theme contrast target passes. Next action: ${stageController.activeStage.nextActionLabel}.`}
         completionFeedback="The action reaches 3:1 against the surface. All three checks are complete."
       >
-        <div data-authored-visual className={styles.preview} style={{ backgroundColor: checks.bg }}>
+        <div data-authored-visual className={styles.preview} style={{ backgroundColor: checks.bg }} aria-describedby="dark-mode-preview-description">
           <div className={styles.surface} style={{ backgroundColor: checks.surface }}>
             <p className={styles.title} style={{ color: checks.text }}>Dashboard title</p>
             <span className={styles.action} style={{ backgroundColor: checks.action, color: checks.actionText }}>Apply changes</span>
           </div>
+          <VisualDescription id="dark-mode-preview-description">
+            Dark-theme preview. Page background {checks.bg.toUpperCase()}, card surface {checks.surface.toUpperCase()}, dashboard title {checks.text.toUpperCase()}, and action {checks.action.toUpperCase()}. The title is on the card surface and the action is on the same surface.
+          </VisualDescription>
         </div>
 
         {stageId === 'text-contrast' && (
