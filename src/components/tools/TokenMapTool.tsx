@@ -3,6 +3,7 @@ import { hslToHex, hexToHsl } from '../../utils/color.ts';
 import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import shellStyles from './ToolShell.module.css';
 
 interface TokenRole {
@@ -101,6 +102,7 @@ export const TokenMapTool = memo(function TokenMapTool({
 
   const sortCorrectCount = SORT_ITEMS.filter((item) => sortAnswers[item.label] === item.category).length;
   const sortAnsweredCount = SORT_ITEMS.filter((item) => sortAnswers[item.label]).length;
+  const derivedDescription = `Base hue ${baseHue} degrees and base saturation ${baseSat} percent. Derived roles: ${derived.map((role) => `${role.name} ${role.color}`).join('; ')}. The preview uses the surface as its background, primary text for its text, action for Action, success background for Success, and error background for Error.`;
 
   return (
     <div className={shellStyles.shell}>
@@ -118,6 +120,7 @@ export const TokenMapTool = memo(function TokenMapTool({
         <>
       {/* Base controls */}
       <div style={{ marginBottom: '0.75rem' }}>
+        <VisualDescription id="token-map-description">{derivedDescription}</VisualDescription>
         <label style={{ fontSize: '0.82rem', display: 'block', marginBottom: '0.3rem' }}>
           Base hue: {baseHue}°
           <input type="range" min={0} max={360} value={baseHue}
@@ -125,6 +128,7 @@ export const TokenMapTool = memo(function TokenMapTool({
             onChange={(e) => setBaseHue(Number(e.target.value))}
             style={{ width: '100%', accentColor: 'var(--accent-warning)' }}
             aria-label={`Base hue: ${baseHue} degrees`}
+            aria-describedby="token-map-description"
           />
         </label>
         <label style={{ fontSize: '0.82rem', display: 'block' }}>
@@ -134,6 +138,7 @@ export const TokenMapTool = memo(function TokenMapTool({
             onChange={(e) => setBaseSat(Number(e.target.value))}
             style={{ width: '100%', accentColor: 'var(--accent-warning)' }}
             aria-label={`Base saturation: ${baseSat} percent`}
+            aria-describedby="token-map-description"
           />
         </label>
       </div>

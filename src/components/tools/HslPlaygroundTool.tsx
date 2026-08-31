@@ -4,6 +4,7 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { HUE_MAX, HueWheel } from './HueWheel.tsx';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import shellStyles from './ToolShell.module.css';
 
 interface Target {
@@ -54,6 +55,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({
   const rgbValue = `rgb(${rgb.r} ${rgb.g} ${rgb.b})`;
   const target = TARGETS[targetIdx];
   const targetHex = hslToHex(target.h, target.s, target.l);
+  const currentDescription = `Current color: HSL ${h} degrees, ${s} percent saturation, ${l} percent lightness; HEX ${hex}; RGB ${rgb.r}, ${rgb.g}, ${rgb.b}.`;
 
   function checkMatch() {
     if (!interactive || stageController.result !== 'idle') return;
@@ -83,6 +85,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({
               width: 80, minHeight: 80, borderRadius: 'var(--radius-md)',
               background: hex, border: '2px solid var(--border)',
             }} />
+            <VisualDescription id="hsl-current-description">{currentDescription}</VisualDescription>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', lineHeight: 1.7 }}>
               <div><span style={{ color: 'var(--muted)' }}>HSL</span> {hslValue}</div>
               <div><span style={{ color: 'var(--muted)' }}>HEX</span> {hex}</div>
@@ -98,6 +101,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({
                 onChange={(e) => setH(Number(e.target.value))}
                 style={{ width: '100%', accentColor: interactive ? 'var(--accent-warning)' : 'var(--yellow)' }}
                 aria-label={`Hue: ${h} degrees`}
+                aria-describedby="hsl-current-description"
               />
             </label>
             <label style={{ fontSize: '0.82rem' }}>
@@ -106,6 +110,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({
                 onChange={(e) => setS(Number(e.target.value))}
                 style={{ width: '100%', accentColor: interactive ? 'var(--accent-warning)' : 'var(--yellow)' }}
                 aria-label={`Saturation: ${s} percent`}
+                aria-describedby="hsl-current-description"
               />
             </label>
             <label style={{ fontSize: '0.82rem' }}>
@@ -114,6 +119,7 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({
                 onChange={(e) => setL(Number(e.target.value))}
                 style={{ width: '100%', accentColor: interactive ? 'var(--accent-warning)' : 'var(--yellow)' }}
                 aria-label={`Lightness: ${l} percent`}
+                aria-describedby="hsl-current-description"
               />
             </label>
           </div>
@@ -130,7 +136,8 @@ export const HslPlaygroundTool = memo(function HslPlaygroundTool({
             <div style={{
               width: 48, height: 48, borderRadius: 'var(--radius-sm)',
               background: targetHex, border: '2px solid var(--border)',
-            }} />
+            }} aria-hidden="true" />
+            <VisualDescription>{`Target appearance: ${target.label}. Its exact HSL values are not disclosed before checking the match.`}</VisualDescription>
             <button onClick={checkMatch} style={{
               padding: '0.4rem 1rem', background: 'var(--accent-cta)', color: 'var(--cta-foreground)',
               border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer',

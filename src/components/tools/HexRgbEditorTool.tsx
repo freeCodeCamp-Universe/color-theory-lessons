@@ -4,6 +4,8 @@ import { rgbToHex, parseHex, rgbString, colorDistance } from '../../utils/color.
 import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 import shellStyles from './ToolShell.module.css';
 import styles from './HexRgbEditorTool.module.css';
 
@@ -26,6 +28,12 @@ const TARGETS: { name: string; rgb: RGB }[] = [
   { name: 'error red',      rgb: { r: 220, g: 38,  b: 38  } },
   { name: 'light gray surface', rgb: { r: 241, g: 241, b: 241 } },
 ];
+
+const TARGET_DESCRIPTIONS: Record<string, string> = {
+  'link blue': 'A saturated medium blue target.',
+  'error red': 'A strong red target used for an error state.',
+  'light gray surface': 'A very light neutral gray surface target.',
+};
 
 const MATCH_THRESHOLD = 20; // Euclidean distance
 
@@ -60,6 +68,8 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({
 
   const target = TARGETS[targetIdx];
   const isClose = colorDistance(current, target.rgb) <= MATCH_THRESHOLD;
+  const currentDescription = `Current color: ${rgbToHex(current)}, RGB ${current.r}, ${current.g}, ${current.b}.`;
+  const hasChangedColor = rgbToHex(current) !== '#6366F1';
 
   // ── Setters ──────────────────────────────────────────────────────────────
 
@@ -107,6 +117,7 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>HEX / RGB dual editor</span>
+      <StatusAnnouncement message={hexError ? 'Invalid HEX value.' : hasChangedColor ? currentDescription : ''} priority={hexError ? 'assertive' : 'polite'} />
 
       <ExerciseStage
         controller={stageController}
@@ -124,6 +135,7 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({
             <div
               className={styles.swatch}
               style={{ backgroundColor: rgbString(current) }}
+              aria-hidden="true"
             />
             <span className={styles.swatchValue}>
               {rgbToHex(current)} · rgb({current.r} {current.g} {current.b})
@@ -138,10 +150,12 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({
             <div
               className={styles.swatch}
               style={{ backgroundColor: interactive ? rgbString(target.rgb) : 'transparent' }}
+              aria-hidden="true"
             />
             <span className={styles.swatchValue}>
               {interactive ? target.name : 'no target'}
             </span>
+            {interactive && <VisualDescription>{`Target appearance: ${TARGET_DESCRIPTIONS[target.name]}`}</VisualDescription>}
           </div>
         </div>
 
@@ -156,10 +170,12 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({
             disabled={!interactive || stageController.result !== 'idle'}
             onChange={(e) => handleHexChange(e.target.value)}
             aria-label="HEX color input"
+            aria-describedby="hex-current-description"
+            aria-invalid={hexError}
             spellCheck={false}
           />
           {hexError && (
-            <span className={styles.hexError}>invalid HEX</span>
+            <span className={styles.hexError} role="alert">invalid HEX</span>
           )}
         </div>
 
@@ -188,6 +204,7 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({
                 onChange={(e) => handleSlider(key, Number(e.target.value))}
                 style={{ accentColor: trackColor }}
                 aria-label={`${label} channel`}
+                aria-describedby="hex-current-description"
               />
             </div>
           ))}
@@ -207,6 +224,7 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({
                 <span
                   className={styles.presetDot}
                   style={{ backgroundColor: rgbString(rgb) }}
+                  aria-hidden="true"
                 />
                 {label}
               </button>
@@ -222,6 +240,7 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({
               </button>
           </>
         )}
+        <VisualDescription id="hex-current-description">{currentDescription}</VisualDescription>
         </div>
       </ExerciseStage>
     </div>

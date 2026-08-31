@@ -3,6 +3,8 @@ import { hexToRgb, hslToHex } from '../../utils/color.ts';
 import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 import shellStyles from './ToolShell.module.css';
 import styles from './FormatRevealTool.module.css';
 
@@ -162,10 +164,14 @@ export const FormatRevealTool = memo(function FormatRevealTool({
   const hsl = selected ? getRoundTripHsl(selected.hex) : null;
 
   const remaining = ELEMENTS.length - revealed.size;
+  const selectionMessage = selected && rgb && hsl
+    ? `${selected.label} selected. ${selected.description} HEX ${selected.hex.toUpperCase()}; RGB ${rgb.r}, ${rgb.g}, ${rgb.b}; HSL ${formatHslValue(hsl.h)} degrees, ${formatHslValue(hsl.s)} percent saturation, ${formatHslValue(hsl.l)} percent lightness.`
+    : '';
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>format explorer</span>
+      <StatusAnnouncement message={selectionMessage} />
 
       <ExerciseStage
         controller={stageController}
@@ -191,6 +197,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
               tabIndex={0}
               onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleSelect('nav-bg')}
               aria-label="Nav background"
+              aria-describedby="format-selection-description"
             >
               <span
                 className={`${styles.navText} ${selectedId === 'nav-text' ? styles.selected : ''} ${revealed.has('nav-text') ? styles.visited : ''}`}
@@ -200,6 +207,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                 tabIndex={0}
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.stopPropagation(), handleSelect('nav-text'))}
                 aria-label="Nav text"
+                aria-describedby="format-selection-description"
                 data-target-size-exception="essential"
               >
                 site.ui
@@ -214,7 +222,8 @@ export const FormatRevealTool = memo(function FormatRevealTool({
               role="button"
               tabIndex={0}
               onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleSelect('hero-bg')}
-              aria-label="Hero surface"
+                aria-label="Hero surface"
+                aria-describedby="format-selection-description"
             >
               <p className={styles.heroTitle}>The design tool for developers.</p>
               <button
@@ -222,6 +231,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                 style={{ backgroundColor: '#2563eb' }}
                 onClick={(e) => { e.stopPropagation(); handleSelect('cta'); }}
                 aria-label="Primary action button"
+                aria-describedby="format-selection-description"
                 data-target-size-exception="essential"
               >
                 <span
@@ -229,6 +239,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                   style={{ color: '#ffffff' }}
                   onClick={(e) => { e.stopPropagation(); handleSelect('cta-text'); }}
                   aria-label="Button text"
+                  aria-describedby="format-selection-description"
                   data-target-size-exception="essential"
                 >
                   Try it free →
@@ -245,6 +256,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
               tabIndex={0}
               onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleSelect('card-bg')}
               aria-label="Card background"
+              aria-describedby="format-selection-description"
             >
               <div
                 className={`${styles.cardBorder} ${selectedId === 'card-border' ? styles.selected : ''} ${revealed.has('card-border') ? styles.visited : ''}`}
@@ -253,6 +265,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                 tabIndex={0}
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.stopPropagation(), handleSelect('card-border'))}
                 aria-label="Card border"
+                aria-describedby="format-selection-description"
                 data-target-size-exception="essential"
               >
                 border →
@@ -265,6 +278,7 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                 tabIndex={0}
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.stopPropagation(), handleSelect('accent'))}
                 aria-label="Success accent"
+                aria-describedby="format-selection-description"
                 data-target-size-exception="essential"
               >
                 ✓ success
@@ -275,10 +289,10 @@ export const FormatRevealTool = memo(function FormatRevealTool({
             {/* Legend */}
             <div className={styles.legend}>
               <span className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: 'var(--accent-warning)' }} /> selected
+                <span className={styles.legendDot} style={{ background: 'var(--accent-warning)' }} aria-hidden="true" /> selected
               </span>
               <span className={styles.legendItem}>
-                <span className={styles.legendDot} style={{ background: 'var(--accent-success)' }} /> explored
+                <span className={styles.legendDot} style={{ background: 'var(--accent-success)' }} aria-hidden="true" /> explored
               </span>
             </div>
           </div>
@@ -286,12 +300,14 @@ export const FormatRevealTool = memo(function FormatRevealTool({
 
         {/* ── Right: Format panel ── */}
         <div className={styles.panel}>
+          <VisualDescription id="format-selection-description">{selectionMessage}</VisualDescription>
           {selected && rgb && hsl ? (
             <>
               <div className={styles.swatchRow}>
                 <div
                   className={styles.swatch}
                   style={{ backgroundColor: selected.hex }}
+                  aria-hidden="true"
                 />
                 <div className={styles.swatchMeta}>
                   <span className={styles.elementLabel}>{selected.label}</span>
