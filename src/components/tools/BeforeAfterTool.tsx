@@ -364,7 +364,12 @@ function HierarchyDemo({
       )}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
-      <div data-authored-visual style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '6px', padding: 'var(--spacing-lg)', display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
+      <div
+        aria-label={`Action hierarchy preview. Submit is ${roles.submit}, Save Draft is ${roles.draft}, and Cancel is ${roles.cancel}.`}
+        data-authored-visual
+        role="img"
+        style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '6px', padding: 'var(--spacing-lg)', display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}
+      >
         {HIERARCHY_ITEMS.map((item) => (
           <span key={item.id} style={btnStyle(roles[item.id])}>{item.label}</span>
         ))}

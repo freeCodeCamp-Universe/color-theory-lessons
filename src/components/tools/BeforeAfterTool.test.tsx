@@ -16,6 +16,14 @@ describe('BeforeAfterTool hierarchy exercise', () => {
     }
   });
 
+  it('describes the current visual hierarchy without disclosing the expected roles', () => {
+    render(<BeforeAfterTool variant="hierarchy" />);
+
+    expect(screen.getByRole('img', { name: /Action hierarchy preview/i })).toHaveAccessibleName(
+      'Action hierarchy preview. Submit is secondary, Save Draft is secondary, and Cancel is secondary.',
+    );
+  });
+
   it('allows correction after an incorrect check', () => {
     const onComplete = vi.fn();
     render(<BeforeAfterTool variant="hierarchy" onComplete={onComplete} />);
