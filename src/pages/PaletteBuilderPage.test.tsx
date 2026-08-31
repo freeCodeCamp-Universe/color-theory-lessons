@@ -227,7 +227,23 @@ describe('PaletteBuilderPage color input', () => {
     const hueRing = screen.getAllByRole('slider', { name: 'Hue' })[0];
     expect(hueRing).toHaveAttribute('aria-valuetext', '217 degrees');
     fireEvent.keyDown(hueRing, { key: 'ArrowRight' });
+    fireEvent.keyUp(hueRing, { key: 'ArrowRight' });
     expect(hueRing).toHaveAttribute('aria-valuetext', '218 degrees');
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Primary color set to #3C80F6 with the HSL picker. Harmony and accessibility suggestions updated.',
+    );
+  });
+
+  it('announces committed RGB picker changes', () => {
+    render(<PaletteBuilderPage />);
+    const red = screen.getByRole('slider', { name: 'R channel' });
+
+    fireEvent.change(red, { target: { value: '60' } });
+    fireEvent.pointerUp(red);
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Primary color set to #3C82F6 with the RGB picker. Harmony and accessibility suggestions updated.',
+    );
   });
 });
 

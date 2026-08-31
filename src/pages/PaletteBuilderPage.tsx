@@ -520,6 +520,19 @@ export function PaletteBuilderPage() {
     applyPrimary(hex);
   };
 
+  const announcePickerChange = (picker: 'RGB' | 'HSL') => {
+    setAnnouncement(`Primary color set to ${hexInput.toUpperCase()} with the ${picker} picker. Harmony and accessibility suggestions updated.`);
+  };
+
+  const handlePickerKeyUp = (
+    event: React.KeyboardEvent<HTMLInputElement | HTMLDivElement>,
+    picker: 'RGB' | 'HSL',
+  ) => {
+    if (['ArrowRight', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'].includes(event.key)) {
+      announcePickerChange(picker);
+    }
+  };
+
   const handleHslChange = (channel: 'h' | 's' | 'l', value: number) => {
     const next = { ...hslSliders, [channel]: value };
     setHslSliders(next);
@@ -876,6 +889,8 @@ export function PaletteBuilderPage() {
                           '--slider-color': ch === 'r' ? '#ff4444' : ch === 'g' ? '#44bb44' : '#4488ff',
                         } as React.CSSProperties}
                         aria-label={`${ch.toUpperCase()} channel`}
+                        onPointerUp={() => announcePickerChange('RGB')}
+                        onKeyUp={(event) => handlePickerKeyUp(event, 'RGB')}
                       />
                       <span className={styles.sliderValue}>{rgbSliders[ch]}</span>
                     </label>
@@ -898,9 +913,13 @@ export function PaletteBuilderPage() {
                         const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
                         const hue = ((angle + 90) % 360 + 360) % 360;
                         handleHslChange('h', Math.round(hue));
+                        announcePickerChange('HSL');
                       }}
+                      onKeyUp={(event) => handlePickerKeyUp(event, 'HSL')}
                       role="slider"
                       aria-label="Hue"
+                      onPointerUp={() => announcePickerChange('HSL')}
+                      onKeyUp={(event) => handlePickerKeyUp(event, 'HSL')}
                       aria-valuemin={0}
                       aria-valuemax={360}
                       aria-valuenow={hslSliders.h}
@@ -965,6 +984,8 @@ export function PaletteBuilderPage() {
                       className={styles.slider}
                       style={{ '--slider-color': hslToHex(hslSliders.h, 100, 50) } as React.CSSProperties}
                       aria-label="Saturation"
+                      onPointerUp={() => announcePickerChange('HSL')}
+                      onKeyUp={(event) => handlePickerKeyUp(event, 'HSL')}
                     />
                     <span className={styles.sliderValue}>{hslSliders.s}%</span>
                   </label>
@@ -979,6 +1000,8 @@ export function PaletteBuilderPage() {
                       className={styles.slider}
                       style={{ '--slider-color': hslToHex(hslSliders.h, hslSliders.s, 50) } as React.CSSProperties}
                       aria-label="Lightness"
+                      onPointerUp={() => announcePickerChange('HSL')}
+                      onKeyUp={(event) => handlePickerKeyUp(event, 'HSL')}
                     />
                     <span className={styles.sliderValue}>{hslSliders.l}%</span>
                   </label>
