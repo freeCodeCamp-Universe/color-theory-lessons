@@ -26,6 +26,11 @@ const ALL_JOBS: ColorJob[] = [
   'no clear purpose',
 ];
 
+const PREVIEW_MOCKUP_DESCRIPTIONS = {
+  purposeful: 'Purposeful interface mockup. A dark navy navigation bar separates the page header from the content. A gold Start learning button stands out as the primary action. Green Unit 1 complete text communicates success. A blue left border groups the Lesson 2 card.',
+  noisy: 'Noisy interface mockup. The red navigation bar, orange hero panel, lime heading, pink supporting text, purple Start learning button, blue completion text, and teal lesson card use competing saturated colors. The primary action does not stand out.',
+} as const;
+
 interface Region {
   id: string;
   name: string;
@@ -141,7 +146,12 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
   if (previewMockup) {
     return (
       <div className={styles.previewFrame}>
-        <div data-authored-visual className={`${styles.mockup} ${previewMockup === 'purposeful' ? styles.mockupGood : styles.mockupBad}`}>
+        <div
+          aria-label={PREVIEW_MOCKUP_DESCRIPTIONS[previewMockup]}
+          className={`${styles.mockup} ${previewMockup === 'purposeful' ? styles.mockupGood : styles.mockupBad}`}
+          data-authored-visual
+          role="img"
+        >
           <div className={styles.nav}>
             <span className={styles.navLogo}>color-theory-course$</span>
             <span className={styles.navLink}>settings</span>

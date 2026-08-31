@@ -67,6 +67,15 @@ describe('BeforeAfterTool hierarchy exercise', () => {
 });
 
 describe('BeforeAfterTool color-role keyboard activation', () => {
+  it.each([
+    ['purposeful', /dark navy navigation bar.*gold Start learning button.*green Unit 1 complete text.*blue left border/i],
+    ['noisy', /red navigation bar.*orange hero panel.*purple Start learning button.*primary action does not stand out/i],
+  ] as const)('describes the %s static mockup', (mockup, description) => {
+    render(<BeforeAfterTool previewMockup={mockup} interactive={false} />);
+
+    expect(screen.getByRole('img')).toHaveAccessibleName(description);
+  });
+
   it('renders the color-role work as one named stage', () => {
     const onStageChange = vi.fn();
     render(<BeforeAfterTool onStageChange={onStageChange} />);

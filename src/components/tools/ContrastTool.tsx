@@ -4,6 +4,7 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 
 interface ProblemArea {
   id: string;
@@ -71,6 +72,7 @@ export const ContrastTool = memo(function ContrastTool({
     helper: hexToHsl(AREAS[1].textColor).l,
     button: hexToHsl(AREAS[2].bgColor).l,
   });
+  const [contrastAnnouncement, setContrastAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
   const checked = stageController.result !== 'idle';
 
@@ -80,10 +82,17 @@ export const ContrastTool = memo(function ContrastTool({
 
   function handleChange(id: string, val: number) {
     if (checked || !interactive) return;
+    const area = AREAS.find((candidate) => candidate.id === id);
+    if (!area) return;
+    const ratio = computeRatio(area, val);
+    const adjustedPart = area.fixBg ? 'button background' : 'text';
+    const state = ratio >= area.threshold ? 'meets' : 'does not meet';
+    setContrastAnnouncement(`${area.label}: ${adjustedPart} lightness ${val}%. Contrast ratio ${ratio.toFixed(2)} to 1; ${state} the ${area.threshold} to 1 requirement.`);
     setLightness((prev) => ({ ...prev, [id]: val }));
   }
 
   function handleCheck() {
+    setContrastAnnouncement('');
     const allFixed = AREAS.every((area) => isFixed(area));
     if (allFixed) {
       stageController.markPassed();
@@ -99,6 +108,7 @@ export const ContrastTool = memo(function ContrastTool({
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>contrast repair lab</span>
+      {contrastAnnouncement && <StatusAnnouncement message={contrastAnnouncement} />}
 
       <ExerciseStage
         controller={stageController}
