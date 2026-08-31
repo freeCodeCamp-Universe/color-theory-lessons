@@ -5,8 +5,8 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it } from 'vitest';
 import { AppProvider } from './state/app-provider.tsx';
 import { AXE_CONTRAST_RULES, formatAccessibilityViolations } from './accessibility-test-config.ts';
-import { VisualDescription } from './components/accessibility/VisualDescription.tsx';
 import { LessonPlayer } from './components/lesson/LessonPlayer.tsx';
+import StepPanelRenderer from './components/lesson/StepPanelRenderer.tsx';
 import { InterfaceMockup } from './components/milestone/InterfaceMockup.tsx';
 import { ChartTunerTool } from './components/tools/ChartTunerTool.tsx';
 import { ExerciseStage } from './components/tools/ExerciseStage.tsx';
@@ -15,6 +15,8 @@ import { useExerciseStages } from './components/tools/useExerciseStages.ts';
 import { PaletteBuilderPage } from './pages/PaletteBuilderPage.tsx';
 import { getLessonQuizSignature } from './lessons/quiz-utils.ts';
 import { lesson1_2 } from './lessons/unit-1/lesson-1-2.ts';
+import { HSL_DIMENSION_PREVIEWS } from './lessons/preview-accessibility.ts';
+import type { StepPanelConfig } from './types/lesson.ts';
 
 afterEach(() => {
   cleanup();
@@ -71,21 +73,27 @@ function renderQuiz() {
 
 describe('visual accessibility verification', () => {
   it('keeps informative and decorative visual treatments distinct', async () => {
-    render(
-      <>
-        <div role="img" aria-label="Color relationship" aria-describedby="informative-description">
-          <span aria-hidden="true">Decorative color chip</span>
-        </div>
-        <VisualDescription id="informative-description">
-          A blue swatch appears beside a yellow swatch to show complementary hues.
-        </VisualDescription>
-        <div aria-hidden="true">Decorative divider</div>
-      </>,
-    );
+    const informativePanel: StepPanelConfig = {
+      type: 'hsl-slider-preview',
+      dimension: 'h',
+      accessibility: HSL_DIMENSION_PREVIEWS.h,
+    };
+    const decorativePanel: StepPanelConfig = {
+      type: 'hsl-slider-preview',
+      dimension: 'h',
+      accessibility: { classification: 'decorative' },
+    };
+    const informative = render(<StepPanelRenderer panel={informativePanel} />);
 
-    expect(screen.getByRole('img', { name: 'Color relationship' }))
-      .toHaveAccessibleDescription('A blue swatch appears beside a yellow swatch to show complementary hues.');
-    expect(screen.getByText('Decorative divider')).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByRole('group', { name: 'Hue adjustment preview' }))
+      .toHaveAccessibleDescription(
+        'Hue is the active control. Moving it changes the color family while Saturation stays at 70% and Lightness stays at 55%.'
+      );
+    await expectNoComponentAxeViolations();
+
+    informative.unmount();
+    const decorative = render(<StepPanelRenderer panel={decorativePanel} />);
+    expect(decorative.container.firstElementChild).toHaveAttribute('aria-hidden', 'true');
     await expectNoComponentAxeViolations();
   });
 
