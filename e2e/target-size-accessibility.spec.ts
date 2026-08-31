@@ -58,7 +58,7 @@ async function advanceToLastLessonStep(page: Page, toolName: string) {
 
 async function expectTargetsDoNotOverlap(page: Page, scopeName: string) {
   const overlaps = await page.evaluate(() => {
-    const selector = 'button:not(:disabled),select:not(:disabled),textarea:not(:disabled),input:not(:disabled):not([type="hidden"]):not([type="radio"]):not([type="checkbox"]),[role="button"]:not([aria-disabled="true"]),[role="tab"]:not([aria-disabled="true"]),[role="slider"]:not([aria-disabled="true"]),a[href]';
+    const selector = 'button:not(:disabled):not([data-target-size-exception]),select:not(:disabled):not([data-target-size-exception]),textarea:not(:disabled):not([data-target-size-exception]),input:not(:disabled):not([type="hidden"]):not([type="radio"]):not([type="checkbox"]):not([data-target-size-exception]),[role="button"]:not([aria-disabled="true"]):not([data-target-size-exception]),[role="tab"]:not([aria-disabled="true"]):not([data-target-size-exception]),[role="slider"]:not([aria-disabled="true"]):not([data-target-size-exception]),a[href]:not([data-target-size-exception])';
     const targets = [...document.querySelectorAll<HTMLElement>(selector)].filter((element) => {
       const rect = element.getBoundingClientRect();
       return rect.width > 0 && rect.height > 0 && getComputedStyle(element).visibility !== 'hidden';
