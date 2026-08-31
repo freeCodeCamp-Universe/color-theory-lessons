@@ -4,6 +4,7 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
 import { VisualDescription } from '../accessibility/VisualDescription.tsx';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 import shellStyles from './ToolShell.module.css';
 
 interface RoleDef {
@@ -80,6 +81,8 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
     && heroOnGradEnd >= TEXT_CONTRAST_TARGET;
   const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
   const themeDescription = `Theme preview. Background ${colors.bg}; surface ${colors.surface}; primary text ${colors.textPri}; secondary text ${colors.textSec}; border ${colors.border}; action ${colors.accent}; success ${colors.success}; warning ${colors.warning}; error ${colors.error}. Gradient starts at ${gradStart} and ends at ${gradEnd}.`;
+  const hasChangedTheme = Object.entries(colors).some(([key, value]) => value !== ROLES.find((role) => role.key === key)?.defaultValue)
+    || gradStart !== GRADIENT_DEFAULTS.start || gradEnd !== GRADIENT_DEFAULTS.end;
 
   function resultColor(passes: boolean) {
     if (!showResults) return 'var(--muted)';
@@ -94,6 +97,7 @@ export const ThemeSandboxTool = memo(function ThemeSandboxTool({
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>theme sandbox</span>
+      <StatusAnnouncement message={hasChangedTheme ? themeDescription : ''} />
 
       <ExerciseStage
         controller={stageController}

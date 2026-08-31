@@ -4,6 +4,7 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
 import { VisualDescription } from '../accessibility/VisualDescription.tsx';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 import shellStyles from './ToolShell.module.css';
 
 interface OverlayContext {
@@ -114,6 +115,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
   const imageTextPassesContrast = imageTextContrast !== null && imageTextContrast >= IMAGE_TEXT_CONTRAST_TARGET;
   const inputsDisabled = !interactive || stageController.result !== 'idle';
   const compositionDescription = `${ctx.label}. ${ctx.description} Background: ${ctx.bgLabel}, ${ctx.bgColor}. Foreground: ${fgLabel} at ${(alpha * 100).toFixed(0)} percent opacity. The foreground sits above the background. Blended result: ${blended}.`;
+  const compositionChanged = alpha !== 0.5 || !isDark;
 
   function checkOverlay() {
     if (!interactive || stageController.result !== 'idle') return;
@@ -127,6 +129,7 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>layer stack simulator</span>
+      <StatusAnnouncement message={compositionChanged ? compositionDescription : ''} />
 
       <ExerciseStage
         controller={stageController}

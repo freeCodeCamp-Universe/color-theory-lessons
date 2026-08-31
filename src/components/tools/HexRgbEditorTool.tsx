@@ -5,7 +5,6 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
 import { VisualDescription } from '../accessibility/VisualDescription.tsx';
-import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 import shellStyles from './ToolShell.module.css';
 import styles from './HexRgbEditorTool.module.css';
 
@@ -69,7 +68,6 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({
   const target = TARGETS[targetIdx];
   const isClose = colorDistance(current, target.rgb) <= MATCH_THRESHOLD;
   const currentDescription = `Current color: ${rgbToHex(current)}, RGB ${current.r}, ${current.g}, ${current.b}.`;
-  const hasChangedColor = rgbToHex(current) !== '#6366F1';
 
   // ── Setters ──────────────────────────────────────────────────────────────
 
@@ -117,7 +115,6 @@ export const HexRgbEditorTool = memo(function HexRgbEditorTool({
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>HEX / RGB dual editor</span>
-      <StatusAnnouncement message={hexError ? 'Invalid HEX value.' : hasChangedColor ? currentDescription : ''} priority={hexError ? 'assertive' : 'polite'} />
 
       <ExerciseStage
         controller={stageController}

@@ -226,25 +226,26 @@ export const FormatRevealTool = memo(function FormatRevealTool({
                 aria-describedby="format-selection-description"
             >
               <p className={styles.heroTitle}>The design tool for developers.</p>
-              <button
+              <div
                 className={`${styles.cta} ${selectedId === 'cta' ? styles.selected : ''} ${revealed.has('cta') ? styles.visited : ''}`}
                 style={{ backgroundColor: '#2563eb' }}
-                onClick={(e) => { e.stopPropagation(); handleSelect('cta'); }}
-                aria-label="Primary action button"
-                aria-describedby="format-selection-description"
-                data-target-size-exception="essential"
               >
-                <span
-                  className={`${selectedId === 'cta-text' ? styles.selected : ''} ${revealed.has('cta-text') ? styles.visited : ''}`}
+                <button
+                  className={styles.ctaColorControl}
+                  onClick={(e) => { e.stopPropagation(); handleSelect('cta'); }}
+                  aria-label="Primary action button"
+                  aria-describedby="format-selection-description"
+                />
+                <button
+                  className={`${styles.ctaText} ${selectedId === 'cta-text' ? styles.selected : ''} ${revealed.has('cta-text') ? styles.visited : ''}`}
                   style={{ color: '#ffffff' }}
                   onClick={(e) => { e.stopPropagation(); handleSelect('cta-text'); }}
                   aria-label="Button text"
                   aria-describedby="format-selection-description"
-                  data-target-size-exception="essential"
                 >
                   Try it free →
-                </span>
-              </button>
+                </button>
+              </div>
             </div>
 
             {/* Card */}

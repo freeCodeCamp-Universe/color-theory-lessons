@@ -4,6 +4,7 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
 import { VisualDescription } from '../accessibility/VisualDescription.tsx';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 import shellStyles from './ToolShell.module.css';
 
 interface TokenRole {
@@ -103,10 +104,15 @@ export const TokenMapTool = memo(function TokenMapTool({
   const sortCorrectCount = SORT_ITEMS.filter((item) => sortAnswers[item.label] === item.category).length;
   const sortAnsweredCount = SORT_ITEMS.filter((item) => sortAnswers[item.label]).length;
   const derivedDescription = `Base hue ${baseHue} degrees and base saturation ${baseSat} percent. Derived roles: ${derived.map((role) => `${role.name} ${role.color}`).join('; ')}. The preview uses the surface as its background, primary text for its text, action for Action, success background for Success, and error background for Error.`;
+  const hasAdjustedBase = baseHue !== INITIAL_BASE_HUE || baseSat !== INITIAL_BASE_SATURATION;
+  const tokenAnnouncement = !hasAdjustedBase ? '' : !hueOk
+    ? 'Action and error hues are too similar. Adjust the base hue so they are distinct.'
+    : derivedDescription;
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>token map</span>
+      <StatusAnnouncement message={tokenAnnouncement} />
 
       <ExerciseStage
         controller={stageController}
