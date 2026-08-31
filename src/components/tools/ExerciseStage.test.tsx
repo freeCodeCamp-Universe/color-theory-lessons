@@ -68,7 +68,7 @@ describe('exercise-stage contract', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     expect(screen.getByText('Stage not attempted')).toBeInTheDocument();
-    expect(screen.getByRole('status')).toBeEmptyDOMElement();
+    expect(screen.getByRole('status')).toHaveTextContent('Retrying Stage 1 of 2: First task.');
     expect(screen.getByRole('button', { name: 'pass stage' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'First task' })).toHaveFocus();
   });

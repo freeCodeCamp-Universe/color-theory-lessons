@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { ExerciseStageController } from './exercise-stage.ts';
 import styles from './ExerciseStage.module.css';
 
@@ -20,6 +20,10 @@ export function ExerciseStage({
   completionFeedback,
   onRetry,
 }: ExerciseStageProps) {
+  const [retryAnnouncement, setRetryAnnouncement] = useState<{
+    stageId: string;
+    message: string;
+  } | null>(null);
   const {
     stages,
     activeStage,
@@ -36,6 +40,10 @@ export function ExerciseStage({
   function handleRetry() {
     onRetry?.();
     retry();
+    setRetryAnnouncement({
+      stageId: activeStage.id,
+      message: `Retrying Stage ${activeStage.position} of ${activeStage.total}: ${activeStage.title}.`,
+    });
   }
 
   return (
@@ -72,6 +80,7 @@ export function ExerciseStage({
         <div className={styles.result} role="status" aria-live="polite" aria-atomic="true">
           {result === 'incorrect' && incorrectFeedback}
           {result === 'passed' && (isFinalStage ? completionFeedback : passedFeedback)}
+          {result === 'idle' && retryAnnouncement?.stageId === activeStage.id && retryAnnouncement.message}
         </div>
 
         {result === 'incorrect' && (
