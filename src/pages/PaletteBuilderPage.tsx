@@ -921,8 +921,6 @@ export function PaletteBuilderPage() {
                       aria-label="Hue"
                       onPointerUp={() => announcePickerChange('HSL')}
                       onKeyUp={(event) => handlePickerKeyUp(event, 'HSL')}
-                      onPointerUp={() => announcePickerChange('HSL')}
-                      onKeyUp={(event) => handlePickerKeyUp(event, 'HSL')}
                       aria-valuemin={0}
                       aria-valuemax={360}
                       aria-valuenow={hslSliders.h}
