@@ -49,15 +49,15 @@ describe('SystemComparisonTool text contrast', () => {
     render(<SystemComparisonTool interactive onComplete={onComplete} />);
 
     expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
-    const adHocSecondaryText = screen.getByRole('button', { name: 'Last updated: today' });
-    const adHocButton = screen.getByRole('button', { name: 'View' });
+    const adHocSecondaryText = screen.getByRole('button', { name: 'Secondary text region, color #9CA3AF' });
+    const adHocButton = screen.getByRole('button', { name: 'View action region, background #3B82F6' });
     expect(adHocSecondaryText).toHaveStyle({ cursor: 'pointer', outline: 'none' });
     expect(adHocButton).toHaveStyle({ cursor: 'pointer', outline: 'none' });
     expect(adHocSecondaryText).not.toHaveAttribute('title');
     expect(adHocButton).not.toHaveAttribute('title');
     fireEvent.click(adHocSecondaryText);
     fireEvent.click(adHocButton);
-    fireEvent.click(screen.getByRole('button', { name: 'Active' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Active status region, background #14B8A6' }));
     expect(screen.getByText('Selected 3/4 inconsistencies')).toBeInTheDocument();
     expect(screen.queryByText('Found 3/4 inconsistencies')).not.toBeInTheDocument();
     expect(screen.queryByText(/Secondary text lightness:/)).not.toBeInTheDocument();
@@ -72,7 +72,7 @@ describe('SystemComparisonTool text contrast', () => {
     fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
     expect(screen.getByText('Selected 3/4 inconsistencies')).toBeInTheDocument();
     expect(screen.queryByText(/Success badge color:/)).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /Settings/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Settings card region, background #FFFFFF' }));
     expect(screen.getByText('Selected 4/4 inconsistencies')).toBeInTheDocument();
     expect(screen.queryByText(/Success badge color:/)).not.toBeInTheDocument();
     expect(onComplete).not.toHaveBeenCalled();
@@ -83,5 +83,16 @@ describe('SystemComparisonTool text contrast', () => {
       expect(screen.getByText(label)).toBeInTheDocument();
     }
     expect(onComplete).toHaveBeenCalledOnce();
+  });
+});
+
+describe('SystemComparisonTool accessible equivalent', () => {
+  it('names each selectable region with its observable color and selection state', () => {
+    render(<SystemComparisonTool interactive />);
+    const control = screen.getByRole('button', { name: 'View action region, background #3B82F6' });
+    expect(control).toHaveAttribute('aria-pressed', 'false');
+    fireEvent.click(control);
+    expect(control).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByText(/Consistent system preview.*#1E40AF/s)).toBeInTheDocument();
   });
 });

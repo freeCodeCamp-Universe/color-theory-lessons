@@ -68,6 +68,16 @@ describe('ColorSpaceLabTool samples', () => {
   });
 });
 
+describe('ColorSpaceLabTool accessible equivalent', () => {
+  it('describes the selected sample without revealing its gamut answer before submission', () => {
+    render(<ColorSpaceLabTool interactive />);
+    expect(screen.getByText(/Selected sample: Vivid orange.*CSS example.*SVG example.*Canvas-style example/s)).toBeInTheDocument();
+    expect(screen.queryByText(/This sample is outside sRGB/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Bright green' }));
+    expect(screen.getAllByRole('status')[0]).toHaveTextContent(/Bright green selected/);
+  });
+});
+
 describe('ColorSpaceLabTool challenge', () => {
   it('hides the gamut task until the first stage passes', () => {
     render(<ColorSpaceLabTool interactive />);

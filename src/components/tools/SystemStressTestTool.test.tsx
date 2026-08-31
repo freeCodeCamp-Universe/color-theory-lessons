@@ -118,3 +118,12 @@ describe('SystemStressTestTool', () => {
     ]);
   });
 });
+
+describe('SystemStressTestTool accessible equivalent', () => {
+  it('describes the current preview without naming a finding before submission', () => {
+    render(<SystemStressTestTool interactive />);
+    expect(screen.getByText(/Light-mode preview.*placeholder text is #AAA/s)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Chart view' }));
+    expect(screen.getAllByRole('status')[0]).toHaveTextContent(/Chart view preview selected/);
+  });
+});

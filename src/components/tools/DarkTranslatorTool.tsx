@@ -1,4 +1,6 @@
 import { memo, useState } from 'react';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import { hexToHsl, hexToRgb, contrastRatioWcag } from '../../utils/color.ts';
 import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
@@ -65,12 +67,14 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
   const [dark, setDark] = useState<Record<RoleKey, string>>(DARK_DEFAULTS);
   const [preview, setPreview] = useState<'light' | 'dark'>('light');
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [announcement, setAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
   function update(key: RoleKey, val: string) {
     if (!interactive || stageController.result === 'passed') return;
     setHasInteracted(true);
     setDark(prev => ({ ...prev, [key]: val }));
+    setAnnouncement(`${key} dark-theme color changed to ${val}.`);
     stageController.retry();
   }
 
@@ -121,10 +125,12 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
     { label: 'Success / error luminance (1.5:1)', pass: semanticLuminanceOk, ratio: semanticContrast },
   ];
   const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
+  const previewDescription = `${preview === 'light' ? 'Light' : 'Dark'} preview. Page background: ${bg}. Surface: ${surf}. Primary text: ${pt}. Supporting text: ${st}. Action: ${act}. Success: ${suc}. Error: ${err}.`;
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>dark translator</span>
+      <StatusAnnouncement message={announcement} />
 
       <ExerciseStage
         controller={stageController}
@@ -137,7 +143,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>LIGHT (fixed)</p>
           {KEYS.map(key => (
             <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
-              <div style={{ width: 16, height: 16, borderRadius: 3, background: LIGHT_THEME[key], border: '1px solid #e5e7eb', flexShrink: 0 }} />
+              <div aria-hidden="true" style={{ width: 16, height: 16, borderRadius: 3, background: LIGHT_THEME[key], border: '1px solid #e5e7eb', flexShrink: 0 }} />
               <span style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 100, flexShrink: 0 }}>{key}</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--primary-foreground)' }}>{LIGHT_THEME[key]}</span>
             </div>
@@ -155,7 +161,7 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
             const errorId = `dark-translator-${key}-hex-error`;
             return (
               <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem', flexWrap: 'wrap' }}>
-                <div style={{ width: 16, height: 16, borderRadius: 3, background: isValidHex(val) ? val : '#888', border: '1px solid var(--border)', flexShrink: 0 }} />
+                <div aria-hidden="true" style={{ width: 16, height: 16, borderRadius: 3, background: isValidHex(val) ? val : '#888', border: '1px solid var(--border)', flexShrink: 0 }} />
                 <span style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: 'var(--muted)', width: 100, flexShrink: 0 }}>{key}</span>
                 <input
                   type="text"
@@ -189,7 +195,11 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
             {(['light', 'dark'] as const).map(m => (
               <button
                 key={m}
-                onClick={() => setPreview(m)}
+                onClick={() => {
+                  setPreview(m);
+                  setAnnouncement(`${m === 'light' ? 'Light' : 'Dark'} preview selected.`);
+                }}
+                aria-pressed={preview === m}
                 style={{
                   padding: '0.2rem 0.6rem', fontSize: '0.75rem', borderRadius: 4, cursor: 'pointer',
                   background: preview === m ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'var(--surface, #1e293b)',
@@ -202,7 +212,8 @@ export const DarkTranslatorTool = memo(function DarkTranslatorTool({
             ))}
           </div>
 
-          <div data-authored-visual style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #4a4a6a', marginBottom: '0.5rem' }}>
+          <VisualDescription id="dark-translator-preview-description">{previewDescription}</VisualDescription>
+          <div aria-describedby="dark-translator-preview-description" data-authored-visual style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #4a4a6a', marginBottom: '0.5rem' }}>
             <div style={{ background: surf, borderRadius: 4, padding: '0.4rem 0.5rem', border: '1px solid rgba(128,128,128,0.2)' }}>
               <div style={{ color: pt, fontWeight: 600, fontSize: '0.83rem' }}>Card Title</div>
               <div style={{ color: st, fontSize: '0.75rem' }}>Supporting detail</div>

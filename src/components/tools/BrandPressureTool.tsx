@@ -1,4 +1,6 @@
 import { memo, useState } from 'react';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
@@ -55,12 +57,14 @@ export const BrandPressureTool = memo(function BrandPressureTool({
   const defaults = interactive ? INTERACTIVE_DEFAULTS : NON_INTERACTIVE_DEFAULTS;
   const [roles, setRoles] = useState<Record<RoleKey, string>>(defaults);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [announcement, setAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
   function update(key: RoleKey, val: string) {
     if (!interactive || stageController.result === 'passed') return;
     setHasInteracted(true);
     setRoles(prev => ({ ...prev, [key]: val }));
+    setAnnouncement(`${ROLE_LABELS[key]} changed to ${val}.`);
     stageController.retry();
   }
 
@@ -88,10 +92,12 @@ export const BrandPressureTool = memo(function BrandPressureTool({
       ? 'var(--accent-warning)'
       : 'var(--accent-danger)';
   const showResults = stageController.attemptedStageIds.includes(stageController.activeStage.id);
+  const previewDescription = `Preview. Page background: ${bg}. Card surface: ${surf}. Primary text: ${pt}. Divider: ${div}. Fixed primary action background: ${FIXED_ACTIONS[0].background}. Fixed secondary action background: ${FIXED_ACTIONS[1].background}. Brand pressure: ${pressure} percent.`;
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>brand pressure</span>
+      <StatusAnnouncement message={announcement} />
 
       <ExerciseStage
         controller={stageController}
@@ -106,7 +112,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({
           {/* Read-only brand roles */}
           {FIXED_ACTIONS.map(action => (
             <div key={action.role} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
-              <div style={{ width: 18, height: 18, borderRadius: 3, background: action.background, border: '1px solid var(--border)', flexShrink: 0 }} />
+              <div aria-hidden="true" style={{ width: 18, height: 18, borderRadius: 3, background: action.background, border: '1px solid var(--border)', flexShrink: 0 }} />
               <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{FIXED_ROLE_LABELS[action.role]} (fixed)</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--primary-foreground)' }}>{action.background}</span>
             </div>
@@ -120,7 +126,7 @@ export const BrandPressureTool = memo(function BrandPressureTool({
             const errorId = `brand-pressure-${key}-hex-error`;
             return (
               <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem', flexWrap: 'wrap' }}>
-                <div style={{ width: 18, height: 18, borderRadius: 3, background: isValidHex(val) ? val : '#888', border: '1px solid var(--border)', flexShrink: 0 }} />
+                <div aria-hidden="true" style={{ width: 18, height: 18, borderRadius: 3, background: isValidHex(val) ? val : '#888', border: '1px solid var(--border)', flexShrink: 0 }} />
                 <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', width: 110, flexShrink: 0 }}>{ROLE_LABELS[key]}</span>
                 <input
                   type="text"
@@ -151,7 +157,8 @@ export const BrandPressureTool = memo(function BrandPressureTool({
         {/* Preview */}
         <div style={{ flex: '1 1 180px', minWidth: 160 }}>
           <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-sans)', color: 'var(--muted)', marginBottom: '0.5rem' }}>PREVIEW</p>
-          <div data-authored-visual style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
+          <VisualDescription id="brand-pressure-preview-description">{previewDescription}</VisualDescription>
+          <div aria-describedby="brand-pressure-preview-description" data-authored-visual style={{ background: bg, padding: '0.75rem', borderRadius: 6, border: '1px solid #e5e7eb' }}>
             <div style={{ color: pt, fontWeight: 600, fontSize: '0.85rem', marginBottom: '0.3rem' }}>Dashboard</div>
             <div style={{ background: surf, borderRadius: 4, padding: '0.4rem 0.5rem', border: `1px solid ${div}`, marginBottom: '0.4rem' }}>
               <div style={{ color: pt, fontSize: '0.8rem' }}>Recent activity</div>

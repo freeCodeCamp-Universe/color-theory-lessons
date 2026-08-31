@@ -169,3 +169,12 @@ describe('BrandPressureTool contrast validation', () => {
     expect(onComplete).toHaveBeenCalledOnce();
   });
 });
+
+describe('BrandPressureTool accessible equivalent', () => {
+  it('describes fixed and editable preview colors', () => {
+    render(<BrandPressureTool interactive />);
+    expect(screen.getByText(/Preview.*Fixed primary action background/s)).toBeInTheDocument();
+    fireEvent.change(screen.getByRole('textbox', { name: 'Page background hex color' }), { target: { value: '#ffffff' } });
+    expect(screen.getAllByRole('status')[0]).toHaveTextContent('Page background changed to #ffffff.');
+  });
+});

@@ -1,4 +1,6 @@
 import { memo, useState } from 'react';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import type { CSSProperties } from 'react';
 import { hexToHsl, hexToRgb } from '../../utils/color.ts';
 import {
@@ -58,6 +60,7 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
   const [accentIdx, setAccentIdx] = useState(0);
   const [sortAnswers, setSortAnswers] = useState<Record<string, string>>({});
   const [gamutAnswers, setGamutAnswers] = useState<Record<string, string>>({});
+  const [announcement, setAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
   const activeStageId = stageController.activeStage.id;
 
@@ -69,6 +72,8 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
     '--p3-color': accent.p3,
     '--srgb-fallback': accent.srgbFallback,
   };
+  const exposeGamutResult = !interactive || (activeStageId === 'classify-gamut-mapping' && stageController.result === 'passed');
+  const comparisonDescription = `Selected sample: ${accent.label}. Display P3 value: ${accent.p3}. sRGB fallback: ${accent.srgbFallback}. CSS example is a button using the sRGB fallback. SVG example is a circle using the same fallback. Canvas-style example is a three-bar chart using the fallback at full and partial opacity.${exposeGamutResult ? outsideSrgb ? ' This sample is outside sRGB and needs gamut mapping for sRGB output.' : ' This sample is inside sRGB and can be represented in both color spaces.' : ''}`;
 
   function expectedGamutAnswer(sample: DisplayP3Sample): GamutAnswer {
     return isDisplayP3OutsideSrgb(sample.p3Channels) ? 'maps' : 'within';
@@ -99,6 +104,7 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>color space lab</span>
+      <StatusAnnouncement message={announcement} />
 
       <ExerciseStage
         controller={stageController}
@@ -112,8 +118,13 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
         {DISPLAY_P3_SAMPLES.map((sample, index) => (
           <button
             key={sample.id}
-            onClick={() => interactive && setAccentIdx(index)}
+            onClick={() => {
+              if (!interactive) return;
+              setAccentIdx(index);
+              setAnnouncement(`${sample.label} selected. Display P3 value ${sample.p3}; sRGB fallback ${sample.srgbFallback}.`);
+            }}
             disabled={!interactive}
+            aria-pressed={index === accentIdx}
             style={{
               padding: '0.25rem 0.5rem',
               fontSize: '0.75rem',
@@ -130,7 +141,8 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
         ))}
       </div>
 
-      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '0.5rem' }}>
+      <VisualDescription id="color-space-comparison-description">{comparisonDescription}</VisualDescription>
+      <div aria-describedby="color-space-comparison-description" data-authored-visual style={{ display: 'flex', gap: '0.75rem', marginBottom: '0.5rem' }}>
         <div style={{ flex: 1 }}>
           <p style={{ fontSize: '0.72rem', color: 'var(--muted)', marginBottom: '0.25rem' }}>
             sRGB fallback
@@ -164,7 +176,7 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
       <div style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', marginBottom: '0.75rem' }}>
         <div><span style={{ color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>Display P3</span> {accent.p3}</div>
         <div><span style={{ color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>sRGB fallback</span> {accent.srgbFallback}</div>
-        {(!interactive || (activeStageId === 'classify-gamut-mapping' && stageController.result === 'passed')) && (
+        {exposeGamutResult && (
           <div style={{ color: outsideSrgb ? 'var(--accent-warning)' : 'var(--accent-success)', marginTop: '0.2rem' }}>
             {outsideSrgb
               ? 'Outside sRGB: this sample needs gamut mapping for sRGB output.'
@@ -177,7 +189,7 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
         <p style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.3rem' }}>
           sRGB fallback in different contexts:
         </p>
-        <div data-authored-visual style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto' }}>
+        <div aria-describedby="color-space-comparison-description" data-authored-visual style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto' }}>
           <div style={{ flex: 1, textAlign: 'center' }}>
             <div style={{
               height: 36,
@@ -192,7 +204,7 @@ export const ColorSpaceLabTool = memo(function ColorSpaceLabTool({
             <span style={{ fontSize: '0.68rem', color: 'var(--muted)' }}>HTML/CSS</span>
           </div>
           <div style={{ flex: 1, textAlign: 'center' }}>
-            <svg width="100%" height="36" viewBox="0 0 60 36">
+            <svg aria-hidden="true" focusable="false" width="100%" height="36" viewBox="0 0 60 36">
               <circle cx="30" cy="18" r="14" fill={accent.srgbFallback} />
             </svg>
             <span style={{ fontSize: '0.68rem', color: 'var(--muted)' }}>SVG icon</span>

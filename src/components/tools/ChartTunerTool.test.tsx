@@ -149,3 +149,12 @@ describe('ChartTunerTool', () => {
     });
   });
 });
+
+describe('ChartTunerTool accessible equivalent', () => {
+  it('provides series, month, value, color, pattern, and simulation state', () => {
+    render(<ChartTunerTool interactive />);
+    expect(screen.getByRole('img', { name: 'Grouped bar chart data' })).toHaveAccessibleDescription(/Revenue: Jan 80.*Color #3B82F6, Diagonal stripes pattern/s);
+    fireEvent.click(screen.getByRole('button', { name: 'Deuteranopia simulation' }));
+    expect(screen.getAllByRole('status')[0]).toHaveTextContent('Deuteranopia simulation selected.');
+  });
+});

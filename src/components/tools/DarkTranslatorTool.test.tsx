@@ -257,3 +257,13 @@ describe('DarkTranslatorTool', () => {
     expect(onComplete).toHaveBeenCalledOnce();
   });
 });
+
+describe('DarkTranslatorTool accessible equivalent', () => {
+  it('reports the selected preview and its role values', () => {
+    render(<DarkTranslatorTool interactive />);
+    fireEvent.click(screen.getByRole('button', { name: 'dark mode' }));
+    expect(screen.getByRole('button', { name: 'dark mode' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByText(/Dark preview.*Page background/s)).toBeInTheDocument();
+    expect(screen.getAllByRole('status')[0]).toHaveTextContent('Dark preview selected.');
+  });
+});

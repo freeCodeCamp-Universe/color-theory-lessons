@@ -1,4 +1,6 @@
 import { memo, useState } from 'react';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
+import { VisualDescription } from '../accessibility/VisualDescription.tsx';
 import { simulateDeuteranopia } from '../../utils/color.ts';
 import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
@@ -101,6 +103,14 @@ const COLORS = {
   alerts: ['#16a34a', '#dc2626'],
 };
 
+const CONTEXT_DESCRIPTIONS: Record<ContextId, string> = {
+  light: 'Light-mode preview. White card on #F9FAFB. The placeholder text is #AAA on white. The Save changes action uses #1E40AF with a save icon.',
+  dark: 'Dark-mode preview. #1E293B card on #0F172A. Text is #F1F5F9. The payment message uses the same text treatment as nearby content. The Save changes action uses #60A5FA with a save icon.',
+  chart: 'Chart preview. Each month contains green #16A34A and red #DC2626 bars. The series do not use labels or patterns.',
+  alerts: 'Alert preview. Two account-update rows use green #16A34A and red #DC2626 dots as their only differing status cue.',
+  simulation: 'Deuteranopia simulation. The chart and alert previews show the same structures with simulated green and red colors. The series remain unlabeled and the alert dots remain the only differing status cue.',
+};
+
 function ChartPreview({ simulate = false }: { simulate?: boolean }) {
   const display = (color: string) => simulate ? simulateDeuteranopia(color) : color;
 
@@ -195,6 +205,7 @@ export const SystemStressTestTool = memo(function SystemStressTestTool({
   const [context, setContext] = useState<ContextId>('light');
   const [selections, setSelections] = useState<FindingSelections>(INITIAL_SELECTIONS);
   const [classifications, setClassifications] = useState<FindingClassifications>(INITIAL_CLASSIFICATIONS);
+  const [announcement, setAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
   const activeStageId = stageController.activeStage.id;
 
@@ -232,6 +243,7 @@ export const SystemStressTestTool = memo(function SystemStressTestTool({
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>system stress test</span>
+      <StatusAnnouncement message={announcement} />
 
       <ExerciseStage
         controller={stageController}
@@ -245,7 +257,10 @@ export const SystemStressTestTool = memo(function SystemStressTestTool({
             key={item.id}
             aria-pressed={context === item.id}
             disabled={!interactive}
-            onClick={() => setContext(item.id)}
+            onClick={() => {
+              setContext(item.id);
+              setAnnouncement(`${item.label} preview selected. ${CONTEXT_DESCRIPTIONS[item.id]}`);
+            }}
             style={{
               background: context === item.id ? 'color-mix(in srgb, var(--accent-warning) 6%, transparent)' : 'var(--border)',
               border: `1px solid ${context === item.id ? 'var(--accent-warning)' : 'var(--border-strong)'}`,
@@ -261,7 +276,8 @@ export const SystemStressTestTool = memo(function SystemStressTestTool({
         ))}
       </div>
 
-      <div data-authored-visual style={{ display: 'contents' }}>
+      <VisualDescription id="system-stress-preview-description">{CONTEXT_DESCRIPTIONS[context]}</VisualDescription>
+      <div aria-describedby="system-stress-preview-description" data-authored-visual style={{ display: 'contents' }}>
         <ContextPreview context={context} />
       </div>
 
