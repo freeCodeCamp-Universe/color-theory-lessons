@@ -16,6 +16,14 @@ describe('BeforeAfterTool hierarchy exercise', () => {
     }
   });
 
+  it('describes the current visual hierarchy without disclosing the expected roles', () => {
+    render(<BeforeAfterTool variant="hierarchy" />);
+
+    expect(screen.getByRole('img', { name: /Action hierarchy preview/i })).toHaveAccessibleName(
+      'Action hierarchy preview. Submit is secondary, Save Draft is secondary, and Cancel is secondary.',
+    );
+  });
+
   it('allows correction after an incorrect check', () => {
     const onComplete = vi.fn();
     render(<BeforeAfterTool variant="hierarchy" onComplete={onComplete} />);
@@ -82,6 +90,13 @@ describe('BeforeAfterTool color-role keyboard activation', () => {
     for (const region of regions) {
       expect(region).toHaveAttribute('tabindex', '0');
     }
+  });
+
+  it('names each region by its visible color and interface element', () => {
+    render(<BeforeAfterTool />);
+
+    expect(screen.getByRole('button', { name: /nav bar color/i })).toHaveAccessibleDescription('Dark navy navigation bar.');
+    expect(screen.getByRole('button', { name: /gold button color/i })).toHaveAccessibleDescription('Gold start learning button.');
   });
 
   it('opens a color-role question with Enter and Space, and prevents Space scrolling', () => {

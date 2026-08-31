@@ -104,6 +104,15 @@ describe('HSLSliderTool previewDimension — interactive', () => {
 });
 
 describe('HSLSliderTool exercise', () => {
+  it('describes the target without exposing its hidden channel value', () => {
+    render(<HSLSliderTool interactive={true} />);
+
+    expect(screen.getByRole('img', { name: /Target color for the match the hue stage/i })).toHaveAccessibleName(
+      /without reading an exact target value/i,
+    );
+    expect(screen.queryByText('H:200 S:70% L:55%')).not.toBeInTheDocument();
+  });
+
   it('keeps the hue wheel and slider synchronized', () => {
     render(<HSLSliderTool interactive={true} />);
     const wheel = screen.getByRole('slider', { name: /Hue wheel/i });
