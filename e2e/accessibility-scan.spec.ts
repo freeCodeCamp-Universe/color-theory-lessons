@@ -293,8 +293,7 @@ for (const theme of ['light', 'dark'] as const) {
       await glossaryRequestBlocked;
       await route.continue();
     });
-    await page.goto('/');
-    await page.getByRole('link', { name: 'glossary' }).first().click();
+    await page.goto('/glossary', { waitUntil: 'domcontentloaded' });
     await expect(page.getByText('loading...')).toBeVisible();
     await expectNoAccessibilityViolations(page, {
       route: '/glossary',
