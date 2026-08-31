@@ -57,6 +57,9 @@ const COMPONENTS: Component[] = [
     description: 'Focus outline against white.',
     renderPreview: (color) => (
       <button
+        type="button"
+        tabIndex={-1}
+        aria-hidden="true"
         style={{
           padding: '0.35rem 0.8rem', fontSize: '0.8rem',
           background: '#ffffff', color: '#111',
