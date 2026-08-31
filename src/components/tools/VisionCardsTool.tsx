@@ -3,6 +3,7 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
 import { useExerciseStages } from './useExerciseStages.ts';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 
 interface CardData {
   name: string;
@@ -83,6 +84,7 @@ export const VisionCardsTool = memo(function VisionCardsTool({
     CARDS.map((c) => previewExpandedNames?.includes(c.name) ?? false)
   );
   const [everExpanded, setEverExpanded] = useState<boolean[]>(CARDS.map(() => false));
+  const [explorationAnnouncement, setExplorationAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
 
   function toggleCard(idx: number) {
@@ -94,8 +96,13 @@ export const VisionCardsTool = memo(function VisionCardsTool({
     const nextEver = [...everExpanded];
     nextEver[idx] = true;
     setEverExpanded(nextEver);
-
-    if (nextEver.every(Boolean)) stageController.markPassed();
+    if (nextEver.every(Boolean)) {
+      stageController.markPassed();
+    } else {
+      setExplorationAnnouncement(
+        `${CARDS[idx].name} ${nextExpanded[idx] ? 'expanded' : 'collapsed'}. ${nextEver.filter(Boolean).length} of ${CARDS.length} cards explored.`,
+      );
+    }
   }
 
   const cards = (
@@ -124,6 +131,7 @@ export const VisionCardsTool = memo(function VisionCardsTool({
                 onClick={() => toggleCard(idx)}
                 disabled={!interactive || stageController.result === 'passed'}
                 aria-expanded={isOpen}
+                aria-controls={`vision-card-${idx}`}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -138,23 +146,23 @@ export const VisionCardsTool = memo(function VisionCardsTool({
                   textAlign: 'left',
                 }}
               >
-                <span style={{
+                <span aria-hidden="true" style={{
                   width: 12, height: 12, borderRadius: '50%',
                   background: card.tint, flexShrink: 0, border: '1px solid var(--border)',
                 }} />
                 <strong style={{ fontSize: interactive ? '1rem' : '0.85rem', flex: 1 }}>{card.name}</strong>
                 {wasSeen && !isOpen && (
-                  <span style={{ fontSize: interactive ? '1rem' : '0.72rem', color: 'var(--accent-success)' }}>✓</span>
+                  <span aria-hidden="true" style={{ fontSize: interactive ? '1rem' : '0.72rem', color: 'var(--accent-success)' }}>✓</span>
                 )}
                 {interactive && (
-                  <span style={{ fontSize: interactive ? '1rem' : '0.75rem', color: 'var(--muted)' }}>
+                  <span aria-hidden="true" style={{ fontSize: interactive ? '1rem' : '0.75rem', color: 'var(--muted)' }}>
                     {isOpen ? '▲' : '▼'}
                   </span>
                 )}
               </button>
 
               {isOpen && (
-                <div style={{
+                <div id={`vision-card-${idx}`} style={{
                   padding: '0 0.75rem 0.65rem',
                   background: `color-mix(in srgb, ${card.tint} 5%, var(--surface))`,
                 }}>
@@ -179,6 +187,7 @@ export const VisionCardsTool = memo(function VisionCardsTool({
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>vision types</span>
+      {explorationAnnouncement && <StatusAnnouncement message={explorationAnnouncement} />}
 
       {interactive ? (
         <ExerciseStage

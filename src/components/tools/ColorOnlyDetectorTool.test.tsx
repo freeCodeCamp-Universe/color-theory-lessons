@@ -12,7 +12,7 @@ function getExampleCard(name: string) {
 }
 
 async function selectExample(name: string, user: ReturnType<typeof userEvent.setup>) {
-  await user.click(within(getExampleCard(name)).getByRole('button', { name: 'select example' }));
+  await user.click(within(getExampleCard(name)).getByRole('button', { name: `Select ${name} example` }));
 }
 
 describe('ColorOnlyDetectorTool', () => {
@@ -22,7 +22,9 @@ describe('ColorOnlyDetectorTool', () => {
     expect(screen.getByText('Stage 1 of 1')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Sample input')).toBeInTheDocument();
     expect(screen.getByText('Series A')).toBeInTheDocument();
-    expect(screen.getAllByRole('button', { name: 'select example' })).toHaveLength(6);
+    expect(screen.getAllByRole('button', { name: /Select .* example/ })).toHaveLength(6);
+    expect(screen.getByRole('link', { name: 'privacy policy' })).toBeInTheDocument();
+    expect(screen.getByText(/Three unlabeled circular dots/)).toBeInTheDocument();
     expect(screen.queryByText(/This link also has an underline/)).not.toBeInTheDocument();
   });
 
@@ -43,7 +45,7 @@ describe('ColorOnlyDetectorTool', () => {
     expect(onComplete).not.toHaveBeenCalled();
 
     await user.click(screen.getByRole('button', { name: 'try stage again' }));
-    await user.click(within(getExampleCard('Link text')).getByRole('button', { name: 'selected' }));
+    await user.click(within(getExampleCard('Link text')).getByRole('button', { name: 'Deselect Link text example' }));
     await selectExample('Chart series', user);
     await user.click(screen.getByRole('button', { name: 'check selections' }));
 

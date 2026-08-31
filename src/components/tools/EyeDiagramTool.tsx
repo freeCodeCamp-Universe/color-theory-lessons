@@ -1,4 +1,5 @@
-import { memo } from 'react';
+import { memo, useRef, useState } from 'react';
+import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 import { ExerciseStage } from './ExerciseStage.tsx';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import shellStyles from './ToolShell.module.css';
@@ -58,7 +59,19 @@ export const EyeDiagramTool = memo(function EyeDiagramTool({
   onComplete,
   onStageChange,
 }: ExerciseToolProps) {
-  const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
+  const hasReportedInitialStage = useRef(false);
+  const [stageAnnouncement, setStageAnnouncement] = useState('');
+  const stageController = useExerciseStages({
+    stages: STAGES,
+    onComplete,
+    onStageChange: (stage) => {
+      onStageChange?.(stage);
+      if (hasReportedInitialStage.current) {
+        setStageAnnouncement(`Stage ${stage.position} of ${stage.total}: ${stage.title}.`);
+      }
+      hasReportedInitialStage.current = true;
+    },
+  });
   const step = STEPS.find(({ id }) => id === stageController.activeStage.id) ?? STEPS[0];
 
   const content = (
@@ -75,6 +88,7 @@ export const EyeDiagramTool = memo(function EyeDiagramTool({
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>visual pathway</span>
+      {stageAnnouncement && <StatusAnnouncement message={stageAnnouncement} />}
 
       {interactive ? (
         <ExerciseStage
