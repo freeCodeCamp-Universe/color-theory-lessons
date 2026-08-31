@@ -33,10 +33,10 @@ const SWATCH_DESCRIPTIONS: Record<string, string> = {
   '#ff0000': 'A fully saturated red swatch.',
   '#00ff00': 'A fully saturated green swatch.',
   '#0000ff': 'A fully saturated blue swatch.',
-  '#ff00ff': 'A fully saturated magenta swatch, combining red and blue light.',
-  '#ffff00': 'A fully saturated yellow swatch, combining red and green light.',
-  '#00ffff': 'A fully saturated cyan swatch, combining green and blue light.',
-  '#ffffff': 'A white swatch with all three channels at their maximum.',
+  '#ff00ff': 'A fully saturated magenta swatch.',
+  '#ffff00': 'A fully saturated yellow swatch.',
+  '#00ffff': 'A fully saturated cyan swatch.',
+  '#ffffff': 'A white swatch.',
 };
 const STAGES: readonly ExerciseStageDefinition[] = [
   {
