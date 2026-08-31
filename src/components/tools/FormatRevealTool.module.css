@@ -79,6 +79,7 @@
   padding: 0.6rem 1rem;
   cursor: pointer;
   transition: opacity 0.1s ease;
+  position: relative;
 }
 
 .nav:hover {
@@ -92,6 +93,8 @@
   cursor: pointer;
   border-radius: 2px;
   padding: 1px 3px;
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Hero ─────────────────────────────────────────────────────────────── */
@@ -101,6 +104,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+  position: relative;
 }
 
 .heroTitle {
@@ -146,6 +150,16 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  position: relative;
+}
+
+.regionBackgroundControl {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: pointer;
 }
 
 .cardBorder {
@@ -158,6 +172,8 @@
   padding: 0.2rem 0.5rem;
   cursor: pointer;
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .accent {
@@ -167,6 +183,8 @@
   cursor: pointer;
   border-radius: 2px;
   padding: 1px 3px;
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Legend ───────────────────────────────────────────────────────────── */

@@ -114,7 +114,10 @@ export const AlphaLayerTool = memo(function AlphaLayerTool({
     : null;
   const imageTextPassesContrast = imageTextContrast !== null && imageTextContrast >= IMAGE_TEXT_CONTRAST_TARGET;
   const inputsDisabled = !interactive || stageController.result !== 'idle';
-  const compositionDescription = `${ctx.label}. ${ctx.description} Background: ${ctx.bgLabel}, ${ctx.bgColor}. Foreground: ${fgLabel} at ${(alpha * 100).toFixed(0)} percent opacity. The foreground sits above the background. Blended result: ${blended}.`;
+  const imageContrastDescription = imageTextContrast === null
+    ? ''
+    : ` White overlay text contrast is ${formatContrastRatio(imageTextContrast)} to 1 and ${imageTextPassesContrast ? 'passes' : 'does not pass'} the ${IMAGE_TEXT_CONTRAST_TARGET} to 1 target.`;
+  const compositionDescription = `${ctx.label}. ${ctx.description} Background: ${ctx.bgLabel}, ${ctx.bgColor}. Foreground: ${fgLabel} at ${(alpha * 100).toFixed(0)} percent opacity. The foreground sits above the background. Blended result: ${blended}.${imageContrastDescription}`;
   const compositionChanged = alpha !== 0.5 || !isDark;
 
   function checkOverlay() {

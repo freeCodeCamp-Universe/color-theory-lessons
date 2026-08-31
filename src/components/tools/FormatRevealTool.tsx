@@ -192,13 +192,8 @@ export const FormatRevealTool = memo(function FormatRevealTool({
             <div
               className={`${styles.nav} ${selectedId === 'nav-bg' ? styles.selected : ''} ${revealed.has('nav-bg') ? styles.visited : ''}`}
               style={{ backgroundColor: '#1e3a5f' }}
-              onClick={() => handleSelect('nav-bg')}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleSelect('nav-bg')}
-              aria-label="Nav background"
-              aria-describedby="format-selection-description"
             >
+              <button className={styles.regionBackgroundControl} onClick={() => handleSelect('nav-bg')} aria-label="Nav background" aria-describedby="format-selection-description" />
               <span
                 className={`${styles.navText} ${selectedId === 'nav-text' ? styles.selected : ''} ${revealed.has('nav-text') ? styles.visited : ''}`}
                 style={{ color: '#e2e8f0' }}
@@ -218,13 +213,8 @@ export const FormatRevealTool = memo(function FormatRevealTool({
             <div
               className={`${styles.hero} ${selectedId === 'hero-bg' ? styles.selected : ''} ${revealed.has('hero-bg') ? styles.visited : ''}`}
               style={{ backgroundColor: '#f0f4f8' }}
-              onClick={() => handleSelect('hero-bg')}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleSelect('hero-bg')}
-                aria-label="Hero surface"
-                aria-describedby="format-selection-description"
             >
+              <button className={styles.regionBackgroundControl} onClick={() => handleSelect('hero-bg')} aria-label="Hero surface" aria-describedby="format-selection-description" />
               <p className={styles.heroTitle}>The design tool for developers.</p>
               <div
                 className={`${styles.cta} ${selectedId === 'cta' ? styles.selected : ''} ${revealed.has('cta') ? styles.visited : ''}`}
@@ -252,13 +242,8 @@ export const FormatRevealTool = memo(function FormatRevealTool({
             <div
               className={`${styles.card} ${selectedId === 'card-bg' ? styles.selected : ''} ${revealed.has('card-bg') ? styles.visited : ''}`}
               style={{ backgroundColor: '#ffffff', borderColor: '#cbd5e1' }}
-              onClick={() => handleSelect('card-bg')}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleSelect('card-bg')}
-              aria-label="Card background"
-              aria-describedby="format-selection-description"
             >
+              <button className={styles.regionBackgroundControl} onClick={() => handleSelect('card-bg')} aria-label="Card background" aria-describedby="format-selection-description" />
               <div
                 className={`${styles.cardBorder} ${selectedId === 'card-border' ? styles.selected : ''} ${revealed.has('card-border') ? styles.visited : ''}`}
                 onClick={(e) => { e.stopPropagation(); handleSelect('card-border'); }}

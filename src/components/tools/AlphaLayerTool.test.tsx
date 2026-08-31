@@ -42,6 +42,7 @@ describe('AlphaLayerTool image text overlay context', () => {
     expect(screen.getByText('Text contrast:').parentElement).toHaveTextContent(
       'Text contrast: 4.4:1 (target: 4.5:1)',
     );
+    expect(screen.getAllByRole('status').some((status) => status.textContent?.includes('White overlay text contrast is 4.4 to 1 and does not pass'))).toBe(true);
     fireEvent.click(screen.getByRole('button', { name: 'check' }));
 
     expect(screen.getByText('Stage 3 of 4')).toBeInTheDocument();
