@@ -35,7 +35,7 @@ The renderer passes lesson-specific options where needed. Interactive tools othe
 
 ## Accessible visual content
 
-`VisualDescription` renders screen-reader-only authored equivalents without duplicating visible copy. `StepPanelRenderer` and `ToolRenderer` wrap configured lesson previews and exercises in labelled groups that reference those descriptions. Milestone quiz swatches and milestone challenge components use the same component for their visual state. `StatusAnnouncement` supplies concise live messages when lesson and milestone state changes.
+`VisualDescription` renders screen-reader-only authored equivalents without duplicating visible copy. `StepPanelRenderer` and `ToolRenderer` wrap configured lesson previews and exercises in labelled groups that reference those descriptions. Milestone quiz swatches and milestone challenge components use the same component for their visual state. `StatusAnnouncement` supplies concise live messages for lesson state changes; `MilestonePlayer` has an inline live region for its own state changes.
 
 ## Milestones
 
