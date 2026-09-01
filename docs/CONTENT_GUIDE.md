@@ -117,7 +117,7 @@ Current supported values:
 When adding a new challenge type, complete all seven steps:
 1. `MILESTONE_CHALLENGE_TYPES` in `src/types/milestone.ts`. The `MilestoneChallengeType` union is derived from this registry.
 2. Create the challenge component and its focused test in `src/components/milestone/challenges/`. Implement `MilestoneChallengeProps`, save and restore work with `sessionKey`, and test session restoration.
-3. Add the challenge's session prefix to `src/state/persistence.ts`, include it in `clearMilestoneSessions`, and test that Reset Progress clears it.
+3. Add the challenge's session prefix to `src/state/persistence.ts`, include it in `clearProgressSessions`, and test that Reset Progress clears it.
 4. Import the component and add its switch mapping in `src/components/milestone/ChallengeRenderer.tsx`.
 5. Add the challenge to the milestone challenge inventory in `docs/ACCESSIBLE_VISUALS.md`.
 6. Add its learner-visible behavior and focused test to `docs/TEST_COVERAGE.md`.
