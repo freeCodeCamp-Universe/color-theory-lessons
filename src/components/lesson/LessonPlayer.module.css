@@ -274,18 +274,18 @@
 }
 
 .choice.chosen {
-  border-color: var(--accent-warning);
+  border: 3px solid var(--accent-warning);
   background-color: color-mix(in srgb, var(--accent-warning) 10%, var(--surface));
   color: var(--primary-foreground);
 }
 
 .choice.correct {
-  border-color: var(--accent-success);
+  border: 3px solid var(--accent-success);
   background-color: color-mix(in srgb, var(--accent-success) 12%, var(--surface));
 }
 
 .choice.incorrect {
-  border-color: var(--accent-danger);
+  border: 3px solid var(--accent-danger);
   background-color: color-mix(in srgb, var(--accent-danger) 12%, var(--surface));
 }
 
