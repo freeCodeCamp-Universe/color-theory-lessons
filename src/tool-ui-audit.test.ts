@@ -6,6 +6,36 @@ import { describe, expect, it } from 'vitest';
 const read = (path: string) => readFileSync(path, 'utf8');
 
 describe('tool UI audit regressions', () => {
+  it('keeps tools and exercise stages within the lesson surface instead of nesting cards', () => {
+    const lessonCss = read('src/components/lesson/LessonPlayer.module.css');
+    const appCss = read('src/index.css');
+    const shellCss = read('src/components/tools/ToolShell.module.css');
+    const stageCss = read('src/components/tools/ExerciseStage.module.css');
+
+    expect(lessonCss).toMatch(/\.layout\s*{[^}]*background-color:\s*var\(--secondary-background\);[^}]*border:\s*1px solid var\(--border\);/s);
+    expect(lessonCss).toMatch(/@media \(min-width: 1000px\)\s*{[^}]*\.layout\s*{[^}]*justify-content:\s*flex-start;/s);
+    expect(lessonCss).not.toMatch(/\.layout\s*{[^}]*border-radius\s*:/s);
+    expect(lessonCss).not.toMatch(/\.panel\s*{[^}]*\b(background-color|border|border-radius)\s*:/s);
+    expect(lessonCss).not.toMatch(/\.examplePanel\s*{[^}]*\b(border-radius)\s*:/s);
+    expect(appCss).toContain('button:not([data-authored-visual]):not([data-authored-visual] *)');
+    expect(appCss).toMatch(/button:not\(\[data-authored-visual\]\):not\(\[data-authored-visual\] \*\)\s*{[^}]*border-radius:\s*0 !important;/s);
+    expect(appCss).toMatch(/@media \(min-width: 1000px\)\s*{\s*:root\s*{\s*--max-content-width:\s*90vw;/s);
+    expect(shellCss).toMatch(/\.shell\s*{[^}]*padding:\s*0;/s);
+    expect(shellCss).not.toMatch(/\.shell\s*{[^}]*\b(background-color|border|border-radius)\s*:/s);
+    expect(stageCss).toMatch(/\.stagePanel\s*{[^}]*align-items:\s*stretch;[^}]*width:\s*100%;/s);
+    expect(stageCss).toMatch(/\.stageContent\s*{[^}]*flex:\s*1;[^}]*overflow-y:\s*auto;/s);
+    expect(stageCss).not.toMatch(/\.stagePanel\s*{[^}]*\b(border|border-radius|padding)\s*:/s);
+  });
+
+  it('keeps quiz answer text in a stable column when result text appears', () => {
+    const lessonCss = read('src/components/lesson/LessonPlayer.module.css');
+    const lessonPlayer = read('src/components/lesson/LessonPlayer.tsx');
+
+    expect(lessonPlayer).toContain('className={styles.choiceLabel}');
+    expect(lessonCss).toMatch(/\.choice\s*{[^}]*grid-template-columns:\s*auto minmax\(0, 1fr\);/s);
+    expect(lessonCss).toMatch(/\.choiceResult\s*{[^}]*grid-column:\s*2;/s);
+  });
+
   it('collapses shared two-column tool grids below 500px', () => {
     const shellCss = read('src/components/tools/ToolShell.module.css');
 

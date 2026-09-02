@@ -115,6 +115,12 @@
   --focus-ring: var(--blue-dark);
 }
 
+@media (min-width: 1000px) {
+  :root {
+    --max-content-width: 90vw;
+  }
+}
+
 /* ── Base reset ───────────────────────────────────────────────────────────── */
 *,
 *::before,
@@ -173,6 +179,11 @@ button {
   cursor: pointer;
   border: none;
   background: none;
+}
+
+/* Keep application controls square while preserving authored lesson mockups. */
+button:not([data-authored-visual]):not([data-authored-visual] *) {
+  border-radius: 0 !important;
 }
 
 /* WCAG 2.2 SC 2.5.5: interactive controls need a 44px pointer target.

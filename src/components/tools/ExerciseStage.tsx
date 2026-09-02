@@ -75,7 +75,7 @@ export function ExerciseStage({
         </h2>
         <p id={instructionId} className={styles.instruction}>{activeStage.instruction}</p>
 
-        {children}
+        <div className={styles.stageContent}>{children}</div>
 
         <div className={styles.result} role="status" aria-live="polite" aria-atomic="true">
           {result === 'incorrect' && incorrectFeedback}
