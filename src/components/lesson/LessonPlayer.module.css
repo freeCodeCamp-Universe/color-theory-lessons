@@ -377,13 +377,20 @@
   align-items: center;
   gap: var(--spacing-md);
   text-align: center;
-  padding: var(--spacing-xl) 0;
+  padding: var(--spacing-xl);
+  background-color: var(--badge-success-background);
+  border: 2px solid var(--accent-success);
+  border-left-width: 0.5rem;
+  border-radius: var(--radius-md);
 }
 
 .completeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
   font-size: 1rem;
   padding: var(--spacing-xs) var(--spacing-md);
-  background-color: var(--badge-success-background);
+  background-color: var(--surface);
   border: 1px solid var(--accent-success);
   color: var(--accent-success);
   border-radius: var(--radius-sm);

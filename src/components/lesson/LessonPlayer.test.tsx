@@ -226,6 +226,7 @@ describe('LessonPlayer', () => {
     expect(status).toHaveTextContent('Lesson complete. 0 of 1 quiz questions correct.');
     expect(progress).toHaveAttribute('aria-valuetext', 'Lesson complete');
     expect(progress).toHaveAccessibleName('Lesson progress: Lesson complete');
+    expect(screen.getByText('✓')).toHaveAttribute('aria-hidden', 'true');
   });
 
   describe('session storage failures', () => {
