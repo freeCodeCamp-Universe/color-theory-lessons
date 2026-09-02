@@ -389,6 +389,25 @@
   border-radius: var(--radius-sm);
 }
 
+:global(:root[data-theme='light']) .complete {
+  padding: var(--spacing-xl);
+  background-color: var(--badge-success-background);
+  border: 2px solid var(--accent-success);
+  border-left-width: 0.5rem;
+  border-radius: var(--radius-md);
+}
+
+:global(:root[data-theme='light']) .completeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background-color: var(--surface);
+}
+
+:global(:root[data-theme='light']) .completeBadge::before {
+  content: '✓';
+}
+
 .completeTitle {
   font-size: 1.4rem;
   font-weight: 700;
