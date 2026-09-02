@@ -243,6 +243,28 @@ test('every navigation destination remains visible and usable at the mobile brea
   await expect(page).toHaveURL(/\/$/);
 });
 
+test('the donation link is keyboard-accessible in desktop navigation and the mobile menu', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/');
+
+  const desktopDonate = page.locator('nav > a', { hasText: 'Donate' });
+  await expect(desktopDonate).toHaveAttribute(
+    'href',
+    /^https:\/\/donate\.freecodecamp\.org\?source=[\w-]+&campaign=test-2026&medium=web$/,
+  );
+  for (let index = 0; index < 7; index += 1) await page.keyboard.press('Tab');
+  await expect(desktopDonate).toBeFocused();
+
+  await page.setViewportSize({ width: 320, height: 900 });
+  const menuButton = page.getByRole('button', { name: 'Menu' });
+  await menuButton.click();
+  const mobileDonate = page.locator('#mobile-nav-menu').getByRole('link', { name: 'Donate' });
+  await expect(mobileDonate).toBeVisible();
+  await expect(mobileDonate).toHaveAttribute('href', await desktopDonate.getAttribute('href'));
+  for (let index = 0; index < 4; index += 1) await page.keyboard.press('Tab');
+  await expect(mobileDonate).toBeFocused();
+});
+
 test('the first lesson mockups keep their colors in both themes', async ({ page }) => {
   await seedCourseState(page, { theme: 'dark' });
   await seedLessonStep(page, 'u1-l1', 0);

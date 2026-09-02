@@ -96,6 +96,10 @@
   .mobileMenu {
     display: flex;
   }
+
+  .desktopDonateLink {
+    display: none;
+  }
 }
 
 @media (max-width: 400px) {
@@ -136,4 +140,29 @@
 .link.active {
   background-color: var(--surface);
   color: var(--primary-foreground);
+}
+
+.donateLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: var(--accent-cta);
+  color: var(--cta-foreground);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.donateLink:hover {
+  background-color: var(--yellow-light);
+  color: var(--cta-foreground);
+  text-decoration: none;
+}
+
+.mobileMenu .donateLink {
+  width: fit-content;
 }
