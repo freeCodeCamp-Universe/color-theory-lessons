@@ -5,7 +5,7 @@ export const BEFORE_AFTER_PREVIEWS = {
     classification: 'informative',
     accessibleName: 'Purposeful interface color preview',
     accessibleDescription:
-      'The dark navigation background separates settings from the page content. The gold start learning button draws attention, the green Unit 1 complete badge communicates status, and the blue border groups the Lesson 2 card.',
+      'The dark navigation background directly borders the lighter page-content background, separating the two regions. The gold start learning button draws attention, the green Unit 1 complete badge communicates status, and matching blue left borders group the related Lesson 2 and Lesson 3 cards.',
   },
   noisy: {
     classification: 'informative',

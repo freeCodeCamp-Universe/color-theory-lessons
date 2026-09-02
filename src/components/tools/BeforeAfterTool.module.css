@@ -51,7 +51,7 @@
 /* Good mockup accent colors */
 .mockupGood .nav {
   background-color: #1b1b32;
-  border-radius: var(--radius-sm);
+  margin: calc(-1 * var(--spacing-md)) calc(-1 * var(--spacing-md)) 0;
   padding: 0.4rem var(--spacing-sm);
   display: flex;
   gap: var(--spacing-sm);
@@ -104,6 +104,12 @@
   font-size: 0.75rem;
   color: var(--green);
   font-family: var(--font-mono);
+}
+
+.lessonCards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
 }
 
 .mockupGood .card {
