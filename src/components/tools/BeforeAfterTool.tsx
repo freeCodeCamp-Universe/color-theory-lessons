@@ -27,7 +27,7 @@ const ALL_JOBS: ColorJob[] = [
 ];
 
 const PREVIEW_MOCKUP_DESCRIPTIONS = {
-  purposeful: 'Purposeful interface mockup. A dark navy navigation bar separates the page header from the content. A gold Start learning button stands out as the primary action. Green Unit 1 complete text communicates success. A blue left border groups the Lesson 2 card.',
+  purposeful: 'Purposeful interface mockup. A dark navy navigation region directly borders the lighter page-content region, separating their different purposes. A gold Start learning button stands out as the primary action. Green Unit 1 complete text communicates success. Matching blue left borders connect the related Lesson 2 and Lesson 3 cards as one group.',
   noisy: 'Noisy interface mockup. The red navigation bar, orange hero panel, lime heading, pink supporting text, purple Start learning button, blue completion text, and teal lesson card use competing saturated colors. The primary action does not stand out.',
 } as const;
 
@@ -43,7 +43,7 @@ const REGIONS: Region[] = [
     id: 'nav',
     name: 'dark nav bar',
     correctJob: 'separating sections',
-    explanation: 'The dark background separates the navigation from the page content without a visible divider.',
+    explanation: 'The dark navigation background directly borders the lighter page-content background, separating two page regions with different purposes.',
   },
   {
     id: 'cta',
@@ -59,9 +59,9 @@ const REGIONS: Region[] = [
   },
   {
     id: 'card',
-    name: 'blue card border',
+    name: 'blue lesson card borders',
     correctJob: 'grouping items',
-    explanation: 'The blue left border marks this element as a distinct type of content. It groups the label and text together as one unit.',
+    explanation: 'The matching blue left borders connect the related Lesson 2 and Lesson 3 cards as one group.',
   },
 ];
 
@@ -162,7 +162,10 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
             <span className={styles.cta}>start learning</span>
           </div>
           <span className={styles.successBadge}>✓ Unit 1 complete</span>
-          <div className={styles.card}>Lesson 2: Hue, saturation, and lightness →</div>
+          <div className={styles.lessonCards}>
+            <div className={styles.card}>Lesson 2: Hue, saturation, and lightness →</div>
+            <div className={styles.card}>Lesson 3: Contrast and readability →</div>
+          </div>
         </div>
       </div>
     );
@@ -245,17 +248,18 @@ export const BeforeAfterTool = memo(function BeforeAfterTool({
               {results['success'] === true && <span aria-hidden="true" className={styles.regionBadge} style={{ marginLeft: '4px' }}>✓</span>}
             </span>
             <div
-              className={`${styles.card} ${interactive ? styles.region : ''} ${results['card'] === true ? styles.regionSolved : activeId === 'card' ? styles.regionActive : ''}`}
+              className={`${styles.lessonCards} ${interactive ? styles.region : ''} ${results['card'] === true ? styles.regionSolved : activeId === 'card' ? styles.regionActive : ''}`}
               onClick={() => interactive && handleRegionClick('card')}
               role={interactive ? 'button' : undefined}
               tabIndex={interactive ? 0 : undefined}
               onKeyDown={(e) => handleRegionKeyDown(e, 'card')}
               aria-describedby={interactive ? 'card-region-description' : undefined}
-              aria-label={interactive ? 'Click to identify what the blue card border color is doing' : undefined}
+              aria-label={interactive ? 'Click to identify what the blue lesson card borders color is doing' : undefined}
               aria-disabled={interactive && results['card'] === true ? true : undefined}
             >
-              Lesson 2: Hue, saturation, and lightness →
-              <span id="card-region-description" className="sr-only">Blue card border around Lesson 2.</span>
+              <div className={styles.card}>Lesson 2: Hue, saturation, and lightness →</div>
+              <div className={styles.card}>Lesson 3: Contrast and readability →</div>
+              <span id="card-region-description" className="sr-only">Matching blue left borders on the related Lesson 2 and Lesson 3 cards.</span>
               {results['card'] === true && <span aria-hidden="true" className={styles.regionBadge}>✓</span>}
             </div>
           </div>

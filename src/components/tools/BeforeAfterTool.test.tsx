@@ -68,7 +68,7 @@ describe('BeforeAfterTool hierarchy exercise', () => {
 
 describe('BeforeAfterTool color-role keyboard activation', () => {
   it.each([
-    ['purposeful', /dark navy navigation bar.*gold Start learning button.*green Unit 1 complete text.*blue left border/i],
+    ['purposeful', /dark navy navigation region.*lighter page-content region.*gold Start learning button.*green Unit 1 complete text.*matching blue left borders.*Lesson 2 and Lesson 3 cards/i],
     ['noisy', /red navigation bar.*orange hero panel.*purple Start learning button.*primary action does not stand out/i],
   ] as const)('describes the %s static mockup', (mockup, description) => {
     render(<BeforeAfterTool previewMockup={mockup} interactive={false} />);
@@ -92,7 +92,7 @@ describe('BeforeAfterTool color-role keyboard activation', () => {
     render(<BeforeAfterTool />);
 
     const regions = screen.getAllByRole('button', {
-      name: /Click to identify what the (nav bar|gold button|green text|blue card border) color is doing/i,
+      name: /Click to identify what the (nav bar|gold button|green text|blue lesson card borders) color is doing/i,
     });
 
     expect(regions).toHaveLength(4);
@@ -106,6 +106,7 @@ describe('BeforeAfterTool color-role keyboard activation', () => {
 
     expect(screen.getByRole('button', { name: /nav bar color/i })).toHaveAccessibleDescription('Dark navy navigation bar.');
     expect(screen.getByRole('button', { name: /gold button color/i })).toHaveAccessibleDescription('Gold start learning button.');
+    expect(screen.getByRole('button', { name: /blue lesson card borders color/i })).toHaveAccessibleDescription('Matching blue left borders on the related Lesson 2 and Lesson 3 cards.');
   });
 
   it('opens a color-role question with Enter and Space, and prevents Space scrolling', () => {
@@ -174,7 +175,7 @@ describe('BeforeAfterTool color-role keyboard activation', () => {
       ['nav bar', 'separating sections'],
       ['gold button', 'drawing attention'],
       ['green text', 'signaling status'],
-      ['blue card border', 'grouping items'],
+      ['blue lesson card borders', 'grouping items'],
     ] as const;
 
     fireEvent.click(screen.getByRole('button', { name: /nav bar color/i }));
@@ -188,7 +189,7 @@ describe('BeforeAfterTool color-role keyboard activation', () => {
       fireEvent.click(screen.getByRole('button', { name: new RegExp(`${region} color`, 'i') }));
       fireEvent.click(screen.getByRole('button', { name: answer }));
       fireEvent.click(screen.getByRole('button', { name: 'check role' }));
-      if (region !== 'blue card border') {
+      if (region !== 'blue lesson card borders') {
         fireEvent.click(screen.getByRole('button', { name: 'got it' }));
       }
     }

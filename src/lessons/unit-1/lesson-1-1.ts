@@ -10,11 +10,11 @@ export const lesson1_1: LessonConfig = {
   reviewTags: ['foundations', 'visual-vocabulary', 'color-function'],
   steps: [
     {
-      text: 'Color directs attention and communicates structure in an interface. In the example, notice which element stands out first, how the navigation is separated from the content, and which color marks progress.',
+      text: 'Color directs attention and communicates structure in an interface. In the example, notice which element stands out first, where the dark navigation region meets the lighter page-content region, and which color marks progress.',
       panel: { type: 'before-after-preview', mockup: 'purposeful', accessibility: BEFORE_AFTER_PREVIEWS.purposeful },
     },
     {
-      text: 'A shared color cue can mark related items as one group. A different background color can also separate navigation from the page content.',
+      text: 'Grouping uses the same color treatment on two or more related elements. Here, matching blue borders connect the Lesson 2 and Lesson 3 cards. Separating uses a different background or boundary between adjacent page regions with different purposes. Here, the dark navigation background directly meets the lighter page-content background.',
       panel: { type: 'before-after-preview', mockup: 'purposeful', accessibility: BEFORE_AFTER_PREVIEWS.purposeful },
     },
     {
@@ -33,9 +33,9 @@ export const lesson1_1: LessonConfig = {
       prompt: 'Complete one stage by identifying the role of each colored area in the interface.',
       hints: [
         'Compare the gold button with the gray text around it. Its stronger contrast draws attention.',
-        'A colored border can mark the content inside it as one group.',
+        'Matching blue borders connect the two related lesson cards as one group.',
         'A status color marks an outcome such as success, warning, or error.',
-        'A background color can mark the boundary between navigation and page content.',
+        'The dark navigation background directly meets the lighter page-content background, marking a boundary between page regions.',
       ],
   },
   quizItems: [
@@ -72,8 +72,8 @@ export const lesson1_1: LessonConfig = {
   ],
   keyPoints: [
     'Color can direct attention and communicate the structure of an interface.',
-    'A shared color treatment can mark related items as one group.',
-    'Different background colors can separate regions such as navigation and page content.',
+    'The same color treatment on two or more related elements can mark them as one group.',
+    'A different background or boundary can separate adjacent page regions with different purposes.',
     'Interfaces often use green for success, red for errors, and yellow for warnings. Repeated use turns these conventions into status cues.',
     'Saturated colors on unrelated elements create competing signals and make the primary action harder to identify.',
   ],
