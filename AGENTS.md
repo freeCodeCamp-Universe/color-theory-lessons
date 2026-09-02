@@ -84,11 +84,12 @@ npm run build   # tsc + vite build
 - Before committing a functional code change, verify the exact behavior the change claims to implement or fix.
 - Use a verification method that matches the behavior. For example, a component remount test does not verify a full browser reload.
 
-## Accessibility Before Commits
+## Accessibility Before Deployment
 
 - Review every learner-facing change against the project's WCAG 2.2 Level AAA target and the applicable requirements in [Development Standards](docs/DEVELOPMENT.md).
 - Verify the changed behavior itself. Check keyboard operation, visible focus, accessible name, role, value, and state; non-color cues; reduced motion; visual descriptions; and status announcements when the change affects them.
-- Automated tests do not replace manual verification. Use a browser and keyboard for changed interactions or presentation. Use a screen reader when changing accessible names or descriptions, focus behavior, live regions, or multi-step learner flows.
+- Automated tests do not replace manual verification. Use a browser and keyboard for changed interactions or presentation. Identify screen-reader walkthroughs when changing accessible names or descriptions, focus behavior, live regions, or multi-step learner flows.
+- Screen-reader walkthroughs do not block pull request merge unless the pull request's issue explicitly requires one. Otherwise, they are batch checks before deployment: while #107 is open, add each required walkthrough there. After #107 closes, create a scoped issue for each new required walkthrough. Do not deploy while the active tracking issue has incomplete required walkthroughs.
 - Follow the visual-content contract in [Accessible visual content](docs/ACCESSIBLE_VISUALS.md). Track visual-description work under #53 and general application structure, interaction, keyboard, focus, zoom, and reflow work under #54.
 
 ## Learning Outcomes
