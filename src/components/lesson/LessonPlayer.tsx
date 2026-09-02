@@ -549,6 +549,9 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
                     >
                       <span className={styles.choiceKey}>{getLessonChoiceLabel(index)}.</span>
                       <span className={styles.choiceLabel}>{choice.label}</span>
+                      {isSelected && !showResult && (
+                        <span className={styles.choiceResult}>selected</span>
+                      )}
                       {showResult && choice.isCorrect && (
                         <span className={styles.choiceResult}>correct</span>
                       )}

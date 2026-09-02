@@ -212,6 +212,7 @@ describe('LessonPlayer', () => {
     const wrongAnswer = screen.getByRole('button', { name: /Wrong Answer/i });
     fireEvent.click(wrongAnswer);
     expect(wrongAnswer).toHaveAttribute('aria-pressed', 'true');
+    expect(wrongAnswer).toHaveAccessibleName(/Wrong Answer.*selected/);
     expect(status).toHaveTextContent(/^Selected Wrong Answer\.$/);
 
     fireEvent.click(screen.getByRole('button', { name: 'check' }));
