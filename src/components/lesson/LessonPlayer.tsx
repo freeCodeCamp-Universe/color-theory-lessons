@@ -605,7 +605,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
           return (
             <div className={styles.complete}>
               <span className={styles.completeBadge}>
-                <span aria-hidden="true">✓</span>
+                <span className={styles.completeIcon} aria-hidden="true">✓</span>
                 lesson complete
               </span>
               <p className={styles.completeTitle}>{lesson.title}</p>
