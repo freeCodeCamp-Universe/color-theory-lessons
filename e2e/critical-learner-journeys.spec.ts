@@ -149,7 +149,7 @@ async function solveFirstLessonChallenge(page: Page) {
     ['Click to identify what the nav bar color is doing', 'separating sections'],
     ['Click to identify what the gold button color is doing', 'drawing attention'],
     ['Click to identify what the green text color is doing', 'signaling status'],
-    ['Click to identify what the blue card border color is doing', 'grouping items'],
+    ['Click to identify what the blue lesson card borders color is doing', 'grouping items'],
   ] as const;
 
   for (const [region, answer] of answers) {

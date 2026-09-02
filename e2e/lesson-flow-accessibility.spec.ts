@@ -29,7 +29,7 @@ test('lesson progress and a static preview expose the current visual context', a
   const descriptionId = await preview.getAttribute('aria-describedby');
   expect(descriptionId).toBeTruthy();
   await expect(page.locator(`#${descriptionId}`)).toContainText(
-    'The dark navigation background separates settings from the page content.',
+    'The dark navigation background directly borders the lighter page-content background, separating the two regions.',
   );
   await expect(preview).not.toHaveAttribute('aria-hidden', 'true');
 });
