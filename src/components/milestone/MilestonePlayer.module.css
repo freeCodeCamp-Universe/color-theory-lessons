@@ -181,6 +181,11 @@
   background-color: color-mix(in srgb, var(--accent-warning) 10%, var(--surface));
 }
 
+/* Match the clearer light-theme selected state used by lesson quizzes. */
+:global(:root[data-theme='light']) .choice.chosen {
+  background-color: color-mix(in srgb, var(--accent-warning) 33%, var(--surface));
+}
+
 .choice.correct {
   border-color: var(--accent-success);
   background-color: color-mix(in srgb, var(--accent-success) 12%, var(--surface));

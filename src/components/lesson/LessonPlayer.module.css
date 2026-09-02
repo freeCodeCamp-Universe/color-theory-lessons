@@ -279,6 +279,12 @@
   color: var(--primary-foreground);
 }
 
+/* The light theme's darker warning token needs a stronger tint to make an
+   unanswered selected choice as easy to spot as its dark-theme counterpart. */
+:global(:root[data-theme='light']) .choice.chosen {
+  background-color: color-mix(in srgb, var(--accent-warning) 33%, var(--surface));
+}
+
 .choice.correct {
   border: 3px solid var(--accent-success);
   background-color: color-mix(in srgb, var(--accent-success) 12%, var(--surface));
