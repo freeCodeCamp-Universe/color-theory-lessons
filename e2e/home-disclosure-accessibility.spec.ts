@@ -11,24 +11,22 @@ test('home unit disclosures expose native semantics and keyboard behavior', asyn
   await heroLink.focus();
   await page.keyboard.press('Tab');
 
-  const collapseButton = page.getByRole('button', {
-    name: 'Collapse Seeing and Describing Color',
-  });
+  const collapseButton = page.getByRole('button', { name: /Seeing and Describing Color/ });
   await expect(collapseButton).toBeFocused();
+  const visibleLabel = [
+    await collapseButton.locator(':scope > span').first().innerText(),
+    ...await collapseButton.locator(':scope > span:nth-child(2) > span').allInnerTexts(),
+  ].join(' ');
+  await expect(collapseButton).toHaveAccessibleName(visibleLabel);
   await expect(collapseButton).toHaveAttribute('aria-controls', 'unit-1-lessons');
   await expect(collapseButton).toHaveAttribute('aria-expanded', 'true');
-  await expect(collapseButton).toMatchAriaSnapshot(`
-    - button "Collapse Seeing and Describing Color" [expanded]
-  `);
   await expect.poll(() => collapseButton.evaluate((element) => {
     const style = getComputedStyle(element);
     return `${style.outlineStyle} ${style.outlineWidth}`;
   })).toBe('solid 2px');
 
   await page.keyboard.press('Enter');
-  const expandButton = page.getByRole('button', {
-    name: 'Expand Seeing and Describing Color',
-  });
+  const expandButton = page.getByRole('button', { name: /Seeing and Describing Color/ });
   await expect(expandButton).toHaveAttribute('aria-expanded', 'false');
   await expect(lessonLink).toBeHidden();
 

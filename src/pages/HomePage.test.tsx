@@ -21,6 +21,13 @@ function getLessonRow(name: string) {
   return screen.getByText(name).closest('li') as HTMLElement;
 }
 
+function getDisclosureVisibleLabel(disclosure: HTMLElement) {
+  return Array.from(disclosure.children)
+    .filter((child) => child.getAttribute('aria-hidden') !== 'true')
+    .map((child) => child.textContent)
+    .join('');
+}
+
 describe('HomePage dashboard', () => {
   it('uses course copy without a fictional terminal prompt', () => {
     renderWithAppState(<HomePage />);
@@ -32,7 +39,8 @@ describe('HomePage dashboard', () => {
   it('starts with the first unit expanded and locks later units and lessons', () => {
     renderWithAppState(<HomePage />);
 
-    const unitOneDisclosure = screen.getByRole('button', { name: 'Collapse Seeing and Describing Color' });
+    const unitOneDisclosure = screen.getByRole('button', { name: /Seeing and Describing Color/ });
+    expect(unitOneDisclosure).toHaveAccessibleName(getDisclosureVisibleLabel(unitOneDisclosure));
     expect(unitOneDisclosure).toHaveAttribute('aria-expanded', 'true');
     expect(unitOneDisclosure).toHaveAttribute('aria-controls', 'unit-1-lessons');
     expect(within(getUnit('Color Systems and Advanced Topics')).queryByRole('button'))
@@ -105,8 +113,8 @@ describe('HomePage dashboard', () => {
     });
 
     const unitOneCard = getUnit('Seeing and Describing Color');
-    const unitOneDisclosure = screen.getByRole('button', { name: 'Expand Seeing and Describing Color' });
-    const unitTwoDisclosure = screen.getByRole('button', { name: 'Collapse How Screens Make Color' });
+    const unitOneDisclosure = screen.getByRole('button', { name: /Seeing and Describing Color/ });
+    const unitTwoDisclosure = screen.getByRole('button', { name: /How Screens Make Color/ });
     expect(within(unitOneCard).getByText('✓ done')).toBeInTheDocument();
     expect(unitOneDisclosure).toHaveAttribute('aria-expanded', 'false');
     expect(unitTwoDisclosure).toHaveAttribute('aria-expanded', 'true');
@@ -124,7 +132,7 @@ describe('HomePage dashboard', () => {
     const user = userEvent.setup();
     renderWithAppState(<HomePage />);
 
-    const unitOneDisclosure = screen.getByRole('button', { name: 'Collapse Seeing and Describing Color' });
+    const unitOneDisclosure = screen.getByRole('button', { name: /Seeing and Describing Color/ });
     unitOneDisclosure.focus();
 
     await user.keyboard('{Enter}');
@@ -144,7 +152,7 @@ describe('HomePage dashboard', () => {
 
     const unitOneCard = getUnit('Seeing and Describing Color');
     const disclosure = within(unitOneCard).getByRole('button', {
-      name: 'Collapse Seeing and Describing Color',
+      name: /Seeing and Describing Color/,
     });
     const startLink = within(unitOneCard).getByRole('link', { name: 'Start: What Color Does in Interface Design' });
     const lessonLink = screen.getByRole('link', { name: 'Continue: What Color Does in Interface Design' });
