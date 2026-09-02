@@ -97,7 +97,6 @@ export function HomePage() {
                       type="button"
                       className={styles.unitDisclosure}
                       onClick={toggleExpand}
-                      aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${unit.title}`}
                       aria-controls={lessonListId}
                       aria-expanded={isExpanded}
                     >
