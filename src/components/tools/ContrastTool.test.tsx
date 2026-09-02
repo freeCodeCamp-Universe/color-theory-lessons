@@ -27,18 +27,19 @@ const boundaryCases = [
 ] as const;
 
 function ratioPattern(ratio: string): RegExp {
-  return new RegExp(`ratio: ${ratio.replace('.', '\\.')}:1`);
+  return new RegExp(`Measured: ${ratio.replace('.', '\\.')}:1`);
 }
 
 describe('ContrastTool', () => {
-  it('associates each lightness control with its live ratio and threshold', () => {
+  it('associates each lightness control with its target without exposing a ratio', () => {
     render(<ContrastTool interactive={true} />);
 
     const slider = screen.getByRole('slider', { name: /Lightness for Section label/i });
-    expect(slider).toHaveAccessibleDescription(/ratio:.*WCAG AA requires 4.5:1/i);
+    expect(slider).toHaveAccessibleDescription('Target: at least 4.5:1.');
+    expect(screen.queryByText(/Measured:.*:1/i)).not.toBeInTheDocument();
   });
 
-  it('announces the changed value, ratio, and pass state', () => {
+  it('does not announce a calculated ratio when a control changes', () => {
     render(<ContrastTool interactive={true} />);
 
     fireEvent.change(
@@ -46,9 +47,7 @@ describe('ContrastTool', () => {
       { target: { value: '60' } },
     );
 
-    expect(screen.getAllByRole('status').map((status) => status.textContent)).toContain(
-      'Section label: text lightness 60%. Contrast ratio 4.65 to 1; meets the 4.5 to 1 requirement.',
-    );
+    expect(screen.getAllByRole('status').map((status) => status.textContent).join(' ')).not.toMatch(/4\.65 to 1/);
   });
 
   it('reports the three-pair repair as one named stage', () => {
@@ -133,13 +132,14 @@ describe('ContrastTool', () => {
     });
   });
 
-  describe('ratio display', () => {
-    it('shows the ratio and threshold for each area', () => {
+  describe('ratio results', () => {
+    it('hides ratios until check, then shows each measurement and match state', () => {
       render(<ContrastTool interactive={true} />);
 
-      // Three ratio displays should be present (one per area)
-      const ratioTexts = screen.getAllByText(/ratio:.*:1.*WCAG AA requires.*:1/i);
-      expect(ratioTexts).toHaveLength(3);
+      expect(screen.queryByText(/Measured:.*:1/i)).not.toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: 'check' }));
+      expect(screen.getAllByText(/Measured:.*:1/i)).toHaveLength(3);
+      expect(screen.getAllByText(/Misses the target\./)).toHaveLength(3);
     });
 
     it.each(boundaryCases)(
@@ -152,21 +152,24 @@ describe('ContrastTool', () => {
         });
 
         fireEvent.change(slider, { target: { value: below.lightness } });
-        expect(screen.getByText(ratioPattern(below.ratio))).toBeInTheDocument();
+        expect(screen.queryByText(ratioPattern(below.ratio))).not.toBeInTheDocument();
         expect(screen.queryByText('✓ readable')).not.toBeInTheDocument();
         fireEvent.click(screen.getByRole('button', { name: 'check' }));
+        expect(screen.getByText(ratioPattern(below.ratio))).toBeInTheDocument();
         expect(screen.getAllByText('below target').length).toBeGreaterThan(0);
         fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
 
         fireEvent.change(slider, { target: { value: firstPassing.lightness } });
-        expect(screen.getByText(ratioPattern(firstPassing.ratio))).toBeInTheDocument();
+        expect(screen.queryByText(ratioPattern(firstPassing.ratio))).not.toBeInTheDocument();
         fireEvent.click(screen.getByRole('button', { name: 'check' }));
+        expect(screen.getByText(ratioPattern(firstPassing.ratio))).toBeInTheDocument();
         expect(screen.getAllByText('✓ readable')).toHaveLength(1);
         fireEvent.click(screen.getByRole('button', { name: 'try stage again' }));
 
         fireEvent.change(slider, { target: { value: above.lightness } });
-        expect(screen.getByText(ratioPattern(above.ratio))).toBeInTheDocument();
+        expect(screen.queryByText(ratioPattern(above.ratio))).not.toBeInTheDocument();
         fireEvent.click(screen.getByRole('button', { name: 'check' }));
+        expect(screen.getByText(ratioPattern(above.ratio))).toBeInTheDocument();
         expect(screen.getAllByText('✓ readable')).toHaveLength(1);
       },
     );

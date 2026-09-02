@@ -4,7 +4,6 @@ import { ExerciseStage } from './ExerciseStage.tsx';
 import shellStyles from './ToolShell.module.css';
 import type { ExerciseStageDefinition, ExerciseToolProps } from './exercise-stage.ts';
 import { useExerciseStages } from './useExerciseStages.ts';
-import { StatusAnnouncement } from '../accessibility/StatusAnnouncement.tsx';
 
 interface ProblemArea {
   id: string;
@@ -72,7 +71,6 @@ export const ContrastTool = memo(function ContrastTool({
     helper: hexToHsl(AREAS[1].textColor).l,
     button: hexToHsl(AREAS[2].bgColor).l,
   });
-  const [contrastAnnouncement, setContrastAnnouncement] = useState('');
   const stageController = useExerciseStages({ stages: STAGES, onComplete, onStageChange });
   const checked = stageController.result !== 'idle';
 
@@ -84,15 +82,10 @@ export const ContrastTool = memo(function ContrastTool({
     if (checked || !interactive) return;
     const area = AREAS.find((candidate) => candidate.id === id);
     if (!area) return;
-    const ratio = computeRatio(area, val);
-    const adjustedPart = area.fixBg ? 'button background' : 'text';
-    const state = ratio >= area.threshold ? 'meets' : 'does not meet';
-    setContrastAnnouncement(`${area.label}: ${adjustedPart} lightness ${val}%. Contrast ratio ${ratio.toFixed(2)} to 1; ${state} the ${area.threshold} to 1 requirement.`);
     setLightness((prev) => ({ ...prev, [id]: val }));
   }
 
   function handleCheck() {
-    setContrastAnnouncement('');
     const allFixed = AREAS.every((area) => isFixed(area));
     if (allFixed) {
       stageController.markPassed();
@@ -104,23 +97,27 @@ export const ContrastTool = memo(function ContrastTool({
   const failingLabels = stageController.result === 'incorrect'
     ? AREAS.filter((area) => !isFixed(area)).map((area) => area.label)
     : [];
+  const checkedResults = AREAS.map((area) => {
+    const ratio = computeRatio(area, lightness[area.id]);
+    const fixed = ratio >= area.threshold;
+    return `${area.label}: ${ratio.toFixed(2)} to 1, ${fixed ? 'matches' : 'misses'} the ${area.threshold} to 1 target.`;
+  }).join(' ');
 
   return (
     <div className={shellStyles.shell}>
       <span className={shellStyles.toolLabel}>contrast repair lab</span>
-      {contrastAnnouncement && <StatusAnnouncement message={contrastAnnouncement} />}
 
       <ExerciseStage
         controller={stageController}
         incorrectFeedback={(
           <span style={{ color: 'var(--accent-danger)' }}>
             {failingLabels.length > 0
-              ? `Still failing: ${failingLabels.join(', ')}.`
+              ? `${checkedResults} Still failing: ${failingLabels.join(', ')}. Adjust the controls and try again.`
               : 'One or more color pairs do not pass yet.'}
           </span>
         )}
         completionFeedback={(
-          <span style={{ color: 'var(--accent-success)' }}>✓ All three color pairs passed.</span>
+          <span style={{ color: 'var(--accent-success)' }}>{checkedResults} All three color pairs match the target.</span>
         )}
       >
 
@@ -167,10 +164,15 @@ export const ContrastTool = memo(function ContrastTool({
                 </span>
               </div>
 
-              {/* Ratio display */}
-              <div id={`${area.id}-contrast-result`} style={{ fontSize: '1rem', color: showResult && fixed ? 'var(--accent-success)' : showResult ? 'var(--accent-warning)' : 'var(--muted)' }}>
-                ratio: {ratio.toFixed(2)}:1. WCAG AA requires {area.threshold}:1.
+              <div id={`${area.id}-contrast-target`} style={{ fontSize: '1rem', color: 'var(--muted)' }}>
+                Target: at least {area.threshold}:1.
               </div>
+
+              {showResult && (
+                <div id={`${area.id}-contrast-result`} style={{ fontSize: '1rem', color: fixed ? 'var(--accent-success)' : 'var(--accent-warning)' }}>
+                  Measured: {ratio.toFixed(2)}:1. {fixed ? 'Matches' : 'Misses'} the target.
+                </div>
+              )}
 
               {/* Preview */}
               <div
@@ -221,7 +223,7 @@ export const ContrastTool = memo(function ContrastTool({
                     cursor: checked ? 'not-allowed' : 'pointer',
                   }}
                   onChange={(e) => handleChange(area.id, Number(e.target.value))}
-                  aria-describedby={`${area.id}-contrast-result`}
+                  aria-describedby={`${area.id}-contrast-target${showResult ? ` ${area.id}-contrast-result` : ''}`}
                   aria-label={`Lightness for ${area.label}: ${l}%`}
                 />
               </div>
