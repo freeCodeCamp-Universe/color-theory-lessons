@@ -604,10 +604,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
               : null;
           return (
             <div className={styles.complete}>
-              <span className={styles.completeBadge}>
-                <span className={styles.completeIcon} aria-hidden="true">✓</span>
-                lesson complete
-              </span>
+              <span className={styles.completeBadge}>lesson complete</span>
               <p className={styles.completeTitle}>{lesson.title}</p>
               <p className={styles.completeBody}>
                 {answers.filter((a) => a.isCorrect).length} of {lesson.quizItems.length} quiz

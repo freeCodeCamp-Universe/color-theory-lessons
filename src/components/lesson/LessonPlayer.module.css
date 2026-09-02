@@ -389,10 +389,6 @@
   border-radius: var(--radius-sm);
 }
 
-.completeIcon {
-  display: none;
-}
-
 :global(:root[data-theme='light']) .complete {
   padding: var(--spacing-xl);
   background-color: var(--badge-success-background);
@@ -408,8 +404,8 @@
   background-color: var(--surface);
 }
 
-:global(:root[data-theme='light']) .completeIcon {
-  display: inline;
+:global(:root[data-theme='light']) .completeBadge::before {
+  content: '✓';
 }
 
 .completeTitle {
