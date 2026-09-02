@@ -1,6 +1,10 @@
+import { readFileSync } from 'node:fs';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { HSLSliderTool } from './HSLSliderTool.tsx';
+import layoutStyles from './HSLSliderTool.module.css';
+
+const styles = readFileSync('src/components/tools/HSLSliderTool.module.css', 'utf8');
 
 afterEach(() => cleanup());
 
@@ -104,6 +108,14 @@ describe('HSLSliderTool previewDimension — interactive', () => {
 });
 
 describe('HSLSliderTool exercise', () => {
+  it('places the current and target swatches in a shared grid row', () => {
+    render(<HSLSliderTool interactive={true} />);
+
+    expect(screen.getByText('your color').parentElement?.parentElement).toHaveClass(layoutStyles.exerciseSwatchRow);
+    expect(styles).toMatch(/\.exerciseSwatchRow\s*\{[\s\S]*grid-template-areas:[\s\S]*'current-swatch target-swatch'/);
+    expect(styles).toMatch(/grid-template-rows:\s*max-content 80px max-content/);
+  });
+
   it('describes the target without exposing its hidden channel value', () => {
     render(<HSLSliderTool interactive={true} />);
 

@@ -192,7 +192,7 @@ export const HSLSliderTool = memo(function HSLSliderTool({
             onChange={(h) => updateChannel('h', h)}
           />
           {/* Swatches */}
-          <div className={styles.swatchRow} style={{ flex: 1, minWidth: '180px' }}>
+          <div className={`${styles.swatchRow} ${styles.exerciseSwatchRow}`} style={{ flex: 1, minWidth: '180px' }}>
             <div className={styles.swatchBox}>
               <span className={styles.swatchLabel}>your color</span>
               <div aria-hidden="true" className={styles.swatch} style={{ backgroundColor: hslString(current) }} />

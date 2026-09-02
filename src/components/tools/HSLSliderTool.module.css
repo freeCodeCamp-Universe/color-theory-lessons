@@ -10,6 +10,42 @@
   gap: var(--spacing-md);
 }
 
+.exerciseSwatchRow {
+  grid-template-areas:
+    'current-label target-label'
+    'current-swatch target-swatch'
+    'current-value target-value';
+  grid-template-rows: max-content 80px max-content;
+}
+
+.exerciseSwatchRow .swatchBox {
+  display: contents;
+}
+
+.exerciseSwatchRow .swatchBox:first-child .swatchLabel {
+  grid-area: current-label;
+}
+
+.exerciseSwatchRow .swatchBox:first-child .swatch {
+  grid-area: current-swatch;
+}
+
+.exerciseSwatchRow .swatchBox:first-child .hslValue {
+  grid-area: current-value;
+}
+
+.exerciseSwatchRow .swatchBox:last-child .swatchLabel {
+  grid-area: target-label;
+}
+
+.exerciseSwatchRow .swatchBox:last-child .swatch {
+  grid-area: target-swatch;
+}
+
+.exerciseSwatchRow .swatchBox:last-child .hslValue {
+  grid-area: target-value;
+}
+
 .swatchBox {
   display: flex;
   flex-direction: column;
