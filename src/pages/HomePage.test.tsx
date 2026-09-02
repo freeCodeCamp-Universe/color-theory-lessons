@@ -51,6 +51,20 @@ describe('HomePage dashboard', () => {
     expect(within(getLessonRow('Hue, Saturation, and Lightness')).getByText('locked')).toBeInTheDocument();
   });
 
+  it('includes every unlocked unit disclosure label in its accessible name', () => {
+    vi.stubEnv('VITE_DEV_MODE', '1');
+    renderWithAppState(<HomePage />);
+
+    const disclosures = screen.getAllByRole('button').filter((button) => (
+      button.hasAttribute('aria-controls')
+    ));
+    expect(disclosures).toHaveLength(units.length);
+
+    for (const disclosure of disclosures) {
+      expect(disclosure).toHaveAccessibleName(getDisclosureVisibleLabel(disclosure));
+    }
+  });
+
   it('shows continue, redo, and locked lesson actions for an in-progress unit', () => {
     renderWithAppState(<HomePage />, {
       state: { completedLessons: ['u1-l1'] },
