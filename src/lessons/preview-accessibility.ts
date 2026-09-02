@@ -20,19 +20,19 @@ export const HSL_DIMENSION_PREVIEWS = {
     classification: 'informative',
     accessibleName: 'Hue adjustment preview',
     accessibleDescription:
-      'Hue is the active control. Moving it changes the color family while Saturation stays at 70% and Lightness stays at 55%.',
+      'The color lab includes a hue wheel plus Saturation and Lightness sliders. Hue is active, so the wheel changes the color family. Saturation stays at 70% and Lightness stays at 55%.',
   },
   s: {
     classification: 'informative',
     accessibleName: 'Saturation adjustment preview',
     accessibleDescription:
-      'Saturation is the active control. Moving it changes how vivid or muted the color appears while Hue stays at 200 degrees and Lightness stays at 55%.',
+      'The color lab includes a hue wheel plus Saturation and Lightness sliders. Saturation is active. The hue wheel stays fixed at 200 degrees, and Lightness stays at 55%. Moving Saturation changes how vivid or muted the color appears.',
   },
   l: {
     classification: 'informative',
     accessibleName: 'Lightness adjustment preview',
     accessibleDescription:
-      'Lightness is the active control. Moving it changes how light or dark the color appears while Hue stays at 200 degrees and Saturation stays at 70%.',
+      'The color lab includes a hue wheel plus Saturation and Lightness sliders. Lightness is active. The hue wheel stays fixed at 200 degrees, and Saturation stays at 70%. Moving Lightness changes how light or dark the color appears.',
   },
 } satisfies Record<'h' | 's' | 'l', DescribedVisual>;
 

@@ -115,26 +115,22 @@ export const HSLSliderTool = memo(function HSLSliderTool({
   if (previewDimension) {
     const preview = previewCurrent;
     const setPreview = setPreviewCurrent;
-    const pHueGrad = `linear-gradient(to right, hsl(0,${preview.s}%,${preview.l}%), hsl(60,${preview.s}%,${preview.l}%), hsl(120,${preview.s}%,${preview.l}%), hsl(180,${preview.s}%,${preview.l}%), hsl(240,${preview.s}%,${preview.l}%), hsl(300,${preview.s}%,${preview.l}%), hsl(360,${preview.s}%,${preview.l}%))`;
     const pSatGrad = `linear-gradient(to right, hsl(${preview.h},0%,${preview.l}%), hsl(${preview.h},100%,${preview.l}%))`;
     const pLightGrad = `linear-gradient(to right, hsl(${preview.h},${preview.s}%,0%), hsl(${preview.h},${preview.s}%,50%), hsl(${preview.h},${preview.s}%,100%))`;
-    const gradients = { h: pHueGrad, s: pSatGrad, l: pLightGrad };
-    const labels = { h: 'Hue', s: 'Saturation', l: 'Lightness' };
-    const maxes = { h: HUE_MAX, s: 100, l: 100 };
-    const units = { h: '°', s: '%', l: '%' };
-    const isHueDimension = previewDimension === 'h';
+    const gradients = { s: pSatGrad, l: pLightGrad };
+    const labels = { s: 'Saturation', l: 'Lightness' };
+    const maxes = { s: 100, l: 100 };
+    const units = { s: '%', l: '%' };
     return (
       <div className={shellStyles.shell}>
         <span className={shellStyles.toolLabel}>HSL color lab</span>
         <div className={styles.root}>
           <div style={{ display: 'flex', gap: 'var(--spacing-lg)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
-            {isHueDimension && (
-              <HueWheel
-                hue={preview.h}
-                interactive={interactive}
-                onChange={(h) => setPreview((prev) => ({ ...prev, h }))}
-              />
-            )}
+            <HueWheel
+              hue={preview.h}
+              interactive={interactive && previewDimension === 'h'}
+              onChange={(h) => setPreview((prev) => ({ ...prev, h }))}
+            />
             <div style={{ flex: 1, minWidth: '180px', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
               <div className={styles.swatchRow}>
                 <div className={styles.swatchBox}>
@@ -144,7 +140,7 @@ export const HSLSliderTool = memo(function HSLSliderTool({
                 </div>
               </div>
               <div className={styles.sliders}>
-                {(['h', 's', 'l'] as const).map((ch) => {
+                {(['s', 'l'] as const).map((ch) => {
                   const isActive = ch === previewDimension;
                   return (
                     <div key={ch} className={styles.sliderRow}>
