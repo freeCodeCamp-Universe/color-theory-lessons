@@ -5,6 +5,8 @@ interface HueWheelProps {
   hue: number;
   /** When true, the wheel responds to click and keyboard input. */
   interactive: boolean;
+  /** When true, the wheel is shown as an inactive reference. */
+  muted?: boolean;
   /** Called with the new hue whenever the user changes it. */
   onChange: (hue: number) => void;
 }
@@ -19,7 +21,7 @@ export const HUE_MAX = 359;
  * `interactive` is true the SVG acts as an ARIA `slider` so keyboard and
  * assistive-technology users can operate it.
  */
-export const HueWheel = memo(function HueWheel({ hue, interactive, onChange }: HueWheelProps) {
+export const HueWheel = memo(function HueWheel({ hue, interactive, muted = false, onChange }: HueWheelProps) {
   const [focused, setFocused] = useState(false);
   const size = 200;
   const cx = size / 2;
@@ -94,7 +96,7 @@ export const HueWheel = memo(function HueWheel({ hue, interactive, onChange }: H
       aria-valuemax={HUE_MAX}
       aria-valuenow={hue}
       aria-label={`Hue wheel: ${hue}°`}
-      style={{ cursor: interactive ? 'crosshair' : 'default', flexShrink: 0, outline: 'none' }}
+      style={{ cursor: interactive ? 'crosshair' : 'default', flexShrink: 0, opacity: muted ? 0.4 : 1, outline: 'none' }}
     >
       {focused && interactive && (
         <circle cx={cx} cy={cy} r={r + 8} fill="none" stroke="var(--focus-ring)" strokeWidth={2} strokeDasharray="4 3" />

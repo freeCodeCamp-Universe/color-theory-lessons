@@ -129,6 +129,7 @@ export const HSLSliderTool = memo(function HSLSliderTool({
             <HueWheel
               hue={preview.h}
               interactive={interactive && previewDimension === 'h'}
+              muted={previewDimension !== 'h'}
               onChange={(h) => setPreview((prev) => ({ ...prev, h }))}
             />
             <div style={{ flex: 1, minWidth: '180px', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>

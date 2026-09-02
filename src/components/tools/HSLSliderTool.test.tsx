@@ -11,7 +11,7 @@ afterEach(() => cleanup());
 describe('HSLSliderTool previewDimension — interactive', () => {
   it('renders a hue wheel (ARIA slider) when previewDimension is h', () => {
     render(<HSLSliderTool interactive={true} previewDimension="h" />);
-    expect(screen.getByRole('slider', { name: /Hue wheel/i })).toBeInTheDocument();
+    expect(screen.getByRole('slider', { name: /Hue wheel/i })).toHaveStyle({ opacity: '1' });
   });
 
   it('renders a disabled hue wheel when previewDimension is s', () => {
@@ -19,6 +19,7 @@ describe('HSLSliderTool previewDimension — interactive', () => {
     const wheel = screen.getByRole('slider', { name: /Hue wheel/i });
     expect(wheel).toHaveAttribute('tabindex', '-1');
     expect(wheel).toHaveAttribute('aria-disabled', 'true');
+    expect(wheel).toHaveStyle({ opacity: '0.4' });
   });
 
   it('renders a disabled hue wheel when previewDimension is l', () => {
@@ -26,6 +27,7 @@ describe('HSLSliderTool previewDimension — interactive', () => {
     const wheel = screen.getByRole('slider', { name: /Hue wheel/i });
     expect(wheel).toHaveAttribute('tabindex', '-1');
     expect(wheel).toHaveAttribute('aria-disabled', 'true');
+    expect(wheel).toHaveStyle({ opacity: '0.4' });
   });
 
   it('uses the wheel as the only hue control', () => {
