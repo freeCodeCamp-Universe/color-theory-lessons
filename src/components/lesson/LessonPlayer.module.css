@@ -3,14 +3,18 @@
   flex-direction: column;
   gap: var(--spacing-lg);
   min-height: 60vh;
+  background-color: var(--secondary-background);
+  border: 1px solid var(--border);
+  padding: var(--spacing-lg);
 }
 
 @media (min-width: 1000px) {
   .layout {
     flex-direction: row;
     align-items: stretch;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0;
+    height: calc(100dvh - var(--header-height) - var(--spacing-2xl) - var(--spacing-md));
   }
 
   .layout .panel {
@@ -22,9 +26,12 @@
     flex-shrink: 1;
     flex-basis: 0;
     min-width: 0;
+    min-height: 0;
     opacity: 1;
+    border-left: 1px solid var(--border);
     margin-left: var(--spacing-lg);
-    overflow: visible;
+    padding-left: var(--spacing-lg);
+    overflow-y: auto;
     pointer-events: auto;
     transition: flex-grow 0.4s ease, opacity 0.35s ease, margin-left 0.4s ease;
   }
@@ -46,17 +53,14 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
-  background-color: var(--secondary-background);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-lg);
+  padding-right: var(--spacing-lg);
   height: auto;
   overflow: visible;
 }
 
 @media (min-width: 1000px) {
   .panel {
-    height: calc(100dvh - var(--header-height) - 3rem);
+    height: 100%;
     overflow: hidden;
   }
 }
@@ -155,7 +159,6 @@
   color: var(--cta-foreground);
   font-size: 1rem;
   font-weight: 700;
-  border-radius: var(--radius-sm);
   border: none;
   cursor: pointer;
   transition: opacity 0.15s ease;
@@ -171,7 +174,6 @@
   color: var(--secondary-foreground);
   font-size: 1rem;
   border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: border-color 0.15s ease, color 0.15s ease;
 }
@@ -249,9 +251,11 @@
 }
 
 .choice {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: flex-start;
-  gap: var(--spacing-sm);
+  column-gap: var(--spacing-sm);
+  row-gap: var(--spacing-xs);
   padding: 0.65rem var(--spacing-md);
   background-color: var(--surface);
   border: 1px solid var(--border-strong);
@@ -293,8 +297,12 @@
   padding-top: 1px;
 }
 
+.choiceLabel {
+  min-width: 0;
+}
+
 .choiceResult {
-  margin-left: auto;
+  grid-column: 2;
   font-size: 1rem;
   font-weight: 700;
 }
@@ -312,9 +320,9 @@
 
 /* ── Right panel example wrapper ─────────────────────────────────────── */
 .examplePanel {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-md);
+  border: 0;
+  height: 100%;
+  padding: 0;
   margin: 0;
   min-width: 0;
 }
@@ -324,7 +332,7 @@
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  padding: 0 var(--spacing-xs);
+  padding: 0;
 }
 
 /* ── Quiz colour swatches ─────────────────────────────────────────────── */
