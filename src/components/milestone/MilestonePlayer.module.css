@@ -204,6 +204,10 @@
   padding-top: 1px;
 }
 
+.choice.chosen .choiceKey {
+  color: inherit;
+}
+
 .srOnly {
   position: absolute;
   width: 1px;
