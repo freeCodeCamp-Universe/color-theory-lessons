@@ -256,10 +256,12 @@ test('the donation link is keyboard-accessible in desktop navigation and the mob
   await expect(desktopDonate).toBeFocused();
 
   await page.setViewportSize({ width: 320, height: 900 });
+  await expect(desktopDonate).toBeHidden();
   const menuButton = page.getByRole('button', { name: 'Menu' });
   await menuButton.click();
   const mobileDonate = page.locator('#mobile-nav-menu').getByRole('link', { name: 'Donate' });
   await expect(mobileDonate).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Donate', exact: true })).toHaveCount(1);
   await expect(mobileDonate).toHaveAttribute('href', await desktopDonate.getAttribute('href'));
   for (let index = 0; index < 4; index += 1) await page.keyboard.press('Tab');
   await expect(mobileDonate).toBeFocused();

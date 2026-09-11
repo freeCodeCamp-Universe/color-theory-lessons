@@ -97,7 +97,7 @@
     display: flex;
   }
 
-  .desktopDonateLink {
+  .donateLink.desktopDonateLink {
     display: none;
   }
 }
