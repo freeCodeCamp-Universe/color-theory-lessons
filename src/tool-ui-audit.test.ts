@@ -36,6 +36,17 @@ describe('tool UI audit regressions', () => {
     expect(lessonCss).toMatch(/\.choiceResult\s*{[^}]*grid-column:\s*2;/s);
   });
 
+  it('gives selected quiz choices a stronger light-theme fill', () => {
+    for (const file of [
+      'src/components/lesson/LessonPlayer.module.css',
+      'src/components/milestone/MilestonePlayer.module.css',
+    ]) {
+      expect(read(file)).toMatch(
+        /:global\(:root\[data-theme='light'\]\) \.choice\.chosen\s*{\s*background-color: color-mix\(in srgb, var\(--accent-warning\) 33%, var\(--surface\)\);/s,
+      );
+    }
+  });
+
   it('collapses shared two-column tool grids below 500px', () => {
     const shellCss = read('src/components/tools/ToolShell.module.css');
 
