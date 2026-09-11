@@ -38,7 +38,6 @@
   align-items: center;
   gap: var(--spacing-sm);
   list-style: none;
-  overflow: hidden;
 }
 
 .menuButton {
@@ -75,7 +74,7 @@
   margin: 0;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .fullLogo {
     display: none;
   }
