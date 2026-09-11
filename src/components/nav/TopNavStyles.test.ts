@@ -13,7 +13,7 @@ describe('TopNav responsive styles', () => {
   });
 
   it('switches to the menu before the desktop links can clip', () => {
-    expect(css).toContain('@media (max-width: 700px)');
+    expect(css).toContain('@media (max-width: 800px)');
     expect(css).not.toContain('@media (max-width: 500px)');
   });
 

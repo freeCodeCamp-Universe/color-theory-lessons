@@ -218,7 +218,7 @@ async function answerMilestoneOneQuiz(page: Page, correct: boolean) {
 }
 
 test('every navigation destination remains visible and usable at the mobile breakpoint', async ({ page }) => {
-  await page.setViewportSize({ width: 700, height: 800 });
+  await page.setViewportSize({ width: 800, height: 800 });
   await page.goto('/');
 
   const menuButton = page.getByRole('button', { name: 'Menu' });
@@ -241,6 +241,68 @@ test('every navigation destination remains visible and usable at the mobile brea
 
   await page.getByRole('link', { name: 'Color Theory Course' }).click();
   await expect(page).toHaveURL(/\/$/);
+});
+
+test('navigation targets fit around the responsive breakpoint', async ({ page }) => {
+  await page.setViewportSize({ width: 801, height: 800 });
+  await page.goto('/');
+  await page.evaluate(() => document.fonts.ready);
+
+  const nav = page.getByRole('navigation', { name: 'Main navigation' });
+  const header = await nav.boundingBox();
+  expect(header).not.toBeNull();
+  for (const name of ['Color Theory Course', 'palette builder', 'glossary', 'review', 'Donate']) {
+    const link = nav.getByRole('link', { name, exact: true });
+    await expect(link).toBeVisible();
+    const box = await link.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.y).toBeGreaterThanOrEqual(header!.y);
+    expect(box!.y + box!.height).toBeLessThanOrEqual(header!.y + header!.height);
+    expect(box!.width).toBeGreaterThanOrEqual(44);
+    expect(box!.height).toBeGreaterThanOrEqual(44);
+  }
+
+  for (const width of [800, 701]) {
+    await page.setViewportSize({ width, height: 800 });
+    const menu = nav.getByRole('button', { name: 'Menu' });
+    await expect(menu).toBeVisible();
+    await expect(nav.getByRole('link', { name: 'Donate', exact: true })).toHaveCount(0);
+    await menu.focus();
+    await page.keyboard.press('Enter');
+    await expect(menu).toHaveAttribute('aria-expanded', 'true');
+    await page.keyboard.press('Tab');
+    const palette = nav.getByRole('link', { name: 'palette builder' });
+    await expect(palette).toBeFocused();
+    const box = await palette.boundingBox();
+    expect(box!.y).toBeGreaterThanOrEqual(header!.height);
+    await expect(nav.getByRole('link', { name: 'Donate', exact: true })).toBeVisible();
+    await menu.focus();
+    await page.keyboard.press('Enter');
+  }
+});
+
+test('the donation link is keyboard-accessible in desktop navigation and the mobile menu', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/');
+
+  const desktopDonate = page.locator('nav > a', { hasText: 'Donate' });
+  await expect(desktopDonate).toHaveAttribute(
+    'href',
+    /^https:\/\/donate\.freecodecamp\.org\?source=[\w-]+&campaign=test-2026&medium=web$/,
+  );
+  for (let index = 0; index < 7; index += 1) await page.keyboard.press('Tab');
+  await expect(desktopDonate).toBeFocused();
+
+  await page.setViewportSize({ width: 320, height: 900 });
+  await expect(desktopDonate).toBeHidden();
+  const menuButton = page.getByRole('button', { name: 'Menu' });
+  await menuButton.click();
+  const mobileDonate = page.locator('#mobile-nav-menu').getByRole('link', { name: 'Donate' });
+  await expect(mobileDonate).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Donate', exact: true })).toHaveCount(1);
+  await expect(mobileDonate).toHaveAttribute('href', await desktopDonate.getAttribute('href'));
+  for (let index = 0; index < 4; index += 1) await page.keyboard.press('Tab');
+  await expect(mobileDonate).toBeFocused();
 });
 
 test('the first lesson mockups keep their colors in both themes', async ({ page }) => {

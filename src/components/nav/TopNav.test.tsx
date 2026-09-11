@@ -1,7 +1,8 @@
-import { cleanup, screen } from '@testing-library/react';
+import { cleanup, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 import { Route, Routes, useLocation } from 'react-router-dom';
+import donationConfig from '../../../donation-config.json';
 import { renderWithAppState } from '../../test-utils.tsx';
 import { TopNav } from './TopNav.tsx';
 
@@ -22,6 +23,8 @@ function renderNavigation(route = '/') {
 }
 
 describe('TopNav', () => {
+  const donationUrl = `https://donate.freecodecamp.org?source=${donationConfig.donationId}&campaign=test-2026&medium=web`;
+
   it('uses plain course branding for both responsive logo variants', () => {
     renderNavigation();
 
@@ -41,6 +44,12 @@ describe('TopNav', () => {
     expect(screen.getByRole('link', { name: 'palette builder' })).toHaveAttribute('aria-current', 'page');
   });
 
+  it('offers a tracked freeCodeCamp donation link', () => {
+    renderNavigation();
+
+    expect(screen.getByRole('link', { name: 'Donate' })).toHaveAttribute('href', donationUrl);
+  });
+
   it('toggles the mobile menu and closes it after navigation', async () => {
     const user = userEvent.setup();
     renderNavigation();
@@ -53,6 +62,7 @@ describe('TopNav', () => {
 
     const mobileMenu = document.getElementById('mobile-nav-menu');
     expect(mobileMenu).not.toBeNull();
+    expect(within(mobileMenu!).getByRole('link', { name: 'Donate' })).toHaveAttribute('href', donationUrl);
     await user.click(screen.getAllByRole('link', { name: 'review' })[1]);
 
     expect(screen.getByText('current path: /review')).toBeInTheDocument();

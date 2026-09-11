@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import donationConfig from '../../../donation-config.json';
 import { ThemeControl } from './ThemeControl.tsx';
 import styles from './TopNav.module.css';
 
@@ -8,6 +9,8 @@ const NAV_ITEMS = [
   { to: '/glossary', label: 'glossary' },
   { to: '/review', label: 'review' },
 ];
+
+const donationUrl = `https://donate.freecodecamp.org?source=${donationConfig.donationId}&campaign=test-2026&medium=web`;
 
 function navLinkClass({ isActive }: { isActive: boolean }) {
   return isActive ? `${styles.link} ${styles.active}` : styles.link;
@@ -38,6 +41,9 @@ export function TopNav() {
         ))}
       </ul>
       <ThemeControl />
+      <a className={`${styles.donateLink} ${styles.desktopDonateLink}`} href={donationUrl}>
+        Donate
+      </a>
       <button
         type="button"
         className={styles.menuButton}
@@ -57,6 +63,11 @@ export function TopNav() {
               </NavLink>
             </li>
           ))}
+          <li>
+            <a className={`${styles.link} ${styles.donateLink}`} href={donationUrl}>
+              Donate
+            </a>
+          </li>
         </ul>
       )}
     </nav>

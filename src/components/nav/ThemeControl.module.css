@@ -5,7 +5,7 @@
 .select {
   min-height: 30px;
   padding: 0 var(--spacing-sm);
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--primary-background);
   border-radius: var(--radius-sm);
   background: var(--secondary-background);
   color: var(--primary-foreground);
@@ -13,7 +13,7 @@
   cursor: pointer;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .select {
     max-width: 8.5rem;
   }
